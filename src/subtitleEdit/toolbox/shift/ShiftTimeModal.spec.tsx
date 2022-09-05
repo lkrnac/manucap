@@ -94,7 +94,7 @@ describe("ShiftTimesModal", () => {
                             <input
                                 name="shiftTime"
                                 type="number"
-                                className="sbte-form-control dotsub-track-line-shift margin-right-10"
+                                className="sbte-form-control dotsub-track-line-shift mt-2"
                                 style={{ width: "120px" }}
                                 placeholder="0.000"
                                 step="0.100"
@@ -102,13 +102,12 @@ describe("ShiftTimesModal", () => {
                                 onChange={jest.fn()}
                             />
                         </div>
-                        <fieldset className="space-y-1">
+                        <fieldset className="space-y-2">
                             <div className="form-check">
                                 <label>
                                     <input
                                         name="shiftPosition"
                                         type="radio"
-                                        className="form-check-input"
                                         value="all"
                                     /> Shift all
                                 </label>
@@ -118,7 +117,6 @@ describe("ShiftTimesModal", () => {
                                     <input
                                         name="shiftPosition"
                                         type="radio"
-                                        className="form-check-input"
                                         value="before"
                                     /> Shift all before editing cue
                                 </label>
@@ -128,7 +126,6 @@ describe("ShiftTimesModal", () => {
                                     <input
                                         name="shiftPosition"
                                         type="radio"
-                                        className="form-check-input"
                                         value="after"
                                     /> Shift all after editing cue
                                 </label>
@@ -145,7 +142,7 @@ describe("ShiftTimesModal", () => {
                     </button>
                     <button
                         type="button"
-                        className="dotsub-shift-modal-close-button sbte-btn sbte-btn-secondary"
+                        className="dotsub-shift-modal-close-button sbte-btn sbte-btn-light"
                     >
                         Close
                     </button>
@@ -200,7 +197,7 @@ describe("ShiftTimesModal", () => {
                             <input
                                 name="shiftTime"
                                 type="number"
-                                className="sbte-form-control dotsub-track-line-shift margin-right-10"
+                                className="sbte-form-control dotsub-track-line-shift mt-2"
                                 style={{ width: "120px" }}
                                 placeholder="0.000"
                                 step="0.100"
@@ -208,13 +205,12 @@ describe("ShiftTimesModal", () => {
                                 onChange={jest.fn()}
                             />
                         </div>
-                        <fieldset className="space-y-1">
+                        <fieldset className="space-y-2">
                             <div className="form-check">
                                 <label>
                                     <input
                                         name="shiftPosition"
                                         type="radio"
-                                        className="form-check-input"
                                         value="all"
                                     /> Shift all
                                 </label>
@@ -224,7 +220,6 @@ describe("ShiftTimesModal", () => {
                                     <input
                                         name="shiftPosition"
                                         type="radio"
-                                        className="form-check-input"
                                         value="before"
                                     /> Shift all before editing cue
                                 </label>
@@ -234,7 +229,6 @@ describe("ShiftTimesModal", () => {
                                     <input
                                         name="shiftPosition"
                                         type="radio"
-                                        className="form-check-input"
                                         value="after"
                                     /> Shift all after editing cue
                                 </label>
@@ -259,7 +253,7 @@ describe("ShiftTimesModal", () => {
                     </button>
                     <button
                         type="button"
-                        className="dotsub-shift-modal-close-button sbte-btn sbte-btn-secondary"
+                        className="dotsub-shift-modal-close-button sbte-btn sbte-btn-light"
                     >Close
                     </button>
                 </div>
@@ -316,7 +310,7 @@ describe("ShiftTimesModal", () => {
                                 <input
                                     name="shiftTime"
                                     type="number"
-                                    className="sbte-form-control dotsub-track-line-shift margin-right-10"
+                                    className="sbte-form-control dotsub-track-line-shift mt-2"
                                     style={{ width: "120px" }}
                                     placeholder="0.000"
                                     step="0.100"
@@ -324,13 +318,12 @@ describe("ShiftTimesModal", () => {
                                     onChange={jest.fn()}
                                 />
                             </div>
-                            <fieldset className="space-y-1">
+                            <fieldset className="space-y-2">
                                 <div className="form-check">
                                     <label>
                                         <input
                                             name="shiftPosition"
                                             type="radio"
-                                            className="form-check-input"
                                             value="all"
                                         /> Shift all
                                     </label>
@@ -340,7 +333,6 @@ describe("ShiftTimesModal", () => {
                                         <input
                                             name="shiftPosition"
                                             type="radio"
-                                            className="form-check-input"
                                             value="before"
                                         /> Shift all before editing cue
                                     </label>
@@ -350,7 +342,6 @@ describe("ShiftTimesModal", () => {
                                         <input
                                             name="shiftPosition"
                                             type="radio"
-                                            className="form-check-input"
                                             value="after"
                                         /> Shift all after editing cue
                                     </label>
@@ -366,7 +357,7 @@ describe("ShiftTimesModal", () => {
                         </button>
                         <button
                             type="button"
-                            className="dotsub-shift-modal-close-button sbte-btn sbte-btn-secondary"
+                            className="dotsub-shift-modal-close-button sbte-btn sbte-btn-light"
                         >Close
                         </button>
                     </div>
@@ -513,7 +504,7 @@ describe("ShiftTimesModal", () => {
         );
 
         // WHEN
-        const closeBtn = container.querySelectorAll(".sbte-btn.sbte-btn-secondary")[0];
+        const closeBtn = container.querySelectorAll(".sbte-btn.sbte-btn-light")[0];
         fireEvent.click(closeBtn);
 
         // THEN

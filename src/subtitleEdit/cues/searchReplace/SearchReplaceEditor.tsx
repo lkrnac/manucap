@@ -105,7 +105,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                     dispatch(searchNextCues(false));
                 }}
             >
-                <i className="fa fa-arrow-down" />
+                <i className="fa-duotone fa-arrow-down" />
             </button>
             <button
                 className="sbte-btn sbte-btn-light sbte-btn-sm sbte-search-prev"
@@ -116,10 +116,10 @@ const SearchReplaceEditor = (): ReactElement | null => {
                     dispatch(searchPreviousCues());
                 }}
             >
-                <i className="fa fa-arrow-up" />
+                <i className="fa-duotone fa-arrow-up" />
             </button>
             <button
-                className="sbte-btn sbte-btn-light sbte-btn-sm"
+                className="sbte-btn sbte-btn-light sbte-btn-sm !text-blue-light"
                 type="button"
                 disabled={editingCueIndex === -1}
                 style={{ marginLeft: "5px" }}
@@ -130,7 +130,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 Replace
             </button>
             <button
-                className="sbte-btn sbte-btn-light sbte-btn-sm"
+                className="sbte-btn sbte-btn-light sbte-btn-sm !text-blue-light"
                 type="button"
                 style={{ marginLeft: "5px", marginRight: "5px" }}
                 onClick={(): void => searchReplaceAll(dispatch, cues, searchReplace, replacement)}
@@ -138,7 +138,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 Replace All
             </button>
             <ToggleButton
-                className="sbte-btn sbte-btn-light"
+                className="sbte-btn sbte-btn-light !text-blue-light"
                 toggled={searchReplace.matchCase}
                 onClick={(): void => {
                     dispatch(setMatchCase(!searchReplace.matchCase));
@@ -156,7 +156,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                     dispatch(showSearchReplace(false));
                 }}
             >
-                <i className="far fa-times-circle" />
+                <i className="fa-duotone fa-times-circle" />
             </button>
         </div>
     ) : null;

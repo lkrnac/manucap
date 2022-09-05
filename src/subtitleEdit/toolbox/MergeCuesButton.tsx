@@ -14,7 +14,7 @@ const MergeCuesButton = (props: Props): ReactElement => {
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     return (
         <button
-            className="sbte-merge-cues-button"
+            className="sbte-merge-cues-button flex items-center"
             disabled={!timecodesUnlocked}
             title="Unlock timecodes to enable"
             onClick={(event): void => {
@@ -23,7 +23,8 @@ const MergeCuesButton = (props: Props): ReactElement => {
                 props.onClick(event);
             }}
         >
-            Merge Cues
+            <i className="w-7 fa-duotone fa-merge text-blue-primary" />
+            <span>Merge Cues</span>
         </button>
     );
 };

@@ -157,6 +157,10 @@
     @apply border bg-gray-0 hover:bg-gray-100 text-gray-700 hover:shadow-md hover:shadow-gray-100/40;
 }
 
+.sbte-btn.sbte-btn-light .fa-duotone {
+    @apply text-blue-light;
+}
+
 .sbte-btn.sbte-btn-light.active {
     @apply border bg-gray-200;
 }
@@ -215,11 +219,11 @@
 }
 
 .sbte-badge.sbte-badge-success {
-    @apply bg-green-primary;
+    @apply bg-green-primary border border-green-dark/80;
 }
 
 .sbte-badge.sbte-badge-secondary {
-    @apply bg-gray-600;
+    @apply bg-gray-600 border border-gray-700/90;
 }
 
 .sbte-badge.sbte-badge-outline {
@@ -343,6 +347,10 @@
     transition: none !important;
     margin-bottom: initial;
     overflow: initial;
+}
+
+.p-toast .p-toast-message .p-toast-message-content .p-toast-summary {
+    @apply font-medium;
 }
 
 /** Dropdown / Menu **/
@@ -477,7 +485,7 @@
 /** Forms **/
 
 .sbte-form-control {
-    @apply block w-full border-gray-100 focus:border-blue-light/80 rounded bg-white py-2 px-4 text-base text-gray-800 border transition-all duration-200;
+    @apply block w-full border-blue-light/20 focus:border-blue-light/80 rounded bg-white py-2 px-4 text-base text-gray-800 border transition-all duration-200;
     height: 38px;
 }
 
@@ -504,7 +512,7 @@ label.sbte-form-control {
 }
 
 .sbte-cue-line-flap {
-    @apply rounded-l-lg bg-gray-800 border border-gray-900/80;
+    @apply rounded-l-lg bg-blue-primary/90 border border-blue-dark/80;
 }
 
 .sbte-cue-line-flap-error {

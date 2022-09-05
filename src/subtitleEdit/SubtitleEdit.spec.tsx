@@ -196,7 +196,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-up" />
+                                    <i className="fa-duotone fa-angle-double-up" />
                                 </button>
                                 <button
                                     id="jumpToLastButton"
@@ -206,7 +206,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-down" />
+                                    <i className="fa-duotone fa-angle-double-down" />
                                 </button>
                                 <button
                                     id="editCueButton"
@@ -217,7 +217,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-edit" />
+                                    <i className="fa-duotone fa-edit" />
                                 </button>
                                 <button
                                     id="playbackCueButton"
@@ -228,7 +228,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-video" />
+                                    <i className="fa-duotone fa-video" />
                                 </button>
                                 <button
                                     hidden
@@ -240,7 +240,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-language" />
+                                    <i className="fa-duotone fa-language" />
                                 </button>
                                 <button
                                     id="cueErrorButton"
@@ -251,14 +251,14 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-bug" />
+                                    <i className="fa-duotone fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="space-x-4 flex items-center">
                                     <div className="font-medium">
                                         <span hidden className="flex items-center ">
                                             <span className="leading-none" />
-                                            <i className="ml-1" />
+                                            <i className="ml-2" />
                                         </span>
                                     </div>
                                     <button
@@ -375,7 +375,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-up" />
+                                    <i className="fa-duotone fa-angle-double-up" />
                                 </button>
                                 <button
                                     id="jumpToLastButton"
@@ -385,7 +385,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-down" />
+                                    <i className="fa-duotone fa-angle-double-down" />
                                 </button>
                                 <button
                                     id="editCueButton"
@@ -396,7 +396,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-edit" />
+                                    <i className="fa-duotone fa-edit" />
                                 </button>
                                 <button
                                     id="playbackCueButton"
@@ -407,7 +407,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-video" />
+                                    <i className="fa-duotone fa-video" />
                                 </button>
                                 <button
                                     hidden
@@ -419,7 +419,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-language" />
+                                    <i className="fa-duotone fa-language" />
                                 </button>
                                 <button
                                     id="cueErrorButton"
@@ -430,14 +430,14 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-bug" />
+                                    <i className="fa-duotone fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="space-x-4 flex items-center">
                                     <div className="font-medium">
                                         <span hidden className="flex items-center ">
                                             <span className="leading-none" />
-                                            <i className="ml-1" />
+                                            <i className="ml-2" />
                                         </span>
                                     </div>
                                     <button
@@ -684,7 +684,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-up" />
+                                    <i className="fa-duotone fa-angle-double-up" />
                                 </button>
                                 <button
                                     id="jumpToLastButton"
@@ -694,7 +694,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-down" />
+                                    <i className="fa-duotone fa-angle-double-down" />
                                 </button>
                                 <button
                                     id="editCueButton"
@@ -705,7 +705,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-edit" />
+                                    <i className="fa-duotone fa-edit" />
                                 </button>
                                 <button
                                     id="playbackCueButton"
@@ -716,7 +716,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-video" />
+                                    <i className="fa-duotone fa-video" />
                                 </button>
                                 <button
                                     hidden
@@ -728,7 +728,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-language" />
+                                    <i className="fa-duotone fa-language" />
                                 </button>
                                 <button
                                     id="cueErrorButton"
@@ -739,14 +739,14 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-bug" />
+                                    <i className="fa-duotone fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="space-x-4 flex items-center">
                                     <div className="font-medium">
                                         <span hidden className="flex items-center ">
                                             <span className="leading-none" />
-                                            <i className="ml-1" />
+                                            <i className="ml-2" />
                                         </span>
                                     </div>
                                     <button
@@ -883,7 +883,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-up" />
+                                    <i className="fa-duotone fa-angle-double-up" />
                                 </button>
                                 <button
                                     id="jumpToLastButton"
@@ -893,7 +893,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-down" />
+                                    <i className="fa-duotone fa-angle-double-down" />
                                 </button>
                                 <button
                                     id="editCueButton"
@@ -904,7 +904,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-edit" />
+                                    <i className="fa-duotone fa-edit" />
                                 </button>
                                 <button
                                     id="playbackCueButton"
@@ -915,7 +915,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-video" />
+                                    <i className="fa-duotone fa-video" />
                                 </button>
                                 <button
                                     hidden
@@ -927,7 +927,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-language" />
+                                    <i className="fa-duotone fa-language" />
                                 </button>
                                 <button
                                     id="cueErrorButton"
@@ -938,14 +938,14 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-bug" />
+                                    <i className="fa-duotone fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="space-x-4 flex items-center">
                                     <div className="font-medium">
                                         <span hidden className="flex items-center ">
                                             <span className="leading-none" />
-                                            <i className="ml-1" />
+                                            <i className="ml-2" />
                                         </span>
                                     </div>
                                     <button
@@ -1081,7 +1081,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-up" />
+                                    <i className="fa-duotone fa-angle-double-up" />
                                 </button>
                                 <button
                                     id="jumpToLastButton"
@@ -1091,7 +1091,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-down" />
+                                    <i className="fa-duotone fa-angle-double-down" />
                                 </button>
                                 <button
                                     id="editCueButton"
@@ -1102,7 +1102,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-edit" />
+                                    <i className="fa-duotone fa-edit" />
                                 </button>
                                 <button
                                     id="playbackCueButton"
@@ -1113,7 +1113,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-video" />
+                                    <i className="fa-duotone fa-video" />
                                 </button>
                                 <button
                                     hidden
@@ -1125,7 +1125,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-language" />
+                                    <i className="fa-duotone fa-language" />
                                 </button>
                                 <button
                                     id="cueErrorButton"
@@ -1136,7 +1136,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-bug" />
+                                    <i className="fa-duotone fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="space-x-4 flex items-center">
@@ -1290,7 +1290,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-up" />
+                                    <i className="fa-duotone fa-angle-double-up" />
                                 </button>
                                 <button
                                     id="jumpToLastButton"
@@ -1300,7 +1300,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-angle-double-down" />
+                                    <i className="fa-duotone fa-angle-double-down" />
                                 </button>
                                 <button
                                     id="editCueButton"
@@ -1311,7 +1311,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-edit" />
+                                    <i className="fa-duotone fa-edit" />
                                 </button>
                                 <button
                                     id="playbackCueButton"
@@ -1322,7 +1322,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-video" />
+                                    <i className="fa-duotone fa-video" />
                                 </button>
                                 <button
                                     hidden
@@ -1334,7 +1334,7 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-language" />
+                                    <i className="fa-duotone fa-language" />
                                 </button>
                                 <button
                                     id="cueErrorButton"
@@ -1345,14 +1345,14 @@ describe("SubtitleEdit", () => {
                                     data-pr-position="top"
                                     data-pr-at="center top-2"
                                 >
-                                    <i className="fa fa-bug" />
+                                    <i className="fa-duotone fa-bug" />
                                 </button>
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="space-x-4 flex items-center">
                                     <div className="font-medium">
                                         <span hidden className="flex items-center ">
                                             <span className="leading-none" />
-                                            <i className="ml-1" />
+                                            <i className="ml-2" />
                                         </span>
                                     </div>
                                     <button

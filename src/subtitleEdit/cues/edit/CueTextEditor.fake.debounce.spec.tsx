@@ -96,22 +96,22 @@ const createExpectedNode = (
             }}
         >
             <div className="text-sm" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
-                <span>DURATION: <span className="text-green-light">{duration}s</span>, </span>
+                <span>DURATION: <span className="text-green-dark">{duration}s</span>, </span>
                 <span>
                     CHARACTERS:{" "}
-                    <span className="text-green-light">
+                    <span className="text-green-dark">
                         {chars.reduce((a, b) => a + b, 0)}
                     </span>,{" "}
                 </span>
                 <span>
                     WORDS:{" "}
-                    <span className="text-green-light">
+                    <span className="text-green-dark">
                         {words.reduce((a, b) => a + b, 0)}
                     </span>,{" "}
                 </span>
                 <span>
                     CPS:{" "}
-                    <span className="text-green-light">
+                    <span className="text-green-dark">
                         {cps.reduce((a, b) => a + b, 0).toFixed(1)}
                     </span>
                 </span>

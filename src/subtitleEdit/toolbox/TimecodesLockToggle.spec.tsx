@@ -22,7 +22,11 @@ describe("TimecodesLockToggle", () => {
         // GIVEN
         const expectedNode = render(
             <button type="button" className="flex items-center justify-between">
-                Timecodes <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-secondary">LOCKED</span>
+                <span>
+                    <i className="w-7 fa-duotone fa-clock text-blue-primary" />
+                    <span>Timecodes</span>
+                </span>
+                <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-secondary">LOCKED</span>
             </button>
         );
 
@@ -44,7 +48,11 @@ describe("TimecodesLockToggle", () => {
                 type="button"
                 className="flex items-center justify-between outline-0 active"
             >
-                Timecodes <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-success">UNLOCKED</span>
+                <span>
+                    <i className="w-7 fa-duotone fa-clock text-blue-primary" />
+                    <span>Timecodes</span>
+                </span>
+                <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-success">UNLOCKED</span>
             </button>
         );
 

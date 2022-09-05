@@ -39,7 +39,7 @@ describe("Toolbox", () => {
                         aria-controls="toolboxMenu"
                         aria-haspopup="true"
                     >
-                        <i className="fas fa-ellipsis-h" />
+                        <i className="fa-duotone fa-ellipsis-h" />
                     </button>
                 </div>
             </Provider>
@@ -87,7 +87,7 @@ describe("Toolbox", () => {
                         aria-controls="toolboxMenu"
                         aria-haspopup="true"
                     >
-                        <i className="fas fa-ellipsis-h" />
+                        <i className="fa-duotone fa-ellipsis-h" />
                     </button>
                 </div>
             </Provider>

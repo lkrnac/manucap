@@ -23,14 +23,20 @@ export const WaveformToggle = (props: Props): ReactElement => {
                 toggle
                     ? (
                         <>
-                            Waveform{" "}
-                            <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-success">SHOWN</span>
+                            <span>
+                                <i className="w-7 fa-duotone fa-waveform-lines text-blue-primary" />
+                                <span>Waveform</span>
+                            </span>
+                            <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-success">SHOWN</span>
                         </>
                     )
                     : (
                         <>
-                            Waveform{" "}
-                            <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-secondary">HIDDEN</span>
+                            <span>
+                                <i className="w-7 fa-duotone fa-waveform-lines text-blue-primary" />
+                                <span>Waveform</span>
+                            </span>
+                            <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-secondary">HIDDEN</span>
                         </>
                     )
             )}

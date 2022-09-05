@@ -33,10 +33,11 @@ describe("ShiftTimeButton", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <button
-                    className="dotsub-shift-time-button"
+                    className="dotsub-shift-time-button flex items-center"
                     title="Unlock timecodes to enable"
                 >
-                    Shift Track Time
+                    <i className="w-7 fa-duotone fa-arrow-right-arrow-left text-blue-primary" />
+                    <span>Shift Track Time</span>
                 </button>
             </Provider>
         );
@@ -58,10 +59,11 @@ describe("ShiftTimeButton", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <button
-                    className="dotsub-shift-time-button"
+                    className="dotsub-shift-time-button flex items-center"
                     title="Unlock timecodes to enable"
                 >
-                    Shift Track Time
+                    <i className="w-7 fa-duotone fa-arrow-right-arrow-left text-blue-primary" />
+                    <span>Shift Track Time</span>
                 </button>
             </Provider>
         );
@@ -84,11 +86,12 @@ describe("ShiftTimeButton", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <button
-                    className="dotsub-shift-time-button"
+                    className="dotsub-shift-time-button flex items-center"
                     disabled
                     title="Unlock timecodes to enable"
                 >
-                    Shift Track Time
+                    <i className="w-7 fa-duotone fa-arrow-right-arrow-left text-blue-primary" />
+                    <span>Shift Track Time</span>
                 </button>
             </Provider>
         );

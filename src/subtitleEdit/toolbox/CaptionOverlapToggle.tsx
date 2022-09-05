@@ -36,13 +36,21 @@ export const CaptionOverlapToggle = (props: Props): ReactElement => {
                 toggle
                     ? (
                         <>
-                            Overlapping{" "}
-                            <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-success">ALLOWED</span>
+                            <span>
+                                <i className="w-7 fa-duotone fa-arrow-down-square-triangle text-blue-primary" />
+                                <span>Overlapping</span>
+                            </span>
+                            <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-success">ALLOWED</span>
                         </>
                     ) : (
                         <>
-                            Overlapping{" "}
-                            <span className="sbte-badge font-bold sbte-badge-sm sbte-badge-secondary">NOT ALLOWED</span>
+                            <span>
+                                <i className="w-7 fa-duotone fa-arrow-down-square-triangle text-blue-primary" />
+                                <span>Overlapping</span>
+                            </span>
+                            <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-secondary">
+                                NOT ALLOWED
+                            </span>
                         </>
                     )
             )}

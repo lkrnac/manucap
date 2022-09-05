@@ -43,7 +43,7 @@ const CueComments = (props: Props): ReactElement => {
                 data-pr-at="left top+10"
                 onClick={(): AppThunk => dispatch(deleteCueComment(cueIndex, commentIndex))}
             >
-                <i className="fa fa-trash" />
+                <i className="fa-duotone fa-trash" />
             </button>
             <Tooltip
                 id={`deleteCueCommentButtonTooltip-${cueIndex}-${commentIndex}`}

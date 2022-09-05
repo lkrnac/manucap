@@ -20,7 +20,7 @@ describe("ImportTrackCuesButton", () => {
                data-pr-position="top"
                data-pr-at="center+2 top-2"
            >
-               <i className="fas fa-file-import fa-lg" />
+               <i className="fa-duotone fa-file-import fa-lg" />
            </button>
        );
 
@@ -46,7 +46,7 @@ describe("ImportTrackCuesButton", () => {
                 data-pr-position="top"
                 data-pr-at="center+2 top-2"
             >
-                <i className="fas fa-file-import fa-lg" />
+                <i className="fa-duotone fa-file-import fa-lg" />
             </button>
         );
 
