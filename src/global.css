@@ -493,7 +493,7 @@
 .sbte-form-control[readonly],
 .sbte-form-control[disabled],
 .sbte-form-control.disabled {
-    @apply bg-gray-0 opacity-100;
+    @apply bg-slate-0 opacity-100;
 }
 
 textarea.sbte-form-control {
