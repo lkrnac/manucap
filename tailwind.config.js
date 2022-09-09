@@ -49,6 +49,9 @@ module.exports = {
                 700: withOpacityValue("--gray-7"),
                 800: withOpacityValue("--gray-8"),
                 900: withOpacityValue("--gray-9"),
+            },
+            slate: {
+                0: withOpacityValue("--slate-0")
             }
         },
         extend: {
