@@ -5,11 +5,11 @@ import { fireEvent, render } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { CueDto, CueError, Language, Task, Track } from "../../model";
+import { CueDto, CueError, Language, Track } from "../../model";
 import CueView from "./CueView";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { updateEditingTrack, updateTask } from "../../trackSlices";
+import { updateEditingTrack } from "../../trackSlices";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import { updateCues } from "../cuesList/cuesListActions";
 import { SubtitleSpecification } from "../../toolbox/model";
@@ -845,13 +845,6 @@ describe("CueView", () => {
                 />
             </Provider>
         );
-        const testingTask = {
-            type: "TASK_CAPTION",
-            projectName: "Project One",
-            dueDate: "2019/12/30 10:00AM",
-            editDisabled: false
-        } as Task;
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 
         // WHEN
         await act(async () => {

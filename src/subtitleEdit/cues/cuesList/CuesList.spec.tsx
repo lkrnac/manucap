@@ -4,13 +4,13 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 
-import { CueDto, Language, ScrollPosition, Task, Track } from "../../model";
+import { CueDto, Language, ScrollPosition, Track } from "../../model";
 import { updateCues, updateVttCue } from "./cuesListActions";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import CuesList from "./CuesList";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
-import { updateEditingTrack, updateTask } from "../../trackSlices";
+import { updateEditingTrack } from "../../trackSlices";
 import { changeScrollPosition, scrollPositionSlice } from "./cuesListScrollSlice";
 import { act } from "react-dom/test-utils";
 import CueLine from "../cueLine/CueLine";
@@ -27,13 +27,6 @@ const scrollIntoViewCallsTracker = jest.fn();
 Element.prototype.scrollIntoView = function (): void {
     scrollIntoViewCallsTracker(this);
 };
-
-const testingTask = {
-    type: "TASK_CAPTION",
-    projectName: "Project One",
-    dueDate: "2019/12/30 10:00AM",
-    editDisabled: false
-} as Task;
 
 const testingCaptionTrack = {
     type: "CAPTION",
@@ -510,7 +503,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
             const actualNode = render(
                 <Provider store={testingStore}>
                     <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
@@ -532,7 +525,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateEditingCueIndex(49) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
             const actualNode = render(
                 <Provider store={testingStore}>
                     <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
@@ -554,7 +547,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateEditingCueIndex(50) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
             const actualNode = render(
                 <Provider store={testingStore}>
                     <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
@@ -576,7 +569,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateEditingCueIndex(111) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
             const actualNode = render(
                 <Provider store={testingStore}>
                     <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
@@ -600,7 +593,7 @@ describe("CuesList", () => {
             testingStore.dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(0) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
             const actualNode = render(
                 <Provider store={testingStore}>
                     <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
@@ -622,7 +615,7 @@ describe("CuesList", () => {
             testingStore.dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(49) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
             const actualNode = render(
                 <Provider store={testingStore}>
                     <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
@@ -644,7 +637,7 @@ describe("CuesList", () => {
             testingStore.dispatch(updateEditingCueIndex(50) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
             const actualNode = render(
                 <Provider store={testingStore}>
                     <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
@@ -666,7 +659,7 @@ describe("CuesList", () => {
             testingStore.dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(111) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
             const actualNode = render(
                 <Provider store={testingStore}>
                     <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />

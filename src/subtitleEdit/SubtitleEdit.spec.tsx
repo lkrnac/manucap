@@ -6,7 +6,7 @@ import { mount } from "enzyme";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import ReactDOM from "react-dom";
 
-import { CueDto, Language, ScrollPosition, Task, Track, CueError } from "./model";
+import { CueDto, Language, ScrollPosition, Track, CueError } from "./model";
 import {
     fixVideoPlayerInvalidTime,
     removeBackgroundColorStyle,
@@ -14,7 +14,7 @@ import {
     removeVideoPlayerDynamicValue,
 } from "../testUtils/testUtils";
 import { updateCues, updateVttCue } from "./cues/cuesList/cuesListActions";
-import { updateEditingTrack, updateTask } from "./trackSlices";
+import { updateEditingTrack } from "./trackSlices";
 import CueLine from "./cues/cueLine/CueLine";
 import SubtitleEdit from "./SubtitleEdit";
 import { SubtitleSpecification } from "./toolbox/model";
@@ -78,27 +78,6 @@ const testingTranslationTrack = {
     mediaTitle: "This is the video title",
     mediaLength: 4000,
 } as Track;
-
-const testingTask = {
-    type: "TASK_CAPTION",
-    projectName: "Project One",
-    dueDate: "2019/12/30 10:00AM",
-    editDisabled: false
-} as Task;
-
-const testingTranslationTask = {
-    type: "TASK_TRANSLATE",
-    projectName: "Project One",
-    dueDate: "2019/12/30 10:00AM",
-    editDisabled: false
-} as Task;
-
-const testingCompletedTask = {
-    type: "TASK_CAPTION",
-    projectName: "Project One",
-    dueDate: "2019/12/30 10:00AM",
-    editDisabled: true
-} as Task;
 
 jest.setTimeout(9000);
 
@@ -291,7 +270,6 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -470,7 +448,6 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -526,7 +503,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -581,7 +558,6 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTranslationTask) as {} as AnyAction);
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -779,7 +755,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -978,7 +954,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -1172,11 +1148,11 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    editDisabled
                 />
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingCompletedTask) as {} as AnyAction);
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -1387,7 +1363,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -1421,7 +1397,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -1453,7 +1429,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -1486,7 +1462,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -1518,7 +1494,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTranslationTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -1550,7 +1526,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -2060,7 +2036,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         for (let i = 0; i < 5; i++) {
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             actualNode.update();

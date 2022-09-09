@@ -1,5 +1,5 @@
 import { updateCues } from "./subtitleEdit/cues/cuesList/cuesListActions";
-import { updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
+import { updateEditingTrack } from "./subtitleEdit/trackSlices";
 import { Reducers } from "./subtitleEdit/subtitleEditReducers";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import VideoPlayer from "./subtitleEdit/player/VideoPlayer";
@@ -10,7 +10,6 @@ import { updateSubtitleUser } from "./subtitleEdit/userSlices";
 
 const Actions = ({
     updateEditingTrack,
-    updateTask,
     updateCues,
     updateSourceCues,
     setAutoSaveSuccess,
