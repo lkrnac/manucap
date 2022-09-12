@@ -1003,7 +1003,7 @@ describe("SubtitleEdit", () => {
                                 />
                             </div>
                             <Toolbox
-                                editDisabled={true}
+                                editDisabled
                                 handleImportFile={jest.fn()}
                                 handleExportSourceFile={jest.fn()}
                                 handleExportFile={jest.fn()}
@@ -1149,7 +1149,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
-                    editDisabled={true}
+                    editDisabled
                 />
             </Provider>
         );
