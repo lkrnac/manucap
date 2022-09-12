@@ -1003,6 +1003,7 @@ describe("SubtitleEdit", () => {
                                 />
                             </div>
                             <Toolbox
+                                editDisabled={true}
                                 handleImportFile={jest.fn()}
                                 handleExportSourceFile={jest.fn()}
                                 handleExportFile={jest.fn()}
@@ -1148,7 +1149,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
-                    editDisabled
+                    editDisabled={true}
                 />
             </Provider>
         );
@@ -1160,9 +1161,9 @@ describe("SubtitleEdit", () => {
 
         // THEN
         const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            actualNode.html())).replace(" disabled=\"\"", "");
+            actualNode.html()));
         const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            expectedNode.html())).replace(" disabled=\"\"", "");
+            expectedNode.html()));
         expect(actual).toEqual(expected);
     });
 
