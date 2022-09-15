@@ -1,3 +1,4 @@
+/* eslint react/no-unknown-property: 0 */ // custom attribute added by react-advanced-timefield
 import "../../../testUtils/initBrowserEnvironment";
 import TimeEditor from "./TimeEditor";
 import { mount } from "enzyme";
