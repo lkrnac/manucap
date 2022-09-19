@@ -124,16 +124,15 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         <div
                             style={{
                                 flex: "1 1 60%",
-                                height: "100%",
-                                paddingLeft: "10px",
-                                display: "flex",
-                                flexDirection: "column"
+                                paddingLeft: "10px"
                             }}
-                            className="space-y-2"
+                            className="h-full flex flex-col justify-between space-y-2"
                         >
-                            <SearchReplaceEditor />
-                            <MergeEditor />
-                            <CuesList editingTrack={editingTrack} commentAuthor={props.commentAuthor} />
+                            <div>
+                                <SearchReplaceEditor />
+                                <MergeEditor />
+                                <CuesList editingTrack={editingTrack} commentAuthor={props.commentAuthor} />
+                            </div>
                             <div className="space-x-2 flex items-center">
                                 <button
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
