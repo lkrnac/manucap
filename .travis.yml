@@ -23,6 +23,7 @@ after_success:
   - npm run lint
   - ./scripts/post-build.sh
   - ./scripts/codecov.sh
+  - ./scripts/post-build-js-checks.sh
 
 deploy:
   provider: npm
