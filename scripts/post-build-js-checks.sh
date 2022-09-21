@@ -2,12 +2,10 @@
 GITHUB_TOKEN=$CD_GITHUB_TOKEN
 
 #check for ESLint violations
-if (grep '<error' */build/eslint.xml 1> /dev/null 2>&1) then
-  # TODO sum for ESLint doesn't work correctly, because it produces XML output without new line characters
-  # Sum is always 1 if there are errors or 0 if there are no errors
-  # I don't have time right now to fix this, therefore will just mention there are/aren't errors for now
-  sumEslint=$(cat */build/eslint.xml | grep -c '<error')
-  curl -H "Authorization: token $GITHUB_TOKEN" --request POST --data '{"state": "failure", "context": "travis-ci/ESLint", "description": "ESLint found issues!"}' https://api.github.com/repos/dotsub/vtms-subtitle-edit-ui/statuses/${TRAVIS_COMMIT} > /dev/null
+if (grep '<error' build/eslint.xml 1> /dev/null 2>&1) then
+  sumEslint=$(cat build/eslint.xml | grep -o '<error' | wc -l)
+  echo "ESLint found "${sumEslint}" issues!";
+  curl -H "Authorization: token $GITHUB_TOKEN" --request POST --data '{"state": "failure", "context": "travis-ci/ESLint", "description": "ESLint found '"${sumEslint}"' issues!"}' https://api.github.com/repos/dotsub/vtms-subtitle-edit-ui/statuses/${TRAVIS_COMMIT} > /dev/null
 else
   curl -H "Authorization: token $GITHUB_TOKEN" --request POST --data '{"state": "success", "context": "travis-ci/ESLint", "description": "ESLint Passed"}' https://api.github.com/repos/dotsub/vtms-subtitle-edit-ui/statuses/${TRAVIS_COMMIT} > /dev/null
 fi
