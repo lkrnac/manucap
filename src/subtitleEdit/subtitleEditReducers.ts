@@ -1,6 +1,6 @@
 import { Action, combineReducers } from "@reduxjs/toolkit";
 import { cuesSlice, matchedCuesSlice } from "./cues/cuesList/cuesListSlices";
-import { editingTrackSlice, taskSlice } from "./trackSlices";
+import { editingTrackSlice } from "./trackSlices";
 import { userSlice } from "./userSlices";
 import { ThunkAction } from "redux-thunk";
 import { playVideoSectionSlice } from "./player/playbackSlices";
@@ -28,7 +28,6 @@ import { waveformVisibleSlice } from "./player/waveformSlices";
 export const Reducers = {
     cues: cuesSlice.reducer,
     editingTrack: editingTrackSlice.reducer,
-    cuesTask: taskSlice.reducer,
     subtitleSpecifications: subtitleSpecificationSlice.reducer,
     sourceCues: sourceCuesSlice.reducer,
     videoSectionToPlay: playVideoSectionSlice.reducer,
@@ -61,7 +60,7 @@ export type SubtitleEditState = ReturnType<typeof subtitleEditReducers>;
 
 /**
  * We are forced to use `as {} as AnyAction` casting then we are executing actions with `testingStore.dispatch`.
- * This seem to be related problem: https://github.com/reduxjs/redux-toolkit/issues/321.
+ * This seems to be related problem: https://github.com/reduxjs/redux-toolkit/issues/321.
  * But no suggestions from that issue work nor mentioned fix didn't work. I couldn't figure out any other fix than
  * applying ugly cast workaround.
  */

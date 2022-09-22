@@ -4,7 +4,6 @@ import "../global.css";
 import { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import EditingVideoPlayer from "./player/EditingVideoPlayer";
-import SubtitleEditHeader from "./SubtitleEditHeader";
 import { AppThunk, SubtitleEditState } from "./subtitleEditReducers";
 import Toolbox from "./toolbox/Toolbox";
 import { enableMapSet } from "immer";
@@ -40,13 +39,13 @@ export interface SubtitleEditProps {
     onImportFile: () => void;
     spellCheckerDomain?: string;
     commentAuthor?: string;
+    editDisabled?: boolean;
 }
 
 const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const dispatch = useDispatch();
     const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
-    const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
     const handleTimeChange = (time: number): AppThunk => dispatch(setCurrentPlayerTime(time));
     const cuesLoadingCounter = useSelector((state: SubtitleEditState) => state.cuesLoadingCounter);
 
@@ -77,7 +76,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
             style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%" }}
         >
             <CueErrorAlert />
-            <SubtitleEditHeader />
             {
                 !hasDataLoaded(editingTrack, loadingIndicator) ?
                     <div
@@ -116,6 +114,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 />
                             </div>
                             <Toolbox
+                                editDisabled={props.editDisabled}
                                 handleExportSourceFile={props.onExportSourceFile}
                                 handleExportFile={props.onExportFile}
                                 handleImportFile={props.onImportFile}
@@ -249,7 +248,10 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     target="#cueErrorButton"
                                 />
                                 <span style={{ flexGrow: 2 }} />
-                                <CompleteButton onComplete={props.onComplete} disabled={editingTask?.editDisabled} />
+                                <CompleteButton
+                                    onComplete={props.onComplete}
+                                    disabled={props.editDisabled}
+                                />
                             </div>
                         </div>
                     </div>

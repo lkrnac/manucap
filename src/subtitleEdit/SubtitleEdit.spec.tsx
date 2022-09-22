@@ -6,7 +6,7 @@ import { mount } from "enzyme";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import ReactDOM from "react-dom";
 
-import { CueDto, Language, ScrollPosition, Task, Track, CueError } from "./model";
+import { CueDto, Language, ScrollPosition, Track, CueError } from "./model";
 import {
     fixVideoPlayerInvalidTime,
     removeBackgroundColorStyle,
@@ -14,7 +14,7 @@ import {
     removeVideoPlayerDynamicValue,
 } from "../testUtils/testUtils";
 import { updateCues, updateVttCue } from "./cues/cuesList/cuesListActions";
-import { updateEditingTrack, updateTask } from "./trackSlices";
+import { updateEditingTrack } from "./trackSlices";
 import CueLine from "./cues/cueLine/CueLine";
 import SubtitleEdit from "./SubtitleEdit";
 import { SubtitleSpecification } from "./toolbox/model";
@@ -79,27 +79,6 @@ const testingTranslationTrack = {
     mediaLength: 4000,
 } as Track;
 
-const testingTask = {
-    type: "TASK_CAPTION",
-    projectName: "Project One",
-    dueDate: "2019/12/30 10:00AM",
-    editDisabled: false
-} as Task;
-
-const testingTranslationTask = {
-    type: "TASK_TRANSLATE",
-    projectName: "Project One",
-    dueDate: "2019/12/30 10:00AM",
-    editDisabled: false
-} as Task;
-
-const testingCompletedTask = {
-    type: "TASK_CAPTION",
-    projectName: "Project One",
-    dueDate: "2019/12/30 10:00AM",
-    editDisabled: true
-} as Task;
-
 jest.setTimeout(9000);
 
 describe("SubtitleEdit", () => {
@@ -122,45 +101,6 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div className="space-x-2 flex items-center">
-                                <div className="space-x-1">
-                                    <span>
-                                        <i className="vtms-icon fa-duotone fa-video text-sm text-blue-light w-5" />
-                                        <span className="font-medium text-blue-light">Video:</span>
-                                    </span>
-                                    <span>This is the video title</span>
-                                </div>
-                                <div className="space-x-1">
-                                    <span>
-                                        <i className="vtms-icon fa-duotone fa-archive text-sm text-blue-light w-5" />
-                                        <span className="font-medium text-blue-light">Project:</span>
-                                    </span>
-                                    <span>Project One</span>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                Caption in: <span className="font-medium text-blue-light ml-1">English (US)</span>{" "}
-                                <span><i>4 seconds</i></span>
-                            </div>
-                        </div>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div className="flex items-center space-x-2">
-                                <span>
-                                    <i className="vtms-icon fa-duotone fa-calendar text-sm text-blue-light w-5" />
-                                    <span className="font-medium text-blue-light">Due Date:</span>
-                                </span><span>2019/12/30 10:00AM</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <span>
-                                    <i className="vtms-icon fa-duotone fa-check text-sm text-blue-light w-5" />
-                                    <span className="font-medium text-blue-light">Completed:</span>
-                                </span>
-                                <span>50%</span>
-                            </div>
-                        </div>
-                    </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
@@ -329,7 +269,6 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -357,45 +296,6 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div className="space-x-2 flex items-center">
-                                <div className="space-x-1">
-                                    <span>
-                                        <i className="vtms-icon fa-duotone fa-video text-sm text-blue-light w-5" />
-                                        <span className="font-medium text-blue-light">Video:</span>
-                                    </span>
-                                    <span>This is the video title</span>
-                                </div>
-                                <div className="space-x-1">
-                                    <span>
-                                        <i className="vtms-icon fa-duotone fa-archive text-sm text-blue-light w-5" />
-                                        <span className="font-medium text-blue-light">Project:</span>
-                                    </span>
-                                    <span>Project One</span>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                Caption in: <span className="font-medium text-blue-light ml-1">English (US)</span>{" "}
-                                <span><i>4 seconds</i></span>
-                            </div>
-                        </div>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div className="flex items-center space-x-2">
-                                <span>
-                                    <i className="vtms-icon fa-duotone fa-calendar text-sm text-blue-light w-5" />
-                                    <span className="font-medium text-blue-light">Due Date:</span>
-                                </span><span>2019/12/30 10:00AM</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <span>
-                                    <i className="vtms-icon fa-duotone fa-check text-sm text-blue-light w-5" />
-                                    <span className="font-medium text-blue-light">Completed:</span>
-                                </span>
-                                <span>0%</span>
-                            </div>
-                        </div>
-                    </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
@@ -546,7 +446,6 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -574,39 +473,6 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div className="space-x-2 flex items-center">
-                                <div className="space-x-1">
-                                    <span>
-                                        <i className="vtms-icon fa-duotone fa-video text-sm text-blue-light w-5" />
-                                        <span className="font-medium text-blue-light">Video:</span>
-                                    </span>
-                                    <span>This is the video title</span>
-                                </div>
-                                <div className="space-x-1">
-                                    <span>
-                                        <i className="vtms-icon fa-duotone fa-archive text-sm text-blue-light w-5" />
-                                        <span className="font-medium text-blue-light">Project:</span>
-                                    </span>
-                                    <span>Project One</span>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                Caption in: <span className="font-medium text-blue-light ml-1">English (US)</span>{" "}
-                                <span><i>4 seconds</i></span>
-                            </div>
-                        </div>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div className="flex items-center space-x-2">
-                                <span>
-                                    <i className="vtms-icon fa-duotone fa-calendar text-sm text-blue-light w-5" />
-                                    <span className="font-medium text-blue-light">Due Date:</span>
-                                </span><span>2019/12/30 10:00AM</span>
-                            </div>
-                            <div />
-                        </div>
-                    </header>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
                         <div className="text-center space-y-4">
                             <div className="sbte-spinner-icon" />
@@ -635,7 +501,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -662,48 +528,6 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div className="space-x-2 flex items-center">
-                                <div className="space-x-1">
-                                    <span>
-                                        <i className="vtms-icon fa-duotone fa-video text-sm text-blue-light w-5" />
-                                        <span className="font-medium text-blue-light">Video:</span>
-                                    </span>
-                                    <span>This is the video title</span>
-                                </div>
-                                <div className="space-x-1">
-                                    <span>
-                                        <i className="vtms-icon fa-duotone fa-archive text-sm text-blue-light w-5" />
-                                        <span className="font-medium text-blue-light">Project:</span>
-                                    </span>
-                                    <span>Project One</span>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                Translation from{" "}
-                                <span className="inline-flex items-center space-x-2 ml-1 font-medium text-blue-light">
-                                    <span>English (US)</span>
-                                    <i className="fa-duotone fa-arrow-right-arrow-left" />
-                                    <span>French (France)</span>
-                                </span>
-                                {" "}
-                                <span>
-                                    <i>4 seconds</i>
-                                </span>
-                            </div>
-                        </div>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div className="flex items-center space-x-2">
-                                <span>
-                                    <i className="vtms-icon fa-duotone fa-calendar text-sm text-blue-light w-5" />
-                                    <span className="font-medium text-blue-light">Due Date:</span>
-                                </span>
-                                <span>2019/12/30 10:00AM</span>
-                            </div>
-                            <div />
-                        </div>
-                    </header>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
                         <div className="text-center space-y-4">
                             <div className="sbte-spinner-icon" />
@@ -732,7 +556,6 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTranslationTask) as {} as AnyAction);
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -760,47 +583,6 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <header style={{ display: "flex", paddingBottom: 10 }}>
-                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div className="space-x-2 flex items-center">
-                                <div className="space-x-1">
-                                    <span>
-                                        <i className="vtms-icon fa-duotone fa-video text-sm text-blue-light w-5" />
-                                        <span className="font-medium text-blue-light">Video:</span>
-                                    </span>
-                                    <span>This is the video title</span>
-                                </div>
-                                <div className="space-x-1">
-                                    <span>
-                                        <i className="vtms-icon fa-duotone fa-archive text-sm text-blue-light w-5" />
-                                        <span className="font-medium text-blue-light">Project:</span>
-                                    </span>
-                                    <span>Project One</span>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                Caption in:{" "}
-                                <span className="font-medium text-blue-light ml-1">English (US)</span>{" "}
-                                <span><i>4 seconds</i></span>
-                            </div>
-                        </div>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div className="flex items-center space-x-2">
-                                <span>
-                                    <i className="vtms-icon fa-duotone fa-calendar text-sm text-blue-light w-5" />
-                                    <span className="font-medium text-blue-light">Due Date:</span>
-                                </span>
-                                <span>2019/12/30 10:00AM</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <span>
-                                    <i className="vtms-icon fa-duotone fa-check text-sm text-blue-light w-5" />
-                                    <span className="font-medium text-blue-light">Completed:</span>
-                                </span>
-                                <span>50%</span>
-                            </div>
-                        </div>
-                    </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
@@ -970,7 +752,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -999,45 +781,6 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div className="space-x-2 flex items-center">
-                                <div className="space-x-1">
-                                    <span>
-                                        <i className="vtms-icon fa-duotone fa-video text-sm text-blue-light w-5" />
-                                        <span className="font-medium text-blue-light">Video:</span>
-                                    </span>
-                                    <span>This is the video title</span>
-                                </div>
-                                <div className="space-x-1">
-                                    <span>
-                                        <i className="vtms-icon fa-duotone fa-archive text-sm text-blue-light w-5" />
-                                        <span className="font-medium text-blue-light">Project:</span>
-                                    </span>
-                                    <span>Project One</span>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                Caption in: <span className="font-medium text-blue-light ml-1">English (US)</span>{" "}
-                                <span><i>4 seconds</i></span>
-                            </div>
-                        </div>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div className="flex items-center space-x-2">
-                                <span>
-                                    <i className="vtms-icon fa-duotone fa-calendar text-sm text-blue-light w-5" />
-                                    <span className="font-medium text-blue-light">Due Date:</span>
-                                </span><span>2019/12/30 10:00AM</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <span>
-                                    <i className="vtms-icon fa-duotone fa-check text-sm text-blue-light w-5" />
-                                    <span className="font-medium text-blue-light">Completed:</span>
-                                </span>
-                                <span>50%</span>
-                            </div>
-                        </div>
-                    </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
@@ -1207,7 +950,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -1236,45 +979,6 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div className="space-x-2 flex items-center">
-                                <div className="space-x-1">
-                                    <span>
-                                        <i className="vtms-icon fa-duotone fa-video text-sm text-blue-light w-5" />
-                                        <span className="font-medium text-blue-light">Video:</span>
-                                    </span>
-                                    <span>This is the video title</span>
-                                </div>
-                                <div className="space-x-1">
-                                    <span>
-                                        <i className="vtms-icon fa-duotone fa-archive text-sm text-blue-light w-5" />
-                                        <span className="font-medium text-blue-light">Project:</span>
-                                    </span>
-                                    <span>Project One</span>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                Caption in: <span className="font-medium text-blue-light ml-1">English (US)</span>{" "}
-                                <span><i>4 seconds</i></span>
-                            </div>
-                        </div>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div className="flex items-center space-x-2">
-                                <span>
-                                    <i className="vtms-icon fa-duotone fa-calendar text-sm text-blue-light w-5" />
-                                    <span className="font-medium text-blue-light">Due Date:</span>
-                                </span><span>2019/12/30 10:00AM</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <span>
-                                    <i className="vtms-icon fa-duotone fa-check text-sm text-blue-light w-5" />
-                                    <span className="font-medium text-blue-light">Completed:</span>
-                                </span>
-                                <span>50%</span>
-                            </div>
-                        </div>
-                    </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
@@ -1295,6 +999,7 @@ describe("SubtitleEdit", () => {
                                 />
                             </div>
                             <Toolbox
+                                editDisabled
                                 handleImportFile={jest.fn()}
                                 handleExportSourceFile={jest.fn()}
                                 handleExportFile={jest.fn()}
@@ -1439,11 +1144,11 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    editDisabled
                 />
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingCompletedTask) as {} as AnyAction);
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -1451,9 +1156,9 @@ describe("SubtitleEdit", () => {
 
         // THEN
         const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            actualNode.html())).replace(" disabled=\"\"", "");
+            actualNode.html()));
         const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            expectedNode.html())).replace(" disabled=\"\"", "");
+            expectedNode.html()));
         expect(actual).toEqual(expected);
     });
 
@@ -1477,45 +1182,6 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <header style={{ display: "flex", paddingBottom: "10px" }}>
-                        <div style={{ display: "flex", flexFlow: "column", flex: 1 }}>
-                            <div className="space-x-2 flex items-center">
-                                <div className="space-x-1">
-                                    <span>
-                                        <i className="vtms-icon fa-duotone fa-video text-sm text-blue-light w-5" />
-                                        <span className="font-medium text-blue-light">Video:</span>
-                                    </span>
-                                    <span>This is the video title</span>
-                                </div>
-                                <div className="space-x-1">
-                                    <span>
-                                        <i className="vtms-icon fa-duotone fa-archive text-sm text-blue-light w-5" />
-                                        <span className="font-medium text-blue-light">Project:</span>
-                                    </span>
-                                    <span>Project One</span>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                Caption in: <span className="font-medium text-blue-light ml-1">English (US)</span>{" "}
-                                <span><i>4 seconds</i></span>
-                            </div>
-                        </div>
-                        <div style={{ display: "flex", flexFlow: "column" }}>
-                            <div className="flex items-center space-x-2">
-                                <span>
-                                    <i className="vtms-icon fa-duotone fa-calendar text-sm text-blue-light w-5" />
-                                    <span className="font-medium text-blue-light">Due Date:</span>
-                                </span><span>2019/12/30 10:00AM</span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <span>
-                                    <i className="vtms-icon fa-duotone fa-check text-sm text-blue-light w-5" />
-                                    <span className="font-medium text-blue-light">Completed:</span>
-                                </span>
-                                <span>50%</span>
-                            </div>
-                        </div>
-                    </header>
                     <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
@@ -1692,7 +1358,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -1726,7 +1392,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -1758,7 +1424,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -1791,7 +1457,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -1823,7 +1489,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTranslationTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -1855,7 +1521,7 @@ describe("SubtitleEdit", () => {
             </Provider>
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         testingStore.dispatch(
             readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
         );
@@ -2365,7 +2031,7 @@ describe("SubtitleEdit", () => {
 
         // WHEN
         testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
-        testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
+
         for (let i = 0; i < 5; i++) {
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             actualNode.update();

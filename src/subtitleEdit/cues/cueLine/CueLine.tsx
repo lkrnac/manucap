@@ -199,6 +199,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     className={translationCueClassName}
                                     sourceCuesIndexes={sourceCuesIndexes}
                                     nextTargetCueIndex={nextTargetCueIndex}
+                                    editDisabled={cueLineEditDisabled}
                                 >
                                     <div style={{ width: "100%", minHeight: "78px" }} />
                                 </ClickCueWrapper>
@@ -269,6 +270,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     className="bg-gray-0"
                                     sourceCuesIndexes={sourceCuesIndexes}
                                     nextTargetCueIndex={nextTargetCueIndex}
+                                    editDisabled={cueLineEditDisabled}
                                 >
                                     <InsertCueButton />
                                 </ClickCueWrapper>

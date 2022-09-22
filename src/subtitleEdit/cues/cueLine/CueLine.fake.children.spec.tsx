@@ -6,14 +6,14 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { fireEvent, render } from "@testing-library/react";
 import { Provider } from "react-redux";
 
-import { CueDto, CueError, CueLineState, Language, Task, Track } from "../../model";
+import { CueDto, CueError, CueLineState, Language, Track } from "../../model";
 import CueEdit, { CueEditProps } from "../edit/CueEdit";
 import CueLine, { CueLineRowProps } from "./CueLine";
 import CueView, { CueViewProps } from "../view/CueView";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import CueLineFlap from "./CueLineFlap";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
-import { updateEditingTrack, updateTask } from "../../trackSlices";
+import { updateEditingTrack } from "../../trackSlices";
 import "../edit/CueTextEditor";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import { updateCues } from "../cuesList/cuesListActions";
@@ -1870,13 +1870,6 @@ describe("CueLine", () => {
                     />
                 </Provider>
             );
-            const testingTask = {
-                type: "TASK_CAPTION",
-                projectName: "Project One",
-                dueDate: "2019/12/30 10:00AM",
-                editDisabled: false
-            } as Task;
-            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 
             // WHEN
             fireEvent.click(actualNode.container.querySelector(".sbte-click-cue-wrapper") as Element);

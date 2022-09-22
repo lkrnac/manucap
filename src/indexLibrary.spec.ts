@@ -9,7 +9,6 @@ describe("indexLibrary", () => {
         expect(indexLibrary.Actions.updateCues).toBeDefined();
         expect(indexLibrary.Actions.updateSourceCues).toBeDefined();
         expect(indexLibrary.Actions.updateEditingTrack).toBeDefined();
-        expect(indexLibrary.Actions.updateTask).toBeDefined();
         expect(indexLibrary.Actions.updateSubtitleUser).toBeDefined();
         expect(indexLibrary.Reducers).toBeDefined();
     });

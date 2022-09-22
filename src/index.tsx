@@ -6,7 +6,7 @@ import "primereact/resources/themes/bootstrap4-light-blue/theme.css";
 import { Provider, useDispatch } from "react-redux";
 import { ReactElement, useEffect } from "react";
 import { updateCues } from "./subtitleEdit/cues/cuesList/cuesListActions";
-import { updateEditingTrack, updateTask } from "./subtitleEdit/trackSlices";
+import { updateEditingTrack } from "./subtitleEdit/trackSlices";
 import { updateSubtitleUser } from "./subtitleEdit/userSlices";
 import { CueDto, Language, User } from "./subtitleEdit/model";
 import ReactDOM from "react-dom";
@@ -293,19 +293,6 @@ const TestApp = (): ReactElement => {
         } as User;
         setTimeout(
             () => dispatch(updateSubtitleUser(subtitleUser)),
-            500
-        );
-    });
-
-    // ################################## Task ###########################################
-    useEffect(() => {
-        setTimeout( // this simulates latency caused by server roundtrip
-            () => dispatch(updateTask({
-                type: "TASK_CAPTION",
-                projectName: "Project One",
-                dueDate: "2019/12/30 10:00AM",
-                editDisabled: false,
-            })),
             500
         );
     });

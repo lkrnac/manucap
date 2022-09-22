@@ -1,6 +1,6 @@
 {
   "name": "@dotsub/vtms-subtitle-edit-ui",
-  "version": "2.24.0",
+  "version": "2.24.1",
   "description": "",
   "author": "Dotsub",
   "license": "",
@@ -40,7 +40,6 @@
     "draft-js": "^0.11.7",
     "draft-js-export-html": "^1.4.1",
     "final-form": "^4.20.7",
-    "humanize-duration": "^3.27.3",
     "immutable": "^4.1.0",
     "lodash": "^4.17.21",
     "moment": "2.29.4",

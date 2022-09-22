@@ -5,9 +5,9 @@ import { fireEvent, render } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import { AnyAction } from "@reduxjs/toolkit";
 
-import { CueDto, Task, Track } from "../../model";
+import { CueDto, Track } from "../../model";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { updateEditingTrack, updateTask } from "../../trackSlices";
+import { updateEditingTrack } from "../../trackSlices";
 import { updateSourceCues } from "./sourceCueSlices";
 import { updateCues } from "../cuesList/cuesListActions";
 import ClickCueWrapper from "./ClickCueWrapper";
@@ -34,13 +34,6 @@ describe("ClickCueWrapper", () => {
                     />
                 </Provider>
             );
-            const testingTask = {
-                type: "TASK_CAPTION",
-                projectName: "Project One",
-                dueDate: "2019/12/30 10:00AM",
-                editDisabled: false
-            } as Task;
-            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 
             // WHEN
             await act(async () => {
@@ -60,35 +53,7 @@ describe("ClickCueWrapper", () => {
                         targetCuesLength={8}
                         sourceCuesIndexes={[]}
                         nextTargetCueIndex={-1}
-                    />
-                </Provider>
-            );
-            const testingTask = {
-                type: "TASK_CAPTION",
-                projectName: "Project One",
-                dueDate: "2019/12/30 10:00AM",
-                editDisabled: true
-            } as Task;
-            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
-
-            // WHEN
-            await act(async () => {
-                fireEvent.click(actualNode.container.querySelector("div") as Element);
-            });
-
-            // THEN
-            expect(testingStore.getState().editingCueIndex).toEqual(-1);
-        });
-
-        it("doesn't open cue if task is not defined", async () => {
-            // GIVEN
-            const actualNode = render(
-                <Provider store={testingStore}>
-                    <ClickCueWrapper
-                        targetCueIndex={6}
-                        targetCuesLength={8}
-                        sourceCuesIndexes={[]}
-                        nextTargetCueIndex={-1}
+                        editDisabled
                     />
                 </Provider>
             );
@@ -181,13 +146,6 @@ describe("ClickCueWrapper", () => {
                     />
                 </Provider>
             );
-            const testingTask = {
-                type: "TASK_CAPTION",
-                projectName: "Project One",
-                dueDate: "2019/12/30 10:00AM",
-                editDisabled: false
-            } as Task;
-            testingStore.dispatch(updateTask(testingTask) as {} as AnyAction);
 
             // WHEN
             await act(async () => {

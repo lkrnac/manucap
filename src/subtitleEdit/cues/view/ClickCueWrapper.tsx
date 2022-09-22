@@ -1,6 +1,5 @@
 import { ReactElement } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { SubtitleEditState } from "../../subtitleEditReducers";
+import { useDispatch } from "react-redux";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { addCue } from "../cuesList/cuesListActions";
 
@@ -11,13 +10,13 @@ export interface CueViewProps {
     nextTargetCueIndex: number;
     className?: string;
     children?: ReactElement;
+    editDisabled?: boolean;
 }
 
 const ClickCueWrapper = (props: CueViewProps): ReactElement => {
     const dispatch = useDispatch();
-    const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
-
     const undefinedSafeClassName = props.className ? `${props.className} ` : "";
+
     return (
         <div
             style={{ display: "flex" }}
@@ -26,7 +25,7 @@ const ClickCueWrapper = (props: CueViewProps): ReactElement => {
                 if (props.targetCueIndex !== undefined) {
                     if (props.targetCueIndex >= props.targetCuesLength) {
                         dispatch(addCue(props.targetCuesLength, props.sourceCuesIndexes));
-                    } else if (editingTask && !editingTask.editDisabled) {
+                    } else if (!props.editDisabled) {
                         dispatch(updateEditingCueIndex(props.targetCueIndex));
                     }
                 } else {

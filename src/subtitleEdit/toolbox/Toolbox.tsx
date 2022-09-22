@@ -22,6 +22,7 @@ interface Props {
     handleExportFile: () => void;
     handleExportSourceFile: () => void;
     handleImportFile: () => void;
+    editDisabled?: boolean;
 }
 
 const Toolbox = (props: Props): ReactElement => {
@@ -29,7 +30,6 @@ const Toolbox = (props: Props): ReactElement => {
     // Tracks.
 
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
-    const editingTask = useSelector((state: SubtitleEditState) => state.cuesTask);
     const isTranslation = !!editingTrack?.sourceLanguage;
 
     // Menu Toolbox.
@@ -55,7 +55,7 @@ const Toolbox = (props: Props): ReactElement => {
             <SearchReplaceButton />
             <ImportTrackCuesButton
                 handleImport={props.handleImportFile}
-                disabled={editingTask?.editDisabled}
+                disabled={props.editDisabled}
             />
             {isTranslation ? (
                 <ExportSourceTrackCuesButton handleExport={props.handleExportSourceFile} />
