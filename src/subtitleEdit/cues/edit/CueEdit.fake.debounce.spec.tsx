@@ -1,3 +1,4 @@
+/* eslint react/no-unknown-property: 0 */ // custom attribute added by react-advanced-timefield
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 // @ts-ignore - Doesn't have types definitions file
