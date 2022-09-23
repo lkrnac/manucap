@@ -14,7 +14,7 @@ const AddCueLineButton = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const buttonId = `addCuelineButton-${props.cueIndex}`;
     return (
-        <div className="p-1.5">
+        <div className="pb-1.5">
             <button
                 id={buttonId}
                 style={{ maxHeight: "38px", height: "100%" }}

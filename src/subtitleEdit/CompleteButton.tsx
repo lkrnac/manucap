@@ -54,7 +54,7 @@ const CompleteButton = (props: Props): ReactElement => {
             <div className="font-medium">
                 {
                     props.disabled ?
-                        <span className="text-green-light">{TASK_COMPLETE_MSG}</span> :
+                        <span className="text-green-primary">{TASK_COMPLETE_MSG}</span> :
                         <span
                             hidden={saveState === SaveState.NONE}
                             className={`flex items-center ${stateCssClasses.get(saveState)}`}
