@@ -94,7 +94,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         </div>
                     </div>
                     :
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
                         <div
                             style={{
                                 flex: "1 1 40%",
@@ -125,7 +125,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 flex: "1 1 60%",
                                 paddingLeft: "10px"
                             }}
-                            className="h-full flex flex-col justify-between space-y-2"
+                            className="space-y-2 h-full flex flex-col justify-between"
                         >
                             <div>
                                 <SearchReplaceEditor />

@@ -101,7 +101,7 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
                         <div
                             style={{
                                 flex: "1 1 40%",
@@ -131,10 +131,10 @@ describe("SubtitleEdit", () => {
                                 flex: "1 1 60%",
                                 paddingLeft: "10px"
                             }}
-                            className="h-full flex flex-col justify-between space-y-2"
+                            className="space-y-2 h-full flex flex-col justify-between"
                         >
                             <div>
-                                <div style={{ overflow: "auto" }}>
+                                <div style={{ overflow: "auto", maxHeight: "90vh" }}>
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -296,7 +296,7 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
                         <div
                             style={{
                                 flex: "1 1 40%",
@@ -326,7 +326,7 @@ describe("SubtitleEdit", () => {
                                 flex: "1 1 60%",
                                 paddingLeft: "10px"
                             }}
-                            className="h-full flex flex-col justify-between space-y-2"
+                            className="space-y-2 h-full flex flex-col justify-between"
                         >
                             <div>
                                 <AddCueLineButton
@@ -334,7 +334,7 @@ describe("SubtitleEdit", () => {
                                     cueIndex={-1}
                                     sourceCueIndexes={[]}
                                 />
-                                <div style={{ overflow: "auto" }} />
+                                <div style={{ overflow: "auto", maxHeight: "90vh" }} />
                             </div>
                             <div className="space-x-2 flex items-center">
                                 <button
@@ -583,7 +583,7 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
                         <div
                             style={{
                                 flex: "1 1 40%",
@@ -613,11 +613,11 @@ describe("SubtitleEdit", () => {
                                 flex: "1 1 60%",
                                 paddingLeft: "10px"
                             }}
-                            className="h-full flex flex-col justify-between space-y-2"
+                            className="space-y-2 h-full flex flex-col justify-between"
                         >
                             <div>
                                 <SearchReplaceEditor />
-                                <div style={{ overflow: "auto" }}>
+                                <div style={{ overflow: "auto", maxHeight: "90vh" }}>
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -781,7 +781,7 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
                         <div
                             style={{
                                 flex: "1 1 40%",
@@ -811,11 +811,11 @@ describe("SubtitleEdit", () => {
                                 flex: "1 1 60%",
                                 paddingLeft: "10px"
                             }}
-                            className="h-full flex flex-col justify-between space-y-2"
+                            className="space-y-2 h-full flex flex-col justify-between"
                         >
                             <div>
                                 <MergeEditor />
-                                <div style={{ overflow: "auto" }}>
+                                <div style={{ overflow: "auto", maxHeight: "90vh" }}>
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -979,7 +979,7 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
                         <div
                             style={{
                                 flex: "1 1 40%",
@@ -1010,10 +1010,10 @@ describe("SubtitleEdit", () => {
                                 flex: "1 1 60%",
                                 paddingLeft: "10px"
                             }}
-                            className="h-full flex flex-col justify-between space-y-2"
+                            className="space-y-2 h-full flex flex-col justify-between"
                         >
                             <div>
-                                <div style={{ overflow: "auto" }}>
+                                <div style={{ overflow: "auto", maxHeight: "90vh" }}>
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -1113,7 +1113,7 @@ describe("SubtitleEdit", () => {
                                 <span style={{ flexGrow: 2 }} />
                                 <div className="space-x-4 flex items-center">
                                     <div className="font-medium">
-                                        <span className="text-green-light">
+                                        <span className="text-green-primary">
                                             Edits are disabled, task is already completed
                                         </span>
                                     </div>
@@ -1182,7 +1182,7 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
                         <div
                             style={{
                                 flex: "1 1 40%",
@@ -1218,10 +1218,10 @@ describe("SubtitleEdit", () => {
                                 flex: "1 1 60%",
                                 paddingLeft: "10px"
                             }}
-                            className="h-full flex flex-col justify-between space-y-2"
+                            className="space-y-2 h-full flex flex-col justify-between"
                         >
                             <div>
-                                <div style={{ overflow: "auto" }}>
+                                <div style={{ overflow: "auto", maxHeight: "90vh" }}>
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}

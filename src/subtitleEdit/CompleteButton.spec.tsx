@@ -69,7 +69,7 @@ describe("CompleteButton", () => {
             <Provider store={testingStore}>
                 <div className="space-x-4 flex items-center">
                     <div className="font-medium">
-                        <span className="text-green-light">
+                        <span className="text-green-primary">
                             Edits are disabled, task is already completed
                         </span>
                     </div>
