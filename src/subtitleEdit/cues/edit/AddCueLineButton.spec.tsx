@@ -23,7 +23,7 @@ describe("AddCueLineButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <div className="pb-1.5">
+            <div className="p-1.5">
                 <button
                     id="addCuelineButton-0"
                     style={{ maxHeight: "38px", height: "100%" }}
@@ -51,7 +51,7 @@ describe("AddCueLineButton", () => {
     it("renders with custom text", () => {
         // GIVEN
         const expectedNode = render(
-            <div className="pb-1.5">
+            <div className="p-1.5">
                 <button
                     id="addCuelineButton-0"
                     style={{ maxHeight: "38px", height: "100%" }}
@@ -239,7 +239,7 @@ describe("AddCueLineButton", () => {
     it("shows tooltip when mouse hovers over", async () => {
         // GIVEN
         const expectedNode = render(
-            <div className="pb-1.5">
+            <div className="p-1.5">
                 <button
                     id="addCuelineButton-0"
                     style={{ maxHeight: 38, height: "100%" }}

@@ -22,6 +22,7 @@ export interface CueViewProps {
     hideText?: boolean;
     glossaryTerm?: string;
     setGlossaryTerm?: (glossaryTerm?: string) => void;
+    editDisabled?: boolean;
 }
 
 const replaceForInsensitiveMatches = (
@@ -99,6 +100,7 @@ const CueView = (props: CueViewProps): ReactElement => {
             sourceCuesIndexes={props.sourceCuesIndexes}
             nextTargetCueIndex={props.nextTargetCueIndex}
             className={props.className}
+            editDisabled={props.editDisabled}
         >
             <>
                 <div
