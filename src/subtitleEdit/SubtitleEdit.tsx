@@ -94,7 +94,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         </div>
                     </div>
                     :
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
                                 flex: "1 1 40%",
@@ -123,11 +123,14 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         <div
                             style={{
                                 flex: "1 1 60%",
-                                paddingLeft: "10px"
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column"
                             }}
-                            className="space-y-2 h-full flex flex-col justify-between"
+                            className="space-y-2 relative"
                         >
-                            <div>
+                            <div style={{ height: "calc(100% - 90px)", overflow: "auto" }}>
                                 <SearchReplaceEditor />
                                 <MergeEditor />
                                 <CuesList
@@ -136,7 +139,10 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     commentAuthor={props.commentAuthor}
                                 />
                             </div>
-                            <div className="space-x-2 flex items-center">
+                            <div
+                                className="space-x-2 flex items-center absolute"
+                                style={{ bottom: 40, left: 10, right: 0 }}
+                            >
                                 <button
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"

@@ -101,7 +101,7 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
                                 flex: "1 1 40%",
@@ -129,12 +129,15 @@ describe("SubtitleEdit", () => {
                         <div
                             style={{
                                 flex: "1 1 60%",
-                                paddingLeft: "10px"
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column"
                             }}
-                            className="space-y-2 h-full flex flex-col justify-between"
+                            className="space-y-2 relative"
                         >
-                            <div>
-                                <div style={{ overflow: "auto", maxHeight: "90vh" }}>
+                            <div style={{ height: "calc(100% - 90px)", overflow: "auto" }}>
+                                <div>
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -159,7 +162,10 @@ describe("SubtitleEdit", () => {
                                     />
                                 </div>
                             </div>
-                            <div className="space-x-2 flex items-center">
+                            <div
+                                className="space-x-2 flex items-center absolute"
+                                style={{ bottom: 40, left: 10, right: 0 }}
+                            >
                                 <button
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
@@ -296,7 +302,7 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
                                 flex: "1 1 40%",
@@ -324,19 +330,25 @@ describe("SubtitleEdit", () => {
                         <div
                             style={{
                                 flex: "1 1 60%",
-                                paddingLeft: "10px"
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column"
                             }}
-                            className="space-y-2 h-full flex flex-col justify-between"
+                            className="space-y-2 relative"
                         >
-                            <div>
+                            <div style={{ height: "calc(100% - 90px)", overflow: "auto" }}>
                                 <AddCueLineButton
                                     text="Start Captioning"
                                     cueIndex={-1}
                                     sourceCueIndexes={[]}
                                 />
-                                <div style={{ overflow: "auto", maxHeight: "90vh" }} />
+                                <div />
                             </div>
-                            <div className="space-x-2 flex items-center">
+                            <div
+                                className="space-x-2 flex items-center absolute"
+                                style={{ bottom: 40, left: 10, right: 0 }}
+                            >
                                 <button
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
@@ -583,7 +595,7 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
                                 flex: "1 1 40%",
@@ -611,13 +623,16 @@ describe("SubtitleEdit", () => {
                         <div
                             style={{
                                 flex: "1 1 60%",
-                                paddingLeft: "10px"
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column"
                             }}
-                            className="space-y-2 h-full flex flex-col justify-between"
+                            className="space-y-2 relative"
                         >
-                            <div>
+                            <div style={{ height: "calc(100% - 90px)", overflow: "auto" }}>
                                 <SearchReplaceEditor />
-                                <div style={{ overflow: "auto", maxHeight: "90vh" }}>
+                                <div>
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -642,7 +657,10 @@ describe("SubtitleEdit", () => {
                                     />
                                 </div>
                             </div>
-                            <div className="space-x-2 flex items-center">
+                            <div
+                                className="space-x-2 flex items-center absolute"
+                                style={{ bottom: 40, left: 10, right: 0 }}
+                            >
                                 <button
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
@@ -781,7 +799,7 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
                                 flex: "1 1 40%",
@@ -809,13 +827,16 @@ describe("SubtitleEdit", () => {
                         <div
                             style={{
                                 flex: "1 1 60%",
-                                paddingLeft: "10px"
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column"
                             }}
-                            className="space-y-2 h-full flex flex-col justify-between"
+                            className="space-y-2 relative"
                         >
-                            <div>
+                            <div style={{ height: "calc(100% - 90px)", overflow: "auto" }}>
                                 <MergeEditor />
-                                <div style={{ overflow: "auto", maxHeight: "90vh" }}>
+                                <div>
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -840,7 +861,10 @@ describe("SubtitleEdit", () => {
                                     />
                                 </div>
                             </div>
-                            <div className="space-x-2 flex items-center">
+                            <div
+                                className="space-x-2 flex items-center absolute"
+                                style={{ bottom: 40, left: 10, right: 0 }}
+                            >
                                 <button
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
@@ -979,7 +1003,7 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
                                 flex: "1 1 40%",
@@ -1008,12 +1032,15 @@ describe("SubtitleEdit", () => {
                         <div
                             style={{
                                 flex: "1 1 60%",
-                                paddingLeft: "10px"
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column"
                             }}
-                            className="space-y-2 h-full flex flex-col justify-between"
+                            className="space-y-2 relative"
                         >
-                            <div>
-                                <div style={{ overflow: "auto", maxHeight: "90vh" }}>
+                            <div style={{ height: "calc(100% - 90px)", overflow: "auto" }}>
+                                <div>
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -1040,7 +1067,10 @@ describe("SubtitleEdit", () => {
                                     />
                                 </div>
                             </div>
-                            <div className="space-x-2 flex items-center">
+                            <div
+                                className="space-x-2 flex items-center absolute"
+                                style={{ bottom: 40, left: 10, right: 0 }}
+                            >
                                 <button
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
@@ -1184,7 +1214,7 @@ describe("SubtitleEdit", () => {
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
                         <div
                             style={{
                                 flex: "1 1 40%",
@@ -1218,12 +1248,15 @@ describe("SubtitleEdit", () => {
                         <div
                             style={{
                                 flex: "1 1 60%",
-                                paddingLeft: "10px"
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column"
                             }}
-                            className="space-y-2 h-full flex flex-col justify-between"
+                            className="space-y-2 relative"
                         >
-                            <div>
-                                <div style={{ overflow: "auto", maxHeight: "90vh" }}>
+                            <div style={{ height: "calc(100% - 90px)", overflow: "auto" }}>
+                                <div>
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -1248,7 +1281,10 @@ describe("SubtitleEdit", () => {
                                     />
                                 </div>
                             </div>
-                            <div className="space-x-2 flex items-center">
+                            <div
+                                className="space-x-2 flex items-center absolute"
+                                style={{ bottom: 40, left: 10, right: 0 }}
+                            >
                                 <button
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
