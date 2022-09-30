@@ -14,6 +14,7 @@ import { changeScrollPosition, DEFAULT_PAGE_SIZE } from "./cuesListScrollSlice";
 interface Props {
     editingTrack: Track | null;
     commentAuthor?: string;
+    editDisabled?: boolean;
 }
 
 const CuesList = (props: Props): ReactElement => {
@@ -136,6 +137,7 @@ const CuesList = (props: Props): ReactElement => {
                                         commentAuthor: props.commentAuthor
                                     }}
                                     rowRef={refs[startIndex + i]}
+                                    editDisabled={props.editDisabled}
                                 />
                             );
                         })

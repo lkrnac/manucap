@@ -130,7 +130,11 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                             <div>
                                 <SearchReplaceEditor />
                                 <MergeEditor />
-                                <CuesList editingTrack={editingTrack} commentAuthor={props.commentAuthor} />
+                                <CuesList
+                                    editDisabled={props.editDisabled}
+                                    editingTrack={editingTrack}
+                                    commentAuthor={props.commentAuthor}
+                                />
                             </div>
                             <div className="space-x-2 flex items-center">
                                 <button

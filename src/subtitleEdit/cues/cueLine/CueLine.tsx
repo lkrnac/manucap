@@ -26,6 +26,7 @@ export interface CueLineProps {
     data: CueLineDto;
     rowProps: CueLineRowProps;
     rowRef: React.RefObject<HTMLDivElement>;
+    editDisabled?: boolean;
 }
 
 const hasTargetText = (cueLine?: CueLineDto): boolean => {
@@ -69,7 +70,8 @@ const hasCuesWithEditDisabled = (cueDtos?: CueDtoWithIndex[]): boolean => {
 
 const shouldDisableCueLine = (props: CueLineProps): boolean | undefined => {
     const cueLine = props.rowProps.matchedCues[props.rowIndex];
-    return hasCuesWithEditDisabled(cueLine.sourceCues) || hasCuesWithEditDisabled(cueLine.targetCues);
+    return props.editDisabled || hasCuesWithEditDisabled(cueLine.sourceCues)
+        || hasCuesWithEditDisabled(cueLine.targetCues);
 };
 
 const findNextTargetCueIndex = (props: CueLineProps): number => {
@@ -186,6 +188,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     nextTargetCueIndex={nextTargetCueIndex}
                                     glossaryTerm={glossaryTerm}
                                     setGlossaryTerm={setGlossaryTerm}
+                                    editDisabled={cueLineEditDisabled}
                                 />
                             );
                         })
@@ -247,6 +250,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                             languageDirection={editingTrack?.language.direction}
                                             sourceCuesIndexes={sourceCuesIndexes}
                                             nextTargetCueIndex={nextTargetCueIndex}
+                                            editDisabled={cueLineEditDisabled}
                                         />
                                         {
                                             commentsVisible ?

@@ -1023,6 +1023,7 @@ describe("SubtitleEdit", () => {
                                             matchedCues,
                                             commentAuthor: "Linguist"
                                         }}
+                                        editDisabled
                                         rowRef={createRef()}
                                     />
                                     <CueLine
@@ -1034,6 +1035,7 @@ describe("SubtitleEdit", () => {
                                             matchedCues,
                                             commentAuthor: "Linguist"
                                         }}
+                                        editDisabled
                                         rowRef={createRef()}
                                     />
                                 </div>
