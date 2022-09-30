@@ -154,7 +154,7 @@ export const updateMatchedCues = (): AppThunk =>
     };
 
 export const checkSpelling = createAsyncThunk(
-    "validations/checkErrors",
+    "validations/checkSpelling",
     async ({ index }: { index: number },
            thunkApi) => {
         if (index !== undefined) {
