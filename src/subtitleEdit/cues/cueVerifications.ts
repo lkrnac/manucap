@@ -232,16 +232,3 @@ export const verifyCueDuration = (vttCue: VTTCue, editingTrack: Track, timeGapLi
     const cueDuration = Number((vttCue.endTime - vttCue.startTime).toFixed(3));
     return cueDuration >= timeGapLimit.minGap && verifyCueChunkRange(vttCue, editingTrack);
 };
-
-export const applyLineLimitation = (
-    vttCue: VTTCue,
-    originalCue: CueDto,
-    subtitleSpecifications: SubtitleSpecification | null
-): boolean => {
-    if (!checkLineLimitation(vttCue.text, subtitleSpecifications)
-        && checkLineLimitation(originalCue.vttCue.text, subtitleSpecifications)) {
-        vttCue.text = originalCue.vttCue.text;
-        return true;
-    }
-    return false;
-};
