@@ -270,34 +270,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
             });
 
-            it("marks cue as corrupted if there are spell check problems", async () => {
-                // GIVEN
-                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
-                testingStore.dispatch(updateEditingTrack(
-                    { language: { id: "en-US" }, id: trackId } as Track
-                ) as {} as AnyAction);
-                testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
-                testingStore.dispatch(matchedCuesSlice.actions
-                    .matchCuesByTime({ cues: testingCues, sourceCues: [], editingCueIndex: 2 })
-                );
-
-                const editUuid = testingStore.getState().cues[2].editUuid;
-                // @ts-ignore modern browsers does have it
-                global.fetch = jest.fn()
-                    .mockImplementation(() =>
-                        new Promise((resolve) => resolve({ json: () => ({}), ok: true })));
-
-                // WHEN
-                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
-
-                // THEN
-                expect(testingStore.getState().cues[2].errors).toEqual(
-                    [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
-                expect(testingStore.getState().matchedCues.matchedCues[2].targetCues[0].cue.errors).toEqual(
-                    [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
-            });
-
             it("does not mark a cue as corrupted if a spell check is fixed", async () => {
                 // GIVEN
                 const testingResponse = { matches: []};

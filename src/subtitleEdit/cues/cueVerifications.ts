@@ -127,7 +127,6 @@ export const conformToRules = (
     if (!overlapCaptions) {
         checkOverlap(cueErrors, cue.vttCue, previousCue, followingCue);
     }
-    checkSpelling(cueErrors, cue);
     checkCharsPerSecond(cueErrors, cue.vttCue, subtitleSpecification);
     return cueErrors;
 };
