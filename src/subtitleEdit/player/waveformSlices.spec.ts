@@ -17,7 +17,7 @@ const testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
 
 describe("waveformVisibleSlice", () => {
-    it("resetEditingTrack resets the waveformVisible flag ", () => {
+    it("resetEditingTrack resets the waveformVisible flag", () => {
         // GIVEN
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(waveformVisibleSlice.actions.setWaveformVisible(false));
@@ -26,6 +26,14 @@ describe("waveformVisibleSlice", () => {
         testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
 
         // THEN
-        expect(testingStore.getState().waveformVisible).toBeFalsy();
+        expect(testingStore.getState().waveformVisible).toBeTruthy();
+    });
+
+    it("show waveform by default", () => {
+        // WHEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
+        // THEN
+        expect(testingStore.getState().waveformVisible).toBeTruthy();
     });
 });
