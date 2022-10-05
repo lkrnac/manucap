@@ -28,7 +28,6 @@ import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { resetEditingTrack, updateEditingTrack } from "../../trackSlices";
 import { generateSpellcheckHash } from "../spellCheck/spellCheckerUtils";
-import { Replacement, SpellCheck } from "../spellCheck/model";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import { lastCueChangeSlice, updateEditingCueIndex } from "../edit/cueEditorSlices";
@@ -2943,24 +2942,14 @@ describe("cueSlices", () => {
     describe("validateCorruptedCues", () => {
         it("validate only corrupted cues with ignored text", () => {
             // GIVEN
-            const spellCheck = {
-                matches: [
-                    {
-                        offset: 8, length: 5, replacements: [{ "value": "Line" }] as Replacement[],
-                        context: { text: "Caption Linex 1", offset: 8, length: 5 },
-                        rule: { id: ruleId }
-                    }
-                ]
-            } as SpellCheck;
-
             const cues = [
                 {
-                    vttCue: new VTTCue(0, 2, "Caption Linex 1"),
-                    cueCategory: "DIALOGUE", errors: [CueError.SPELLCHECK_ERROR], spellCheck: spellCheck
+                    vttCue: new VTTCue(0, 3, "Caption Linex 1"),
+                    cueCategory: "DIALOGUE", errors: []
                 },
                 {
                     vttCue: new VTTCue(2, 4, "Caption Linex 2"),
-                    cueCategory: "DIALOGUE", errors: [CueError.SPELLCHECK_ERROR], spellCheck: spellCheck
+                    cueCategory: "DIALOGUE", errors: []
                 },
                 {
                     vttCue: new VTTCue(4, 6, "Caption Line 3"),
@@ -2982,8 +2971,8 @@ describe("cueSlices", () => {
             testingStore.dispatch(validateCorruptedCues("Linex") as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].errors).toEqual([CueError.SPELLCHECK_ERROR]);
-            expect(testingStore.getState().cues[1].errors).toEqual([CueError.SPELLCHECK_ERROR]);
+            expect(testingStore.getState().cues[0].errors).toEqual([CueError.TIME_GAP_OVERLAP]);
+            expect(testingStore.getState().cues[1].errors).toEqual([CueError.TIME_GAP_OVERLAP]);
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
             expect(testingStore.getState().cues[4].errors).toEqual([]);
