@@ -14,8 +14,6 @@ import WaveSurfer from "wavesurfer.js";
 // @ts-ignore no types for wavesurfer
 import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.js";
 // @ts-ignore no types for wavesurfer
-import MinimapPlugin from "wavesurfer.js/dist/plugin/wavesurfer.minimap.js";
-// @ts-ignore no types for wavesurfer
 import TimelinePlugin from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js";
 import moment from "moment";
 
@@ -261,9 +259,6 @@ class VideoPlayer extends React.Component<Props> {
                             plugins: [
                                 RegionsPlugin.create({
                                     dragSelection: false
-                                }),
-                                MinimapPlugin.create({
-                                    height: 30,
                                 }),
                                 TimelinePlugin.create({
                                     container: this.waveformTimelineRef?.current

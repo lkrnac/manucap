@@ -58,18 +58,15 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.params.height).toEqual(100);
         expect(actualComponent.wavesurfer.params.pixelRatio).toEqual(1);
         expect(actualComponent.wavesurfer.params.barHeight).toEqual(0.4);
-        expect(actualComponent.wavesurfer.params.plugins.length).toEqual(3);
+        expect(actualComponent.wavesurfer.params.plugins.length).toEqual(2);
         expect(actualComponent.wavesurfer.params.plugins[0].name).toEqual("regions");
-        expect(actualComponent.wavesurfer.params.plugins[1].name).toEqual("minimap");
-        expect(actualComponent.wavesurfer.params.plugins[2].name).toEqual("timeline");
-        expect(actualComponent.wavesurfer.initialisedPluginList).toEqual(
-            { regions: true, minimap: true, timeline: true });
+        expect(actualComponent.wavesurfer.params.plugins[1].name).toEqual("timeline");
+        expect(actualComponent.wavesurfer.initialisedPluginList).toEqual({ regions: true, timeline: true });
         expect(actualComponent.wavesurfer.regions.params).toEqual({ dragSelection: false });
         expect(actualComponent.wavesurfer.regions.list[0].drag).toBeFalsy();
         expect(actualComponent.wavesurfer.regions.list[0].loop).toBeFalsy();
         expect(actualComponent.wavesurfer.regions.list[0].resize).toBeTruthy();
         expect(actualComponent.wavesurfer.regions.list[0].formatTimeCallback(0, 2)).toEqual("00:00:000-00:02:000");
-        expect(actualComponent.wavesurfer.minimap.params.height).toEqual(30);
     });
 
     it("initializes wavesurfer with regions", async () => {
