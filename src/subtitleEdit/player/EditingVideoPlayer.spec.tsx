@@ -156,7 +156,7 @@ describe("EditingVideoPlayer", () => {
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     waveform="dummyWaveform"
-                    duration={1801}
+                    mediaLength={1801000}
                     onTimeChange={handleTimeChange}
                 />
             </Provider>
@@ -177,7 +177,7 @@ describe("EditingVideoPlayer", () => {
         testingStore.dispatch(waveformVisibleSlice.actions.setWaveformVisible(true));
         const actualNode = mount(
             <Provider store={testingStore} >
-                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" waveform="dummyWaveform" duration={120} />
+                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" waveform="dummyWaveform" mediaLength={120000} />
             </Provider>
         );
         await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
