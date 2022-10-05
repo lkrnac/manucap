@@ -52,7 +52,7 @@ export interface Props {
     mp4: string;
     poster: string;
     waveform?: string;
-    mediaLength?: number;
+    duration?: number;
     waveformVisible?: boolean;
     updateCueTimecodes?: (idx: number, start: number, end: number) => void;
     timecodesUnlocked?: boolean;
@@ -121,11 +121,9 @@ class VideoPlayer extends React.Component<Props> {
     private readonly waveformRef?: RefObject<HTMLDivElement>;
     private readonly waveformTimelineRef?: RefObject<HTMLDivElement>;
 
-
     constructor(props: Props) {
         super(props);
 
-        console.log(this.props.mediaLength);
         this.player = {} as VideoJsPlayer; // Keeps Typescript compiler quiet. Feel free to remove if you know how.
         this.videoNode = React.createRef();
         this.waveformRef = React.createRef();
@@ -239,8 +237,7 @@ class VideoPlayer extends React.Component<Props> {
     }
 
     private loadWaveform() {
-        const mediaLength = this.props.mediaLength;
-        if (this.props.waveform && mediaLength !== undefined) {
+        if (this.props.waveform && this.props.duration) {
             fetch(this.props.waveform,
                 { headers: { "Content-Type": "application/json", "Accept": "application/json" }})
                 .then((response) => response.json())
@@ -275,7 +272,7 @@ class VideoPlayer extends React.Component<Props> {
                             this.videoNode?.current,
                             peaksData.data,
                             "auto",
-                            mediaLength * ONE_MILLISECOND
+                            this.props.duration
                         );
 
                         this.wavesurfer.on("region-update-end", (updatedRegion: WaveformRegion) => {
@@ -298,7 +295,7 @@ class VideoPlayer extends React.Component<Props> {
             moment(parseFloat(time.toFixed(3)) * 1000).format("mm:ss:SSS")).join("-");
 
     private addRegion(index: number, start: number, end: number, text: string, color: string) {
-        if (this.props.mediaLength && start <= this.props.mediaLength * ONE_MILLISECOND) {
+        if (this.props.duration && start <= this.props.duration) {
             this.wavesurfer?.addRegion({
                 id: index,
                 start,
@@ -375,7 +372,7 @@ class VideoPlayer extends React.Component<Props> {
                     data-setup="{}"
                 />
                 {
-                     this.props.waveform && this.props.mediaLength ?
+                     this.props.waveform && this.props.duration ?
                          <div
                              className="sbte-waveform overflow-hidden"
                              hidden={!this.props.waveformVisible}

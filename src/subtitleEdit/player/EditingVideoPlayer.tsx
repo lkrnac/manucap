@@ -11,7 +11,7 @@ interface Props {
     mp4: string;
     poster: string;
     waveform?: string;
-    mediaLength?: number
+    duration?: number;
     onTimeChange?: (time: number) => void;
 }
 
@@ -49,7 +49,7 @@ const EditingVideoPlayer = (props: Props): ReactElement => {
                 mp4={props.mp4}
                 poster={props.poster}
                 waveform={props.waveform}
-                mediaLength={props.mediaLength}
+                duration={props.duration}
                 waveformVisible={waveformVisible}
                 updateCueTimecodes={updateCueTimecodes}
                 timecodesUnlocked={editingTrack.timecodesUnlocked}

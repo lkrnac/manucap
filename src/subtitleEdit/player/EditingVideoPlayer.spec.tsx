@@ -123,7 +123,7 @@ describe("EditingVideoPlayer", () => {
         actualNode.setProps({}); // trigger update + re-render
 
         // THEN
-        expect(actualNode.find(VideoPlayer).props().mp4).toEqual("dummy.Mp4");
+        expect(actualNode.find(VideoPlayer).props().mp4).toEqual("dummyMp4");
         expect(actualNode.find(VideoPlayer).props().poster).toEqual("dummyPoster");
         expect(actualNode.find(VideoPlayer).props().tracks[0]).toEqual(testingTrack);
         expect(actualNode.find(VideoPlayer).props().tracks.length).toEqual(1);
@@ -147,6 +147,29 @@ describe("EditingVideoPlayer", () => {
         expect(actualNode.find(VideoPlayer).props().playSection).toEqual({ startTime: -1 });
     });
 
+    it("doesn't enable waveform for videos longer than 30 minutes", () => {
+        // GIVEN
+        const handleTimeChange = jest.fn();
+        const actualNode = mount(
+            <Provider store={testingStore} >
+                <EditingVideoPlayer
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    waveform="dummyWaveform"
+                    duration={1801}
+                    onTimeChange={handleTimeChange}
+                />
+            </Provider>
+        );
+
+        // WHEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        actualNode.setProps({}); // trigger update + re-render
+
+        // THEN
+        expect(testingStore.getState().waveformVisible).toBeFalsy();
+    });
+
     it("updates cues timecodes when waveform regions are manually updated", async () => {
         // GIVEN
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
@@ -154,7 +177,7 @@ describe("EditingVideoPlayer", () => {
         testingStore.dispatch(waveformVisibleSlice.actions.setWaveformVisible(true));
         const actualNode = mount(
             <Provider store={testingStore} >
-                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" waveform="dummyWaveform" mediaLength={120000} />
+                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" waveform="dummyWaveform" duration={120} />
             </Provider>
         );
         await act(async () => new Promise(resolve => setTimeout(resolve, 200)));

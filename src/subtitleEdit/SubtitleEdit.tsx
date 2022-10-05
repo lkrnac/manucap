@@ -29,6 +29,7 @@ export interface SubtitleEditProps {
     mp4: string;
     poster: string;
     waveform?: string;
+    duration?: number;
     onViewTrackHistory: () => void;
     onSave: () => void;
     onComplete: () => void;
@@ -104,7 +105,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     mp4={props.mp4}
                                     poster={props.poster}
                                     waveform={props.waveform}
-                                    mediaLength={editingTrack?.mediaLength}
+                                    duration={props.duration}
                                     onTimeChange={handleTimeChange}
                                 />
                             </div>

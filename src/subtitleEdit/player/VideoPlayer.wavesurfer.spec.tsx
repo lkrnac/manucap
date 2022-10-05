@@ -31,6 +31,7 @@ describe("VideoPlayer with waveform", () => {
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 waveform="dummyWaveform"
+                duration={20}
                 waveformVisible
                 timecodesUnlocked
                 cues={cues}
@@ -76,6 +77,7 @@ describe("VideoPlayer with waveform", () => {
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 waveform="dummyWaveform"
+                duration={20}
                 waveformVisible
                 cues={cues}
                 tracks={tracks}
@@ -112,6 +114,7 @@ describe("VideoPlayer with waveform", () => {
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 waveform="dummyWaveform"
+                duration={20}
                 waveformVisible
                 cues={cues}
                 tracks={tracks}
@@ -392,6 +395,7 @@ describe("VideoPlayer with waveform", () => {
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 waveform=""
+                duration={20}
                 waveformVisible
                 tracks={tracks}
                 languageCuesArray={[]}
@@ -436,6 +440,7 @@ describe("VideoPlayer with waveform", () => {
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 waveform="dummyWaveform"
+                duration={20}
                 waveformVisible={false}
                 tracks={tracks}
                 languageCuesArray={[]}
