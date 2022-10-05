@@ -21,8 +21,8 @@ import { updateSourceCues } from "./subtitleEdit/cues/view/sourceCueSlices";
 const language = { id: "en-US", name: "English (US)", direction: "LTR" } as Language;
 // const language = { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language;
 
-// const trackType = "TRANSLATION";
-const trackType = "CAPTION";
+const trackType = "TRANSLATION";
+// const trackType = "CAPTION";
 
 const TIME_MATCH_TESTING = false;
 
@@ -263,7 +263,7 @@ const TestApp = (): ReactElement => {
                 sourceLanguage,
                 default: true,
                 mediaTitle: "This is the video title",
-                mediaLength: 1471000,
+                mediaLength: 305000,
                 mediaChunkStart,
                 mediaChunkEnd,
                 progress: 50,
@@ -324,14 +324,8 @@ const TestApp = (): ReactElement => {
     return (
         <SubtitleEdit
             poster="https://dotsub-media-encoded.s3.amazonaws.com/sample/dotsubExplainer.jpeg"
-            // ### 3 h ###
-            // eslint-disable-next-line max-len
-            // mp4="https://dotsub-encoded-media-prod.videotms.com/bf870f57-f21c-4d1d-a155-1d88298d69aa/0f541dfe-40f0-48ef-88e1-445a62c60344/2022-06-14T14:06:39.252869/a5dbb212-1222-47ee-9e31-612bd626b43e-0f541dfe-40f0-48ef-88e1-445a62c60344.mp4"
-            // waveform="1bcc2aab-437c-4276-97ae-13b246dc1c0a-0f541dfe-40f0-48ef-88e1-445a62c60344.json"
-            // ### 24 m ###
-            // eslint-disable-next-line max-len
-            mp4="https://dotsub-encoded-media-prod.videotms.com/3b01f5ac-e968-4e65-9b7e-013409187224/bf30b1dd-0e49-427a-9cf9-9550645a9086/2022-09-27T05:57:39.528112/7bc597e7-92b8-4080-9aa2-2076e6aa82ac-bf30b1dd-0e49-427a-9cf9-9550645a9086.mp4"
-            waveform="81e97906-e86d-4b3f-8c30-b5f4ef935694-bf30b1dd-0e49-427a-9cf9-9550645a9086.json"
+            mp4="https://dotsub-media-encoded.s3.amazonaws.com/sample/dotsubExplainer.mp4"
+            waveform="https://dotsub-media-encoded.s3.amazonaws.com/sample/dotsubExplainer.json"
             onViewTrackHistory={(): void => undefined}
             onSave={(): void => {
                 setTimeout(
