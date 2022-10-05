@@ -90,7 +90,7 @@ describe("cuesListScrollSlice", () => {
             });
     });
 
-    it("", () => {
+    it("do not trigger redux actions when user is just scrolling", () => {
         // GIVEN
         const changeFocusedCueIndexSpy = jest.spyOn(scrollPositionSlice.actions, "changeFocusedCueIndex");
         changeFocusedCueIndexSpy.mockClear();
