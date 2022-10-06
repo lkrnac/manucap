@@ -18,12 +18,12 @@ describe("WaveformToggle", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = render(
-            <button type="button" className="flex items-center justify-between">
+            <button type="button" className="flex items-center justify-between outline-0 active">
                 <span>
                     <i className="w-7 fa-duotone fa-waveform-lines text-blue-primary" />
                     <span>Waveform</span>
                 </span>
-                <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-secondary">HIDDEN</span>
+                <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-success">SHOWN</span>
             </button>
         );
 
@@ -43,13 +43,13 @@ describe("WaveformToggle", () => {
         const expectedNode = render(
             <button
                 type="button"
-                className="flex items-center justify-between outline-0 active"
+                className="flex items-center justify-between"
             >
                 <span>
                     <i className="w-7 fa-duotone fa-waveform-lines text-blue-primary" />
                     <span>Waveform</span>
                 </span>
-                <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-success">SHOWN</span>
+                <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-secondary">HIDDEN</span>
             </button>
         );
 
@@ -78,6 +78,6 @@ describe("WaveformToggle", () => {
         fireEvent.click(actualNode.container.querySelector("button") as Element);
 
         // THEN
-        expect(testingStore.getState().waveformVisible).toEqual(true);
+        expect(testingStore.getState().waveformVisible).toEqual(false);
     });
 });

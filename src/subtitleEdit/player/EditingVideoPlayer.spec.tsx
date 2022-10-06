@@ -147,7 +147,7 @@ describe("EditingVideoPlayer", () => {
         expect(actualNode.find(VideoPlayer).props().playSection).toEqual({ startTime: -1 });
     });
 
-    it("doesn't enable waveform for videos longer than 30 minutes", () => {
+    it("enable waveform by default", () => {
         // GIVEN
         const handleTimeChange = jest.fn();
         const actualNode = mount(
@@ -167,7 +167,7 @@ describe("EditingVideoPlayer", () => {
         actualNode.setProps({}); // trigger update + re-render
 
         // THEN
-        expect(testingStore.getState().waveformVisible).toBeFalsy();
+        expect(testingStore.getState().waveformVisible).toBeTruthy();
     });
 
     it("updates cues timecodes when waveform regions are manually updated", async () => {
