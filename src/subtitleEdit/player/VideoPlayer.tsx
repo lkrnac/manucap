@@ -14,8 +14,6 @@ import WaveSurfer from "wavesurfer.js";
 // @ts-ignore no types for wavesurfer
 import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.js";
 // @ts-ignore no types for wavesurfer
-import MinimapPlugin from "wavesurfer.js/dist/plugin/wavesurfer.minimap.js";
-// @ts-ignore no types for wavesurfer
 import TimelinePlugin from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js";
 import moment from "moment";
 
@@ -54,7 +52,7 @@ export interface Props {
     mp4: string;
     poster: string;
     waveform?: string;
-    duration?: number;
+    mediaLength?: number;
     waveformVisible?: boolean;
     updateCueTimecodes?: (idx: number, start: number, end: number) => void;
     timecodesUnlocked?: boolean;
@@ -122,6 +120,7 @@ class VideoPlayer extends React.Component<Props> {
     public wavesurfer: WaveSurfer;
     private readonly waveformRef?: RefObject<HTMLDivElement>;
     private readonly waveformTimelineRef?: RefObject<HTMLDivElement>;
+
 
     constructor(props: Props) {
         super(props);
@@ -239,7 +238,8 @@ class VideoPlayer extends React.Component<Props> {
     }
 
     private loadWaveform() {
-        if (this.props.waveform && this.props.duration) {
+        const mediaLength = this.props.mediaLength;
+        if (this.props.waveform && mediaLength !== undefined) {
             fetch(this.props.waveform,
                 { headers: { "Content-Type": "application/json", "Accept": "application/json" }})
                 .then((response) => response.json())
@@ -262,9 +262,6 @@ class VideoPlayer extends React.Component<Props> {
                                 RegionsPlugin.create({
                                     dragSelection: false
                                 }),
-                                MinimapPlugin.create({
-                                    height: 30,
-                                }),
                                 TimelinePlugin.create({
                                     container: this.waveformTimelineRef?.current
                                 })
@@ -277,7 +274,7 @@ class VideoPlayer extends React.Component<Props> {
                             this.videoNode?.current,
                             peaksData.data,
                             "auto",
-                            this.props.duration
+                            mediaLength * ONE_MILLISECOND
                         );
 
                         this.wavesurfer.on("region-update-end", (updatedRegion: WaveformRegion) => {
@@ -300,7 +297,7 @@ class VideoPlayer extends React.Component<Props> {
             moment(parseFloat(time.toFixed(3)) * 1000).format("mm:ss:SSS")).join("-");
 
     private addRegion(index: number, start: number, end: number, text: string, color: string) {
-        if (this.props.duration && start <= this.props.duration) {
+        if (this.props.mediaLength && start <= this.props.mediaLength * ONE_MILLISECOND) {
             this.wavesurfer?.addRegion({
                 id: index,
                 start,
@@ -377,7 +374,7 @@ class VideoPlayer extends React.Component<Props> {
                     data-setup="{}"
                 />
                 {
-                     this.props.waveform && this.props.duration ?
+                     this.props.waveform && this.props.mediaLength ?
                          <div
                              className="sbte-waveform overflow-hidden"
                              hidden={!this.props.waveformVisible}

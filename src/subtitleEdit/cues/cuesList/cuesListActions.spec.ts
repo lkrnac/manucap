@@ -28,7 +28,6 @@ import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { resetEditingTrack, updateEditingTrack } from "../../trackSlices";
 import { generateSpellcheckHash } from "../spellCheck/spellCheckerUtils";
-import { Replacement, SpellCheck } from "../spellCheck/model";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import { lastCueChangeSlice, updateEditingCueIndex } from "../edit/cueEditorSlices";
@@ -268,34 +267,6 @@ describe("cueSlices", () => {
                     [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
                 expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
                 expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
-            });
-
-            it("marks cue as corrupted if there are spell check problems", async () => {
-                // GIVEN
-                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
-                testingStore.dispatch(updateEditingTrack(
-                    { language: { id: "en-US" }, id: trackId } as Track
-                ) as {} as AnyAction);
-                testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
-                testingStore.dispatch(matchedCuesSlice.actions
-                    .matchCuesByTime({ cues: testingCues, sourceCues: [], editingCueIndex: 2 })
-                );
-
-                const editUuid = testingStore.getState().cues[2].editUuid;
-                // @ts-ignore modern browsers does have it
-                global.fetch = jest.fn()
-                    .mockImplementation(() =>
-                        new Promise((resolve) => resolve({ json: () => ({}), ok: true })));
-
-                // WHEN
-                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue"), editUuid) as {} as AnyAction);
-
-                // THEN
-                expect(testingStore.getState().cues[2].errors).toEqual(
-                    [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
-                expect(testingStore.getState().matchedCues.matchedCues[2].targetCues[0].cue.errors).toEqual(
-                    [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
             });
 
             it("does not mark a cue as corrupted if a spell check is fixed", async () => {
@@ -2971,24 +2942,14 @@ describe("cueSlices", () => {
     describe("validateCorruptedCues", () => {
         it("validate only corrupted cues with ignored text", () => {
             // GIVEN
-            const spellCheck = {
-                matches: [
-                    {
-                        offset: 8, length: 5, replacements: [{ "value": "Line" }] as Replacement[],
-                        context: { text: "Caption Linex 1", offset: 8, length: 5 },
-                        rule: { id: ruleId }
-                    }
-                ]
-            } as SpellCheck;
-
             const cues = [
                 {
-                    vttCue: new VTTCue(0, 2, "Caption Linex 1"),
-                    cueCategory: "DIALOGUE", errors: [CueError.SPELLCHECK_ERROR], spellCheck: spellCheck
+                    vttCue: new VTTCue(0, 3, "Caption Linex 1"),
+                    cueCategory: "DIALOGUE", errors: []
                 },
                 {
                     vttCue: new VTTCue(2, 4, "Caption Linex 2"),
-                    cueCategory: "DIALOGUE", errors: [CueError.SPELLCHECK_ERROR], spellCheck: spellCheck
+                    cueCategory: "DIALOGUE", errors: []
                 },
                 {
                     vttCue: new VTTCue(4, 6, "Caption Line 3"),
@@ -3010,8 +2971,8 @@ describe("cueSlices", () => {
             testingStore.dispatch(validateCorruptedCues("Linex") as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].errors).toEqual([CueError.SPELLCHECK_ERROR]);
-            expect(testingStore.getState().cues[1].errors).toEqual([CueError.SPELLCHECK_ERROR]);
+            expect(testingStore.getState().cues[0].errors).toEqual([CueError.TIME_GAP_OVERLAP]);
+            expect(testingStore.getState().cues[1].errors).toEqual([CueError.TIME_GAP_OVERLAP]);
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
             expect(testingStore.getState().cues[4].errors).toEqual([]);

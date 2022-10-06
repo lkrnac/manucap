@@ -19,7 +19,6 @@ import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
 import { setSpellCheckDomain } from "./spellcheckerSettingsSlice";
 import CueErrorAlert from "./cues/CueErrorAlert";
 import MergeEditor from "./cues/merge/MergeEditor";
-import { waveformVisibleSlice } from "./player/waveformSlices";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -30,7 +29,6 @@ export interface SubtitleEditProps {
     mp4: string;
     poster: string;
     waveform?: string;
-    duration?: number;
     onViewTrackHistory: () => void;
     onSave: () => void;
     onComplete: () => void;
@@ -62,9 +60,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
             dispatch(setSaveTrack(props.onSave));
             dispatch(setSpellCheckDomain(props.spellCheckerDomain));
             dispatch(changeScrollPosition(ScrollPosition.FIRST));
-            if (props.duration && props.duration <= 1800) {
-                dispatch(waveformVisibleSlice.actions.setWaveformVisible(true));
-            }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [] // Run only once
@@ -109,7 +104,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                     mp4={props.mp4}
                                     poster={props.poster}
                                     waveform={props.waveform}
-                                    duration={props.duration}
+                                    mediaLength={editingTrack?.mediaLength}
                                     onTimeChange={handleTimeChange}
                                 />
                             </div>

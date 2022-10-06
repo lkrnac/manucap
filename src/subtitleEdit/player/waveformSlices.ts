@@ -3,11 +3,11 @@ import { editingTrackSlice } from "../trackSlices";
 
 export const waveformVisibleSlice = createSlice({
     name: "waveformVisible",
-    initialState: false,
+    initialState: true,
     reducers: {
         setWaveformVisible: (_state, action: PayloadAction<boolean>): boolean => action.payload
     },
     extraReducers: {
-        [editingTrackSlice.actions.resetEditingTrack.type]: (): boolean => false
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): boolean => true
     }
 });

@@ -1,5 +1,5 @@
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { changeScrollPosition } from "./cuesListScrollSlice";
+import { changeScrollPosition, currentCueErrorIndexSlice, scrollPositionSlice } from "./cuesListScrollSlice";
 import { CueDto, ScrollPosition } from "../../model";
 import { AnyAction } from "@reduxjs/toolkit";
 import each from "jest-each";
@@ -56,7 +56,7 @@ describe("cuesListScrollSlice", () => {
         });
     });
 
-    describe("changeScrollPosition with not null previous focused index", () => {
+    describe("changeScrollPosition with null previous focused index", () => {
         beforeEach(() => {
             testingStore = createTestingStore({
                 matchedCues: testingMatchedCues,
@@ -88,5 +88,31 @@ describe("cuesListScrollSlice", () => {
                 // THEN
                 expect(testingStore.getState().focusedCueIndex).toEqual(expectedFocusedCueIndex);
             });
+    });
+
+    it("do not trigger redux actions when user is just scrolling", () => {
+        // GIVEN
+        const changeFocusedCueIndexSpy = jest.spyOn(scrollPositionSlice.actions, "changeFocusedCueIndex");
+        changeFocusedCueIndexSpy.mockClear();
+        const changeCurrentCueErrorPositionSpy =
+            jest.spyOn(currentCueErrorIndexSlice.actions, "changeCurrentCueErrorPosition");
+        changeCurrentCueErrorPositionSpy.mockClear();
+
+        testingStore = createTestingStore({
+            matchedCues: testingMatchedCues,
+            cues: testingTargetCues,
+            sourceCues: testingSourceCues,
+            editingCueIndex: null,
+            currentPlayerTime: 65,
+            focusedCueIndex: 110
+        });
+
+        // WHEN
+        testingStore.dispatch(changeScrollPosition(ScrollPosition.NONE) as {} as AnyAction);
+        testingStore.dispatch(changeScrollPosition(ScrollPosition.NONE) as {} as AnyAction);
+
+        // THEN
+        expect(changeFocusedCueIndexSpy).toBeCalledTimes(1);
+        expect(changeCurrentCueErrorPositionSpy).toBeCalledTimes(1);
     });
 });

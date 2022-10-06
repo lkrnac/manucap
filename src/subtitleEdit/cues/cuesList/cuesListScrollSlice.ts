@@ -88,6 +88,9 @@ export const matchCueTimeIndex = (cues: CueDto[], trackTime: number): number => 
 export const changeScrollPosition = (scrollPosition: ScrollPosition, previousFocusedCueIndex?: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<ScrollPosition | null>>, getState): void => {
         const state = getState();
+        if (scrollPosition === ScrollPosition.NONE && getState().focusedCueIndex === null) {
+            return;
+        }
         const previousFocusedCueIndexInitiated = previousFocusedCueIndex
             ? previousFocusedCueIndex
             : getState().focusedCueIndex;

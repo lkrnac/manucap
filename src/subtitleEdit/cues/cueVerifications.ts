@@ -127,7 +127,6 @@ export const conformToRules = (
     if (!overlapCaptions) {
         checkOverlap(cueErrors, cue.vttCue, previousCue, followingCue);
     }
-    checkSpelling(cueErrors, cue);
     checkCharsPerSecond(cueErrors, cue.vttCue, subtitleSpecification);
     return cueErrors;
 };
@@ -231,17 +230,4 @@ const verifyCueChunkRange = (vttCue: VTTCue, editingTrack: Track): boolean => {
 export const verifyCueDuration = (vttCue: VTTCue, editingTrack: Track, timeGapLimit: TimeGapLimit): boolean => {
     const cueDuration = Number((vttCue.endTime - vttCue.startTime).toFixed(3));
     return cueDuration >= timeGapLimit.minGap && verifyCueChunkRange(vttCue, editingTrack);
-};
-
-export const applyLineLimitation = (
-    vttCue: VTTCue,
-    originalCue: CueDto,
-    subtitleSpecifications: SubtitleSpecification | null
-): boolean => {
-    if (!checkLineLimitation(vttCue.text, subtitleSpecifications)
-        && checkLineLimitation(originalCue.vttCue.text, subtitleSpecifications)) {
-        vttCue.text = originalCue.vttCue.text;
-        return true;
-    }
-    return false;
 };

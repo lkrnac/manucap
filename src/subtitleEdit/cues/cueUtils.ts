@@ -1,7 +1,9 @@
 import Immutable from "immutable";
 
 // https://github.com/mozilla/vtt.js/issues/364
+// TODO: Name is confusing consider changing it or use different set of browsers if mistake
 export const isSafari = (): boolean => {
+    // TODO: This is very unsafe of browser type recognition. Can easily fail. Use some decent library
     const userAgent = navigator.userAgent.toLowerCase();
     return userAgent.indexOf("safari") !== -1 && userAgent.indexOf("chrome") === -1;
 };

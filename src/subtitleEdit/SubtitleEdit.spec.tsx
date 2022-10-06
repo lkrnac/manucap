@@ -1229,7 +1229,7 @@ describe("SubtitleEdit", () => {
                                     mp4="dummyMp4"
                                     poster="dummyPoster"
                                     waveform="dummyWaveform"
-                                    duration={20}
+                                    mediaLength={4000}
                                     waveformVisible
                                     timecodesUnlocked
                                     cues={cues}
@@ -1385,7 +1385,6 @@ describe("SubtitleEdit", () => {
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     waveform="dummyWaveform"
-                    duration={20}
                     onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
                     onComplete={(): void => undefined}
@@ -2105,59 +2104,5 @@ describe("SubtitleEdit", () => {
 
         // THEN
         expect(actualNode.find(".video-player-wrapper").key()).toEqual("1");
-    });
-
-    it("enables waveform for videos shorter or equal than 30 minutes", () => {
-        // GIVEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    waveform="dummyWaveform"
-                    duration={1800}
-                    onViewTrackHistory={(): void => undefined}
-                    onSave={jest.fn()}
-                    onComplete={(): void => undefined}
-                    onExportSourceFile={(): void => undefined}
-                    onExportFile={(): void => undefined}
-                    onImportFile={(): void => undefined}
-                />
-            </Provider>
-        );
-
-        // WHEN
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        actualNode.setProps({}); // trigger update + re-render
-
-        // THEN
-        expect(testingStore.getState().waveformVisible).toBeTruthy();
-    });
-
-    it("doesn't enable waveform for videos longer than 30 minutes", () => {
-        // GIVEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    waveform="dummyWaveform"
-                    duration={1801}
-                    onViewTrackHistory={(): void => undefined}
-                    onSave={jest.fn()}
-                    onComplete={(): void => undefined}
-                    onExportSourceFile={(): void => undefined}
-                    onExportFile={(): void => undefined}
-                    onImportFile={(): void => undefined}
-                />
-            </Provider>
-        );
-
-        // WHEN
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        actualNode.setProps({}); // trigger update + re-render
-
-        // THEN
-        expect(testingStore.getState().waveformVisible).toBeFalsy();
     });
 });

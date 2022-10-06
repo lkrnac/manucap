@@ -31,8 +31,8 @@ describe("VideoPlayer with waveform", () => {
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 waveform="dummyWaveform"
-                duration={20}
                 waveformVisible
+                mediaLength={20000}
                 timecodesUnlocked
                 cues={cues}
                 tracks={tracks}
@@ -58,18 +58,15 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.params.height).toEqual(100);
         expect(actualComponent.wavesurfer.params.pixelRatio).toEqual(1);
         expect(actualComponent.wavesurfer.params.barHeight).toEqual(0.4);
-        expect(actualComponent.wavesurfer.params.plugins.length).toEqual(3);
+        expect(actualComponent.wavesurfer.params.plugins.length).toEqual(2);
         expect(actualComponent.wavesurfer.params.plugins[0].name).toEqual("regions");
-        expect(actualComponent.wavesurfer.params.plugins[1].name).toEqual("minimap");
-        expect(actualComponent.wavesurfer.params.plugins[2].name).toEqual("timeline");
-        expect(actualComponent.wavesurfer.initialisedPluginList).toEqual(
-            { regions: true, minimap: true, timeline: true });
+        expect(actualComponent.wavesurfer.params.plugins[1].name).toEqual("timeline");
+        expect(actualComponent.wavesurfer.initialisedPluginList).toEqual({ regions: true, timeline: true });
         expect(actualComponent.wavesurfer.regions.params).toEqual({ dragSelection: false });
         expect(actualComponent.wavesurfer.regions.list[0].drag).toBeFalsy();
         expect(actualComponent.wavesurfer.regions.list[0].loop).toBeFalsy();
         expect(actualComponent.wavesurfer.regions.list[0].resize).toBeTruthy();
         expect(actualComponent.wavesurfer.regions.list[0].formatTimeCallback(0, 2)).toEqual("00:00:000-00:02:000");
-        expect(actualComponent.wavesurfer.minimap.params.height).toEqual(30);
     });
 
     it("initializes wavesurfer with regions", async () => {
@@ -80,8 +77,8 @@ describe("VideoPlayer with waveform", () => {
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 waveform="dummyWaveform"
-                duration={20}
                 waveformVisible
+                mediaLength={20000}
                 cues={cues}
                 tracks={tracks}
                 languageCuesArray={[]}
@@ -117,8 +114,8 @@ describe("VideoPlayer with waveform", () => {
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 waveform="dummyWaveform"
-                duration={20}
                 waveformVisible
+                mediaLength={20000}
                 cues={cues}
                 tracks={tracks}
                 languageCuesArray={[]}
@@ -141,7 +138,7 @@ describe("VideoPlayer with waveform", () => {
             poster: "dummyPosterUrl",
             mp4: "dummyMp4Url",
             waveform: "dummyWaveform",
-            duration: 20,
+            mediaLength: 20000,
             waveformVisible: true,
             cues,
             tracks,
@@ -192,7 +189,7 @@ describe("VideoPlayer with waveform", () => {
             poster: "dummyPosterUrl",
             mp4: "dummyMp4Url",
             waveform: "dummyWaveform",
-            duration: 20,
+            mediaLength: 20000,
             waveformVisible: true,
             cues: testCues,
             tracks,
@@ -234,7 +231,7 @@ describe("VideoPlayer with waveform", () => {
             poster: "dummyPosterUrl",
             mp4: "dummyMp4Url",
             waveform: "dummyWaveform",
-            duration: 20,
+            mediaLength: 20000,
             waveformVisible: true,
             cues,
             tracks,
@@ -273,7 +270,7 @@ describe("VideoPlayer with waveform", () => {
             poster: "dummyPosterUrl",
             mp4: "dummyMp4Url",
             waveform: "dummyWaveform",
-            duration: 20,
+            mediaLength: 20000,
             waveformVisible: true,
             cues,
             tracks,
@@ -315,7 +312,7 @@ describe("VideoPlayer with waveform", () => {
             poster: "dummyPosterUrl",
             mp4: "dummyMp4Url",
             waveform: "dummyWaveform",
-            duration: 20,
+            mediaLength: 20000,
             waveformVisible: true,
             cues,
             tracks,
@@ -360,7 +357,7 @@ describe("VideoPlayer with waveform", () => {
             poster: "dummyPosterUrl",
             mp4: "dummyMp4Url",
             waveform: "dummyWaveform",
-            duration: 20,
+            mediaLength: 20000,
             waveformVisible: true,
             cues,
             tracks,
@@ -398,8 +395,8 @@ describe("VideoPlayer with waveform", () => {
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 waveform=""
-                duration={20}
                 waveformVisible
+                mediaLength={20000}
                 tracks={tracks}
                 languageCuesArray={[]}
                 lastCueChange={null}
@@ -413,7 +410,7 @@ describe("VideoPlayer with waveform", () => {
         expect(waveformNode.get(0)).toBeUndefined();
     });
 
-    it("hides waveform if no waveform duration is present", async () => {
+    it("hides waveform if mediaLength parameter is missing", async () => {
         // GIVEN
         // WHEN
         const actualNode = mount(
@@ -443,8 +440,8 @@ describe("VideoPlayer with waveform", () => {
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 waveform="dummyWaveform"
-                duration={20}
                 waveformVisible={false}
+                mediaLength={20000}
                 tracks={tracks}
                 languageCuesArray={[]}
                 lastCueChange={null}
@@ -464,7 +461,7 @@ describe("VideoPlayer with waveform", () => {
             poster: "dummyPosterUrl",
             mp4: "dummyMp4Url",
             waveform: "dummyWaveform",
-            duration: 20,
+            mediaLength: 20000,
             waveformVisible: true,
             cues,
             tracks,
@@ -498,7 +495,7 @@ describe("VideoPlayer with waveform", () => {
             poster: "dummyPosterUrl",
             mp4: "dummyMp4Url",
             waveform: "dummyWaveform",
-            duration: 20,
+            mediaLength: 20000,
             waveformVisible: false,
             cues,
             tracks,
@@ -536,7 +533,7 @@ describe("VideoPlayer with waveform", () => {
             poster: "dummyPosterUrl",
             mp4: "dummyMp4Url",
             waveform: "dummyWaveform",
-            duration: 20,
+            mediaLength: 20000,
             waveformVisible: false,
             updateCueTimecodes,
             cues,
@@ -569,7 +566,7 @@ describe("VideoPlayer with waveform", () => {
             poster: "dummyPosterUrl",
             mp4: "dummyMp4Url",
             waveform: "dummyWaveform",
-            duration: 20,
+            mediaLength: 20000,
             waveformVisible: true,
             timecodesUnlocked: false,
             cues,
