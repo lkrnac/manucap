@@ -125,7 +125,6 @@ class VideoPlayer extends React.Component<Props> {
     constructor(props: Props) {
         super(props);
 
-        console.log(this.props.mediaLength);
         this.player = {} as VideoJsPlayer; // Keeps Typescript compiler quiet. Feel free to remove if you know how.
         this.videoNode = React.createRef();
         this.waveformRef = React.createRef();
