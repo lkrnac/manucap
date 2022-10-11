@@ -90,7 +90,7 @@ describe("CuesList", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <AddCueLineButton text="Start Captioning" cueIndex={-1} sourceCueIndexes={[]} />
-                    <div style={{ overflow: "auto", maxHeight: "90vh" }} />
+                    <div style={{ overflow: "auto" }} />
                 </Provider>
             );
 
@@ -131,7 +131,7 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto", maxHeight: "90vh" }}>
+                    <div style={{ overflow: "auto" }}>
                         <CueLine
                             key={0}
                             data={matchedCuesShort[0]}
@@ -193,7 +193,7 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto", maxHeight: "90vh" }}>
+                    <div style={{ overflow: "auto" }}>
                         {
                             Array.from({ length: 105 }, (_element, index) => (
                                 <CueLine
@@ -241,7 +241,7 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto", maxHeight: "90vh" }}>
+                    <div style={{ overflow: "auto" }}>
                         <button
                             style={{ marginBottom: 5 }}
                             className="sbte-btn sbte-btn-primary sbte-previous-button w-full"
@@ -296,7 +296,7 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto", maxHeight: "90vh" }}>
+                    <div style={{ overflow: "auto" }}>
                         <button
                             style={{ marginBottom: 5 }}
                             className="sbte-btn sbte-btn-primary sbte-previous-button w-full"

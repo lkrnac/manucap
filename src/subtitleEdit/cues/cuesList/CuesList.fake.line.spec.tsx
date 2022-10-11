@@ -80,7 +80,7 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto", maxHeight: "90vh"  }}>
+                    <div style={{ overflow: "auto" }}>
                         <CueLine
                             data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
                             rowIndex={0}
@@ -139,7 +139,7 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto", maxHeight: "90vh"  }}>
+                    <div style={{ overflow: "auto" }}>
                         <CueLine
                             data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
                             rowIndex={0}
@@ -213,7 +213,7 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto", maxHeight: "90vh"  }}>
+                    <div style={{ overflow: "auto" }}>
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
@@ -272,7 +272,7 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto", maxHeight: "90vh"  }}>
+                    <div style={{ overflow: "auto" }}>
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
@@ -340,7 +340,7 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto", maxHeight: "90vh"  }}>
+                    <div style={{ overflow: "auto" }}>
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
                             rowIndex={0}
@@ -409,7 +409,7 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto", maxHeight: "90vh"  }}>
+                    <div style={{ overflow: "auto" }}>
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
                             rowIndex={0}
@@ -483,7 +483,7 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto", maxHeight: "90vh"  }}>
+                    <div style={{ overflow: "auto" }}>
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
@@ -552,7 +552,7 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto", maxHeight: "90vh"  }}>
+                    <div style={{ overflow: "auto" }}>
                         <CueLine
                             data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
@@ -620,7 +620,7 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto", maxHeight: "90vh"  }}>
+                    <div style={{ overflow: "auto" }}>
                         <CueLine
                             data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
                             rowIndex={0}
@@ -672,7 +672,7 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto", maxHeight: "90vh"  }}>
+                    <div style={{ overflow: "auto" }}>
                         <CueLine
                             data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
                             rowIndex={0}
@@ -732,7 +732,7 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto", maxHeight: "90vh"  }}>
+                    <div style={{ overflow: "auto" }}>
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
@@ -804,7 +804,7 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto", maxHeight: "90vh"  }}>
+                    <div style={{ overflow: "auto" }}>
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}
@@ -871,7 +871,7 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto", maxHeight: "90vh"  }}>
+                    <div style={{ overflow: "auto" }}>
                         <CueLine
                             data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                             rowIndex={0}

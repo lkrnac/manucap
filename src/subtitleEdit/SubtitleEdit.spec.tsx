@@ -97,20 +97,13 @@ describe("SubtitleEdit", () => {
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%"
+                        height: "100%",
+                        overflow: "hidden"
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
-                        <div
-                            style={{
-                                flex: "1 1 40%",
-                                display: "flex",
-                                flexFlow: "column",
-                                paddingRight: "10px",
-                                zIndex: 20
-                            }}
-                        >
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "100%" }}>
+                        <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -129,37 +122,38 @@ describe("SubtitleEdit", () => {
                         <div
                             style={{
                                 flex: "1 1 60%",
-                                paddingLeft: "10px"
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between"
                             }}
-                            className="space-y-2 h-full flex flex-col justify-between"
                         >
-                            <div>
-                                <div style={{ overflow: "auto", maxHeight: "90vh" }}>
-                                    <CueLine
-                                        data={{ targetCues: [cuesWithIndexes[0]]}}
-                                        rowIndex={0}
-                                        rowProps={{
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues,
-                                            commentAuthor: "Linguist"
-                                        }}
-                                        rowRef={createRef()}
-                                    />
-                                    <CueLine
-                                        data={{ targetCues: [cuesWithIndexes[1]]}}
-                                        rowIndex={1}
-                                        rowProps={{
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues,
-                                            commentAuthor: "Linguist"
-                                        }}
-                                        rowRef={createRef()}
-                                    />
-                                </div>
+                            <div style={{ overflow: "auto" }}>
+                                <CueLine
+                                    data={{ targetCues: [cuesWithIndexes[0]]}}
+                                    rowIndex={0}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    rowRef={createRef()}
+                                />
+                                <CueLine
+                                    data={{ targetCues: [cuesWithIndexes[1]]}}
+                                    rowIndex={1}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    rowRef={createRef()}
+                                />
                             </div>
-                            <div className="space-x-2 flex items-center">
+                            <div className="space-x-2 flex items-center mt-1.5">
                                 <button
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
@@ -292,20 +286,13 @@ describe("SubtitleEdit", () => {
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%"
+                        height: "100%",
+                        overflow: "hidden"
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
-                        <div
-                            style={{
-                                flex: "1 1 40%",
-                                display: "flex",
-                                flexFlow: "column",
-                                paddingRight: "10px",
-                                zIndex: 20
-                            }}
-                        >
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "100%" }}>
+                        <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -324,19 +311,20 @@ describe("SubtitleEdit", () => {
                         <div
                             style={{
                                 flex: "1 1 60%",
-                                paddingLeft: "10px"
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between"
                             }}
-                            className="space-y-2 h-full flex flex-col justify-between"
                         >
-                            <div>
-                                <AddCueLineButton
-                                    text="Start Captioning"
-                                    cueIndex={-1}
-                                    sourceCueIndexes={[]}
-                                />
-                                <div style={{ overflow: "auto", maxHeight: "90vh" }} />
-                            </div>
-                            <div className="space-x-2 flex items-center">
+                            <AddCueLineButton
+                                text="Start Captioning"
+                                cueIndex={-1}
+                                sourceCueIndexes={[]}
+                            />
+                            <div style={{ overflow: "auto" }} />
+                            <div className="space-x-2 flex items-center mt-1.5">
                                 <button
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
@@ -469,7 +457,8 @@ describe("SubtitleEdit", () => {
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%"
+                        height: "100%",
+                        overflow: "hidden"
                     }}
                 >
                     <div>CueErrorAlert</div>
@@ -524,7 +513,8 @@ describe("SubtitleEdit", () => {
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%"
+                        height: "100%",
+                        overflow: "hidden"
                     }}
                 >
                     <div>CueErrorAlert</div>
@@ -579,20 +569,13 @@ describe("SubtitleEdit", () => {
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%"
+                        height: "100%",
+                        overflow: "hidden"
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
-                        <div
-                            style={{
-                                flex: "1 1 40%",
-                                display: "flex",
-                                flexFlow: "column",
-                                paddingRight: "10px",
-                                zIndex: 20
-                            }}
-                        >
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "100%" }}>
+                        <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -611,38 +594,39 @@ describe("SubtitleEdit", () => {
                         <div
                             style={{
                                 flex: "1 1 60%",
-                                paddingLeft: "10px"
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between"
                             }}
-                            className="space-y-2 h-full flex flex-col justify-between"
                         >
-                            <div>
-                                <SearchReplaceEditor />
-                                <div style={{ overflow: "auto", maxHeight: "90vh" }}>
-                                    <CueLine
-                                        data={{ targetCues: [cuesWithIndexes[0]]}}
-                                        rowIndex={0}
-                                        rowProps={{
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues,
-                                            commentAuthor: "Linguist"
-                                        }}
-                                        rowRef={createRef()}
-                                    />
-                                    <CueLine
-                                        data={{ targetCues: [cuesWithIndexes[1]]}}
-                                        rowIndex={1}
-                                        rowProps={{
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues,
-                                            commentAuthor: "Linguist"
-                                        }}
-                                        rowRef={createRef()}
-                                    />
-                                </div>
+                            <SearchReplaceEditor />
+                            <div style={{ overflow: "auto" }}>
+                                <CueLine
+                                    data={{ targetCues: [cuesWithIndexes[0]]}}
+                                    rowIndex={0}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    rowRef={createRef()}
+                                />
+                                <CueLine
+                                    data={{ targetCues: [cuesWithIndexes[1]]}}
+                                    rowIndex={1}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    rowRef={createRef()}
+                                />
                             </div>
-                            <div className="space-x-2 flex items-center">
+                            <div className="space-x-2 flex items-center mt-1.5">
                                 <button
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
@@ -777,20 +761,13 @@ describe("SubtitleEdit", () => {
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%"
+                        height: "100%",
+                        overflow: "hidden"
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
-                        <div
-                            style={{
-                                flex: "1 1 40%",
-                                display: "flex",
-                                flexFlow: "column",
-                                paddingRight: "10px",
-                                zIndex: 20
-                            }}
-                        >
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "100%" }}>
+                        <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -809,38 +786,39 @@ describe("SubtitleEdit", () => {
                         <div
                             style={{
                                 flex: "1 1 60%",
-                                paddingLeft: "10px"
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between"
                             }}
-                            className="space-y-2 h-full flex flex-col justify-between"
                         >
-                            <div>
-                                <MergeEditor />
-                                <div style={{ overflow: "auto", maxHeight: "90vh" }}>
-                                    <CueLine
-                                        data={{ targetCues: [cuesWithIndexes[0]]}}
-                                        rowIndex={0}
-                                        rowProps={{
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues,
-                                            commentAuthor: "Linguist"
-                                        }}
-                                        rowRef={createRef()}
-                                    />
-                                    <CueLine
-                                        data={{ targetCues: [cuesWithIndexes[1]]}}
-                                        rowIndex={1}
-                                        rowProps={{
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues,
-                                            commentAuthor: "Linguist"
-                                        }}
-                                        rowRef={createRef()}
-                                    />
-                                </div>
+                            <MergeEditor />
+                            <div style={{ overflow: "auto" }}>
+                                <CueLine
+                                    data={{ targetCues: [cuesWithIndexes[0]]}}
+                                    rowIndex={0}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    rowRef={createRef()}
+                                />
+                                <CueLine
+                                    data={{ targetCues: [cuesWithIndexes[1]]}}
+                                    rowIndex={1}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    rowRef={createRef()}
+                                />
                             </div>
-                            <div className="space-x-2 flex items-center">
+                            <div className="space-x-2 flex items-center mt-1.5">
                                 <button
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
@@ -975,20 +953,13 @@ describe("SubtitleEdit", () => {
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%"
+                        height: "100%",
+                        overflow: "hidden"
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
-                        <div
-                            style={{
-                                flex: "1 1 40%",
-                                display: "flex",
-                                flexFlow: "column",
-                                paddingRight: "10px",
-                                zIndex: 20
-                            }}
-                        >
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "100%" }}>
+                        <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -1008,39 +979,40 @@ describe("SubtitleEdit", () => {
                         <div
                             style={{
                                 flex: "1 1 60%",
-                                paddingLeft: "10px"
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between"
                             }}
-                            className="space-y-2 h-full flex flex-col justify-between"
                         >
-                            <div>
-                                <div style={{ overflow: "auto", maxHeight: "90vh" }}>
-                                    <CueLine
-                                        data={{ targetCues: [cuesWithIndexes[0]]}}
-                                        rowIndex={0}
-                                        rowProps={{
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues,
-                                            commentAuthor: "Linguist"
-                                        }}
-                                        editDisabled
-                                        rowRef={createRef()}
-                                    />
-                                    <CueLine
-                                        data={{ targetCues: [cuesWithIndexes[1]]}}
-                                        rowIndex={1}
-                                        rowProps={{
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues,
-                                            commentAuthor: "Linguist"
-                                        }}
-                                        editDisabled
-                                        rowRef={createRef()}
-                                    />
-                                </div>
+                            <div style={{ overflow: "auto" }}>
+                                <CueLine
+                                    data={{ targetCues: [cuesWithIndexes[0]]}}
+                                    rowIndex={0}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    editDisabled
+                                    rowRef={createRef()}
+                                />
+                                <CueLine
+                                    data={{ targetCues: [cuesWithIndexes[1]]}}
+                                    rowIndex={1}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    editDisabled
+                                    rowRef={createRef()}
+                                />
                             </div>
-                            <div className="space-x-2 flex items-center">
+                            <div className="space-x-2 flex items-center mt-1.5">
                                 <button
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
@@ -1180,20 +1152,13 @@ describe("SubtitleEdit", () => {
                         display: "flex",
                         flexFlow: "column",
                         padding: "10px",
-                        height: "100%"
+                        height: "100%",
+                        overflow: "hidden"
                     }}
                 >
                     <div>CueErrorAlert</div>
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
-                        <div
-                            style={{
-                                flex: "1 1 40%",
-                                display: "flex",
-                                flexFlow: "column",
-                                paddingRight: "10px",
-                                zIndex: 20
-                            }}
-                        >
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "100%" }}>
+                        <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                             <div className="video-player-wrapper">
                                 <VideoPlayer
                                     mp4="dummyMp4"
@@ -1218,37 +1183,38 @@ describe("SubtitleEdit", () => {
                         <div
                             style={{
                                 flex: "1 1 60%",
-                                paddingLeft: "10px"
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between"
                             }}
-                            className="space-y-2 h-full flex flex-col justify-between"
                         >
-                            <div>
-                                <div style={{ overflow: "auto", maxHeight: "90vh" }}>
-                                    <CueLine
-                                        data={{ targetCues: [cuesWithIndexes[0]]}}
-                                        rowIndex={0}
-                                        rowProps={{
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues,
-                                            commentAuthor: "Linguist"
-                                        }}
-                                        rowRef={createRef()}
-                                    />
-                                    <CueLine
-                                        data={{ targetCues: [cuesWithIndexes[1]]}}
-                                        rowIndex={1}
-                                        rowProps={{
-                                            targetCuesLength: 2,
-                                            withoutSourceCues: true,
-                                            matchedCues,
-                                            commentAuthor: "Linguist"
-                                        }}
-                                        rowRef={createRef()}
-                                    />
-                                </div>
+                            <div style={{ overflow: "auto" }}>
+                                <CueLine
+                                    data={{ targetCues: [cuesWithIndexes[0]]}}
+                                    rowIndex={0}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    rowRef={createRef()}
+                                />
+                                <CueLine
+                                    data={{ targetCues: [cuesWithIndexes[1]]}}
+                                    rowIndex={1}
+                                    rowProps={{
+                                        targetCuesLength: 2,
+                                        withoutSourceCues: true,
+                                        matchedCues,
+                                        commentAuthor: "Linguist"
+                                    }}
+                                    rowRef={createRef()}
+                                />
                             </div>
-                            <div className="space-x-2 flex items-center">
+                            <div className="space-x-2 flex items-center mt-1.5">
                                 <button
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
