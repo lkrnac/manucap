@@ -1035,7 +1035,7 @@ describe("CueLineFlap", () => {
                             marginRight: "auto",
                             left: "0",
                             right: "0",
-                            bottom: "55px",
+                            bottom: "50px",
                             fontSize: "14px"
                         }}
                     />
@@ -1133,7 +1133,7 @@ describe("CueLineFlap", () => {
                             marginRight: "auto",
                             left: "0",
                             right: "0",
-                            bottom: "55px",
+                            bottom: "50px",
                             fontSize: "14px"
                         }}
                     >
@@ -1234,7 +1234,7 @@ describe("CueLineFlap", () => {
                             marginRight: "auto",
                             left: "0",
                             right: "0",
-                            bottom: "55px",
+                            bottom: "50px",
                             fontSize: "14px"
                         }}
                     >

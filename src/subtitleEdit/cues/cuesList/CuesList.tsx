@@ -100,7 +100,10 @@ const CuesList = (props: Props): ReactElement => {
                     ? <AddCueLineButton text="Start Captioning" cueIndex={-1} sourceCueIndexes={[]} />
                     : null
             }
-            <div ref={scrollRef}>
+            <div
+                ref={scrollRef}
+                style={{ overflow: "auto", maxHeight: "90vh" }}
+            >
                 {
                     startIndex > 0
                         ? (

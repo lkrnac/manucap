@@ -106,7 +106,7 @@ const CueLineFlap = (props: Props): ReactElement => {
                 <div style={{ paddingTop: "10px", fontSize: "11px", fontWeight: "bold" }}>
                     {props.rowIndex + 1}
                 </div>
-                <div style={getIconStyle(showCommentsIcon ? "55px" : "30px")}>
+                <div style={getIconStyle(showCommentsIcon ? "50px" : "30px")}>
                     {
                         props.editDisabled
                             ? <i className="fa-duotone fa-lock" />
