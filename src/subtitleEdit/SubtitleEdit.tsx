@@ -68,7 +68,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     return (
         <div
             className="sbte-subtitle-edit"
-            style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%" }}
+            style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%", overflow: "hidden" }}
         >
             <CueErrorAlert />
             {
@@ -89,16 +89,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         </div>
                     </div>
                     :
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "95%" }}>
-                        <div
-                            style={{
-                                flex: "1 1 40%",
-                                display: "flex",
-                                flexFlow: "column",
-                                paddingRight: "10px",
-                                zIndex: "20"
-                            }}
-                        >
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "100%" }}>
+                        <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                             <div className="video-player-wrapper" key={cuesLoadingCounter}>
                                 <EditingVideoPlayer
                                     mp4={props.mp4}
@@ -118,20 +110,21 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         <div
                             style={{
                                 flex: "1 1 60%",
-                                paddingLeft: "10px"
+                                height: "100%",
+                                paddingLeft: "10px",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "space-between"
                             }}
-                            className="space-y-2 h-full flex flex-col justify-between"
                         >
-                            <div>
-                                <SearchReplaceEditor />
-                                <MergeEditor />
-                                <CuesList
-                                    editDisabled={props.editDisabled}
-                                    editingTrack={editingTrack}
-                                    commentAuthor={props.commentAuthor}
-                                />
-                            </div>
-                            <div className="space-x-2 flex items-center">
+                            <SearchReplaceEditor />
+                            <MergeEditor />
+                            <CuesList
+                                editDisabled={props.editDisabled}
+                                editingTrack={editingTrack}
+                                commentAuthor={props.commentAuthor}
+                            />
+                            <div className="space-x-2 flex items-center mt-1.5">
                                 <button
                                     className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
                                     type="button"
