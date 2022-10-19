@@ -68,7 +68,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     return (
         <div
             className="sbte-subtitle-edit"
-            style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%", overflow: "hidden" }}
+            style={{ display: "flex", flexFlow: "column", padding: "10px", height: "70%", overflow: "hidden" }}
         >
             <CueErrorAlert />
             {
