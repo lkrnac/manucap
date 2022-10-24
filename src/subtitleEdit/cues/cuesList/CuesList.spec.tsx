@@ -97,7 +97,12 @@ describe("CuesList", () => {
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -175,7 +180,12 @@ describe("CuesList", () => {
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -223,7 +233,12 @@ describe("CuesList", () => {
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -278,7 +293,12 @@ describe("CuesList", () => {
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -327,7 +347,12 @@ describe("CuesList", () => {
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -346,7 +371,12 @@ describe("CuesList", () => {
             testingStore.dispatch(updateEditingCueIndex(102) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -364,7 +394,12 @@ describe("CuesList", () => {
             testingStore.dispatch(updateEditingCueIndex(202) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
             await act(async () => {
@@ -390,7 +425,12 @@ describe("CuesList", () => {
             testingStore.dispatch(updateEditingCueIndex(52) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -408,7 +448,12 @@ describe("CuesList", () => {
             testingStore.dispatch(updateEditingCueIndex(52) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
             await act(async () => {
@@ -449,7 +494,12 @@ describe("CuesList", () => {
             // WHEN
             render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -482,7 +532,12 @@ describe("CuesList", () => {
             // WHEN
             render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -506,7 +561,12 @@ describe("CuesList", () => {
 
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -528,7 +588,12 @@ describe("CuesList", () => {
 
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -550,7 +615,12 @@ describe("CuesList", () => {
 
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -572,7 +642,12 @@ describe("CuesList", () => {
 
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -596,7 +671,12 @@ describe("CuesList", () => {
 
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -618,7 +698,12 @@ describe("CuesList", () => {
 
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -640,7 +725,12 @@ describe("CuesList", () => {
 
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -662,7 +752,12 @@ describe("CuesList", () => {
 
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -689,7 +784,12 @@ describe("CuesList", () => {
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -717,7 +817,12 @@ describe("CuesList", () => {
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -745,7 +850,12 @@ describe("CuesList", () => {
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -779,7 +889,12 @@ describe("CuesList", () => {
             testingStore.dispatch(updateCues(testingSourceCuesForPagination) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -815,7 +930,12 @@ describe("CuesList", () => {
             testingStore.dispatch(updateCues(testingSourceCuesForPagination) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -852,7 +972,12 @@ describe("CuesList", () => {
 
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -887,7 +1012,12 @@ describe("CuesList", () => {
 
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -914,7 +1044,12 @@ describe("CuesList", () => {
 
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -957,7 +1092,12 @@ describe("CuesList", () => {
 
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 
@@ -984,7 +1124,12 @@ describe("CuesList", () => {
             // GIVEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} commentAuthor="Linguist" />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider>
             );
 

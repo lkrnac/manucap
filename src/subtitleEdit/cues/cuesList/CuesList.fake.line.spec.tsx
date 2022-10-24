@@ -107,7 +107,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -166,7 +170,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingDirectTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingDirectTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -240,7 +248,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -299,7 +311,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -367,7 +383,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -442,7 +462,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -510,7 +534,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -585,7 +613,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -635,7 +667,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -687,7 +723,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -759,7 +799,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -831,7 +875,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -892,7 +940,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -905,7 +957,11 @@ describe("CuesList", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingDirectTranslationTrack} />
+                <CuesList
+                    editingTrack={testingDirectTranslationTrack}
+                    onComplete={jest.fn()}
+                    onViewTrackHistory={jest.fn()}
+                />
             </Provider >
         );
         await act(async () => {
@@ -931,7 +987,11 @@ describe("CuesList", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingDirectTranslationTrack} />
+                <CuesList
+                    editingTrack={testingDirectTranslationTrack}
+                    onComplete={jest.fn()}
+                    onViewTrackHistory={jest.fn()}
+                />
             </Provider >
         );
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
@@ -958,7 +1018,11 @@ describe("CuesList", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingDirectTranslationTrack} />
+                <CuesList
+                    editingTrack={testingDirectTranslationTrack}
+                    onComplete={jest.fn()}
+                    onViewTrackHistory={jest.fn()}
+                />
             </Provider >
         );
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
