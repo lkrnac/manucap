@@ -257,7 +257,10 @@ class VideoPlayer extends React.Component<Props> {
                             removeMediaElementOnDestroy: false,
                             height: 100,
                             pixelRatio: 1,
-                            barHeight: 0.4,
+                            barHeight: 0.2,
+                            minPxPerSec: 10,
+                            barGap:30,
+                            fillParent: false,
                             plugins: [
                                 RegionsPlugin.create({
                                     dragSelection: false
@@ -268,7 +271,7 @@ class VideoPlayer extends React.Component<Props> {
                             ]
                         });
 
-                        this.wavesurfer.zoom(80);
+                        this.wavesurfer.zoom(50);
 
                         this.wavesurfer.load(
                             this.videoNode?.current,
