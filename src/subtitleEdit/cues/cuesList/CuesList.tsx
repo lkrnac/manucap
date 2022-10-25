@@ -112,7 +112,7 @@ const CuesList = (props: Props): ReactElement => {
                     ? <AddCueLineButton text="Start Captioning" cueIndex={-1} sourceCueIndexes={[]} />
                     : null
             }
-            <div ref={scrollRef} style={{ overflow: "auto" }}>
+            <div ref={scrollRef} style={{ overflow: "auto" }} className="sbte-cue-list">
                 {
                     startIndex > 0
                         ? (

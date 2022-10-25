@@ -91,7 +91,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }}>
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
                             <CueLine
                                 data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
                                 rowIndex={0}
@@ -170,7 +170,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }}>
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
                             <CueLine
                                 data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
                                 rowIndex={0}
@@ -264,7 +264,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }}>
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
@@ -343,7 +343,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }}>
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
                             <CueLine
                                 data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
@@ -431,7 +431,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }}>
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
                                 rowIndex={0}
@@ -520,7 +520,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }}>
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
                                 rowIndex={0}
@@ -614,7 +614,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }}>
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
                             <CueLine
                                 data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
@@ -703,7 +703,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }}>
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
                             <CueLine
                                 data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
@@ -791,7 +791,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }}>
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
                             <CueLine
                                 data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
                                 rowIndex={0}
@@ -863,7 +863,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }}>
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
                             <CueLine
                                 data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
                                 rowIndex={0}
@@ -943,7 +943,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }}>
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
@@ -1035,7 +1035,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }}>
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}
@@ -1122,7 +1122,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }}>
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
                             <CueLine
                                 data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
                                 rowIndex={0}

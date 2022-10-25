@@ -140,7 +140,7 @@ describe("SubtitleEdit", () => {
                                     justifyContent: "space-between"
                                 }}
                             >
-                                <div style={{ overflow: "auto" }}>
+                                <div style={{ overflow: "auto" }} className="sbte-cue-list">
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -262,7 +262,7 @@ describe("SubtitleEdit", () => {
                                     cueIndex={-1}
                                     sourceCueIndexes={[]}
                                 />
-                                <div style={{ overflow: "auto" }} />
+                                <div style={{ overflow: "auto" }} className="sbte-cue-list" />
                                 <CueListToolbar
                                     editingTrack={testingTrack}
                                     onViewTrackHistory={jest.fn()}
@@ -469,7 +469,7 @@ describe("SubtitleEdit", () => {
                                     justifyContent: "space-between"
                                 }}
                             >
-                                <div style={{ overflow: "auto" }}>
+                                <div style={{ overflow: "auto" }} className="sbte-cue-list">
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -589,7 +589,7 @@ describe("SubtitleEdit", () => {
                                     justifyContent: "space-between"
                                 }}
                             >
-                                <div style={{ overflow: "auto" }}>
+                                <div style={{ overflow: "auto" }} className="sbte-cue-list">
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -709,7 +709,7 @@ describe("SubtitleEdit", () => {
                                     justifyContent: "space-between"
                                 }}
                             >
-                                <div style={{ overflow: "auto" }}>
+                                <div style={{ overflow: "auto" }} className="sbte-cue-list">
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -842,7 +842,7 @@ describe("SubtitleEdit", () => {
                                     justifyContent: "space-between"
                                 }}
                             >
-                                <div style={{ overflow: "auto" }}>
+                                <div style={{ overflow: "auto" }} className="sbte-cue-list">
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}

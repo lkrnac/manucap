@@ -101,7 +101,7 @@ describe("CuesList", () => {
                         }}
                     >
                         <AddCueLineButton text="Start Captioning" cueIndex={-1} sourceCueIndexes={[]} />
-                        <div style={{ overflow: "auto" }} />
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list" />
                         <CueListToolbar
                             editingTrack={testingTranslationTrack}
                             onViewTrackHistory={jest.fn()}
@@ -163,7 +163,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }}>
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
                             <CueLine
                                 key={0}
                                 data={matchedCuesShort[0]}
@@ -246,7 +246,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }}>
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
                             {
                                 Array.from({ length: 105 }, (_element, index) => (
                                     <CueLine
@@ -315,7 +315,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }}>
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
                             <button
                                 style={{ marginBottom: 5 }}
                                 className="sbte-btn sbte-btn-primary sbte-previous-button w-full"
@@ -391,7 +391,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }}>
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
                             <button
                                 style={{ marginBottom: 5 }}
                                 className="sbte-btn sbte-btn-primary sbte-previous-button w-full"
@@ -484,10 +484,10 @@ describe("CuesList", () => {
                 </Provider>
             );
             await act(async () => {
-                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
             });
             await act(async () => {
-                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
             });
 
             // WHEN
@@ -538,10 +538,10 @@ describe("CuesList", () => {
                 </Provider>
             );
             await act(async () => {
-                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
             });
             await act(async () => {
-                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
             });
 
             // WHEN
@@ -945,10 +945,10 @@ describe("CuesList", () => {
                 testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
             });
             await act(async () => {
-                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
             });
             await act(async () => {
-                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
             });
             await act(async () => {
                 testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
@@ -984,10 +984,10 @@ describe("CuesList", () => {
                 testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
             });
             await act(async () => {
-                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
             });
             await act(async () => {
-                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
             });
             await act(async () => {
                 testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
@@ -1025,10 +1025,10 @@ describe("CuesList", () => {
                 testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
             });
             await act(async () => {
-                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
             });
             await act(async () => {
-                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
             });
 
             // THEN
@@ -1218,10 +1218,10 @@ describe("CuesList", () => {
             testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(50) as {} as AnyAction);
             await act(async () => {
-                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
             });
             await act(async () => {
-                actualNode.container.querySelector("div")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
             });
 
             // THEN
