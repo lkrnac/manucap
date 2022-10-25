@@ -75,8 +75,8 @@ describe("CompleteButton", () => {
                     </div>
                     <button
                         type="button"
-                        disabled
                         className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn"
+                        disabled
                     >
                         Complete
                     </button>
@@ -116,8 +116,8 @@ describe("CompleteButton", () => {
                         </div>
                         <button
                             type="button"
-                            disabled
                             className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn"
+                            disabled
                         >
                             Complete
                         </button>
