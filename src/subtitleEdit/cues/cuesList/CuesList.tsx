@@ -100,7 +100,7 @@ const CuesList = (props: Props): ReactElement => {
         <div
             style={{
                 flex: "1 1 60%",
-                height: "90%",
+                height: "95%",
                 paddingLeft: "10px",
                 display: "flex",
                 flexDirection: "column",
