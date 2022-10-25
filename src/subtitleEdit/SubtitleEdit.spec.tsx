@@ -32,6 +32,7 @@ import { lastCueChangeSlice } from "./cues/edit/cueEditorSlices";
 import { showMerge } from "./cues/merge/mergeSlices";
 import MergeEditor from "./cues/merge/MergeEditor";
 import { act } from "react-dom/test-utils";
+import CueListToolbar from "./CueListToolbar";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
@@ -129,117 +130,45 @@ describe("SubtitleEdit", () => {
                                 justifyContent: "space-between"
                             }}
                         >
-                            <div style={{ overflow: "auto" }}>
-                                <CueLine
-                                    data={{ targetCues: [cuesWithIndexes[0]]}}
-                                    rowIndex={0}
-                                    rowProps={{
-                                        targetCuesLength: 2,
-                                        withoutSourceCues: true,
-                                        matchedCues,
-                                        commentAuthor: "Linguist"
-                                    }}
-                                    rowRef={createRef()}
-                                />
-                                <CueLine
-                                    data={{ targetCues: [cuesWithIndexes[1]]}}
-                                    rowIndex={1}
-                                    rowProps={{
-                                        targetCuesLength: 2,
-                                        withoutSourceCues: true,
-                                        matchedCues,
-                                        commentAuthor: "Linguist"
-                                    }}
-                                    rowRef={createRef()}
-                                />
-                            </div>
-                            <div className="space-x-2 flex items-center mt-1.5">
-                                <button
-                                    className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
-                                    type="button"
-                                >
-                                    View Track History
-                                </button>
-                                <button
-                                    id="jumpToFirstButton"
-                                    className="sbte-btn sbte-btn-light sbte-jump-to-first-button"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to top"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-angle-double-up" />
-                                </button>
-                                <button
-                                    id="jumpToLastButton"
-                                    className="sbte-btn sbte-btn-light sbte-jump-to-last-button"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to bottom"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-angle-double-down" />
-                                </button>
-                                <button
-                                    id="editCueButton"
-                                    data-testid="sbte-jump-to-edit-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to currently editing subtitle"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-edit" />
-                                </button>
-                                <button
-                                    id="playbackCueButton"
-                                    data-testid="sbte-jump-to-playback-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to subtitle in playback position"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-video" />
-                                </button>
-                                <button
-                                    hidden
-                                    id="translatedCueButton"
-                                    data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to last translated subtitle"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-language" />
-                                </button>
-                                <button
-                                    id="cueErrorButton"
-                                    data-testid="sbte-jump-error-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to next subtitle error"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-bug" />
-                                </button>
-                                <span style={{ flexGrow: 2 }} />
-                                <div className="space-x-4 flex items-center">
-                                    <div className="font-medium">
-                                        <span hidden className="flex items-center ">
-                                            <span className="leading-none" />
-                                            <i className="ml-2" />
-                                        </span>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn"
-                                    >
-                                        Complete
-                                    </button>
+                            <div
+                                style={{
+                                    flex: "1 1 60%",
+                                    height: "90%",
+                                    paddingLeft: "10px",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "space-between"
+                                }}
+                            >
+                                <div style={{ overflow: "auto" }}>
+                                    <CueLine
+                                        data={{ targetCues: [cuesWithIndexes[0]]}}
+                                        rowIndex={0}
+                                        rowProps={{
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
+                                        }}
+                                        rowRef={createRef()}
+                                    />
+                                    <CueLine
+                                        data={{ targetCues: [cuesWithIndexes[1]]}}
+                                        rowIndex={1}
+                                        rowProps={{
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
+                                        }}
+                                        rowRef={createRef()}
+                                    />
                                 </div>
+                                <CueListToolbar
+                                    editingTrack={testingTrack}
+                                    onViewTrackHistory={jest.fn()}
+                                    onComplete={jest.fn()}
+                                />
                             </div>
                         </div>
                     </div>
@@ -318,99 +247,27 @@ describe("SubtitleEdit", () => {
                                 justifyContent: "space-between"
                             }}
                         >
-                            <AddCueLineButton
-                                text="Start Captioning"
-                                cueIndex={-1}
-                                sourceCueIndexes={[]}
-                            />
-                            <div style={{ overflow: "auto" }} />
-                            <div className="space-x-2 flex items-center mt-1.5">
-                                <button
-                                    className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
-                                    type="button"
-                                >
-                                    View Track History
-                                </button>
-                                <button
-                                    id="jumpToFirstButton"
-                                    className="sbte-btn sbte-btn-light sbte-jump-to-first-button"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to top"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-angle-double-up" />
-                                </button>
-                                <button
-                                    id="jumpToLastButton"
-                                    className="sbte-btn sbte-btn-light sbte-jump-to-last-button"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to bottom"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-angle-double-down" />
-                                </button>
-                                <button
-                                    id="editCueButton"
-                                    data-testid="sbte-jump-to-edit-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to currently editing subtitle"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-edit" />
-                                </button>
-                                <button
-                                    id="playbackCueButton"
-                                    data-testid="sbte-jump-to-playback-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to subtitle in playback position"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-video" />
-                                </button>
-                                <button
-                                    hidden
-                                    id="translatedCueButton"
-                                    data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to last translated subtitle"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-language" />
-                                </button>
-                                <button
-                                    id="cueErrorButton"
-                                    data-testid="sbte-jump-error-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to next subtitle error"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-bug" />
-                                </button>
-                                <span style={{ flexGrow: 2 }} />
-                                <div className="space-x-4 flex items-center">
-                                    <div className="font-medium">
-                                        <span hidden className="flex items-center ">
-                                            <span className="leading-none" />
-                                            <i className="ml-2" />
-                                        </span>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn"
-                                    >
-                                        Complete
-                                    </button>
-                                </div>
+                            <div
+                                style={{
+                                    flex: "1 1 60%",
+                                    height: "90%",
+                                    paddingLeft: "10px",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "space-between"
+                                }}
+                            >
+                                <AddCueLineButton
+                                    text="Start Captioning"
+                                    cueIndex={-1}
+                                    sourceCueIndexes={[]}
+                                />
+                                <div style={{ overflow: "auto" }} />
+                                <CueListToolbar
+                                    editingTrack={testingTrack}
+                                    onViewTrackHistory={jest.fn()}
+                                    onComplete={jest.fn()}
+                                />
                             </div>
                         </div>
                     </div>
@@ -602,117 +459,45 @@ describe("SubtitleEdit", () => {
                             }}
                         >
                             <SearchReplaceEditor />
-                            <div style={{ overflow: "auto" }}>
-                                <CueLine
-                                    data={{ targetCues: [cuesWithIndexes[0]]}}
-                                    rowIndex={0}
-                                    rowProps={{
-                                        targetCuesLength: 2,
-                                        withoutSourceCues: true,
-                                        matchedCues,
-                                        commentAuthor: "Linguist"
-                                    }}
-                                    rowRef={createRef()}
-                                />
-                                <CueLine
-                                    data={{ targetCues: [cuesWithIndexes[1]]}}
-                                    rowIndex={1}
-                                    rowProps={{
-                                        targetCuesLength: 2,
-                                        withoutSourceCues: true,
-                                        matchedCues,
-                                        commentAuthor: "Linguist"
-                                    }}
-                                    rowRef={createRef()}
-                                />
-                            </div>
-                            <div className="space-x-2 flex items-center mt-1.5">
-                                <button
-                                    className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
-                                    type="button"
-                                >
-                                    View Track History
-                                </button>
-                                <button
-                                    id="jumpToFirstButton"
-                                    className="sbte-btn sbte-btn-light sbte-jump-to-first-button"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to top"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-angle-double-up" />
-                                </button>
-                                <button
-                                    id="jumpToLastButton"
-                                    className="sbte-btn sbte-btn-light sbte-jump-to-last-button"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to bottom"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-angle-double-down" />
-                                </button>
-                                <button
-                                    id="editCueButton"
-                                    data-testid="sbte-jump-to-edit-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to currently editing subtitle"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-edit" />
-                                </button>
-                                <button
-                                    id="playbackCueButton"
-                                    data-testid="sbte-jump-to-playback-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to subtitle in playback position"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-video" />
-                                </button>
-                                <button
-                                    hidden
-                                    id="translatedCueButton"
-                                    data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to last translated subtitle"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-language" />
-                                </button>
-                                <button
-                                    id="cueErrorButton"
-                                    data-testid="sbte-jump-error-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to next subtitle error"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-bug" />
-                                </button>
-                                <span style={{ flexGrow: 2 }} />
-                                <div className="space-x-4 flex items-center">
-                                    <div className="font-medium">
-                                        <span hidden className="flex items-center ">
-                                            <span className="leading-none" />
-                                            <i className="ml-2" />
-                                        </span>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn"
-                                    >
-                                        Complete
-                                    </button>
+                            <div
+                                style={{
+                                    flex: "1 1 60%",
+                                    height: "90%",
+                                    paddingLeft: "10px",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "space-between"
+                                }}
+                            >
+                                <div style={{ overflow: "auto" }}>
+                                    <CueLine
+                                        data={{ targetCues: [cuesWithIndexes[0]]}}
+                                        rowIndex={0}
+                                        rowProps={{
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
+                                        }}
+                                        rowRef={createRef()}
+                                    />
+                                    <CueLine
+                                        data={{ targetCues: [cuesWithIndexes[1]]}}
+                                        rowIndex={1}
+                                        rowProps={{
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
+                                        }}
+                                        rowRef={createRef()}
+                                    />
                                 </div>
+                                <CueListToolbar
+                                    editingTrack={testingTrack}
+                                    onViewTrackHistory={jest.fn()}
+                                    onComplete={jest.fn()}
+                                />
                             </div>
                         </div>
                     </div>
@@ -794,117 +579,45 @@ describe("SubtitleEdit", () => {
                             }}
                         >
                             <MergeEditor />
-                            <div style={{ overflow: "auto" }}>
-                                <CueLine
-                                    data={{ targetCues: [cuesWithIndexes[0]]}}
-                                    rowIndex={0}
-                                    rowProps={{
-                                        targetCuesLength: 2,
-                                        withoutSourceCues: true,
-                                        matchedCues,
-                                        commentAuthor: "Linguist"
-                                    }}
-                                    rowRef={createRef()}
-                                />
-                                <CueLine
-                                    data={{ targetCues: [cuesWithIndexes[1]]}}
-                                    rowIndex={1}
-                                    rowProps={{
-                                        targetCuesLength: 2,
-                                        withoutSourceCues: true,
-                                        matchedCues,
-                                        commentAuthor: "Linguist"
-                                    }}
-                                    rowRef={createRef()}
-                                />
-                            </div>
-                            <div className="space-x-2 flex items-center mt-1.5">
-                                <button
-                                    className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
-                                    type="button"
-                                >
-                                    View Track History
-                                </button>
-                                <button
-                                    id="jumpToFirstButton"
-                                    className="sbte-btn sbte-btn-light sbte-jump-to-first-button"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to top"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-angle-double-up" />
-                                </button>
-                                <button
-                                    id="jumpToLastButton"
-                                    className="sbte-btn sbte-btn-light sbte-jump-to-last-button"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to bottom"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-angle-double-down" />
-                                </button>
-                                <button
-                                    id="editCueButton"
-                                    data-testid="sbte-jump-to-edit-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to currently editing subtitle"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-edit" />
-                                </button>
-                                <button
-                                    id="playbackCueButton"
-                                    data-testid="sbte-jump-to-playback-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to subtitle in playback position"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-video" />
-                                </button>
-                                <button
-                                    hidden
-                                    id="translatedCueButton"
-                                    data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to last translated subtitle"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-language" />
-                                </button>
-                                <button
-                                    id="cueErrorButton"
-                                    data-testid="sbte-jump-error-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to next subtitle error"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-bug" />
-                                </button>
-                                <span style={{ flexGrow: 2 }} />
-                                <div className="space-x-4 flex items-center">
-                                    <div className="font-medium">
-                                        <span hidden className="flex items-center ">
-                                            <span className="leading-none" />
-                                            <i className="ml-2" />
-                                        </span>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn"
-                                    >
-                                        Complete
-                                    </button>
+                            <div
+                                style={{
+                                    flex: "1 1 60%",
+                                    height: "90%",
+                                    paddingLeft: "10px",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "space-between"
+                                }}
+                            >
+                                <div style={{ overflow: "auto" }}>
+                                    <CueLine
+                                        data={{ targetCues: [cuesWithIndexes[0]]}}
+                                        rowIndex={0}
+                                        rowProps={{
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
+                                        }}
+                                        rowRef={createRef()}
+                                    />
+                                    <CueLine
+                                        data={{ targetCues: [cuesWithIndexes[1]]}}
+                                        rowIndex={1}
+                                        rowProps={{
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
+                                        }}
+                                        rowRef={createRef()}
+                                    />
                                 </div>
+                                <CueListToolbar
+                                    editingTrack={testingTrack}
+                                    onViewTrackHistory={jest.fn()}
+                                    onComplete={jest.fn()}
+                                />
                             </div>
                         </div>
                     </div>
@@ -986,119 +699,48 @@ describe("SubtitleEdit", () => {
                                 justifyContent: "space-between"
                             }}
                         >
-                            <div style={{ overflow: "auto" }}>
-                                <CueLine
-                                    data={{ targetCues: [cuesWithIndexes[0]]}}
-                                    rowIndex={0}
-                                    rowProps={{
-                                        targetCuesLength: 2,
-                                        withoutSourceCues: true,
-                                        matchedCues,
-                                        commentAuthor: "Linguist"
-                                    }}
-                                    editDisabled
-                                    rowRef={createRef()}
-                                />
-                                <CueLine
-                                    data={{ targetCues: [cuesWithIndexes[1]]}}
-                                    rowIndex={1}
-                                    rowProps={{
-                                        targetCuesLength: 2,
-                                        withoutSourceCues: true,
-                                        matchedCues,
-                                        commentAuthor: "Linguist"
-                                    }}
-                                    editDisabled
-                                    rowRef={createRef()}
-                                />
-                            </div>
-                            <div className="space-x-2 flex items-center mt-1.5">
-                                <button
-                                    className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
-                                    type="button"
-                                >
-                                    View Track History
-                                </button>
-                                <button
-                                    id="jumpToFirstButton"
-                                    className="sbte-btn sbte-btn-light sbte-jump-to-first-button"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to top"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-angle-double-up" />
-                                </button>
-                                <button
-                                    id="jumpToLastButton"
-                                    className="sbte-btn sbte-btn-light sbte-jump-to-last-button"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to bottom"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-angle-double-down" />
-                                </button>
-                                <button
-                                    id="editCueButton"
-                                    data-testid="sbte-jump-to-edit-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to currently editing subtitle"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-edit" />
-                                </button>
-                                <button
-                                    id="playbackCueButton"
-                                    data-testid="sbte-jump-to-playback-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to subtitle in playback position"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-video" />
-                                </button>
-                                <button
-                                    hidden
-                                    id="translatedCueButton"
-                                    data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to last translated subtitle"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-language" />
-                                </button>
-                                <button
-                                    id="cueErrorButton"
-                                    data-testid="sbte-jump-error-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to next subtitle error"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-bug" />
-                                </button>
-                                <span style={{ flexGrow: 2 }} />
-                                <div className="space-x-4 flex items-center">
-                                    <div className="font-medium">
-                                        <span className="text-green-primary">
-                                            Edits are disabled, task is already completed
-                                        </span>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        disabled
-                                        className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn"
-                                    >
-                                        Complete
-                                    </button>
+                            <div
+                                style={{
+                                    flex: "1 1 60%",
+                                    height: "90%",
+                                    paddingLeft: "10px",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "space-between"
+                                }}
+                            >
+                                <div style={{ overflow: "auto" }}>
+                                    <CueLine
+                                        data={{ targetCues: [cuesWithIndexes[0]]}}
+                                        rowIndex={0}
+                                        rowProps={{
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
+                                        }}
+                                        editDisabled
+                                        rowRef={createRef()}
+                                    />
+                                    <CueLine
+                                        data={{ targetCues: [cuesWithIndexes[1]]}}
+                                        rowIndex={1}
+                                        rowProps={{
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
+                                        }}
+                                        editDisabled
+                                        rowRef={createRef()}
+                                    />
                                 </div>
+                                <CueListToolbar
+                                    editingTrack={testingTrack}
+                                    onViewTrackHistory={jest.fn()}
+                                    onComplete={jest.fn()}
+                                    editDisabled
+                                />
                             </div>
                         </div>
                     </div>
@@ -1190,117 +832,45 @@ describe("SubtitleEdit", () => {
                                 justifyContent: "space-between"
                             }}
                         >
-                            <div style={{ overflow: "auto" }}>
-                                <CueLine
-                                    data={{ targetCues: [cuesWithIndexes[0]]}}
-                                    rowIndex={0}
-                                    rowProps={{
-                                        targetCuesLength: 2,
-                                        withoutSourceCues: true,
-                                        matchedCues,
-                                        commentAuthor: "Linguist"
-                                    }}
-                                    rowRef={createRef()}
-                                />
-                                <CueLine
-                                    data={{ targetCues: [cuesWithIndexes[1]]}}
-                                    rowIndex={1}
-                                    rowProps={{
-                                        targetCuesLength: 2,
-                                        withoutSourceCues: true,
-                                        matchedCues,
-                                        commentAuthor: "Linguist"
-                                    }}
-                                    rowRef={createRef()}
-                                />
-                            </div>
-                            <div className="space-x-2 flex items-center mt-1.5">
-                                <button
-                                    className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
-                                    type="button"
-                                >
-                                    View Track History
-                                </button>
-                                <button
-                                    id="jumpToFirstButton"
-                                    className="sbte-btn sbte-btn-light sbte-jump-to-first-button"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to top"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-angle-double-up" />
-                                </button>
-                                <button
-                                    id="jumpToLastButton"
-                                    className="sbte-btn sbte-btn-light sbte-jump-to-last-button"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to bottom"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-angle-double-down" />
-                                </button>
-                                <button
-                                    id="editCueButton"
-                                    data-testid="sbte-jump-to-edit-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to currently editing subtitle"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-edit" />
-                                </button>
-                                <button
-                                    id="playbackCueButton"
-                                    data-testid="sbte-jump-to-playback-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to subtitle in playback position"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-video" />
-                                </button>
-                                <button
-                                    hidden
-                                    id="translatedCueButton"
-                                    data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to last translated subtitle"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-language" />
-                                </button>
-                                <button
-                                    id="cueErrorButton"
-                                    data-testid="sbte-jump-error-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    data-pr-tooltip="Scroll to next subtitle error"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-bug" />
-                                </button>
-                                <span style={{ flexGrow: 2 }} />
-                                <div className="space-x-4 flex items-center">
-                                    <div className="font-medium">
-                                        <span hidden className="flex items-center ">
-                                            <span className="leading-none" />
-                                            <i className="ml-2" />
-                                        </span>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn"
-                                    >
-                                        Complete
-                                    </button>
+                            <div
+                                style={{
+                                    flex: "1 1 60%",
+                                    height: "90%",
+                                    paddingLeft: "10px",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "space-between"
+                                }}
+                            >
+                                <div style={{ overflow: "auto" }}>
+                                    <CueLine
+                                        data={{ targetCues: [cuesWithIndexes[0]]}}
+                                        rowIndex={0}
+                                        rowProps={{
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
+                                        }}
+                                        rowRef={createRef()}
+                                    />
+                                    <CueLine
+                                        data={{ targetCues: [cuesWithIndexes[1]]}}
+                                        rowIndex={1}
+                                        rowProps={{
+                                            targetCuesLength: 2,
+                                            withoutSourceCues: true,
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
+                                        }}
+                                        rowRef={createRef()}
+                                    />
                                 </div>
+                                <CueListToolbar
+                                    editingTrack={testingTrack}
+                                    onViewTrackHistory={jest.fn()}
+                                    onComplete={jest.fn()}
+                                />
                             </div>
                         </div>
                     </div>
