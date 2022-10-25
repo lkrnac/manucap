@@ -17,6 +17,7 @@ import CueLine from "../cueLine/CueLine";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import AddCueLineButton from "../edit/AddCueLineButton";
 import { matchedCuesSlice } from "./cuesListSlices";
+import CueListToolbar from "../../CueListToolbar";
 
 const scrollIntoViewCallsTracker = jest.fn();
 
@@ -89,8 +90,24 @@ describe("CuesList", () => {
             // GIVEN
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <AddCueLineButton text="Start Captioning" cueIndex={-1} sourceCueIndexes={[]} />
-                    <div style={{ overflow: "auto" }} />
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            paddingLeft: "10px",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <AddCueLineButton text="Start Captioning" cueIndex={-1} sourceCueIndexes={[]} />
+                        <div style={{ overflow: "auto" }} />
+                        <CueListToolbar
+                            editingTrack={testingTranslationTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
+                        />
+                    </div>
                 </Provider>
             );
 
@@ -136,42 +153,58 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto" }}>
-                        <CueLine
-                            key={0}
-                            data={matchedCuesShort[0]}
-                            rowIndex={0}
-                            rowProps={{
-                                targetCuesLength: 3,
-                                withoutSourceCues: false,
-                                matchedCues: matchedCuesShort,
-                                commentAuthor: "Linguist"
-                            }}
-                            rowRef={createRef()}
-                        />
-                        <CueLine
-                            key={1}
-                            data={matchedCuesShort[1]}
-                            rowIndex={1}
-                            rowProps={{
-                                targetCuesLength: 3,
-                                withoutSourceCues: false,
-                                matchedCues: matchedCuesShort,
-                                commentAuthor: "Linguist"
-                            }}
-                            rowRef={createRef()}
-                        />
-                        <CueLine
-                            key={2}
-                            data={matchedCuesShort[2]}
-                            rowIndex={2}
-                            rowProps={{
-                                targetCuesLength: 3,
-                                withoutSourceCues: false,
-                                matchedCues: matchedCuesShort,
-                                commentAuthor: "Linguist"
-                            }}
-                            rowRef={createRef()}
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            paddingLeft: "10px",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ overflow: "auto" }}>
+                            <CueLine
+                                key={0}
+                                data={matchedCuesShort[0]}
+                                rowIndex={0}
+                                rowProps={{
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues: matchedCuesShort,
+                                    commentAuthor: "Linguist"
+                                }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                key={1}
+                                data={matchedCuesShort[1]}
+                                rowIndex={1}
+                                rowProps={{
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues: matchedCuesShort,
+                                    commentAuthor: "Linguist"
+                                }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                key={2}
+                                data={matchedCuesShort[2]}
+                                rowIndex={2}
+                                rowProps={{
+                                    targetCuesLength: 3,
+                                    withoutSourceCues: false,
+                                    matchedCues: matchedCuesShort,
+                                    commentAuthor: "Linguist"
+                                }}
+                                rowRef={createRef()}
+                            />
+                        </div>
+                        <CueListToolbar
+                            editingTrack={testingTranslationTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
                         />
                     </div>
                 </Provider>
@@ -203,29 +236,45 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto" }}>
-                        {
-                            Array.from({ length: 105 }, (_element, index) => (
-                                <CueLine
-                                    key={index}
-                                    data={matchedCues[index]}
-                                    rowIndex={index}
-                                    rowProps={{
-                                        targetCuesLength: 120,
-                                        withoutSourceCues: false,
-                                        matchedCues,
-                                        commentAuthor: "Linguist"
-                                    }}
-                                    rowRef={createRef()}
-                                />
-                            ))
-                        }
-                        <button
-                            className="sbte-btn sbte-btn-primary sbte-next-button w-full"
-                            onClick={jest.fn()}
-                        >
-                            Load Next Cues
-                        </button>
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            paddingLeft: "10px",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ overflow: "auto" }}>
+                            {
+                                Array.from({ length: 105 }, (_element, index) => (
+                                    <CueLine
+                                        key={index}
+                                        data={matchedCues[index]}
+                                        rowIndex={index}
+                                        rowProps={{
+                                            targetCuesLength: 120,
+                                            withoutSourceCues: false,
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
+                                        }}
+                                        rowRef={createRef()}
+                                    />
+                                ))
+                            }
+                            <button
+                                className="sbte-btn sbte-btn-primary sbte-next-button w-full"
+                                onClick={jest.fn()}
+                            >
+                                Load Next Cues
+                            </button>
+                        </div>
+                        <CueListToolbar
+                            editingTrack={testingTranslationTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
+                        />
                     </div>
                 </Provider>
             );
@@ -256,36 +305,52 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto" }}>
-                        <button
-                            style={{ marginBottom: 5 }}
-                            className="sbte-btn sbte-btn-primary sbte-previous-button w-full"
-                            onClick={jest.fn()}
-                        >
-                            Load Previous Cues
-                        </button>
-                        {
-                            Array.from({ length: 110 }, (_element, index) => (
-                                <CueLine
-                                    key={index + 95}
-                                    data={matchedCues[index + 95]}
-                                    rowIndex={index + 95}
-                                    rowProps={{
-                                        targetCuesLength: 120,
-                                        withoutSourceCues: false,
-                                        matchedCues,
-                                        commentAuthor: "Linguist"
-                                    }}
-                                    rowRef={createRef()}
-                                />
-                            ))
-                        }
-                        <button
-                            className="sbte-btn sbte-btn-primary sbte-next-button w-full"
-                            onClick={jest.fn()}
-                        >
-                            Load Next Cues
-                        </button>
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            paddingLeft: "10px",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ overflow: "auto" }}>
+                            <button
+                                style={{ marginBottom: 5 }}
+                                className="sbte-btn sbte-btn-primary sbte-previous-button w-full"
+                                onClick={jest.fn()}
+                            >
+                                Load Previous Cues
+                            </button>
+                            {
+                                Array.from({ length: 110 }, (_element, index) => (
+                                    <CueLine
+                                        key={index + 95}
+                                        data={matchedCues[index + 95]}
+                                        rowIndex={index + 95}
+                                        rowProps={{
+                                            targetCuesLength: 120,
+                                            withoutSourceCues: false,
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
+                                        }}
+                                        rowRef={createRef()}
+                                    />
+                                ))
+                            }
+                            <button
+                                className="sbte-btn sbte-btn-primary sbte-next-button w-full"
+                                onClick={jest.fn()}
+                            >
+                                Load Next Cues
+                            </button>
+                        </div>
+                        <CueListToolbar
+                            editingTrack={testingTranslationTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
+                        />
                     </div>
                 </Provider>
             );
@@ -316,30 +381,46 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto" }}>
-                        <button
-                            style={{ marginBottom: 5 }}
-                            className="sbte-btn sbte-btn-primary sbte-previous-button w-full"
-                            onClick={jest.fn()}
-                        >
-                            Load Previous Cues
-                        </button>
-                        {
-                            Array.from({ length: 25 }, (_element, index) => (
-                                <CueLine
-                                    key={index + 195}
-                                    data={matchedCues[index + 195]}
-                                    rowIndex={index + 195}
-                                    rowProps={{
-                                        targetCuesLength: 120,
-                                        withoutSourceCues: false,
-                                        matchedCues,
-                                        commentAuthor: "Linguist"
-                                    }}
-                                    rowRef={createRef()}
-                                />
-                            ))
-                        }
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            paddingLeft: "10px",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ overflow: "auto" }}>
+                            <button
+                                style={{ marginBottom: 5 }}
+                                className="sbte-btn sbte-btn-primary sbte-previous-button w-full"
+                                onClick={jest.fn()}
+                            >
+                                Load Previous Cues
+                            </button>
+                            {
+                                Array.from({ length: 25 }, (_element, index) => (
+                                    <CueLine
+                                        key={index + 195}
+                                        data={matchedCues[index + 195]}
+                                        rowIndex={index + 195}
+                                        rowProps={{
+                                            targetCuesLength: 120,
+                                            withoutSourceCues: false,
+                                            matchedCues,
+                                            commentAuthor: "Linguist"
+                                        }}
+                                        rowRef={createRef()}
+                                    />
+                                ))
+                            }
+                        </div>
+                        <CueListToolbar
+                            editingTrack={testingTranslationTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
+                        />
                     </div>
                 </Provider>
             );
