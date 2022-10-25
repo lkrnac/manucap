@@ -133,7 +133,7 @@ describe("SubtitleEdit", () => {
                             <div
                                 style={{
                                     flex: "1 1 60%",
-                                    height: "95%",
+                                    height: "90%",
                                     paddingLeft: "10px",
                                     display: "flex",
                                     flexDirection: "column",
@@ -250,7 +250,7 @@ describe("SubtitleEdit", () => {
                             <div
                                 style={{
                                     flex: "1 1 60%",
-                                    height: "95%",
+                                    height: "90%",
                                     paddingLeft: "10px",
                                     display: "flex",
                                     flexDirection: "column",
@@ -462,7 +462,7 @@ describe("SubtitleEdit", () => {
                             <div
                                 style={{
                                     flex: "1 1 60%",
-                                    height: "95%",
+                                    height: "90%",
                                     paddingLeft: "10px",
                                     display: "flex",
                                     flexDirection: "column",
@@ -582,7 +582,7 @@ describe("SubtitleEdit", () => {
                             <div
                                 style={{
                                     flex: "1 1 60%",
-                                    height: "95%",
+                                    height: "90%",
                                     paddingLeft: "10px",
                                     display: "flex",
                                     flexDirection: "column",
@@ -702,7 +702,7 @@ describe("SubtitleEdit", () => {
                             <div
                                 style={{
                                     flex: "1 1 60%",
-                                    height: "95%",
+                                    height: "90%",
                                     paddingLeft: "10px",
                                     display: "flex",
                                     flexDirection: "column",
@@ -835,7 +835,7 @@ describe("SubtitleEdit", () => {
                             <div
                                 style={{
                                     flex: "1 1 60%",
-                                    height: "95%",
+                                    height: "90%",
                                     paddingLeft: "10px",
                                     display: "flex",
                                     flexDirection: "column",
