@@ -648,8 +648,5 @@ region.wavesurfer-region:before {
 }
 region.wavesurfer-region:before {
     content: attr(data-region-label);
-    position: absolute;
-    top: 0;
-    background-color: gray;
-    color: white;
+    @apply text-gray-900/80
 }
