@@ -18,7 +18,7 @@ import TimelinePlugin from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js";
 import moment from "moment";
 
 const SECOND = 1000;
-const ONE_MILLISECOND = 0.001;
+const ONE_MILLISECOND = 0.0001;
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
 
 const customizeLinePosition = (vttCue: VTTCue, trackFontSizePercent?: number): void => {
@@ -249,7 +249,7 @@ class VideoPlayer extends React.Component<Props> {
                             container: this.waveformRef.current,
                             normalize: true,
                             scrollParent: true,
-                            minimap: true,
+                            // minimap: true,
                             partialRender: true,
                             cursorColor: "#007bff",
                             cursorWidth: 2,
@@ -257,13 +257,10 @@ class VideoPlayer extends React.Component<Props> {
                             removeMediaElementOnDestroy: false,
                             height: 100,
                             pixelRatio: 1,
-                            barHeight: 0.2,
-                            minPxPerSec: 10,
-                            barGap:30,
-                            fillParent: false,
+                            barHeight: 0.4,
                             plugins: [
                                 RegionsPlugin.create({
-                                    dragSelection: false
+                                    dragSelection: false,
                                 }),
                                 TimelinePlugin.create({
                                     container: this.waveformTimelineRef?.current
@@ -271,7 +268,7 @@ class VideoPlayer extends React.Component<Props> {
                             ]
                         });
 
-                        this.wavesurfer.zoom(50);
+                        this.wavesurfer.zoom(80);
 
                         this.wavesurfer.load(
                             this.videoNode?.current,

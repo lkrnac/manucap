@@ -646,3 +646,10 @@ region.wavesurfer-region:before {
         transform: rotate(360deg);
     }
 }
+region.wavesurfer-region:before {
+    content: attr(data-region-label);
+    position: absolute;
+    top: 0;
+    background-color: gray;
+    color: white;
+}
