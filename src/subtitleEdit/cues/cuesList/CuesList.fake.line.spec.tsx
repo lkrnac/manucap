@@ -17,6 +17,7 @@ import { act } from "react-dom/test-utils";
 import { changeScrollPosition } from "./cuesListScrollSlice";
 import { Character, KeyCombination } from "../../utils/shortcutConstants";
 import { updateSourceCues } from "../view/sourceCueSlices";
+import CueListToolbar from "../../CueListToolbar";
 
 jest.mock(
     "../cueLine/CueLine",
@@ -80,26 +81,41 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto" }}>
-                        <CueLine
-                            data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
-                            rowIndex={0}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            rowRef={createRef()}
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                            <CueLine
+                                data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
+                                rowIndex={0}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
+                                rowIndex={1}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [cuesWithIndexes[2]], sourceCues: []}}
+                                rowIndex={2}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                        </div >
+                        <CueListToolbar
+                            editingTrack={testingCaptionTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
                         />
-                        <CueLine
-                            data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
-                            rowIndex={1}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                        <CueLine
-                            data={{ targetCues: [cuesWithIndexes[2]], sourceCues: []}}
-                            rowIndex={2}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                    </div >
+                    </div>
                 </Provider >
             );
 
@@ -107,7 +123,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingCaptionTrack} />
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -139,26 +159,41 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto" }}>
-                        <CueLine
-                            data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
-                            rowIndex={0}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            rowRef={createRef()}
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                            <CueLine
+                                data={{ targetCues: [cuesWithIndexes[0]], sourceCues: []}}
+                                rowIndex={0}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
+                                rowIndex={1}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [cuesWithIndexes[2]], sourceCues: []}}
+                                rowIndex={2}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                        </div >
+                        <CueListToolbar
+                            editingTrack={testingDirectTranslationTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
                         />
-                        <CueLine
-                            data={{ targetCues: [cuesWithIndexes[1]], sourceCues: []}}
-                            rowIndex={1}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                        <CueLine
-                            data={{ targetCues: [cuesWithIndexes[2]], sourceCues: []}}
-                            rowIndex={2}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues:true, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                    </div >
+                    </div>
                 </Provider >
             );
 
@@ -166,7 +201,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingDirectTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingDirectTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -213,26 +252,41 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto" }}>
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
-                            rowIndex={0}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={0}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
+                                rowIndex={1}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
+                                rowIndex={2}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                        </div >
+                        <CueListToolbar
+                            editingTrack={testingTranslationTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
                         />
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
-                            rowIndex={1}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
-                            rowIndex={2}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                    </div >
+                    </div>
                 </Provider >
             );
 
@@ -240,7 +294,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -272,26 +330,41 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto" }}>
-                        <CueLine
-                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
-                            rowIndex={0}
-                            rowProps={{ targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={0}
+                                rowProps={{ targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]}}
+                                rowIndex={1}
+                                rowProps={{ targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
+                                rowIndex={2}
+                                rowProps={{ targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                        </div >
+                        <CueListToolbar
+                            editingTrack={testingTranslationTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
                         />
-                        <CueLine
-                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]}}
-                            rowIndex={1}
-                            rowProps={{ targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                        <CueLine
-                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
-                            rowIndex={2}
-                            rowProps={{ targetCuesLength: 0, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                    </div >
+                    </div>
                 </Provider >
             );
 
@@ -299,7 +372,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -340,26 +417,41 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto" }}>
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
-                            rowIndex={0}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
+                                rowIndex={0}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={1}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: []}}
+                                rowIndex={2}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                        </div >
+                        <CueListToolbar
+                            editingTrack={testingTranslationTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
                         />
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[0]]}}
-                            rowIndex={1}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: []}}
-                            rowIndex={2}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                    </div >
+                    </div>
                 </Provider >
             );
 
@@ -367,7 +459,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -409,32 +505,47 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto" }}>
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
-                            rowIndex={0}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
+                                rowIndex={0}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={1}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: []}}
+                                rowIndex={2}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: []}}
+                                rowIndex={3}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                        </div >
+                        <CueListToolbar
+                            editingTrack={testingTranslationTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
                         />
-                        <CueLine
-                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
-                            rowIndex={1}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: []}}
-                            rowIndex={2}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: []}}
-                            rowIndex={3}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                    </div >
+                    </div>
                 </Provider >
             );
 
@@ -442,7 +553,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -483,26 +598,41 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto" }}>
-                        <CueLine
-                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
-                            rowIndex={0}
-                            rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={0}
+                                rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[1]]}}
+                                rowIndex={1}
+                                rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
+                                rowIndex={2}
+                                rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                        </div >
+                        <CueListToolbar
+                            editingTrack={testingTranslationTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
                         />
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[1]]}}
-                            rowIndex={1}
-                            rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                        <CueLine
-                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
-                            rowIndex={2}
-                            rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                    </div >
+                    </div>
                 </Provider >
             );
 
@@ -510,7 +640,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -552,32 +686,47 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto" }}>
-                        <CueLine
-                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
-                            rowIndex={0}
-                            rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={0}
+                                rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
+                                rowIndex={1}
+                                rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]}}
+                                rowIndex={2}
+                                rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
+                                rowIndex={3}
+                                rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                        </div >
+                        <CueListToolbar
+                            editingTrack={testingTranslationTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
                         />
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: []}}
-                            rowIndex={1}
-                            rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                        <CueLine
-                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[1]]}}
-                            rowIndex={2}
-                            rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                        <CueLine
-                            data={{ targetCues: [], sourceCues: [sourceCuesWithIndexes[2]]}}
-                            rowIndex={3}
-                            rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                    </div >
+                    </div>
                 </Provider >
             );
 
@@ -585,7 +734,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -620,14 +773,29 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto" }}>
-                        <CueLine
-                            data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
-                            rowIndex={0}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                            <CueLine
+                                data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
+                                rowIndex={0}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                        </div >
+                        <CueListToolbar
+                            editingTrack={testingTranslationTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
                         />
-                    </div >
+                    </div>
                 </Provider >
             );
 
@@ -635,7 +803,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -672,14 +844,29 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto" }}>
-                        <CueLine
-                            data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
-                            rowIndex={0}
-                            rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                            <CueLine
+                                data={{ targetCues: targetCuesWithIndexes, sourceCues: sourceCuesWithIndexes }}
+                                rowIndex={0}
+                                rowProps={{ targetCuesLength: 1, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                        </div >
+                        <CueListToolbar
+                            editingTrack={testingTranslationTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
                         />
-                    </div >
+                    </div>
                 </Provider >
             );
 
@@ -687,7 +874,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -732,26 +923,41 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto" }}>
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
-                            rowIndex={0}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={0}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
+                                rowIndex={1}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
+                                rowIndex={2}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                        </div >
+                        <CueListToolbar
+                            editingTrack={testingTranslationTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
                         />
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
-                            rowIndex={1}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
-                            rowIndex={2}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                    </div >
+                    </div>
                 </Provider >
             );
 
@@ -759,7 +965,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -804,26 +1014,41 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto" }}>
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
-                            rowIndex={0}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={0}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
+                                rowIndex={1}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
+                                rowIndex={2}
+                                rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                        </div >
+                        <CueListToolbar
+                            editingTrack={testingTranslationTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
                         />
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
-                            rowIndex={1}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[2]], sourceCues: [sourceCuesWithIndexes[2]]}}
-                            rowIndex={2}
-                            rowProps={{ targetCuesLength: 3, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                    </div >
+                    </div>
                 </Provider >
             );
 
@@ -831,7 +1056,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -871,20 +1100,35 @@ describe("CuesList", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div style={{ overflow: "auto" }}>
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
-                            rowIndex={0}
-                            rowProps={{ targetCuesLength: 2, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
+                    <div
+                        style={{
+                            flex: "1 1 60%",
+                            height: "90%",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between"
+                        }}
+                    >
+                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[0]], sourceCues: [sourceCuesWithIndexes[0]]}}
+                                rowIndex={0}
+                                rowProps={{ targetCuesLength: 2, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                            <CueLine
+                                data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
+                                rowIndex={1}
+                                rowProps={{ targetCuesLength: 2, withoutSourceCues: false, matchedCues }}
+                                rowRef={createRef()}
+                            />
+                        </div >
+                        <CueListToolbar
+                            editingTrack={testingTranslationTrack}
+                            onViewTrackHistory={jest.fn()}
+                            onComplete={jest.fn()}
                         />
-                        <CueLine
-                            data={{ targetCues: [targetCuesWithIndexes[1]], sourceCues: [sourceCuesWithIndexes[1]]}}
-                            rowIndex={1}
-                            rowProps={{ targetCuesLength: 2, withoutSourceCues: false, matchedCues }}
-                            rowRef={createRef()}
-                        />
-                    </div >
+                    </div>
                 </Provider >
             );
 
@@ -892,7 +1136,11 @@ describe("CuesList", () => {
             testingStore.dispatch(changeScrollPosition(ScrollPosition.FIRST) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CuesList editingTrack={testingTranslationTrack} />
+                    <CuesList
+                        editingTrack={testingTranslationTrack}
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
                 </Provider >
             );
 
@@ -905,7 +1153,11 @@ describe("CuesList", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingDirectTranslationTrack} />
+                <CuesList
+                    editingTrack={testingDirectTranslationTrack}
+                    onComplete={jest.fn()}
+                    onViewTrackHistory={jest.fn()}
+                />
             </Provider >
         );
         await act(async () => {
@@ -931,7 +1183,11 @@ describe("CuesList", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingDirectTranslationTrack} />
+                <CuesList
+                    editingTrack={testingDirectTranslationTrack}
+                    onComplete={jest.fn()}
+                    onViewTrackHistory={jest.fn()}
+                />
             </Provider >
         );
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
@@ -958,7 +1214,11 @@ describe("CuesList", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         render(
             <Provider store={testingStore}>
-                <CuesList editingTrack={testingDirectTranslationTrack} />
+                <CuesList
+                    editingTrack={testingDirectTranslationTrack}
+                    onComplete={jest.fn()}
+                    onViewTrackHistory={jest.fn()}
+                />
             </Provider >
         );
         testingStore.dispatch(updateCues([]) as {} as AnyAction);

@@ -10,11 +10,14 @@ import { SubtitleEditState } from "../../subtitleEditReducers";
 import Mousetrap from "mousetrap";
 import { KeyCombination } from "../../utils/shortcutConstants";
 import { changeScrollPosition, DEFAULT_PAGE_SIZE } from "./cuesListScrollSlice";
+import CueListToolbar from "../../CueListToolbar";
 
 interface Props {
     editingTrack: Track | null;
     commentAuthor?: string;
     editDisabled?: boolean;
+    onViewTrackHistory: () => void;
+    onComplete: () => void;
 }
 
 const CuesList = (props: Props): ReactElement => {
@@ -94,13 +97,21 @@ const CuesList = (props: Props): ReactElement => {
     );
 
     return (
-        <>
+        <div
+            style={{
+                flex: "1 1 60%",
+                height: "90%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between"
+            }}
+        >
             {
                 showStartCaptioning
                     ? <AddCueLineButton text="Start Captioning" cueIndex={-1} sourceCueIndexes={[]} />
                     : null
             }
-            <div ref={scrollRef} style={{ overflow: "auto" }}>
+            <div ref={scrollRef} style={{ overflow: "auto" }} className="sbte-cue-list">
                 {
                     startIndex > 0
                         ? (
@@ -157,7 +168,13 @@ const CuesList = (props: Props): ReactElement => {
                         : null
                 }
             </div>
-        </>
+            <CueListToolbar
+                onViewTrackHistory={props.onViewTrackHistory}
+                editingTrack={props.editingTrack}
+                onComplete={props.onComplete}
+                editDisabled={props.editDisabled}
+            />
+        </div>
     );
 };
 
