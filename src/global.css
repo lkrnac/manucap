@@ -646,6 +646,8 @@ region.wavesurfer-region:before {
         transform: rotate(360deg);
     }
 }
+
+/* Waveform */
 region.wavesurfer-region:before {
     content: attr(data-region-label);
     @apply text-gray-900/80
