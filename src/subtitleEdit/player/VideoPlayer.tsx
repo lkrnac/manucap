@@ -247,7 +247,9 @@ class VideoPlayer extends React.Component<Props> {
                     if (this.waveformRef?.current) {
                         this.wavesurfer = WaveSurfer.create({
                             container: this.waveformRef.current,
-                            normalize: true,
+                            // normalize by the maximum peak when true,
+                            // which overrides barHeight
+                            normalize: false,
                             scrollParent: true,
                             minimap: true,
                             partialRender: true,
@@ -257,7 +259,7 @@ class VideoPlayer extends React.Component<Props> {
                             removeMediaElementOnDestroy: false,
                             height: 100,
                             pixelRatio: 1,
-                            barHeight: 0.4,
+                            barHeight: 0.01, // set height of the waveform bars
                             plugins: [
                                 RegionsPlugin.create({
                                     dragSelection: false
