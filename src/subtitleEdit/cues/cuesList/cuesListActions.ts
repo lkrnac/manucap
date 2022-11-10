@@ -213,6 +213,14 @@ export const validateCue = (
     dispatch(checkErrors({ index, shouldSpellCheck: shouldSpellCheck }));
 };
 
+// TODO: Consider separate actions for:
+//    - shifting start time
+//    - shifting end time
+//    - updating cue text
+//    - updating category and/or position
+//  This way we could do less action or check only some validations related to the concrete action. This way we could
+//  speed up the processing.
+//  But this needs to be investigated, I am not saying that it is good idea.
 export const updateVttCue = (
     idx: number,
     vttCue: VTTCue,
