@@ -322,18 +322,15 @@ const TestApp = (): ReactElement => {
         );
     });
 
-    const mp4 = `https://dotsub-media-encoded.s3.amazonaws.com/sample/${LONG_VIDEO_TESTING
+    const video = `https://dotsub-media-encoded.s3.amazonaws.com/sample/${LONG_VIDEO_TESTING
         ? "my-long-movie"
-        : "dotsubExplainer"}.mp4`;
-    const waveform = `https://dotsub-media-encoded.s3.amazonaws.com/sample/${LONG_VIDEO_TESTING
-        ? "my-long-movie"
-        : "dotsubExplainer"}.json`;
+        : "dotsubExplainer"}`;
 
     return (
         <SubtitleEdit
-            poster="https://dotsub-media-encoded.s3.amazonaws.com/sample/dotsubExplainer.jpeg"
-            mp4={mp4}
-            waveform={waveform}
+            poster={`${video}.jpeg`}
+            mp4={`${video}.mp4`}
+            waveform={`${video}.json`}
             onViewTrackHistory={(): void => undefined}
             onSave={(): void => {
                 setTimeout(
