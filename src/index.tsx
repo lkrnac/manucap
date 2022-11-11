@@ -264,7 +264,7 @@ const TestApp = (): ReactElement => {
                 sourceLanguage,
                 default: true,
                 mediaTitle: "This is the video title",
-                mediaLength: LONG_VIDEO_TESTING ? 3612542 : 305000,
+                mediaLength: LONG_VIDEO_TESTING ? 3612542 : 125526,
                 mediaChunkStart,
                 mediaChunkEnd,
                 progress: 50,
