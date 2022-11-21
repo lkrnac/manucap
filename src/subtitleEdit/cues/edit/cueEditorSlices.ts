@@ -25,9 +25,17 @@ export const editingCueIndexSlice = createSlice({
         [cuesSlice.actions.addCue.type]:
             (_state, action: PayloadAction<CueIndexAction>): number => action.payload.idx,
         [cuesSlice.actions.deleteCue.type]: (): number => -1,
-        [cuesSlice.actions.updateCues.type]: (): number => -1,
-        [cuesSlice.actions.updateCues.type]: (): number => -1,
         [mergeVisibleSlice.actions.setMergeVisible.type]: (): number => -1
+    }
+});
+
+type FocusedInputType = "EDITOR" | "START_TIME";
+
+export const focusedInputSlice = createSlice({
+    name: "focusedInput",
+    initialState: "EDITOR" as FocusedInputType,
+    reducers: {
+        updateFocusedInput: (_state, action: PayloadAction<FocusedInputType>): FocusedInputType => action.payload
     }
 });
 
@@ -91,6 +99,7 @@ export const updateEditingCueIndexNoThunk = (
     getState: Function,
     idx: number
 ): void => {
+    dispatch(focusedInputSlice.actions.updateFocusedInput("EDITOR"));
     dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx }));
     if (idx >= 0) {
         const state = getState();

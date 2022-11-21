@@ -40,7 +40,9 @@ jest.mock("lodash", () => (
             fn.cancel = jest.fn();
             return fn;
         },
-        get: jest.requireActual("lodash/get")
+        get: jest.requireActual("lodash/get"),
+        sortBy: jest.requireActual("lodash/sortBy"),
+        findIndex: jest.requireActual("lodash/findIndex")
     }));
 jest.mock("../spellCheck/spellCheckFetch");
 // @ts-ignore we are mocking this function
@@ -152,6 +154,7 @@ describe("CueEdit", () => {
                                 key={1}
                                 index={0}
                                 vttCue={cues[0].vttCue}
+                                autoFocus
                                 bindCueViewModeKeyboardShortcut={jest.fn()}
                                 unbindCueViewModeKeyboardShortcut={jest.fn()}
                                 setGlossaryTerm={jest.fn()}
@@ -249,6 +252,7 @@ describe("CueEdit", () => {
                                 key={1}
                                 index={0}
                                 vttCue={cues[0].vttCue}
+                                autoFocus
                                 bindCueViewModeKeyboardShortcut={jest.fn()}
                                 unbindCueViewModeKeyboardShortcut={jest.fn()}
                                 setGlossaryTerm={jest.fn()}
@@ -351,6 +355,7 @@ describe("CueEdit", () => {
                                 key={1}
                                 index={0}
                                 vttCue={cues[0].vttCue}
+                                autoFocus
                                 bindCueViewModeKeyboardShortcut={jest.fn()}
                                 unbindCueViewModeKeyboardShortcut={jest.fn()}
                                 setGlossaryTerm={jest.fn()}
@@ -452,6 +457,7 @@ describe("CueEdit", () => {
                                 key={1}
                                 index={0}
                                 vttCue={cues[0].vttCue}
+                                autoFocus
                                 bindCueViewModeKeyboardShortcut={jest.fn()}
                                 unbindCueViewModeKeyboardShortcut={jest.fn()}
                                 setGlossaryTerm={jest.fn()}
@@ -1568,9 +1574,9 @@ describe("CueEdit", () => {
 
     describe("unbind shortcuts", () => {
         // TODO: It seems tests in this file are somehow affecting each other and in this group is nested beforeEach.
-        // Nested beforeEach is extremely terrible idea to me. After fixing totally unrelated tests,
-        // one of tests from this group started failing. I don't fully understand these test cases and had to do
-        // hacky tricks to make these tests run. We should really fix this situation.
+        //  Nested beforeEach is extremely terrible idea to me. After fixing totally unrelated tests,
+        //  one of tests from this group started failing. I don't fully understand these test cases and had to do
+        //  hacky tricks to make these tests run. We should really fix this situation.
         beforeEach(() => {
             const spellCheck = {
                 matches: [
@@ -1678,5 +1684,4 @@ describe("CueEdit", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(0);
         });
     });
-
 });

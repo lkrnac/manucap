@@ -1604,6 +1604,70 @@ describe("cueSlices", () => {
                 expect(updateSearchMatchesSpy).not.toBeCalled();
             });
         });
+
+        describe("ordering of source cues", () => {
+            it("reorder cues if cue position changes when editing start time", () => {
+                // GIVEN
+                const track = { ...testingTrack, overlapEnabled: true };
+                testingStore.dispatch(updateEditingTrack(track) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(2, new VTTCue(1.5, 4, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1.5);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 2");
+                expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().validationErrors).toEqual([]);
+                expect(testingStore.getState().lastCueChange.changeType).toEqual("EDIT");
+                expect(testingStore.getState().lastCueChange.index).toEqual(2);
+                expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().cues[1].vttCue === testingStore.getState().lastCueChange.vttCue)
+                    .toBeTruthy();
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+                expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
+                expect(testingStore.getState().editingCueIndex).toEqual(1);
+                expect(testingStore.getState().focusedInput).toEqual("START_TIME");
+            });
+
+            it("don't reorder cues if cue position doesn't change when editing start time", () => {
+                // GIVEN
+                const track = { ...testingTrack, overlapEnabled: true };
+                testingStore.dispatch(updateEditingTrack(track) as {} as AnyAction);
+                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+                testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+                const editUuid = testingStore.getState().cues[1].editUuid;
+
+                // WHEN
+                testingStore.dispatch(updateVttCue(2, new VTTCue(2, 4, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+                // THEN
+                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
+                expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(4);
+                expect(testingStore.getState().validationErrors).toEqual([]);
+                expect(testingStore.getState().lastCueChange.changeType).toEqual("EDIT");
+                expect(testingStore.getState().lastCueChange.index).toEqual(2);
+                expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
+                expect(testingStore.getState().cues[2].vttCue === testingStore.getState().lastCueChange.vttCue)
+                    .toBeTruthy();
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+                expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
+                expect(testingStore.getState().editingCueIndex).toEqual(2);
+                expect(testingStore.getState().focusedInput).toEqual("EDITOR");
+            });
+        });
     });
 
     describe("validateCue", () => {

@@ -57,6 +57,7 @@ const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
             editUuid={props.props.editUuid}
             spellCheck={props.props.spellCheck}
             setGlossaryTerm={jest.fn()}
+            autoFocus
         />
     </Provider>
 );
@@ -102,6 +103,7 @@ describe("CueTextEditor", () => {
                         {
                             index: 0,
                             vttCue,
+                            autoFocus: true,
                             editUuid,
                             spellCheck,
                             bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,

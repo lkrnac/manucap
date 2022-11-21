@@ -34,6 +34,7 @@ import { changeScrollPosition } from "./cuesListScrollSlice";
 import { addSpellCheck, fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import {
     editingCueIndexSlice,
+    focusedInputSlice,
     lastCueChangeSlice,
     updateSearchMatches,
     validationErrorSlice
@@ -213,6 +214,22 @@ export const validateCue = (
     dispatch(checkErrors({ index, shouldSpellCheck: shouldSpellCheck }));
 };
 
+const reorderCuesIfNeeded = function (dispatch: Dispatch<SubtitleEditAction>, state: SubtitleEditState): void {
+    const newCues = state.cues;
+    const editingCueIndex = state.editingCueIndex;
+    let editUuid = null;
+    if (editingCueIndex > -1) {
+        editUuid = newCues[editingCueIndex].editUuid;
+    }
+    const sortedCues = _.sortBy(newCues, (cue: CueDto) => cue.vttCue.startTime);
+    const newEditingCueIndex = _.findIndex(sortedCues, [ "editUuid", editUuid ]);
+    if (editingCueIndex != newEditingCueIndex) {
+        dispatch(focusedInputSlice.actions.updateFocusedInput("START_TIME"));
+        dispatch(cuesSlice.actions.updateCues({ cues: sortedCues }));
+        dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: newEditingCueIndex }));
+    }
+};
+
 // TODO: Consider separate actions for:
 //    - shifting start time
 //    - shifting end time
@@ -285,6 +302,9 @@ export const updateVttCue = (
             const newCue = { ...originalCue, idx, vttCue: newVttCue, editUuid: uuidv4() };
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
+            if (vttCue.startTime !== originalCue.vttCue.startTime) {
+                reorderCuesIfNeeded(dispatch, getState());
+            }
             if (getState().searchReplaceVisible) {
                 updateSearchMatches(dispatch, getState, idx);
             }
@@ -537,6 +557,7 @@ export const mergeCues = (): AppThunk =>
                 const validCueDuration = editingTrack && verifyCueDuration(mergedVttCue, editingTrack, timeGapLimit);
 
                 if (validCueDuration) {
+                    dispatch(focusedInputSlice.actions.updateFocusedInput("EDITOR"));
                     dispatch(cuesSlice.actions.mergeCues(
                         { mergedCue, startIndex: firstCue.index, endIndex: lastCue.index }));
                     dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: firstCue.index }));

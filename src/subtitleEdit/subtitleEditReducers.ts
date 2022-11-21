@@ -19,6 +19,7 @@ import { spellcheckerSettingsSlice } from "./spellcheckerSettingsSlice";
 import { sourceCuesSlice } from "./cues/view/sourceCueSlices";
 import {
     editingCueIndexSlice,
+    focusedInputSlice,
     lastCueChangeSlice,
     validationErrorSlice
 } from "./cues/edit/cueEditorSlices";
@@ -49,7 +50,8 @@ export const Reducers = {
     currentPlayerTime: currentPlayerTimeSlice.reducer,
     commentsVisible: commentsVisibleSlice.reducer,
     waveformVisible: waveformVisibleSlice.reducer,
-    currentCueErrorIndex: currentCueErrorIndexSlice.reducer
+    currentCueErrorIndex: currentCueErrorIndexSlice.reducer,
+    focusedInput: focusedInputSlice.reducer
 };
 
 const subtitleEditReducers = combineReducers(Reducers);

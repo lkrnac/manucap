@@ -38,6 +38,7 @@ const getCueIndexes = (cues: CueDtoWithIndex[] | undefined): number[] => cues
 const CueEdit = (props: CueEditProps): ReactElement => {
     const dispatch = useDispatch();
     const currentPlayerTime = useSelector((state: SubtitleEditState) => state.currentPlayerTime);
+    const focusedInput = useSelector((state: SubtitleEditState) => state.focusedInput);
     const nextSourceCuesIndexes = props.nextCueLine
         ? getCueIndexes(props.nextCueLine.sourceCues)
         : [];
@@ -159,6 +160,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                                             updateCueAndCopyProperties(
                                                 dispatch, props, startTime, props.cue.vttCue.endTime, props.cue.editUuid
                                             )}
+                                        autoFocus={focusedInput === "START_TIME"}
                                     />
                                     <TimeEditor
                                         time={props.cue.vttCue.endTime}
@@ -196,6 +198,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
             </div>
             <div
                 className="border-l border-blue-light/20 flex items-center"
+                data-testid="sbte-cue-editor-container"
                 style={{ flex: "1 1 70%" }}
             >
                 <CueTextEditor
@@ -209,6 +212,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                     unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcut}
                     glossaryTerm={props.glossaryTerm}
                     setGlossaryTerm={props.setGlossaryTerm}
+                    autoFocus={focusedInput !== "START_TIME"}
                 />
                 <CueActionsPanel
                     index={props.index}
