@@ -47,7 +47,7 @@ describe("VideoPlayer with waveform", () => {
         // @ts-ignore can't find the correct syntax
         const actualComponent = videoNode.instance() as VideoPlayer;
 
-        expect(actualComponent.wavesurfer.params.normalize).toBeTruthy();
+        expect(actualComponent.wavesurfer.params.normalize).toBeFalsy();
         expect(actualComponent.wavesurfer.params.scrollParent).toBeTruthy();
         expect(actualComponent.wavesurfer.params.minimap).toBeTruthy();
         expect(actualComponent.wavesurfer.params.partialRender).toBeTruthy();
@@ -57,7 +57,7 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.params.removeMediaElementOnDestroy).toBeFalsy();
         expect(actualComponent.wavesurfer.params.height).toEqual(100);
         expect(actualComponent.wavesurfer.params.pixelRatio).toEqual(1);
-        expect(actualComponent.wavesurfer.params.barHeight).toEqual(0.4);
+        expect(actualComponent.wavesurfer.params.barHeight).toEqual(0.01);
         expect(actualComponent.wavesurfer.params.plugins.length).toEqual(2);
         expect(actualComponent.wavesurfer.params.plugins[0].name).toEqual("regions");
         expect(actualComponent.wavesurfer.params.plugins[1].name).toEqual("timeline");
