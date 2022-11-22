@@ -148,104 +148,7 @@ describe("CueEdit", () => {
                         </div>
                         <div
                             className="border-l border-blue-light/20 flex items-center"
-                            style={{ flex: "1 1 70%" }}
-                        >
-                            <CueTextEditor
-                                key={1}
-                                index={0}
-                                vttCue={cues[0].vttCue}
-                                autoFocus
-                                bindCueViewModeKeyboardShortcut={jest.fn()}
-                                unbindCueViewModeKeyboardShortcut={jest.fn()}
-                                setGlossaryTerm={jest.fn()}
-                            />
-                            <CueActionsPanel index={0} cue={cues[0]} isEdit sourceCueIndexes={[]} />
-                        </div>
-                    </div>
-                </Provider>
-            );
-            testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
-
-            // WHEN
-            const actualNode = mount(
-                <Provider store={testingStore}>
-                    <CueEdit
-                        index={0}
-                        cue={{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto}
-                        setGlossaryTerm={jest.fn()}
-                    />
-                </Provider>
-            );
-
-            // THEN
-            const actual = removeDraftJsDynamicValues(actualNode.html());
-            const expected = removeDraftJsDynamicValues(expectedNode.html());
-            expect(actual).toEqual(expected);
-        });
-
-        it("renders for caption task", () => {
-            // GIVEN
-            // noinspection HtmlUnknownAttribute
-            const expectedNode = mount(
-                <Provider store={testingStore}>
-                    <div
-                        style={{ display: "flex" }}
-                        className="border-b border-blue-light/20 bg-white z-10"
-                    >
-                        <div
-                            style={{
-                               flex: "1 1 300px",
-                                display: "flex",
-                                flexDirection: "column",
-                                padding: "5px 10px",
-                                justifyContent: "space-between"
-                            }}
-                        >
-                            <div style={{
-                                display: "flex",
-                                flexDirection:"column",
-                                paddingBottom: "15px"
-                            }}
-                            >
-                                <div className="sbte-time-editors">
-                                    <input
-                                        type="text"
-                                        // @ts-ignore custom attribute added by react-advanced-timefield
-                                        colon=":"
-                                        className="sbte-form-control mousetrap block text-center"
-                                        value="00:00:00.000"
-                                        onChange={(): void => undefined}
-                                    />
-                                    <input
-                                        type="text"
-                                        // @ts-ignore custom attribute added by react-advanced-timefield
-                                        colon=":"
-                                        className="sbte-form-control mousetrap block text-center"
-                                        value="00:00:02.000"
-                                        onChange={(): void => undefined}
-                                    />
-                                </div>
-                            </div>
-                            <div style={{ display: "flex", justifyContent: "space-between" }} >
-                                <button
-                                    className="sbte-dropdown-toggle sbte-btn sbte-btn-light !font-normal"
-                                    aria-controls="cueCategoryMenu"
-                                    aria-haspopup
-                                >
-                                    Dialogue
-                                </button>
-                                <button
-                                    className="sbte-position-toggle-button
-                                        sbte-dropdown-toggle sbte-btn sbte-btn-light"
-                                    aria-controls="positionButtonMenu"
-                                    aria-haspopup
-                                >
-                                    <span>↓↓</span><span className="caret" />
-                                </button>
-                            </div>
-                        </div>
-                        <div
-                            className="border-l border-blue-light/20 flex items-center"
+                            data-testid="sbte-cue-editor-container"
                             style={{ flex: "1 1 70%" }}
                         >
                             <CueTextEditor
@@ -349,6 +252,7 @@ describe("CueEdit", () => {
                         </div>
                         <div
                             className="border-l border-blue-light/20 flex items-center"
+                            data-testid="sbte-cue-editor-container"
                             style={{ flex: "1 1 70%" }}
                         >
                             <CueTextEditor
@@ -451,6 +355,7 @@ describe("CueEdit", () => {
                         </div>
                         <div
                             className="border-l border-blue-light/20 flex items-center"
+                            data-testid="sbte-cue-editor-container"
                             style={{ flex: "1 1 70%" }}
                         >
                             <CueTextEditor

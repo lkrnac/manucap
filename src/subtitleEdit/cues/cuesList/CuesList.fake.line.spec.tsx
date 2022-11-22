@@ -986,6 +986,6 @@ describe("CuesList", () => {
         // THEN
         expect(testEnterBinding).toHaveBeenCalled();
         expect(testingStore.getState().cues.length).toEqual(3);
-        expect(testingStore.getState().editingCueIndex).toEqual(-1);
+        expect(testingStore.getState().editingCueIndex).toEqual(0);
     });
 });
