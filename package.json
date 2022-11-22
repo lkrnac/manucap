@@ -1,6 +1,6 @@
 {
   "name": "@dotsub/vtms-subtitle-edit-ui",
-  "version": "2.24.5",
+  "version": "2.24.11",
   "description": "",
   "author": "Dotsub",
   "license": "",
@@ -54,7 +54,7 @@
     "remark-gfm": "1.0.0",
     "sanitize-html": "^2.7.1",
     "uuid": "^9.0.0",
-    "video.js": "7.20.2",
+    "video.js": "7.20.3",
     "wavesurfer.js": "^6.2.0"
   },
   "devDependencies": {

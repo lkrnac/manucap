@@ -25,6 +25,7 @@ const trackType = "TRANSLATION";
 // const trackType = "CAPTION";
 
 const TIME_MATCH_TESTING = false;
+const LONG_VIDEO_TESTING = false;
 
 const mediaChunkStart = undefined;
 const mediaChunkEnd = undefined;
@@ -263,7 +264,7 @@ const TestApp = (): ReactElement => {
                 sourceLanguage,
                 default: true,
                 mediaTitle: "This is the video title",
-                mediaLength: 305000,
+                mediaLength: LONG_VIDEO_TESTING ? 3612542 : 125526,
                 mediaChunkStart,
                 mediaChunkEnd,
                 progress: 50,
@@ -321,11 +322,15 @@ const TestApp = (): ReactElement => {
         );
     });
 
+    const video = `https://dotsub-media-encoded.s3.amazonaws.com/sample/${LONG_VIDEO_TESTING
+        ? "my-long-movie"
+        : "dotsubExplainer"}`;
+
     return (
         <SubtitleEdit
-            poster="https://dotsub-media-encoded.s3.amazonaws.com/sample/dotsubExplainer.jpeg"
-            mp4="https://dotsub-media-encoded.s3.amazonaws.com/sample/dotsubExplainer.mp4"
-            waveform="https://dotsub-media-encoded.s3.amazonaws.com/sample/dotsubExplainer.json"
+            poster={`${video}.jpeg`}
+            mp4={`${video}.mp4`}
+            waveform={`${video}.json`}
             onViewTrackHistory={(): void => undefined}
             onSave={(): void => {
                 setTimeout(

@@ -9,12 +9,10 @@ import Toolbox from "./toolbox/Toolbox";
 import { enableMapSet } from "immer";
 import { hasDataLoaded } from "./utils/subtitleEditUtils";
 import CuesList from "./cues/cuesList/CuesList";
-import { Tooltip } from "primereact/tooltip";
 import { setSaveTrack } from "./cues/saveSlices";
 import { resetEditingTrack } from "./trackSlices";
 import { changeScrollPosition, setCurrentPlayerTime } from "./cues/cuesList/cuesListScrollSlice";
 import { ScrollPosition } from "./model";
-import CompleteButton from "./CompleteButton";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
 import { setSpellCheckDomain } from "./spellcheckerSettingsSlice";
 import CueErrorAlert from "./cues/CueErrorAlert";
@@ -68,7 +66,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     return (
         <div
             className="sbte-subtitle-edit"
-            style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%" }}
+            style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%", overflow: "hidden" }}
         >
             <CueErrorAlert />
             {
@@ -89,16 +87,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         </div>
                     </div>
                     :
-                    <div style={{ display: "flex", alignItems: "flex-start", height: "93%" }}>
-                        <div
-                            style={{
-                                flex: "1 1 40%",
-                                display: "flex",
-                                flexFlow: "column",
-                                paddingRight: "10px",
-                                zIndex: "20"
-                            }}
-                        >
+                    <div style={{ display: "flex", alignItems: "flex-start", height: "100%" }}>
+                        <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
                             <div className="video-player-wrapper" key={cuesLoadingCounter}>
                                 <EditingVideoPlayer
                                     mp4={props.mp4}
@@ -121,143 +111,19 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 height: "100%",
                                 paddingLeft: "10px",
                                 display: "flex",
-                                flexDirection: "column"
+                                flexDirection: "column",
+                                justifyContent: "space-between"
                             }}
-                            className="space-y-2 relative"
                         >
-                            <div style={{ height: "calc(100% - 90px)", overflow: "auto" }}>
-                                <SearchReplaceEditor />
-                                <MergeEditor />
-                                <CuesList
-                                    editDisabled={props.editDisabled}
-                                    editingTrack={editingTrack}
-                                    commentAuthor={props.commentAuthor}
-                                />
-                            </div>
-                            <div
-                                className="space-x-2 flex items-center absolute"
-                                style={{ bottom: 40, left: 10, right: 0 }}
-                            >
-                                <button
-                                    className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
-                                    type="button"
-                                    onClick={(): void => props.onViewTrackHistory()}
-                                >
-                                    View Track History
-                                </button>
-                                <button
-                                    id="jumpToFirstButton"
-                                    className="sbte-btn sbte-btn-light sbte-jump-to-first-button"
-                                    type="button"
-                                    onClick={(): void => {
-                                        dispatch(changeScrollPosition(ScrollPosition.FIRST));
-                                    }}
-                                    data-pr-tooltip="Scroll to top"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-angle-double-up" />
-                                </button>
-                                <Tooltip
-                                    id="jumpToFirstButtonTooltip"
-                                    target="#jumpToFirstButton"
-                                />
-                                <button
-                                    id="jumpToLastButton"
-                                    className="sbte-btn sbte-btn-light sbte-jump-to-last-button"
-                                    type="button"
-                                    onClick={(): void => {
-                                        dispatch(changeScrollPosition(ScrollPosition.LAST));
-                                    }}
-                                    data-pr-tooltip="Scroll to bottom"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-angle-double-down" />
-                                </button>
-                                <Tooltip
-                                    id="jumpToLastButtonTooltip"
-                                    target="#jumpToLastButton"
-                                />
-                                <button
-                                    id="editCueButton"
-                                    data-testid="sbte-jump-to-edit-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    onClick={(): void => {
-                                        dispatch(changeScrollPosition(ScrollPosition.CURRENT));
-                                    }}
-                                    data-pr-tooltip="Scroll to currently editing subtitle"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-edit" />
-                                </button>
-                                <Tooltip
-                                    id="editCueButtonTooltip"
-                                    target="#editCueButton"
-                                />
-                                <button
-                                    id="playbackCueButton"
-                                    data-testid="sbte-jump-to-playback-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    onClick={(): void => {
-                                        dispatch(changeScrollPosition(ScrollPosition.PLAYBACK));
-                                    }}
-                                    data-pr-tooltip="Scroll to subtitle in playback position"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-video" />
-                                </button>
-                                <Tooltip
-                                    id="playbackCueButtonTooltip"
-                                    target="#playbackCueButton"
-                                />
-                                <button
-                                    hidden={editingTrack?.type !== "TRANSLATION"}
-                                    id="translatedCueButton"
-                                    data-testid="sbte-jump-to-last-translated-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    onClick={(): void => {
-                                        dispatch(changeScrollPosition(ScrollPosition.LAST_TRANSLATED));
-                                    }}
-                                    data-pr-tooltip="Scroll to last translated subtitle"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-language" />
-                                </button>
-                                <Tooltip
-                                    id="translatedCueButtonTooltip"
-                                    target="#translatedCueButton"
-                                />
-                                <button
-                                    id="cueErrorButton"
-                                    data-testid="sbte-jump-error-cue-button"
-                                    className="sbte-btn sbte-btn-light"
-                                    type="button"
-                                    onClick={(): void => {
-                                        dispatch(changeScrollPosition(ScrollPosition.ERROR));
-                                    }}
-                                    data-pr-tooltip="Scroll to next subtitle error"
-                                    data-pr-position="top"
-                                    data-pr-at="center top-2"
-                                >
-                                    <i className="fa-duotone fa-bug" />
-                                </button>
-                                <Tooltip
-                                    id="cueErrorButtonTooltip"
-                                    target="#cueErrorButton"
-                                />
-                                <span style={{ flexGrow: 2 }} />
-                                <CompleteButton
-                                    onComplete={props.onComplete}
-                                    disabled={props.editDisabled}
-                                />
-                            </div>
+                            <SearchReplaceEditor />
+                            <MergeEditor />
+                            <CuesList
+                                editDisabled={props.editDisabled}
+                                editingTrack={editingTrack}
+                                commentAuthor={props.commentAuthor}
+                                onViewTrackHistory={props.onViewTrackHistory}
+                                onComplete={props.onComplete}
+                            />
                         </div>
                     </div>
             }
