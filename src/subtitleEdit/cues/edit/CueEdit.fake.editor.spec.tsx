@@ -122,8 +122,7 @@ describe("CueEdit", () => {
             );
             // noinspection HtmlUnknownAttribute
             expect(document.activeElement?.outerHTML).toEqual(
-                "<input type=\"text\" colon=\":\" class=\"sbte-form-control mousetrap block text-center\"" +
-                " value=\"00:00:03.000\">"
+                "<input type=\"text\" class=\"sbte-form-control mousetrap block text-center\" value=\"00:00:03.000\">"
             );
         });
     });

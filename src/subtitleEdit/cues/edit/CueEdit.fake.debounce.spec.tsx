@@ -112,16 +112,12 @@ describe("CueEdit", () => {
                                 <div className="sbte-time-editors">
                                     <input
                                         type="text"
-                                        // @ts-ignore custom attribute added by react-advanced-timefield
-                                        colon=":"
                                         className="sbte-form-control mousetrap block text-center"
                                         value="00:00:00.000"
                                         onChange={(): void => undefined}
                                     />
                                     <input
                                         type="text"
-                                        // @ts-ignore custom attribute added by react-advanced-timefield
-                                        colon=":"
                                         className="sbte-form-control mousetrap block text-center"
                                         value="00:00:02.000"
                                         onChange={(): void => undefined}
@@ -319,16 +315,12 @@ describe("CueEdit", () => {
                                 <div className="sbte-time-editors">
                                     <input
                                         type="text"
-                                        // @ts-ignore custom attribute added by react-advanced-timefield
-                                        colon=":"
                                         className="sbte-form-control mousetrap block text-center"
                                         value="00:00:00.000"
                                         onChange={(): void => undefined}
                                     />
                                     <input
                                         type="text"
-                                        // @ts-ignore custom attribute added by react-advanced-timefield
-                                        colon=":"
                                         className="sbte-form-control mousetrap block text-center"
                                         value="00:00:02.000"
                                         onChange={(): void => undefined}
