@@ -43,7 +43,7 @@ describe("PositionButton", () => {
                 </button>
                 <div
                     id="positionButtonMenu"
-                    className="p-menu p-component sbte-position-button-list p-menu-overlay
+                    className="p-menu p-component p-menu-overlay sbte-position-button-list
                         p-connected-overlay-enter p-connected-overlay-enter-active"
                     style={{
                         zIndex: 1001,
