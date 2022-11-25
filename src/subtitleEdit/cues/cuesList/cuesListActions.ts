@@ -214,11 +214,15 @@ export const validateCue = (
     dispatch(checkErrors({ index, shouldSpellCheck: shouldSpellCheck }));
 };
 
-const reorderCuesIfNeeded = function (dispatch: Dispatch<SubtitleEditAction>, state: SubtitleEditState): void {
+const reorderCuesIfNeeded = function (
+    dispatch: Dispatch<SubtitleEditAction>,
+    state: SubtitleEditState,
+    cuesToUpdate?: CueDto[]
+): void {
+    const newCues = cuesToUpdate ? cuesToUpdate : state.cues;
     if (state.sourceCues && state.sourceCues.length !== 0) {
-        return;
+        dispatch(cuesSlice.actions.updateCues({ cues: newCues }));
     }
-    const newCues = state.cues;
     const editingCueIndex = state.editingCueIndex;
     let editUuid = null;
     if (editingCueIndex > -1) {
@@ -471,8 +475,7 @@ export const deleteCue = (idx: number): AppThunk =>
 
 export const updateCues = (cues: CueDto[]): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
-        dispatch(cuesSlice.actions.updateCues({ cues }));
-        reorderCuesIfNeeded(dispatch, getState());
+        reorderCuesIfNeeded(dispatch, getState(), cues);
         dispatch(updateMatchedCues());
     };
 

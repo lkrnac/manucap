@@ -18,16 +18,16 @@ import { Replacement, SpellCheck } from "../spellCheck/model";
 import { act } from "react-dom/test-utils";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 
-jest.mock("lodash", () => (
-    {
-        debounce: (fn: MockedDebouncedFunction): Function => {
-            fn.cancel = jest.fn();
-            return fn;
-        },
-        get: jest.requireActual("lodash/get"),
-        findIndex: jest.requireActual("lodash/findIndex"),
-        findLastIndex: jest.requireActual("lodash/findLastIndex")
-    }));
+jest.mock("lodash", () => ({
+    debounce: (fn: MockedDebouncedFunction): Function => {
+        fn.cancel = jest.fn();
+        return fn;
+    },
+    get: jest.requireActual("lodash/get"),
+    findIndex: jest.requireActual("lodash/findIndex"),
+    findLastIndex: jest.requireActual("lodash/findLastIndex"),
+    sortBy: jest.requireActual("lodash/sortBy")
+}));
 jest.mock("../spellCheck/spellCheckFetch");
 // @ts-ignore we are mocking this function
 fetchSpellCheck.mockImplementation(() => jest.fn());

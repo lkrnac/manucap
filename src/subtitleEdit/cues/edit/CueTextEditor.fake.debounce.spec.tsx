@@ -43,7 +43,8 @@ jest.mock("lodash", () => (
         },
         get: jest.requireActual("lodash/get"),
         findIndex: jest.requireActual("lodash/findIndex"),
-        findLastIndex: jest.requireActual("lodash/findLastIndex")
+        findLastIndex: jest.requireActual("lodash/findLastIndex"),
+        sortBy: jest.requireActual("lodash/sortBy")
     }));
 jest.mock("../spellCheck/spellCheckFetch");
 

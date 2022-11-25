@@ -36,7 +36,9 @@ import CueListToolbar from "./CueListToolbar";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
-    isEmpty: jest.requireActual("lodash/isEmpty")
+    isEmpty: jest.requireActual("lodash/isEmpty"),
+    sortBy: jest.requireActual("lodash/sortBy"),
+    findIndex: jest.requireActual("lodash/findIndex")
 }));
 
 // We are mocking here.

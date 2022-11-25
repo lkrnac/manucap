@@ -15,7 +15,9 @@ import { removeIds, renderWithPortal } from "../../../testUtils/testUtils";
 import { Message } from "primereact/message";
 
 jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback
+    debounce: (callback: Function): Function => callback,
+    sortBy: jest.requireActual("lodash/sortBy"),
+    findIndex: jest.requireActual("lodash/findIndex")
 }));
 
 const testCuesForNegativeShifting = [
