@@ -148,7 +148,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
 
         //THEN
         expect(document.querySelector(".spellcheck__option--is-focused")?.innerHTML)
-            .toEqual("Sometime");
+            .toEqual("Somewhat");
     });
 
     it("select an option using enter shortcut", () => {

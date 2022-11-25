@@ -83,7 +83,7 @@ describe("ShiftTimesModal", () => {
                             className="p-dialog-header-icon p-dialog-header-close p-link"
                             aria-label="Close"
                         >
-                            <span className="p-dialog-header-close-icon pi pi-times" />
+                            <span className="p-dialog-header-close-icon pi pi-times" aria-hidden="true" />
                         </button>
                     </div>
                 </div>
@@ -186,7 +186,7 @@ describe("ShiftTimesModal", () => {
                             className="p-dialog-header-icon p-dialog-header-close p-link"
                             aria-label="Close"
                         >
-                            <span className="p-dialog-header-close-icon pi pi-times" />
+                            <span className="p-dialog-header-close-icon pi pi-times" aria-hidden="true" />
                         </button>
                     </div>
                 </div>
@@ -299,7 +299,7 @@ describe("ShiftTimesModal", () => {
                                 className="p-dialog-header-icon p-dialog-header-close p-link"
                                 aria-label="Close"
                             >
-                                <span className="p-dialog-header-close-icon pi pi-times" />
+                                <span className="p-dialog-header-close-icon pi pi-times" aria-hidden="true" />
                             </button>
                         </div>
                     </div>
