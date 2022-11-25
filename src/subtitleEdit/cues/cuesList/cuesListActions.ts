@@ -215,6 +215,9 @@ export const validateCue = (
 };
 
 const reorderCuesIfNeeded = function (dispatch: Dispatch<SubtitleEditAction>, state: SubtitleEditState): void {
+    if (state.sourceCues && state.sourceCues.length !== 0) {
+        return;
+    }
     const newCues = state.cues;
     const editingCueIndex = state.editingCueIndex;
     let editUuid = null;
@@ -223,9 +226,9 @@ const reorderCuesIfNeeded = function (dispatch: Dispatch<SubtitleEditAction>, st
     }
     const sortedCues = _.sortBy(newCues, (cue: CueDto) => cue.vttCue.startTime);
     const newEditingCueIndex = _.findIndex(sortedCues, [ "editUuid", editUuid ]);
+    dispatch(cuesSlice.actions.updateCues({ cues: sortedCues }));
     if (editingCueIndex != newEditingCueIndex) {
         dispatch(focusedInputSlice.actions.updateFocusedInput("START_TIME"));
-        dispatch(cuesSlice.actions.updateCues({ cues: sortedCues }));
         dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: newEditingCueIndex }));
     }
 };
@@ -467,8 +470,9 @@ export const deleteCue = (idx: number): AppThunk =>
     };
 
 export const updateCues = (cues: CueDto[]): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction>): void => {
+    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
         dispatch(cuesSlice.actions.updateCues({ cues }));
+        reorderCuesIfNeeded(dispatch, getState());
         dispatch(updateMatchedCues());
     };
 
@@ -479,6 +483,9 @@ export const applyShiftTimeByPosition = (position: string, cueIndex: number, shi
         validateShift(shiftPosition, cueIndex);
         validateShiftWithinChunkRange(shiftTime, editingTrack, getState().cues);
         dispatch(cuesSlice.actions.applyShiftTimeByPosition({ cueIndex, shiftTime, shiftPosition }));
+        if (cueIndex > 0) {
+            reorderCuesIfNeeded(dispatch, getState());
+        }
         dispatch(updateMatchedCues());
         callSaveTrack(dispatch, getState, true);
     };
