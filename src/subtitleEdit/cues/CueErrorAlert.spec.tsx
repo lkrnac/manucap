@@ -28,7 +28,7 @@ describe("CueErrorAlert", () => {
                 <div>
                     <div
                         className="p-toast-message p-toast-message-error
-                        p-toast-message-enter p-toast-message-enter-active"
+                        p-toast-message-enter-done"
                         role="alert"
                         aria-live="assertive"
                         aria-atomic="true"
@@ -43,9 +43,11 @@ describe("CueErrorAlert", () => {
                                     Max Characters Per Line Exceeded
                                 </div>
                             </div>
-                            <button type="button" className="p-toast-icon-close p-link">
-                                <span className="p-toast-icon-close-icon pi pi-times" />
-                            </button>
+                            <div>
+                                <button type="button" className="p-toast-icon-close p-link" aria-label="Close">
+                                    <span className="p-toast-icon-close-icon pi pi-times" aria-hidden="true" />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -133,7 +135,7 @@ describe("CueErrorAlert", () => {
         // GIVEN
         testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
         const expectedNode = render(
-            <div className="p-toast p-component p-toast-top-center" style={{ "zIndex": 1201 }}>
+            <div className="p-toast p-component p-toast-top-center" style={{}}>
                 <div>
                     <div
                         className="p-toast-message p-toast-message-error p-toast-message-enter-done"
@@ -151,9 +153,11 @@ describe("CueErrorAlert", () => {
                                     Max Characters Per Line Exceeded
                                 </div>
                             </div>
-                            <button type="button" className="p-toast-icon-close p-link">
-                                <span className="p-toast-icon-close-icon pi pi-times" />
-                            </button>
+                            <div>
+                                <button type="button" className="p-toast-icon-close p-link" aria-label="Close">
+                                    <span className="p-toast-icon-close-icon pi pi-times" aria-hidden="true" />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -178,7 +182,8 @@ describe("CueErrorAlert", () => {
         );
 
         // THEN
-        expect(container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        expect(container.outerHTML.replace(/ ?style=""/g, ""))
+            .toEqual(expectedNode.container.outerHTML);
     });
 
     it("auto sets validation error to false after receiving it", (done) => {
