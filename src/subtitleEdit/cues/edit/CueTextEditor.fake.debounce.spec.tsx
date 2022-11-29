@@ -43,7 +43,8 @@ jest.mock("lodash", () => (
         },
         get: jest.requireActual("lodash/get"),
         findIndex: jest.requireActual("lodash/findIndex"),
-        findLastIndex: jest.requireActual("lodash/findLastIndex")
+        findLastIndex: jest.requireActual("lodash/findLastIndex"),
+        sortBy: jest.requireActual("lodash/sortBy")
     }));
 jest.mock("../spellCheck/spellCheckFetch");
 
@@ -74,6 +75,7 @@ const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
             vttCue={props.props.vttCue}
             editUuid={props.props.editUuid}
             setGlossaryTerm={jest.fn()}
+            autoFocus
         />
     </Provider>
 );
@@ -192,6 +194,7 @@ const createEditorNode = (text = "someText", spellcheck?: SpellCheck): React.Rea
                 editUuid={editUuid}
                 spellCheck={spellcheck}
                 setGlossaryTerm={jest.fn()}
+                autoFocus
             />
         </Provider>);
 };
@@ -234,6 +237,7 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
                 vttCue={vttCue}
                 editUuid={editUuid}
                 setGlossaryTerm={jest.fn()}
+                autoFocus
             />
         </Provider>
     );
@@ -276,6 +280,7 @@ const testForContentState = (
                 vttCue={vttCue}
                 editUuid={editUuid}
                 setGlossaryTerm={jest.fn()}
+                autoFocus
             />
         </Provider>
     );
@@ -376,6 +381,7 @@ describe("CueTextEditor", () => {
                         index={0}
                         vttCue={vttCue}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -553,6 +559,7 @@ describe("CueTextEditor", () => {
                         vttCue={vttCue}
                         editUuid={editUuid}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -603,7 +610,8 @@ describe("CueTextEditor", () => {
                             editUuid,
                             bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
                             unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
-                            setGlossaryTerm: jest.fn()
+                            setGlossaryTerm: jest.fn(),
+                            autoFocus: true
                         }
                     }
                 />);
@@ -631,7 +639,8 @@ describe("CueTextEditor", () => {
                         editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
                         unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
-                        setGlossaryTerm: jest.fn()
+                        setGlossaryTerm: jest.fn(),
+                        autoFocus: true
                     }}
                 />);
 
@@ -658,7 +667,8 @@ describe("CueTextEditor", () => {
                         editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
                         unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
-                        setGlossaryTerm: jest.fn()
+                        setGlossaryTerm: jest.fn(),
+                        autoFocus: true
                     }}
                 />);
 
@@ -685,7 +695,8 @@ describe("CueTextEditor", () => {
                         editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
                         unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
-                        setGlossaryTerm: jest.fn()
+                        setGlossaryTerm: jest.fn(),
+                        autoFocus: true
                     }}
                 />);
 
@@ -712,7 +723,8 @@ describe("CueTextEditor", () => {
                         editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
                         unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
-                        setGlossaryTerm: jest.fn()
+                        setGlossaryTerm: jest.fn(),
+                        autoFocus: true
                     }}
                 />);
 
@@ -738,7 +750,8 @@ describe("CueTextEditor", () => {
                         editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
                         unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
-                        setGlossaryTerm: jest.fn()
+                        setGlossaryTerm: jest.fn(),
+                        autoFocus: true
                     }}
                 />);
 
@@ -764,7 +777,8 @@ describe("CueTextEditor", () => {
                         editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
                         unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
-                        setGlossaryTerm: jest.fn()
+                        setGlossaryTerm: jest.fn(),
+                        autoFocus: true
                     }}
                 />);
 
@@ -790,7 +804,8 @@ describe("CueTextEditor", () => {
                         editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
                         unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
-                        setGlossaryTerm: jest.fn()
+                        setGlossaryTerm: jest.fn(),
+                        autoFocus: true
                     }}
                 />);
 
@@ -816,7 +831,8 @@ describe("CueTextEditor", () => {
                         editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
                         unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
-                        setGlossaryTerm: jest.fn()
+                        setGlossaryTerm: jest.fn(),
+                        autoFocus: true
                     }}
                 />);
 
@@ -842,7 +858,8 @@ describe("CueTextEditor", () => {
                         editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
                         unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
-                        setGlossaryTerm: jest.fn()
+                        setGlossaryTerm: jest.fn(),
+                        autoFocus: true
                     }}
                 />);
 
@@ -930,6 +947,7 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         spellCheck={spellCheck}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -976,6 +994,7 @@ describe("CueTextEditor", () => {
                             editUuid={editUuid}
                             spellCheck={spellCheck}
                             setGlossaryTerm={jest.fn()}
+                            autoFocus
                         />
                     </Provider>
                 );
@@ -1034,6 +1053,7 @@ describe("CueTextEditor", () => {
                             editUuid={editUuid}
                             spellCheck={spellCheck}
                             setGlossaryTerm={jest.fn()}
+                            autoFocus
                         />
                     </Provider>
                 );
@@ -1082,6 +1102,7 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         spellCheck={spellCheck}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -1121,6 +1142,7 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         spellCheck={spellCheck}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             ), { container: document.body });
@@ -1169,6 +1191,7 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         spellCheck={spellCheck}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>,
                 { container: document.body }
@@ -1231,6 +1254,7 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         spellCheck={spellCheck}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -1294,6 +1318,7 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         spellCheck={spellCheck}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -1368,6 +1393,7 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         spellCheck={spellCheck}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -1423,6 +1449,7 @@ describe("CueTextEditor", () => {
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -1460,6 +1487,7 @@ describe("CueTextEditor", () => {
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -1498,6 +1526,7 @@ describe("CueTextEditor", () => {
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -1540,6 +1569,7 @@ describe("CueTextEditor", () => {
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -1592,6 +1622,7 @@ describe("CueTextEditor", () => {
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -1644,6 +1675,7 @@ describe("CueTextEditor", () => {
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -1699,6 +1731,7 @@ describe("CueTextEditor", () => {
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         searchReplaceMatches={searchReplaceMatches}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -1762,6 +1795,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -1803,6 +1837,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -1830,6 +1865,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -1863,6 +1899,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -1898,6 +1935,7 @@ describe("CueTextEditor", () => {
                             bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                             unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                             setGlossaryTerm={jest.fn()}
+                            autoFocus
                         />
                     </Provider>
                 );
@@ -1933,6 +1971,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -1980,6 +2019,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -2033,6 +2073,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -2079,6 +2120,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -2106,6 +2148,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -2139,6 +2182,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -2174,6 +2218,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -2209,6 +2254,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -2256,6 +2302,7 @@ describe("CueTextEditor", () => {
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -2287,6 +2334,7 @@ describe("CueTextEditor", () => {
                         vttCue={vttCue}
                         editUuid={testingStore.getState().cues[0].editUuid}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -2321,6 +2369,7 @@ describe("CueTextEditor", () => {
                         vttCue={vttCue}
                         editUuid={testingStore.getState().cues[0].editUuid}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -2355,6 +2404,7 @@ describe("CueTextEditor", () => {
                         vttCue={vttCue}
                         editUuid={testingStore.getState().cues[0].editUuid}
                         setGlossaryTerm={jest.fn()}
+                        autoFocus
                     />
                 </Provider>
             );
@@ -2405,7 +2455,8 @@ describe("CueTextEditor", () => {
                         editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
                         unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
-                        setGlossaryTerm: jest.fn()
+                        setGlossaryTerm: jest.fn(),
+                        autoFocus: true
                     }
                 }
             />);
@@ -2446,7 +2497,8 @@ describe("CueTextEditor", () => {
                         editUuid,
                         bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
                         unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
-                        setGlossaryTerm: jest.fn()
+                        setGlossaryTerm: jest.fn(),
+                        autoFocus: true
                     }
                 }
             />);
@@ -2477,5 +2529,57 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("initial text\nPaste text");
     });
 
+    it("doesn't receive focus if autoFocus parameter is false", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
+        const editUuid = testingStore.getState().cues[0].editUuid;
 
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={editUuid}
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                    setGlossaryTerm={jest.fn()}
+                    autoFocus={false}
+                />
+            </Provider>
+        );
+
+        // THEN
+        const editorState = actualNode.find(Editor).props().editorState;
+        const selectionState = editorState.getSelection();
+
+        expect(selectionState.getFocusOffset()).toEqual(0);
+    });
+
+    it("receive focus if autoFocus parameter is false", () => {
+        // GIVEN
+        const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
+        const editUuid = testingStore.getState().cues[0].editUuid;
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={editUuid}
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                    setGlossaryTerm={jest.fn()}
+                    autoFocus
+                />
+            </Provider>
+        );
+
+        // THEN
+        const editorState = actualNode.find(Editor).props().editorState;
+        const selectionState = editorState.getSelection();
+
+        expect(selectionState.getFocusOffset()).toEqual(21);
+    });
 });

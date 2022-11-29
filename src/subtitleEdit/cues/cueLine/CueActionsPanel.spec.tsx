@@ -17,7 +17,9 @@ import { createTestingStore } from "../../../testUtils/testingStore";
 import SplitCueLineButton from "../edit/SplitCueLineButton";
 
 jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback
+    debounce: (callback: Function): Function => callback,
+    sortBy: jest.requireActual("lodash/sortBy"),
+    findIndex: jest.requireActual("lodash/findIndex")
 }));
 
 const cues = [

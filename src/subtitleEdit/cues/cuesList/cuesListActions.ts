@@ -34,6 +34,7 @@ import { changeScrollPosition } from "./cuesListScrollSlice";
 import { addSpellCheck, fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import {
     editingCueIndexSlice,
+    focusedInputSlice,
     lastCueChangeSlice,
     updateSearchMatches,
     validationErrorSlice
@@ -213,6 +214,37 @@ export const validateCue = (
     dispatch(checkErrors({ index, shouldSpellCheck: shouldSpellCheck }));
 };
 
+const reorderCuesIfNeeded = function (
+    dispatch: Dispatch<SubtitleEditAction>,
+    state: SubtitleEditState,
+    cuesToUpdate?: CueDto[]
+): void {
+    const newCues = cuesToUpdate ? cuesToUpdate : state.cues;
+    if (state.sourceCues && state.sourceCues.length !== 0) {
+        dispatch(cuesSlice.actions.updateCues({ cues: newCues }));
+    }
+    const editingCueIndex = state.editingCueIndex;
+    let editUuid = null;
+    if (editingCueIndex > -1) {
+        editUuid = newCues[editingCueIndex].editUuid;
+    }
+    const sortedCues = _.sortBy(newCues, (cue: CueDto) => cue.vttCue.startTime);
+    const newEditingCueIndex = _.findIndex(sortedCues, [ "editUuid", editUuid ]);
+    dispatch(cuesSlice.actions.updateCues({ cues: sortedCues }));
+    if (editingCueIndex != newEditingCueIndex) {
+        dispatch(focusedInputSlice.actions.updateFocusedInput("START_TIME"));
+        dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: newEditingCueIndex }));
+    }
+};
+
+// TODO: Consider separate actions for:
+//    - shifting start time
+//    - shifting end time
+//    - updating cue text
+//    - updating category and/or position
+//  This way we could do less action or check only some validations related to the concrete action. This way we could
+//  speed up the processing.
+//  But this needs to be investigated, I am not saying that it is good idea.
 export const updateVttCue = (
     idx: number,
     vttCue: VTTCue,
@@ -277,6 +309,9 @@ export const updateVttCue = (
             const newCue = { ...originalCue, idx, vttCue: newVttCue, editUuid: uuidv4() };
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
+            if (vttCue.startTime !== originalCue.vttCue.startTime) {
+                reorderCuesIfNeeded(dispatch, getState());
+            }
             if (getState().searchReplaceVisible) {
                 updateSearchMatches(dispatch, getState, idx);
             }
@@ -439,8 +474,8 @@ export const deleteCue = (idx: number): AppThunk =>
     };
 
 export const updateCues = (cues: CueDto[]): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction>): void => {
-        dispatch(cuesSlice.actions.updateCues({ cues }));
+    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
+        reorderCuesIfNeeded(dispatch, getState(), cues);
         dispatch(updateMatchedCues());
     };
 
@@ -451,6 +486,9 @@ export const applyShiftTimeByPosition = (position: string, cueIndex: number, shi
         validateShift(shiftPosition, cueIndex);
         validateShiftWithinChunkRange(shiftTime, editingTrack, getState().cues);
         dispatch(cuesSlice.actions.applyShiftTimeByPosition({ cueIndex, shiftTime, shiftPosition }));
+        if (cueIndex > 0) {
+            reorderCuesIfNeeded(dispatch, getState());
+        }
         dispatch(updateMatchedCues());
         callSaveTrack(dispatch, getState, true);
     };
@@ -529,6 +567,7 @@ export const mergeCues = (): AppThunk =>
                 const validCueDuration = editingTrack && verifyCueDuration(mergedVttCue, editingTrack, timeGapLimit);
 
                 if (validCueDuration) {
+                    dispatch(focusedInputSlice.actions.updateFocusedInput("EDITOR"));
                     dispatch(cuesSlice.actions.mergeCues(
                         { mergedCue, startIndex: firstCue.index, endIndex: lastCue.index }));
                     dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: firstCue.index }));

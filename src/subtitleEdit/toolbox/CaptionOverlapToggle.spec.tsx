@@ -10,7 +10,9 @@ import { updateEditingTrack } from "../trackSlices";
 import { callSaveTrack, setAutoSaveSuccess, setSaveTrack } from "../cues/saveSlices";
 
 jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback
+    debounce: (callback: Function): Function => callback,
+    sortBy: jest.requireActual("lodash/sortBy"),
+    findIndex: jest.requireActual("lodash/findIndex")
 }));
 
 let testingStore = createTestingStore();

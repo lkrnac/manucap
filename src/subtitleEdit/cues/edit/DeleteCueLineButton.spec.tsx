@@ -11,7 +11,9 @@ import { updateEditingTrack } from "../../trackSlices";
 import { createTestingStore } from "../../../testUtils/testingStore";
 
 jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback
+    debounce: (callback: Function): Function => callback,
+    sortBy: jest.requireActual("lodash/sortBy"),
+    findIndex: jest.requireActual("lodash/findIndex")
 }));
 
 let testingStore = createTestingStore();

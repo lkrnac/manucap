@@ -179,6 +179,7 @@ const keyShortcutBindings = (spellCheckerMatchingOffset: number | null) =>
 export interface CueTextEditorProps {
     index: number;
     vttCue: VTTCue;
+    autoFocus: boolean;
     editUuid?: string;
     spellCheck?: SpellCheck;
     searchReplaceMatches?: SearchReplaceMatches;
@@ -225,26 +226,30 @@ const replaceIfNeeded = (
 
 const revertEntityState = (
     prevVttText: string,
-    editorPreviousTextRef: MutableRefObject<string | null>
+    editorPreviousTextRef: MutableRefObject<string | null>,
+    autoFocus: boolean
 ): EditorState => {
     const processedHTML = convertFromHTML(convertVttToHtml(prevVttText));
     const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
     let newUpdatedState = EditorState.createWithContent(initialContentState);
-    newUpdatedState = EditorState.moveFocusToEnd(newUpdatedState);
+    if (autoFocus) {
+        newUpdatedState = EditorState.moveFocusToEnd(newUpdatedState);
+    }
     editorPreviousTextRef.current = prevVttText;
     return newUpdatedState;
 };
 
 const handleApplyEntityIfNeeded = (
     newEditorState: EditorState,
-    editorPreviousTextRef: MutableRefObject<string | null>
+    editorPreviousTextRef: MutableRefObject<string | null>,
+    autoFocus: boolean
 ): EditorState => {
     // This code reverts an undesired change in editor that causes text to be lost on Firefox
     const newVttText = getVttText(newEditorState.getCurrentContent());
     if (newEditorState.getLastChangeType() === "apply-entity") {
         const prevVttText = editorPreviousTextRef.current || "";
         if (prevVttText !== newVttText) {
-            return revertEntityState(prevVttText, editorPreviousTextRef);
+            return revertEntityState(prevVttText, editorPreviousTextRef, autoFocus);
         }
     }
     editorPreviousTextRef.current = newVttText;
@@ -273,7 +278,9 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         () => {
             const initialContentState = ContentState.createFromBlockArray(processedHTML.contentBlocks);
             let initEditorState = EditorState.createWithContent(initialContentState);
-            initEditorState = EditorState.moveFocusToEnd(initEditorState);
+            if (props.autoFocus) {
+                initEditorState = EditorState.moveFocusToEnd(initEditorState);
+            }
 
             return initEditorState;
         }
@@ -435,7 +442,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                             if (imeCompositionRef.current === "end") {
                                 imeCompositionRef.current = null;
                             }
-                            const newUpdatedState = handleApplyEntityIfNeeded(newEditorState, editorPreviousTextRef);
+                            const newUpdatedState =
+                                handleApplyEntityIfNeeded(newEditorState, editorPreviousTextRef, props.autoFocus);
                             setEditorState(newUpdatedState);
                         }}
                         ref={editorRef}
