@@ -16,14 +16,15 @@ import { setSaveTrack } from "../saveSlices";
 import { LodashDebounce } from "lodash/ts3.1/fp";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 
-jest.mock("lodash", () => (
-    {
-        debounce: (fn: LodashDebounce): Function => {
-            fn.cancel = jest.fn();
-            return fn;
-        },
-        get: (): [] => {return [];}
-    }));
+jest.mock("lodash", () => ({
+    debounce: (fn: LodashDebounce): Function => {
+        fn.cancel = jest.fn();
+        return fn;
+    },
+    get: (): [] => ([]),
+    sortBy: jest.requireActual("lodash/sortBy"),
+    findIndex: jest.requireActual("lodash/findIndex")
+}));
 const ruleId = "MORFOLOGIK_RULE_EN_US";
 const spellCheckFakeMatches = {
     "matches": [
@@ -83,6 +84,7 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
                     vttCue={vttCue}
                     editUuid={editUuid}
                     setGlossaryTerm={jest.fn()}
+                    autoFocus
                 />
             </Provider>);
     };

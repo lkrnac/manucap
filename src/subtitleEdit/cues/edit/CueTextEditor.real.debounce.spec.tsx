@@ -47,6 +47,7 @@ const createEditorNode = (text = "someText", index?: number): ReactWrapper => {
                 vttCue={vttCue}
                 editUuid={editUuid}
                 setGlossaryTerm={jest.fn()}
+                autoFocus
             />
         </Provider>
     );
@@ -70,6 +71,7 @@ const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
             vttCue={props.props.vttCue}
             editUuid={props.props.editUuid}
             setGlossaryTerm={jest.fn()}
+            autoFocus
         />
     </Provider>
 );
@@ -136,6 +138,7 @@ describe("CueTextEditor", () => {
                     vttCue={vttCue}
                     editUuid={editUuid}
                     setGlossaryTerm={jest.fn()}
+                    autoFocus
                 />
             </Provider>
         );
@@ -176,7 +179,8 @@ describe("CueTextEditor", () => {
                             editUuid,
                             bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
                             unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
-                            setGlossaryTerm: jest.fn()
+                            setGlossaryTerm: jest.fn(),
+                            autoFocus: true
                         }
                     }
                 />);
@@ -238,6 +242,7 @@ describe("CueTextEditor", () => {
                     unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     searchReplaceMatches={searchReplaceMatches}
                     setGlossaryTerm={jest.fn()}
+                    autoFocus
                 />
             </Provider>
         );
@@ -279,6 +284,7 @@ describe("CueTextEditor", () => {
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                     unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     setGlossaryTerm={jest.fn()}
+                    autoFocus
                 />
             </Provider>
         );
@@ -438,6 +444,7 @@ describe("CueTextEditor", () => {
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                     unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
                     setGlossaryTerm={jest.fn()}
+                    autoFocus
                 />
             </Provider>
         );
@@ -538,6 +545,7 @@ describe("CueTextEditor", () => {
                     editUuid={editUuid}
                     spellCheck={spellCheck}
                     setGlossaryTerm={jest.fn()}
+                    autoFocus
                 />
             </Provider>
         );

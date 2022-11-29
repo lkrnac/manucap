@@ -17,7 +17,9 @@ jest.mock("lodash", () => ({
     debounce: (callback: Function): Function =>
         // lodash API signature contains "any"
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (...args: any[]): NodeJS.Timeout => setTimeout(() => callback(...args), 50)
+        (...args: any[]): NodeJS.Timeout => setTimeout(() => callback(...args), 50),
+    sortBy: jest.requireActual("lodash/sortBy"),
+    findIndex: jest.requireActual("lodash/findIndex")
 }));
 
 const saveTrack = jest.fn();

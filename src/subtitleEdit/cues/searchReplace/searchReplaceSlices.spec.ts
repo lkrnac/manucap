@@ -1,5 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit";
-import testingStore from "../../../testUtils/testingStore";
+import { createTestingStore } from "../../../testUtils/testingStore";
+
 import {
     replaceCurrentMatch,
     searchNextCues,
@@ -37,7 +38,13 @@ const testingCuesWithEditDisabled = [
     },
 ] as CueDto[];
 
+let testingStore = createTestingStore();
+
 describe("searchReplaceSlices", () => {
+    beforeEach(() => {
+        testingStore = createTestingStore();
+    });
+
     describe("setFind", () => {
         it("sets search replace find state", () => {
             // WHEN
@@ -134,7 +141,7 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("line 2");
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
-            expect(testingStore.getState().focusedCueIndex).toEqual(0);
+            expect(testingStore.getState().focusedCueIndex).toEqual(null);
         });
 
         it("searches for find term in next cue match case - with match", () => {
@@ -674,8 +681,8 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("Caption Line");
             expect(testingStore.getState().searchReplace.direction).toEqual("PREVIOUS");
-            expect(testingStore.getState().editingCueIndex).toEqual(2);
-            expect(testingStore.getState().focusedCueIndex).toEqual(2);
+            expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(1);
         });
 
         it("does not search if find is empty string", () => {
