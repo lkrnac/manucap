@@ -448,6 +448,16 @@
     @apply border-b-blue-light;
 }
 
+/* TODO - Fixes tooltip flicker issue introduced
+     by Primereact, which should be fix 8.7.3. This
+     can be removed at that point */
+.p-tooltip {
+    position: absolute;
+    padding: .25em .5rem;
+    top: -9999px;
+    left: -9999px;
+}
+
 /** Inline Messages **/
 
 .p-inline-message.p-inline-message-warn {
@@ -651,14 +661,4 @@ region.wavesurfer-region:before {
 region.wavesurfer-region:before {
     content: attr(data-region-label);
     @apply text-gray-900/80
-}
-
-/* TODO - Fixes tooltip flicker issue introduced
-     by Primereact, which should be fix 8.7.3. This
-     can be removed at that point */
-.p-tooltip {
-    position: absolute;
-    padding: .25em .5rem;
-    top: -9999px;
-    left: -9999px;
 }
