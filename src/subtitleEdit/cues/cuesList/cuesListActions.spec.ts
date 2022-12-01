@@ -2821,6 +2821,32 @@ describe("cueSlices", () => {
             const notOrderedCues = [
                 { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
                 { vttCue: new VTTCue(4, 6, "Caption Line 2"), cueCategory: "DIALOGUE", errors: []},
+                { vttCue: new VTTCue(1, 3, "Caption Line 3"), cueCategory: "DIALOGUE", errors: [], editUuid: "lala" },
+                { vttCue: new VTTCue(2, 4, "Caption Line 4"), cueCategory: "ONSCREEN_TEXT", errors: []},
+            ] as CueDto[];
+            testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(updateCues(notOrderedCues) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(3);
+            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
+            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(4);
+            expect(testingStore.getState().cues[3].vttCue.startTime).toEqual(4);
+            expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(6);
+            expect(testingStore.getState().editingCueIndex).toEqual(1);
+        });
+
+        it("resets editing cue index if out of range when reordering cues", () => {
+            // GIVEN
+            testingStore.dispatch(updateEditingCueIndex(8) as {} as AnyAction);
+            const notOrderedCues = [
+                { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
+                { vttCue: new VTTCue(4, 6, "Caption Line 2"), cueCategory: "DIALOGUE", errors: []},
                 { vttCue: new VTTCue(1, 3, "Caption Line 3"), cueCategory: "DIALOGUE", errors: []},
                 { vttCue: new VTTCue(2, 4, "Caption Line 4"), cueCategory: "ONSCREEN_TEXT", errors: []},
             ] as CueDto[];
@@ -2837,6 +2863,8 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(4);
             expect(testingStore.getState().cues[3].vttCue.startTime).toEqual(4);
             expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(6);
+            expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(6);
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
     });
 

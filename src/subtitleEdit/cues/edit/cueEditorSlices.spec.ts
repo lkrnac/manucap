@@ -105,5 +105,23 @@ describe("cueSlices", () => {
                 expect(result).toEqual([0, 3, 7]);
             },
         );
+
+        test.each([
+            ["<i>Editing</i> Line Wrapped text and", "text", [21]],
+            ["<i>Editing</i> <u>Line</u> Wrapped text and", "text", [21]],
+            ["<i>Editing</i> <u>Line</u> Wr$%^&apped text and", "text", [25]],
+            ["<i>Editing</i> <u>Line</u> $ >> Wr$%^&apped text and", "text", [30]],
+            ["<i>Editing</i> Line $ >> Wr$%^&apped text and text", "text", [30, 39]],
+            ["<i>Editing</i> Line $ <strong>>></strong> Wr$%^&apped text and", ">>", [15]],
+            ["<i>Editing</i> Line $ <strong>>></strong> Wr$%^&apped text", "$", [13, 20]]
+        ])(
+            "returns proper search result for html text %s",
+            (html: string, find: string, expectedResult: number[]) => {
+            // WHEN
+            const result = searchCueText(html, find, false);
+
+            // THEN
+            expect(result).toEqual(expectedResult);
+        });
     });
 });
