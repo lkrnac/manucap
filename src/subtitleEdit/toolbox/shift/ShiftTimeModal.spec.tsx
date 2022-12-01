@@ -13,6 +13,7 @@ import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
 import { removeIds, renderWithPortal } from "../../../testUtils/testUtils";
 import { Message } from "primereact/message";
+import { updateEditingCueIndex } from "../../cues/edit/cueEditorSlices";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
@@ -100,7 +101,6 @@ describe("ShiftTimesModal", () => {
                                 style={{ width: "120px" }}
                                 placeholder="0.000"
                                 step="0.100"
-                                value=""
                                 onChange={jest.fn()}
                             />
                         </div>
@@ -110,7 +110,7 @@ describe("ShiftTimesModal", () => {
                                     <input
                                         name="shiftPosition"
                                         type="radio"
-                                        value="all"
+                                        value="0"
                                     /> Shift all
                                 </label>
                             </div>
@@ -119,7 +119,7 @@ describe("ShiftTimesModal", () => {
                                     <input
                                         name="shiftPosition"
                                         type="radio"
-                                        value="before"
+                                        value="1"
                                     /> Shift all before editing cue
                                 </label>
                             </div>
@@ -128,7 +128,7 @@ describe("ShiftTimesModal", () => {
                                     <input
                                         name="shiftPosition"
                                         type="radio"
-                                        value="after"
+                                        value="2"
                                     /> Shift all after editing cue
                                 </label>
                             </div>
@@ -138,6 +138,7 @@ describe("ShiftTimesModal", () => {
                 <div className="p-dialog-footer">
                     <button
                         type="submit"
+                        disabled
                         className="dotsub-shift-modal-apply-button sbte-btn sbte-btn-primary"
                     >
                         Apply
@@ -159,7 +160,7 @@ describe("ShiftTimesModal", () => {
             </Provider>
         );
 
-        const allCuesRadioBtn = actualNode.container.querySelectorAll(".form-check input[value='all']")[0];
+        const allCuesRadioBtn = actualNode.container.querySelectorAll(".form-check input[value='0']")[0];
         fireEvent.click(allCuesRadioBtn);
 
         // THEN
@@ -203,7 +204,6 @@ describe("ShiftTimesModal", () => {
                                 style={{ width: "120px" }}
                                 placeholder="0.000"
                                 step="0.100"
-                                value=""
                                 onChange={jest.fn()}
                             />
                         </div>
@@ -213,7 +213,7 @@ describe("ShiftTimesModal", () => {
                                     <input
                                         name="shiftPosition"
                                         type="radio"
-                                        value="all"
+                                        value="0"
                                     /> Shift all
                                 </label>
                             </div>
@@ -222,7 +222,7 @@ describe("ShiftTimesModal", () => {
                                     <input
                                         name="shiftPosition"
                                         type="radio"
-                                        value="before"
+                                        value="1"
                                     /> Shift all before editing cue
                                 </label>
                             </div>
@@ -231,7 +231,7 @@ describe("ShiftTimesModal", () => {
                                     <input
                                         name="shiftPosition"
                                         type="radio"
-                                        value="after"
+                                        value="2"
                                     /> Shift all after editing cue
                                 </label>
                             </div>
@@ -270,7 +270,7 @@ describe("ShiftTimesModal", () => {
         );
 
         const input = actualNode.container.querySelectorAll("input[name='shiftTime']")[0];
-        const allCuesRadioBtn = actualNode.container.querySelectorAll(".form-check input[value='all']")[0];
+        const allCuesRadioBtn = actualNode.container.querySelectorAll(".form-check input[value='0']")[0];
         userEvent.type(input, "-1");
         fireEvent.click(allCuesRadioBtn);
 
@@ -316,7 +316,6 @@ describe("ShiftTimesModal", () => {
                                     style={{ width: "120px" }}
                                     placeholder="0.000"
                                     step="0.100"
-                                    value=""
                                     onChange={jest.fn()}
                                 />
                             </div>
@@ -326,7 +325,7 @@ describe("ShiftTimesModal", () => {
                                         <input
                                             name="shiftPosition"
                                             type="radio"
-                                            value="all"
+                                            value="0"
                                         /> Shift all
                                     </label>
                                 </div>
@@ -335,7 +334,7 @@ describe("ShiftTimesModal", () => {
                                         <input
                                             name="shiftPosition"
                                             type="radio"
-                                            value="before"
+                                            value="1"
                                         /> Shift all before editing cue
                                     </label>
                                 </div>
@@ -344,7 +343,7 @@ describe("ShiftTimesModal", () => {
                                         <input
                                             name="shiftPosition"
                                             type="radio"
-                                            value="after"
+                                            value="2"
                                         /> Shift all after editing cue
                                     </label>
                                 </div>
@@ -375,7 +374,7 @@ describe("ShiftTimesModal", () => {
         );
 
         const input = actualNode.container.querySelectorAll("input[name='shiftTime']")[0];
-        const allCuesRadioBtn = actualNode.container.querySelectorAll(".form-check input[value='all']")[0];
+        const allCuesRadioBtn = actualNode.container.querySelectorAll(".form-check input[value='0']")[0];
         userEvent.type(input, "-1");
         fireEvent.click(allCuesRadioBtn);
 
@@ -385,9 +384,10 @@ describe("ShiftTimesModal", () => {
             .toEqual(expectedNode.container.querySelectorAll(".p-dialog")[0].outerHTML);
     });
 
-    it("applies the shift time on form submit with a valid shift value", () => {
-        // // GIVEN
+    it("applies the shift time on form submit with a valid shift value", async () => {
+        // GIVEN
         testingStore.dispatch(updateCues(testCues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
         const actualNode = renderWithPortal(
             <Provider store={testingStore}>
@@ -397,11 +397,13 @@ describe("ShiftTimesModal", () => {
 
         // WHEN
         const input = actualNode.container.querySelectorAll("input[name='shiftTime']")[0];
-        const allCuesRadioBtn = actualNode.container.querySelectorAll(".form-check input[value='all']")[0];
+        const allCuesRadioBtn = actualNode.container.querySelectorAll(".form-check input[value='0']")[0];
         const submitBtn = actualNode.container.querySelectorAll(".dotsub-shift-modal-apply-button")[0];
         userEvent.type(input, "1");
         fireEvent.click(allCuesRadioBtn);
-        fireEvent.click(submitBtn);
+        await act(async () => {
+            fireEvent.click(submitBtn);
+        });
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1);
@@ -412,6 +414,7 @@ describe("ShiftTimesModal", () => {
         // // GIVEN
         testingStore.dispatch(updateEditingTrack(testingCaptionTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(testCuesChunk) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
         const { container } = renderWithPortal(
             <Provider store={testingStore}>
@@ -421,11 +424,13 @@ describe("ShiftTimesModal", () => {
 
         // WHEN
         const input = container.querySelectorAll("input[name='shiftTime']")[0];
-        const allCuesRadioBtn = container.querySelectorAll(".form-check input[value='all']")[0];
+        const allCuesRadioBtn = container.querySelectorAll(".form-check input[value='0']")[0];
         const submitBtn = container.querySelectorAll(".dotsub-shift-modal-apply-button")[0];
         fireEvent.change(input, { target: { value: "-0.5" }});
         fireEvent.click(allCuesRadioBtn);
-        fireEvent.click(submitBtn);
+        await act(async () => {
+            fireEvent.click(submitBtn);
+        });
 
         // THEN
         expect(container.querySelectorAll(".p-inline-message-text")[0].innerHTML)
@@ -437,10 +442,11 @@ describe("ShiftTimesModal", () => {
         expect(testingStore.getState().cues[3].vttCue.startTime).toEqual(5);
     });
 
-    it("validates the shift time on form submit for media chunk end", () => {
+    it("validates the shift time on form submit for media chunk end", async () => {
         // // GIVEN
         testingStore.dispatch(updateEditingTrack(testingCaptionTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(testCuesChunk) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
         const { container } = renderWithPortal(
             <Provider store={testingStore}>
                 <ShiftTimesModal show onClose={jest.fn()} />
@@ -449,11 +455,13 @@ describe("ShiftTimesModal", () => {
 
         // WHEN
         const input = container.querySelectorAll("input[name='shiftTime']")[0];
-        const allCuesRadioBtn = container.querySelectorAll(".form-check input[value='all']")[0];
+        const allCuesRadioBtn = container.querySelectorAll(".form-check input[value='0']")[0];
         const submitBtn = container.querySelectorAll(".dotsub-shift-modal-apply-button")[0];
         userEvent.type(input, "0.6");
         fireEvent.click(allCuesRadioBtn);
-        fireEvent.click(submitBtn);
+        await act(async () => {
+            fireEvent.click(submitBtn);
+        });
 
         // THEN
         expect(container.querySelectorAll(".p-inline-message-text")[0].innerHTML)
@@ -466,10 +474,11 @@ describe("ShiftTimesModal", () => {
         expect(testingStore.getState().cues[3].vttCue.startTime).toEqual(5);
     });
 
-    it("shifts time on form submit for media chunk cues", () => {
+    it("shifts time on form submit for media chunk cues", async () => {
         // // GIVEN
         testingStore.dispatch(updateEditingTrack(testingCaptionTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(testCuesChunk) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
         const { container } = renderWithPortal(
             <Provider store={testingStore}>
                 <ShiftTimesModal show onClose={jest.fn()} />
@@ -478,11 +487,13 @@ describe("ShiftTimesModal", () => {
 
         // WHEN
         const input = container.querySelectorAll("input[name='shiftTime']")[0];
-        const allCuesRadioBtn = container.querySelectorAll(".form-check input[value='all']")[0];
+        const allCuesRadioBtn = container.querySelectorAll(".form-check input[value='0']")[0];
         const submitBtn = container.querySelectorAll(".dotsub-shift-modal-apply-button")[0];
         userEvent.type(input, "0.25");
         fireEvent.click(allCuesRadioBtn);
-        fireEvent.click(submitBtn);
+        await act(async () => {
+            fireEvent.click(submitBtn);
+        });
 
         // THEN
         expect(container.querySelectorAll(".alert-danger").length).toEqual(0);
@@ -513,9 +524,10 @@ describe("ShiftTimesModal", () => {
         expect(onClose).toBeCalled();
     });
 
-    it("calls saveTrack in redux store when shift value", () => {
+    it("calls saveTrack in redux store when shift value", async () => {
         // // GIVEN
         testingStore.dispatch(updateCues(testCues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
         const { container } = renderWithPortal(
             <Provider store={testingStore}>
@@ -525,11 +537,13 @@ describe("ShiftTimesModal", () => {
 
         // WHEN
         const input = container.querySelectorAll("input[name='shiftTime']")[0];
-        const allCuesRadioBtn = container.querySelectorAll(".form-check input[value='all']")[0];
+        const allCuesRadioBtn = container.querySelectorAll(".form-check input[value='0']")[0];
         const submitBtn = container.querySelectorAll(".dotsub-shift-modal-apply-button")[0];
         userEvent.type(input, "1");
         fireEvent.click(allCuesRadioBtn);
-        fireEvent.click(submitBtn);
+        await act(async () => {
+            fireEvent.click(submitBtn);
+        });
 
         // THEN
         expect(saveTrack).toHaveBeenCalledTimes(1);
@@ -538,6 +552,7 @@ describe("ShiftTimesModal", () => {
     it("shift by minus when shifting value does not generate negative cue time", async () => {
         // GIVEN
         testingStore.dispatch(updateCues(testCuesForNegativeShifting) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
         const { container } = renderWithPortal(
             <Provider store={testingStore}>
@@ -547,7 +562,7 @@ describe("ShiftTimesModal", () => {
 
         // WHEN
         const input = container.querySelectorAll("input[name='shiftTime']")[0];
-        const allCuesRadioBtn = container.querySelectorAll(".form-check input[value='all']")[0];
+        const allCuesRadioBtn = container.querySelectorAll(".form-check input[value='0']")[0];
         const submitBtn = container.querySelectorAll(".dotsub-shift-modal-apply-button")[0];
 
         await act(async () => {
@@ -555,7 +570,9 @@ describe("ShiftTimesModal", () => {
         });
 
         fireEvent.click(allCuesRadioBtn);
-        fireEvent.click(submitBtn);
+        await act(async () => {
+            fireEvent.click(submitBtn);
+        });
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0.847);
@@ -565,6 +582,7 @@ describe("ShiftTimesModal", () => {
     it("does not shift by minus when shifting value would generate negative cue time", async () => {
         // GIVEN
         testingStore.dispatch(updateCues(testCues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
         const { container } = renderWithPortal(
             <Provider store={testingStore}>
@@ -574,7 +592,7 @@ describe("ShiftTimesModal", () => {
 
         // WHEN
         const input = container.querySelectorAll("input[name='shiftTime']")[0];
-        const allCuesRadioBtn = container.querySelectorAll(".form-check input[value='all']")[0];
+        const allCuesRadioBtn = container.querySelectorAll(".form-check input[value='0']")[0];
         const submitBtn = container.querySelectorAll(".dotsub-shift-modal-apply-button")[0];
 
         await act(async () => {
@@ -582,7 +600,9 @@ describe("ShiftTimesModal", () => {
         });
 
         fireEvent.click(allCuesRadioBtn);
-        fireEvent.click(submitBtn);
+        await act(async () => {
+            fireEvent.click(submitBtn);
+        });
 
         // THEN
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);

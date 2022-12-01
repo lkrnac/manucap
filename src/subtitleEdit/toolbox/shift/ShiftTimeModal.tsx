@@ -11,11 +11,11 @@ const INVALID_SHIFT_MSG = "The start time of the first cue plus the shift value 
 
 const isShiftTimeInvalid = (value: string, position: ShiftPosition, firstCueTime: number, isMediaChunk: boolean)
     : boolean =>
-    !isMediaChunk && position !== ShiftPosition.AFTER ? (parseFloat(value) + firstCueTime) < 0 : false;
+    !isMediaChunk && position != ShiftPosition.AFTER ? (parseFloat(value) + firstCueTime) < 0 : false;
 
 interface ShiftTimeValues {
     shiftTime: string;
-    shiftPosition: string;
+    shiftPosition: ShiftPosition;
 }
 
 interface Props {
@@ -35,13 +35,9 @@ const ShiftTimeModal = (props: Props): ReactElement => {
     const shiftTimeWatch = watch("shiftTime");
 
     const onSubmit = (values: ShiftTimeValues): void => {
-        handleApplyShift(values.shiftPosition, values.shiftTime);
-    };
-
-    const handleApplyShift = (shiftPosition: string, shiftTime: string): void => {
-        const shiftValue = parseFloat(shiftTime);
+        const shiftValue = parseFloat(values.shiftTime);
         try {
-            dispatch(applyShiftTimeByPosition(shiftPosition, editCueIndex, shiftValue));
+            dispatch(applyShiftTimeByPosition(values.shiftPosition, editCueIndex, shiftValue));
         } catch (e) {
             // @ts-ignore
             setErrorMessage(e.message);
@@ -71,7 +67,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                         type="submit"
                         disabled={
                             isShiftTimeInvalid(shiftTimeWatch, shiftPositionWatch, firstTrackTime, isMediaChunk) ||
-                            shiftPositionWatch === undefined || !shiftTimeWatch
+                            !shiftPositionWatch || !shiftTimeWatch
                         }
                         className="dotsub-shift-modal-apply-button sbte-btn sbte-btn-primary"
                         onClick={handleSubmit(onSubmit)}
@@ -93,9 +89,9 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                     <label>Time Shift in Seconds.Milliseconds</label>
                     <input
                         name="shiftTime"
+                        type="number"
                         className="sbte-form-control dotsub-track-line-shift mt-2"
                         style={{ width: "120px" }}
-                        type="number"
                         placeholder="0.000"
                         step={"0.100"}
                         ref={register}
@@ -115,8 +111,8 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                     <div className="form-check">
                         <label>
                             <input
-                                type="radio"
                                 name="shiftPosition"
+                                type="radio"
                                 value={ShiftPosition.BEFORE}
                                 ref={register}
                             /> Shift all before editing cue
@@ -125,8 +121,8 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                     <div className="form-check">
                         <label>
                             <input
-                                type="radio"
                                 name="shiftPosition"
+                                type="radio"
                                 value={ShiftPosition.AFTER}
                                 ref={register}
                             /> Shift all after editing cue
