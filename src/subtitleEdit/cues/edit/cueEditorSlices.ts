@@ -10,6 +10,7 @@ import sanitizeHtml from "sanitize-html";
 import { SearchDirection } from "../searchReplace/model";
 import { mergeVisibleSlice } from "../merge/mergeSlices";
 import { updateMatchedCues } from "../cuesList/cuesListActions";
+import _ from "lodash";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -56,7 +57,8 @@ export const searchCueText = (text: string, find: string, matchCase: boolean): A
     const regExpFlag = matchCase ? "g" : "gi";
     const re = new RegExp(escapeRegex(find), regExpFlag);
     const results = [];
-    while (re.exec(plainText)){
+    const plainTextUnescaped = _.unescape(plainText);
+    while (re.exec(plainTextUnescaped)){
         results.push(re.lastIndex - find.length);
     }
     return results;
