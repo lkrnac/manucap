@@ -14,8 +14,8 @@ describe("SubtitleSpecificationsModal", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div
-                    className="p-dialog-mask p-component-overlay p-component-overlay-enter
-                        p-dialog-visible p-dialog-center"
+                    className="p-dialog-mask p-dialog-center p-component-overlay
+                        p-component-overlay-enter p-dialog-visible"
                 >
                     <div
                         className="p-dialog p-component max-w-3xl p-dialog-enter p-dialog-enter-active"
@@ -34,7 +34,7 @@ describe("SubtitleSpecificationsModal", () => {
                                     className="p-dialog-header-icon p-dialog-header-close p-link"
                                     aria-label="Close"
                                 >
-                                    <span className="p-dialog-header-close-icon pi pi-times" />
+                                    <span className="p-dialog-header-close-icon pi pi-times" aria-hidden="true" />
                                 </button>
                             </div>
                         </div>
