@@ -579,7 +579,7 @@ describe("ShiftTimesModal", () => {
         expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2.847);
     });
 
-    it("does not shift by minus when shifting value would generate negative cue time", async () => {
+    it("doesn't shift by minus when shifting value would generate negative cue time (all)", async () => {
         // GIVEN
         testingStore.dispatch(updateCues(testCues) as {} as AnyAction);
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
@@ -605,7 +605,73 @@ describe("ShiftTimesModal", () => {
         });
 
         // THEN
+        expect(container.querySelectorAll(".p-inline-message-text")[0].innerHTML)
+            .toEqual("The start time of the first cue plus the shift value must be greater or equal to 0");
+
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
         expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+    });
+
+    it("doesn't shift by minus when shifting value would generate negative cue time (before)", async () => {
+        // GIVEN
+        testingStore.dispatch(updateCues(testCues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
+
+        const { container } = renderWithPortal(
+            <Provider store={testingStore}>
+                <ShiftTimesModal show onClose={jest.fn()} />
+            </Provider>
+        );
+
+        // WHEN
+        const input = container.querySelectorAll("input[name='shiftTime']")[0];
+        const beforeCuesRadioBtn = container.querySelectorAll(".form-check input[value='1']")[0];
+        const submitBtn = container.querySelectorAll(".dotsub-shift-modal-apply-button")[0];
+
+        await act(async () => {
+            await userEvent.type(input, "-0.153", { delay: 100 });
+        });
+
+        fireEvent.click(beforeCuesRadioBtn);
+        await act(async () => {
+            fireEvent.click(submitBtn);
+        });
+
+        // THEN
+        expect(container.querySelectorAll(".p-inline-message-text")[0].innerHTML)
+            .toEqual("The start time of the first cue plus the shift value must be greater or equal to 0");
+
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+    });
+
+    it("shifts time by minus when shifting after selected cue", async () => {
+        // GIVEN
+        testingStore.dispatch(updateCues(testCues) as {} as AnyAction);
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+
+        const { container } = renderWithPortal(
+            <Provider store={testingStore}>
+                <ShiftTimesModal show onClose={jest.fn()} />
+            </Provider>
+        );
+
+        // WHEN
+        const input = container.querySelectorAll("input[name='shiftTime']")[0];
+        const afterCuesRadioBtn = container.querySelectorAll(".form-check input[value='2']")[0];
+        const submitBtn = container.querySelectorAll(".dotsub-shift-modal-apply-button")[0];
+
+        await act(async () => {
+            await userEvent.type(input, "-0.153", { delay: 100 });
+        });
+
+        fireEvent.click(afterCuesRadioBtn);
+        await act(async () => {
+            fireEvent.click(submitBtn);
+        });
+
+        // THEN
+        expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+        expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(0.847);
     });
 });
