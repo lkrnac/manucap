@@ -225,7 +225,9 @@ const reorderCuesIfNeeded = function (
     }
     const editingCueIndex = state.editingCueIndex;
     let editUuid = null;
-    if (editingCueIndex > -1) {
+    if (editingCueIndex > -1
+        && newCues.length > editingCueIndex // This can happen when user closes one track and opens shorter track
+    ) {
         editUuid = newCues[editingCueIndex].editUuid;
     }
     const sortedCues = _.sortBy(newCues, (cue: CueDto) => cue.vttCue.startTime);
