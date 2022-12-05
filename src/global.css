@@ -290,11 +290,11 @@
 /** Toasts **/
 
 .p-toast {
-    @apply w-half border-none overflow-hidden;
+    @apply w-half border-none overflow-hidden max-w-none !z-100;
 }
 
 .p-toast-message {
-    @apply !bg-white !border-none overflow-hidden;
+    @apply !bg-white !border-none overflow-hidden !z-100;
 }
 
 .p-toast .p-toast-message .p-toast-message-content .p-toast-message-icon {
