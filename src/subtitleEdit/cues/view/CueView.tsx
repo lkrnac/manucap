@@ -4,10 +4,13 @@ import { convertVttToHtml } from "../edit/cueTextConverter";
 import { cueCategoryToPrettyName, findPositionIcon } from "../cueUtils";
 import { getTimeString } from "../../utils/timeUtils";
 import sanitizeHtml from "sanitize-html";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import ClickCueWrapper from "./ClickCueWrapper";
 import { validateVttCue } from "../cuesList/cuesListActions";
+import { SubtitleEditState } from "../../subtitleEditReducers";
+import { SearchReplaceMatch } from "../searchReplace/SearchReplaceMatch";
+import { renderToString } from "react-dom/server";
 
 export interface CueViewProps {
     cue: CueDto;
@@ -47,7 +50,7 @@ const replaceForInsensitiveMatches = (
     return sanitizedHtml;
 };
 
-const injectGlossaryTerms = (plainText: string, props: CueViewProps, sanitizedHtml: string): string => {
+const injectGlossaryTerms = (props: CueViewProps, plainText: string, sanitizedHtml: string): string => {
     if (props.cue.glossaryMatches) {
         const deduplicatedMatches = [ ...props.cue.glossaryMatches ].sort(
             (first, second) => second.source.length - first.source.length
@@ -64,7 +67,25 @@ const injectGlossaryTerms = (plainText: string, props: CueViewProps, sanitizedHt
     return sanitizedHtml;
 };
 
-const buildContent = (props: CueViewProps): string => {
+const getWordOccurrenceIndex = (text: string, word: string, occurrence: number) => {
+    return text.split(word, occurrence).join(word).length;
+};
+
+const injectCurrentSearchMatch = (props: CueViewProps, plainText: string, sanitizedHtml: string): string => {
+    const matchLength = props.cue.searchReplaceMatches?.matchLength;
+    const offsetIndex = props.cue.searchReplaceMatches?.offsetIndex;
+    const offset = offsetIndex !== undefined ? props.cue.searchReplaceMatches?.offsets[offsetIndex] : undefined;
+    if (matchLength && offsetIndex !== undefined && offset !== undefined) {
+        const match = plainText.substring(offset, offset + matchLength);
+        const htmlOffset = getWordOccurrenceIndex(sanitizedHtml, match, offsetIndex + 1);
+        const partialHtml = sanitizedHtml.substring(htmlOffset);
+        const replacement = renderToString(<SearchReplaceMatch><>{match}</></SearchReplaceMatch>);
+        sanitizedHtml = sanitizedHtml.substring(0, htmlOffset) + partialHtml.replace(match, replacement);
+    }
+    return sanitizedHtml;
+};
+
+const buildContent = (props: CueViewProps, editingCueIndex: number): string => {
     const plainText = sanitizeHtml(props.cue.vttCue.text, { allowedTags: []});
     let sanitizedHtml = convertVttToHtml(sanitizeHtml(props.cue.vttCue.text, { allowedTags: ["b", "i", "u"]}));
 
@@ -72,17 +93,21 @@ const buildContent = (props: CueViewProps): string => {
         // @ts-ignore We need to define function as global, because it will be used
         // in glossary decorator onClick event injected into HTML via string manipulation + dangerouslySetInnerHTML
         global.pickSetGlossaryTerm = (term: string): void => props?.setGlossaryTerm(term);
-        sanitizedHtml = injectGlossaryTerms(plainText, props, sanitizedHtml);
+        sanitizedHtml = injectGlossaryTerms(props, plainText, sanitizedHtml);
+    }
+    if (props.targetCueIndex === editingCueIndex) {
+        sanitizedHtml = injectCurrentSearchMatch(props, plainText, sanitizedHtml);
     }
     return sanitizedHtml;
 };
 
 const CueView = (props: CueViewProps): ReactElement => {
+    const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
     const dispatch = useDispatch();
 
     const html = props.hideText
         ? ""
-        : buildContent(props);
+        : buildContent(props, editingCueIndex);
 
     useEffect(() => {
         if (props.isTargetCue

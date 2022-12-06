@@ -213,7 +213,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                 {
                     props.data.targetCues && props.data.targetCues.length > 0
                         ? props.data.targetCues.map(targetCue => {
-                            return editingCueIndex === targetCue.index
+                            return editingCueIndex === targetCue.index && !cueLineEditDisabled
                                 ? (
                                     <>
                                         <CueEdit
