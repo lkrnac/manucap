@@ -214,6 +214,7 @@ export const validateCue = (
     dispatch(checkErrors({ index, shouldSpellCheck: shouldSpellCheck }));
 };
 
+// TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
 // @ts-ignore rolled back
 const reorderCuesIfNeeded = function (
     dispatch: Dispatch<SubtitleEditAction>,
@@ -312,6 +313,7 @@ export const updateVttCue = (
             const newCue = { ...originalCue, idx, vttCue: newVttCue, editUuid: uuidv4() };
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
+            // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
             // if (vttCue.startTime !== originalCue.vttCue.startTime) {
             //     reorderCuesIfNeeded(dispatch, getState());
             // }
@@ -479,6 +481,7 @@ export const deleteCue = (idx: number): AppThunk =>
 export const updateCues = (cues: CueDto[]): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction>): void => {
         dispatch(cuesSlice.actions.updateCues({ cues }));
+        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
         // reorderCuesIfNeeded(dispatch, getState(), cues);
         dispatch(updateMatchedCues());
     };
@@ -490,6 +493,7 @@ export const applyShiftTimeByPosition = (position: string, cueIndex: number, shi
         validateShift(shiftPosition, cueIndex);
         validateShiftWithinChunkRange(shiftTime, editingTrack, getState().cues);
         dispatch(cuesSlice.actions.applyShiftTimeByPosition({ cueIndex, shiftTime, shiftPosition }));
+        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
         // if (cueIndex > 0) {
         //     reorderCuesIfNeeded(dispatch, getState());
         // }

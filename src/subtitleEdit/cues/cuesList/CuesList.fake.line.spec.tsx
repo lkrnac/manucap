@@ -1201,6 +1201,7 @@ describe("CuesList", () => {
         expect(testingStore.getState().editingCueIndex).toEqual(0);
     });
 
+    // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
     it.skip("doesn't rebind enter key binding when cues are added", () => {
         // GIVEN
         const testingTrack = {

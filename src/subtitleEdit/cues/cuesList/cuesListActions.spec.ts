@@ -1606,6 +1606,7 @@ describe("cueSlices", () => {
         });
 
         describe("ordering of source cues", () => {
+            // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
             it.skip("reorder cues if cue position changes when editing start time", () => {
                 // GIVEN
                 const track = { ...testingTrack, overlapEnabled: true };
@@ -1637,6 +1638,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().focusedInput).toEqual("START_TIME");
             });
 
+            // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
             it.skip("don't reorder cues if cue position doesn't change when editing start time", () => {
                 // GIVEN
                 const track = { ...testingTrack, overlapEnabled: true };
@@ -2816,6 +2818,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
         });
 
+        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
         it.skip("reorder cues based on start time", () => {
             // GIVEN
             const notOrderedCues = [
@@ -2841,6 +2844,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(1);
         });
 
+        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
         it.skip("resets editing cue index if out of range when reordering cues", () => {
             // GIVEN
             testingStore.dispatch(updateEditingCueIndex(8) as {} as AnyAction);
@@ -2919,6 +2923,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
         });
 
+        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
         it.skip("reorder cues when shifting time before cue index", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
@@ -2937,6 +2942,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
         });
 
+        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
         it.skip("reorder cues when shifting time after cue index", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
