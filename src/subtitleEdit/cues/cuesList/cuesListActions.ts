@@ -216,7 +216,7 @@ export const validateCue = (
 
 // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
 // @ts-ignore rolled back
-const reorderCuesIfNeeded = function (
+const reorderCuesIfNeeded = function ( // eslint-disable-line @typescript-eslint/no-unused-vars
     dispatch: Dispatch<SubtitleEditAction>,
     state: SubtitleEditState,
     cuesToUpdate?: CueDto[]
