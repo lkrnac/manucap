@@ -214,6 +214,7 @@ export const validateCue = (
     dispatch(checkErrors({ index, shouldSpellCheck: shouldSpellCheck }));
 };
 
+// @ts-ignore rolled back
 const reorderCuesIfNeeded = function (
     dispatch: Dispatch<SubtitleEditAction>,
     state: SubtitleEditState,
@@ -311,9 +312,9 @@ export const updateVttCue = (
             const newCue = { ...originalCue, idx, vttCue: newVttCue, editUuid: uuidv4() };
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
-            if (vttCue.startTime !== originalCue.vttCue.startTime) {
-                reorderCuesIfNeeded(dispatch, getState());
-            }
+            // if (vttCue.startTime !== originalCue.vttCue.startTime) {
+            //     reorderCuesIfNeeded(dispatch, getState());
+            // }
             if (getState().searchReplaceVisible) {
                 updateSearchMatches(dispatch, getState, idx);
             }
@@ -476,8 +477,9 @@ export const deleteCue = (idx: number): AppThunk =>
     };
 
 export const updateCues = (cues: CueDto[]): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
-        reorderCuesIfNeeded(dispatch, getState(), cues);
+    (dispatch: Dispatch<SubtitleEditAction>): void => {
+        dispatch(cuesSlice.actions.updateCues({ cues }));
+        // reorderCuesIfNeeded(dispatch, getState(), cues);
         dispatch(updateMatchedCues());
     };
 
@@ -488,9 +490,9 @@ export const applyShiftTimeByPosition = (position: string, cueIndex: number, shi
         validateShift(shiftPosition, cueIndex);
         validateShiftWithinChunkRange(shiftTime, editingTrack, getState().cues);
         dispatch(cuesSlice.actions.applyShiftTimeByPosition({ cueIndex, shiftTime, shiftPosition }));
-        if (cueIndex > 0) {
-            reorderCuesIfNeeded(dispatch, getState());
-        }
+        // if (cueIndex > 0) {
+        //     reorderCuesIfNeeded(dispatch, getState());
+        // }
         dispatch(updateMatchedCues());
         callSaveTrack(dispatch, getState, true);
     };
