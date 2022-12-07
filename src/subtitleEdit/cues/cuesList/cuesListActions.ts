@@ -214,7 +214,9 @@ export const validateCue = (
     dispatch(checkErrors({ index, shouldSpellCheck: shouldSpellCheck }));
 };
 
-const reorderCuesIfNeeded = function (
+// TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
+// @ts-ignore rolled back
+const reorderCuesIfNeeded = function ( // eslint-disable-line @typescript-eslint/no-unused-vars
     dispatch: Dispatch<SubtitleEditAction>,
     state: SubtitleEditState,
     cuesToUpdate?: CueDto[]
@@ -311,9 +313,10 @@ export const updateVttCue = (
             const newCue = { ...originalCue, idx, vttCue: newVttCue, editUuid: uuidv4() };
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
-            if (vttCue.startTime !== originalCue.vttCue.startTime) {
-                reorderCuesIfNeeded(dispatch, getState());
-            }
+            // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
+            // if (vttCue.startTime !== originalCue.vttCue.startTime) {
+            //     reorderCuesIfNeeded(dispatch, getState());
+            // }
             if (getState().searchReplaceVisible) {
                 updateSearchMatches(dispatch, getState, idx);
             }
@@ -476,8 +479,10 @@ export const deleteCue = (idx: number): AppThunk =>
     };
 
 export const updateCues = (cues: CueDto[]): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
-        reorderCuesIfNeeded(dispatch, getState(), cues);
+    (dispatch: Dispatch<SubtitleEditAction>): void => {
+        dispatch(cuesSlice.actions.updateCues({ cues }));
+        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
+        // reorderCuesIfNeeded(dispatch, getState(), cues);
         dispatch(updateMatchedCues());
     };
 
@@ -487,9 +492,10 @@ export const applyShiftTimeByPosition = (shiftPosition: ShiftPosition, cueIndex:
         validateShift(shiftPosition, cueIndex);
         validateShiftWithinChunkRange(shiftTime, editingTrack, getState().cues);
         dispatch(cuesSlice.actions.applyShiftTimeByPosition({ cueIndex, shiftTime, shiftPosition }));
-        if (cueIndex > 0) {
-            reorderCuesIfNeeded(dispatch, getState());
-        }
+        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
+        // if (cueIndex > 0) {
+        //     reorderCuesIfNeeded(dispatch, getState());
+        // }
         dispatch(updateMatchedCues());
         callSaveTrack(dispatch, getState, true);
     };
