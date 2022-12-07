@@ -1,5 +1,5 @@
 import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
-import { CueDto, ScrollPosition } from "../../model";
+import { CueDto, ScrollPosition, Track } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
 
 export const DEFAULT_PAGE_SIZE = 100;
@@ -109,3 +109,18 @@ export const changeScrollPosition = (scrollPosition: ScrollPosition, previousFoc
         dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(focusedCueIndex));
         dispatch(currentCueErrorIndexSlice.actions.changeCurrentCueErrorPosition(errorCueIndex));
     };
+
+export const scrollToFirstUnlockChunk = (editingTrack: Track): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<ScrollPosition | null>>, getState): void => {
+    const state = getState();
+    const chunkStartSeconds = editingTrack?.mediaChunkStart ? editingTrack.mediaChunkStart / 1000 : 0;
+    const chunkEndSeconds = editingTrack?.mediaChunkEnd ? editingTrack.mediaChunkEnd / 1000 : 0;
+    const focusedCueIndex = state.cues.findIndex(cue =>
+        cue.vttCue.startTime >= chunkStartSeconds
+        && cue.vttCue.endTime <= chunkEndSeconds
+        && !cue.editDisabled
+    );
+    if (focusedCueIndex > -1) {
+        dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(focusedCueIndex));
+    }
+};

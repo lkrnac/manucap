@@ -9,7 +9,7 @@ import { addCue } from "./cuesListActions";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import Mousetrap from "mousetrap";
 import { KeyCombination } from "../../utils/shortcutConstants";
-import { changeScrollPosition, DEFAULT_PAGE_SIZE } from "./cuesListScrollSlice";
+import { changeScrollPosition, DEFAULT_PAGE_SIZE, scrollToFirstUnlockChunk } from "./cuesListScrollSlice";
 import CueListToolbar from "../../CueListToolbar";
 
 interface Props {
@@ -71,10 +71,14 @@ const CuesList = (props: Props): ReactElement => {
             if (startAt !== null
                 && refs[startAt] !== undefined
                 && refs[startAt].current !== null
+                && props.editingTrack?.mediaChunkStart === undefined
             ) {
                 const ref = refs[startAt];
                 preventScroll.current = true;
                 ref?.current?.scrollIntoView({ block: "nearest", inline: "nearest" });
+            }
+            else if (props.editingTrack?.mediaChunkStart !== undefined) {
+                dispatch(scrollToFirstUnlockChunk(props.editingTrack));
             }
         }
     );
