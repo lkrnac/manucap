@@ -9,7 +9,11 @@ import { addCue } from "./cuesListActions";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import Mousetrap from "mousetrap";
 import { KeyCombination } from "../../utils/shortcutConstants";
-import { changeScrollPosition, DEFAULT_PAGE_SIZE, scrollToFirstUnlockChunk } from "./cuesListScrollSlice";
+import {
+    changeScrollPosition,
+    scrollToFirstUnlockChunk,
+    DEFAULT_PAGE_SIZE
+} from "./cuesListScrollSlice";
 import CueListToolbar from "../../CueListToolbar";
 
 interface Props {
@@ -26,9 +30,15 @@ const CuesList = (props: Props): ReactElement => {
     const matchedCues = useSelector((state: SubtitleEditState) => state.matchedCues);
     const previousNonNullFocusedCueIndex = useRef(-1);
     const startAt = useSelector((state: SubtitleEditState) => state.focusedCueIndex);
+    const [openMediaChunk, setOpenMediaChunk] = useState<boolean>(props.editingTrack?.mediaChunkStart !== undefined);
     if (startAt !== null) {
         previousNonNullFocusedCueIndex.current = startAt;
     }
+    if(props.editingTrack && openMediaChunk) {
+        setOpenMediaChunk(false);
+        dispatch(scrollToFirstUnlockChunk(props.editingTrack));
+    }
+
     const scrollRef = useRef(null as HTMLDivElement | null);
     const preventScroll = useRef(false);
 
@@ -46,6 +56,7 @@ const CuesList = (props: Props): ReactElement => {
         : (pageIndex + 1) * DEFAULT_PAGE_SIZE + 5;
     const [refs, setRefs] = useState([] as RefObject<HTMLDivElement>[]);
 
+    console.log(startAt);
     useEffect(
         () => {
             if (showStartCaptioning) {
@@ -71,14 +82,10 @@ const CuesList = (props: Props): ReactElement => {
             if (startAt !== null
                 && refs[startAt] !== undefined
                 && refs[startAt].current !== null
-                && props.editingTrack?.mediaChunkStart === undefined
             ) {
                 const ref = refs[startAt];
                 preventScroll.current = true;
                 ref?.current?.scrollIntoView({ block: "nearest", inline: "nearest" });
-            }
-            else if (props.editingTrack?.mediaChunkStart !== undefined) {
-                dispatch(scrollToFirstUnlockChunk(props.editingTrack));
             }
         }
     );

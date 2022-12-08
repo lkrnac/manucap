@@ -115,12 +115,12 @@ export const scrollToFirstUnlockChunk = (editingTrack: Track): AppThunk =>
     const state = getState();
     const chunkStartSeconds = editingTrack?.mediaChunkStart ? editingTrack.mediaChunkStart / 1000 : 0;
     const chunkEndSeconds = editingTrack?.mediaChunkEnd ? editingTrack.mediaChunkEnd / 1000 : 0;
-    const focusedCueIndex = state.cues.findIndex(cue =>
+    const mediaChunkStartIndex = state.cues.findIndex(cue =>
         cue.vttCue.startTime >= chunkStartSeconds
         && cue.vttCue.endTime <= chunkEndSeconds
         && !cue.editDisabled
     );
-    if (focusedCueIndex > -1) {
-        dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(focusedCueIndex));
+    if (mediaChunkStartIndex > -1) {
+        dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(mediaChunkStartIndex));
     }
 };
