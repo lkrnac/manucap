@@ -56,7 +56,6 @@ const CuesList = (props: Props): ReactElement => {
         : (pageIndex + 1) * DEFAULT_PAGE_SIZE + 5;
     const [refs, setRefs] = useState([] as RefObject<HTMLDivElement>[]);
 
-    console.log(startAt);
     useEffect(
         () => {
             if (showStartCaptioning) {
