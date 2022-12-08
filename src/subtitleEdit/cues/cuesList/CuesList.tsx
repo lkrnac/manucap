@@ -30,15 +30,10 @@ const CuesList = (props: Props): ReactElement => {
     const matchedCues = useSelector((state: SubtitleEditState) => state.matchedCues);
     const previousNonNullFocusedCueIndex = useRef(-1);
     const startAt = useSelector((state: SubtitleEditState) => state.focusedCueIndex);
-    const [openMediaChunk, setOpenMediaChunk] = useState<boolean>(props.editingTrack?.mediaChunkStart !== undefined);
+    const isMediaChunked = props.editingTrack?.mediaChunkStart !== undefined;
     if (startAt !== null) {
         previousNonNullFocusedCueIndex.current = startAt;
     }
-    if(props.editingTrack && openMediaChunk) {
-        setOpenMediaChunk(false);
-        dispatch(scrollToFirstUnlockChunk());
-    }
-
     const scrollRef = useRef(null as HTMLDivElement | null);
     const preventScroll = useRef(false);
 
@@ -105,6 +100,12 @@ const CuesList = (props: Props): ReactElement => {
         },
         [dispatch, scrollRef]
     );
+
+    useEffect(() => {
+        if (isMediaChunked) {
+            dispatch((scrollToFirstUnlockChunk()));
+        }
+    }, [dispatch, scrollToFirstUnlockChunk, isMediaChunked]);
 
     return (
         <div
