@@ -105,7 +105,7 @@ const CuesList = (props: Props): ReactElement => {
         if (isMediaChunked) {
             dispatch((scrollToFirstUnlockChunk()));
         }
-    }, [dispatch, scrollToFirstUnlockChunk, isMediaChunked]);
+    }, [dispatch, isMediaChunked]);
 
     return (
         <div
