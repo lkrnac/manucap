@@ -36,7 +36,7 @@ const CuesList = (props: Props): ReactElement => {
     }
     if(props.editingTrack && openMediaChunk) {
         setOpenMediaChunk(false);
-        dispatch(scrollToFirstUnlockChunk(props.editingTrack));
+        dispatch(scrollToFirstUnlockChunk());
     }
 
     const scrollRef = useRef(null as HTMLDivElement | null);
