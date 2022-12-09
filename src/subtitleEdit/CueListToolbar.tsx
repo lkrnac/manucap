@@ -71,7 +71,7 @@ const CueListToolbar = (props: Props): ReactElement => {
                 data-pr-position="top"
                 data-pr-at="center top-2"
             >
-                <i className="fa-duotone fa-up-to-line"></i>
+                <i className="fa-duotone fa-hashtag-lock"></i>
             </button>
             <Tooltip
                 id="firstUnlockChunkCueButtonTooltip"
