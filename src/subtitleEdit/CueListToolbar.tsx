@@ -61,7 +61,7 @@ const CueListToolbar = (props: Props): ReactElement => {
             <button
                 id="firstUnlockChunkCueButton"
                 hidden={props.editingTrack?.mediaChunkStart === undefined}
-                data-testid="sbte-jump-to-playback-cue-button"
+                data-testid="sbte-jump-to-first-unlock-cue-button"
                 className="sbte-btn sbte-btn-light"
                 type="button"
                 onClick={(): void => {
