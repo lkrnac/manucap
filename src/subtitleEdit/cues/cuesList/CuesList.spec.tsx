@@ -999,7 +999,7 @@ describe("CuesList", () => {
             expect(scrolledElement3.outerHTML).toContain("Caption Line 119");
         });
 
-        it("prevent loosing page index when ficused cue index is null", async () => {
+        it("prevent losing page index when focused cue index is null", async () => {
             const testingSourceCuesForPagination = Array.from({ length: 120 }, (_element, index) => (
                 { vttCue: new VTTCue(index, index + 1, "Caption Line " + index), cueCategory: "DIALOGUE" } as CueDto
             ));
@@ -1030,6 +1030,44 @@ describe("CuesList", () => {
             expect(testingStore.getState().focusedCueIndex).toEqual(null);
             expect(actualNode.container.querySelector("div")?.outerHTML).toContain("Caption Line 119");
             expect(actualNode.container.querySelector("div")?.outerHTML).toContain("Caption Line 100");
+        });
+
+        it("scrolls to first media chunk when task is open", async () => {
+            // GIVEN
+            const testingCaptionTrack = {
+                type: "CAPTION",
+                language: { id: "en-US", name: "English (US)" } as Language,
+                default: true,
+                mediaTitle: "This is the video title",
+                mediaLength: 4000,
+                mediaChunkStart: 4000,
+                mediaChunkEnd: 5000,
+                progress: 50
+            } as Track;
+
+            const cues = [
+                { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE", editDisabled: true },
+                { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE", editDisabled: true  },
+                { vttCue: new VTTCue(2, 3, "Caption Line 3"), cueCategory: "DIALOGUE", editDisabled: true  },
+                { vttCue: new VTTCue(3, 4, "Caption Line 4"), cueCategory: "DIALOGUE", editDisabled: true  },
+                { vttCue: new VTTCue(4, 5, "Caption Line 5"), cueCategory: "DIALOGUE", editDisabled: false  },
+                { vttCue: new VTTCue(5, 6, "Caption Line 6"), cueCategory: "DIALOGUE", editDisabled: false  },
+                { vttCue: new VTTCue(6, 7, "Caption Line 7"), cueCategory: "DIALOGUE", editDisabled: true  },
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+
+            // WHEN
+            render(
+                <Provider store={testingStore}>
+                    <CuesList
+                        editingTrack={testingCaptionTrack}
+                        commentAuthor="Linguist"
+                        onComplete={jest.fn()}
+                        onViewTrackHistory={jest.fn()}
+                    />
+                </Provider>
+            );
+            expect(testingStore.getState().focusedCueIndex).toEqual(4);
         });
     });
 
