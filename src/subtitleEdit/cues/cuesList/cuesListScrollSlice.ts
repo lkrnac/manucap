@@ -1,6 +1,7 @@
 import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
 import { CueDto, ScrollPosition } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
+import _ from "lodash";
 
 export const DEFAULT_PAGE_SIZE = 100;
 
@@ -57,7 +58,7 @@ const getScrollCueIndex = (
         return currentPlayerCueIndex;
     }
     if (scrollPosition === ScrollPosition.LAST_TRANSLATED) {
-        return lastTranslatedIndex - 1;
+        return lastTranslatedIndex;
     }
     if(scrollPosition === ScrollPosition.ERROR && errorCueIndex !== -1) {
         return errorCueIndex;
@@ -97,7 +98,7 @@ export const changeScrollPosition = (scrollPosition: ScrollPosition, previousFoc
         const currentPlayerTime = getState().currentPlayerTime;
         const currentPlayerCueIndex = matchCueTimeIndex(state.cues, currentPlayerTime);
         const errorCueIndex = getErrorCueIndex(state.cues, state.currentCueErrorIndex);
-        const lastTranslatedIndex = getLastTranslatedIndex(state.cues);
+        const lastTranslatedIndex = _.findLastIndex(state.cues, cue => !cue.editDisabled);
         const focusedCueIndex = getScrollCueIndex(
             state.matchedCues.matchedCues.length,
             state.matchedCues.editingFocusIndex,
@@ -110,11 +111,6 @@ export const changeScrollPosition = (scrollPosition: ScrollPosition, previousFoc
         dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(focusedCueIndex));
         dispatch(currentCueErrorIndexSlice.actions.changeCurrentCueErrorPosition(errorCueIndex));
     };
-
-const getLastTranslatedIndex = (cues: CueDto[]): number => {
-    const lastTranslatedIndex = cues.slice().reverse().findIndex(cue => !cue.editDisabled) - 1;
-    return cues.length - lastTranslatedIndex;
-};
 
 export const scrollToFirstUnlockChunk = (): AppThunk =>
     (dispatch: Dispatch<PayloadAction<ScrollPosition | null>>, getState): void => {
