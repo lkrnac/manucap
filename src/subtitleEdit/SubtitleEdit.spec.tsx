@@ -38,7 +38,8 @@ jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
     isEmpty: jest.requireActual("lodash/isEmpty"),
     sortBy: jest.requireActual("lodash/sortBy"),
-    findIndex: jest.requireActual("lodash/findIndex")
+    findIndex: jest.requireActual("lodash/findIndex"),
+    findLastIndex: jest.requireActual("lodash/findLastIndex")
 }));
 
 // We are mocking here.
