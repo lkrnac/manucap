@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import CompleteButton from "./CompleteButton";
 import { Tooltip } from "primereact/tooltip";
 import { useDispatch } from "react-redux";
-import { changeScrollPosition } from "./cues/cuesList/cuesListScrollSlice";
+import { changeScrollPosition, scrollToFirstUnlockChunk } from "./cues/cuesList/cuesListScrollSlice";
 import { ScrollPosition } from "./model";
 import { Track } from "./model";
 
@@ -57,6 +57,25 @@ const CueListToolbar = (props: Props): ReactElement => {
             <Tooltip
                 id="jumpToLastButtonTooltip"
                 target="#jumpToLastButton"
+            />
+            <button
+                id="firstUnlockChunkCueButton"
+                hidden={props.editingTrack?.mediaChunkStart === undefined}
+                data-testid="sbte-jump-to-playback-cue-button"
+                className="sbte-btn sbte-btn-light"
+                type="button"
+                onClick={(): void => {
+                    dispatch(scrollToFirstUnlockChunk());
+                }}
+                data-pr-tooltip="Scroll to first unlocked chunk subtitle position"
+                data-pr-position="top"
+                data-pr-at="center top-2"
+            >
+                <i className="fa-duotone fa-up-to-line"></i>
+            </button>
+            <Tooltip
+                id="firstUnlockChunkCueButtonTooltip"
+                target="#firstUnlockChunkCueButton"
             />
             <button
                 id="editCueButton"
