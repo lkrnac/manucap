@@ -3,10 +3,12 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     replaceCurrentMatch,
+    searchCueText,
     searchNextCues,
     searchPreviousCues,
     setFind,
-    setMatchCase, setReplacement,
+    setMatchCase,
+    setReplacement,
     showSearchReplace
 } from "./searchReplaceSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
@@ -15,7 +17,6 @@ import { CueDto } from "../../model";
 import { replaceVttCueContent } from "../edit/editUtils";
 import ToggleButton from "../../toolbox/ToggleButton";
 import { SearchReplace } from "./model";
-import { searchCueText } from "../edit/cueEditorSlices";
 
 const replaceAllInVttCue = (
     vttCue: VTTCue,

@@ -207,7 +207,6 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                     vttCue={props.cue.vttCue}
                     editUuid={props.cue.editUuid}
                     spellCheck={props.cue.spellCheck}
-                    searchReplaceMatches={props.cue.searchReplaceMatches}
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcut}
                     unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcut}
                     glossaryTerm={props.glossaryTerm}

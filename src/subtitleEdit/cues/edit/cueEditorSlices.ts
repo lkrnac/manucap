@@ -1,16 +1,12 @@
 import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-import { CueChange, CueDto, CueError, ScrollPosition, SubtitleEditAction } from "../../model";
+import { CueChange, CueError, ScrollPosition, SubtitleEditAction } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
 import { changeScrollPosition } from "../cuesList/cuesListScrollSlice";
 import { cuesSlice } from "../cuesList/cuesListSlices";
 import { editingTrackSlice } from "../../trackSlices";
-import sanitizeHtml from "sanitize-html";
-import { SearchDirection } from "../searchReplace/model";
 import { mergeVisibleSlice } from "../merge/mergeSlices";
 import { updateMatchedCues } from "../cuesList/cuesListActions";
-import _ from "lodash";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -42,82 +38,23 @@ export const focusedInputSlice = createSlice({
     }
 });
 
-// Sourced from SO https://stackoverflow.com/a/3561711 See post for eslint disable about escaping /
-/* eslint-disable no-useless-escape */
-const escapeRegex = (value: string): string =>
-    value.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
-/* eslint-enable */
-
-export const searchCueText = (text: string, find: string, matchCase: boolean): Array<number> => {
-    if (find === "") {
-        return [];
-    }
-    const plainText = sanitizeHtml(text, { allowedTags: []});
-    if (plainText === "") {
-        return [];
-    }
-    const regExpFlag = matchCase ? "g" : "gi";
-    const re = new RegExp(escapeRegex(find), regExpFlag);
-    const results = [];
-    const plainTextUnescaped = _.unescape(plainText);
-    while (re.exec(plainTextUnescaped)){
-        results.push(re.lastIndex - find.length);
-    }
-    return results;
-};
-
-const finNextOffsetIndexForSearch = (
-    cue: CueDto,
-    offsets: Array<number>,
-    direction: SearchDirection
-): number => {
-    const lastIndex = offsets.length - 1;
-    if (cue.searchReplaceMatches && cue.searchReplaceMatches.offsetIndex >= 0) {
-        return cue.searchReplaceMatches.offsetIndex < lastIndex ?
-            cue.searchReplaceMatches.offsetIndex : lastIndex;
-    }
-    return direction === "NEXT" ? 0 : lastIndex;
-};
-
-export const updateSearchMatches = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction | void>>,
-    getState: Function,
-    idx: number
-): void => {
-    const searchReplace = getState().searchReplace;
-    const cue = getState().cues[idx];
-    if (cue) {
-        const offsets = searchCueText(cue.vttCue.text, searchReplace.find, searchReplace.matchCase);
-        const offsetIndex = finNextOffsetIndexForSearch(cue, offsets, searchReplace.direction);
-        dispatch(cuesSlice.actions.addSearchMatches(
-            {
-                idx,
-                searchMatches: { offsets, matchLength: searchReplace.find.length, offsetIndex }
-            }
-        ));
-    }
-};
-
 export const updateEditingCueIndexNoThunk = (
     dispatch: Dispatch<SubtitleEditAction>,
-    getState: Function,
     idx: number
 ): void => {
     dispatch(focusedInputSlice.actions.updateFocusedInput("EDITOR"));
     dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx }));
     if (idx >= 0) {
-        const state = getState();
-        if (state.searchReplaceVisible) {
-            updateSearchMatches(dispatch, getState, idx);
-        }
+        // TODO: check if it's needed
         dispatch(updateMatchedCues());
         dispatch(changeScrollPosition(ScrollPosition.CURRENT));
     }
 };
 
+// TODO: check if updateEditingCueIndexNoThunk can be called directly
 export const updateEditingCueIndex = (idx: number): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
-        updateEditingCueIndexNoThunk(dispatch, getState, idx);
+    (dispatch: Dispatch<SubtitleEditAction | void>): void => {
+        updateEditingCueIndexNoThunk(dispatch, idx);
     };
 
 export const validationErrorSlice = createSlice({

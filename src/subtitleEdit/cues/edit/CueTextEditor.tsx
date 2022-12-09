@@ -47,11 +47,11 @@ const findSpellCheckIssues = (props: CueTextEditorProps, editingTrack: Track | n
         }
     };
 
-const findSearchReplaceMatch =
-    (props: CueTextEditorProps) => (_contentBlock: ContentBlock, callback: Function): void => {
-        if (props.searchReplaceMatches && props.searchReplaceMatches.offsets.length > 0) {
-            const offset = props.searchReplaceMatches.offsets[props.searchReplaceMatches.offsetIndex];
-            callback(offset, offset + props.searchReplaceMatches.matchLength);
+const findSearchReplaceMatch = (searchReplaceMatches: SearchReplaceMatches | undefined) =>
+    (_contentBlock: ContentBlock, callback: Function): void => {
+        if (searchReplaceMatches && searchReplaceMatches.offsets.length > 0) {
+            const offset = searchReplaceMatches.offsets[searchReplaceMatches.offsetIndex];
+            callback(offset, offset + searchReplaceMatches.matchLength);
         }
     };
 
@@ -182,7 +182,6 @@ export interface CueTextEditorProps {
     autoFocus: boolean;
     editUuid?: string;
     spellCheck?: SpellCheck;
-    searchReplaceMatches?: SearchReplaceMatches;
     bindCueViewModeKeyboardShortcut: () => void;
     unbindCueViewModeKeyboardShortcut: () => void;
     glossaryTerm?: string;
@@ -264,6 +263,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     const spellcheckerEnabled = useSelector((state: SubtitleEditState) => state.spellCheckerSettings.enabled);
     const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
     const replacement = useSelector((state: SubtitleEditState) => state.searchReplace.replacement);
+    const searchReplace = useSelector((state: SubtitleEditState) => state.searchReplace);
 
     const [spellCheckerMatchingOffset, setSpellCheckerMatchingOffset] = useState(null);
     const editorRef = useRef(null);
@@ -289,14 +289,14 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     setEditorStateFOR_TESTING = setEditorState;
 
     let decoratedEditorState = insertGlossaryTermIfNeeded(editorState, props.glossaryTerm);
-    decoratedEditorState = replaceIfNeeded(decoratedEditorState, props.searchReplaceMatches, replacement);
+    decoratedEditorState = replaceIfNeeded(decoratedEditorState, searchReplace.matches, replacement);
 
     // If in composition mode (i.e. for IME input or diacritics), the decorator re-renders cannot
     // happen because it will cause an error in the draft-js composition handler.
     if (!imeCompositionRef.current) {
         const newCompositeDecorator = new CompositeDecorator([
             {
-                strategy: findSearchReplaceMatch(props),
+                strategy: findSearchReplaceMatch(searchReplace.matches),
                 component: SearchReplaceMatch,
             },
             {

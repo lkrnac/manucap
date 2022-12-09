@@ -4,7 +4,6 @@ import { CueCategory, CueComment, CueDto, CueError, SubtitleEditAction } from ".
 import { copyNonConstructorProperties } from "../cueUtils";
 import { editingTrackSlice } from "../../trackSlices";
 import { Match, SpellCheck } from "../spellCheck/model";
-import { SearchReplaceMatches } from "../searchReplace/model";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 import { matchCuesByTime, MatchedCuesWithEditingFocus } from "./cuesListTimeMatching";
 
@@ -41,10 +40,6 @@ export interface CueErrorsPayload {
 
 export interface SpellCheckAction extends CueIndexAction {
     spellCheck: SpellCheck;
-}
-
-export interface SearchReplaceAction extends CueIndexAction {
-    searchMatches: SearchReplaceMatches;
 }
 
 export interface SpellCheckRemovalAction extends CueIndexAction {
@@ -94,9 +89,6 @@ export const cuesSlice = createSlice({
         },
         addSpellCheck: (state, action: PayloadAction<SpellCheckAction>): void => {
             state[action.payload.idx].spellCheck = action.payload.spellCheck;
-        },
-        addSearchMatches: (state, action: PayloadAction<SearchReplaceAction>): void => {
-            state[action.payload.idx].searchReplaceMatches = action.payload.searchMatches;
         },
         removeIgnoredSpellcheckedMatchesFromAllCues: (state,
                                                       action: PayloadAction<SpellCheckRemovalAction>): void => {

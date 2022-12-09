@@ -1,5 +1,4 @@
 import { SpellCheck } from "./cues/spellCheck/model";
-import { SearchReplaceMatches } from "./cues/searchReplace/model";
 
 export type LanguageDirection = "RTL" | "LTR";
 
@@ -34,7 +33,6 @@ export interface CueDto {
     editUuid?: string;
     editDisabled?: boolean;
     spellCheck?: SpellCheck;
-    searchReplaceMatches?: SearchReplaceMatches;
     glossaryMatches?: GlossaryMatchDto[];
     errors?: CueError[] | null;
     comments?: CueComment[];
