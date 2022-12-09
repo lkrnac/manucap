@@ -97,11 +97,12 @@ export const changeScrollPosition = (scrollPosition: ScrollPosition, previousFoc
         const currentPlayerTime = getState().currentPlayerTime;
         const currentPlayerCueIndex = matchCueTimeIndex(state.cues, currentPlayerTime);
         const errorCueIndex = getErrorCueIndex(state.cues, state.currentCueErrorIndex);
+        const lastTranslatedIndex = getLastTranslatedIndex(state.cues);
         const focusedCueIndex = getScrollCueIndex(
             state.matchedCues.matchedCues.length,
             state.matchedCues.editingFocusIndex,
             currentPlayerCueIndex,
-            state.cues.length,
+            lastTranslatedIndex,
             previousFocusedCueIndexInitiated,
             errorCueIndex,
             scrollPosition
@@ -109,6 +110,11 @@ export const changeScrollPosition = (scrollPosition: ScrollPosition, previousFoc
         dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(focusedCueIndex));
         dispatch(currentCueErrorIndexSlice.actions.changeCurrentCueErrorPosition(errorCueIndex));
     };
+
+const getLastTranslatedIndex = (cues: CueDto[]): number => {
+    const lastTranslatedIndex = cues.slice().reverse().findIndex(cue => !cue.editDisabled) - 1;
+    return cues.length - lastTranslatedIndex;
+};
 
 export const scrollToFirstUnlockChunk = (): AppThunk =>
     (dispatch: Dispatch<PayloadAction<ScrollPosition | null>>, getState): void => {
