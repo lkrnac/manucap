@@ -109,3 +109,12 @@ export const changeScrollPosition = (scrollPosition: ScrollPosition, previousFoc
         dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(focusedCueIndex));
         dispatch(currentCueErrorIndexSlice.actions.changeCurrentCueErrorPosition(errorCueIndex));
     };
+
+export const scrollToFirstUnlockChunk = (): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<ScrollPosition | null>>, getState): void => {
+    const state = getState();
+    const mediaChunkStartIndex = state.cues.findIndex(cue => !cue.editDisabled);
+    if (mediaChunkStartIndex > -1) {
+        dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(mediaChunkStartIndex));
+    }
+};
