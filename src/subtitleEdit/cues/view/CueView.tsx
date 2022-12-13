@@ -14,6 +14,7 @@ import { renderToString } from "react-dom/server";
 import { SearchReplace } from "../searchReplace/model";
 
 export interface CueViewProps {
+    rowIndex: number;
     cue: CueDto;
     isTargetCue: boolean;
     targetCuesLength: number;
@@ -93,7 +94,6 @@ const injectCurrentSearchMatch = (
 
 const buildContent = (
     props: CueViewProps,
-    editingCueIndex: number,
     searchReplaceVisible: boolean,
     searchReplace: SearchReplace
 ): string => {
@@ -107,23 +107,24 @@ const buildContent = (
         sanitizedHtml = injectGlossaryTerms(props, plainText, sanitizedHtml);
     }
     const indices = searchReplace.indices;
-    if (searchReplaceVisible && editingCueIndex === indices.matchedCueIndex
-        && (props.isTargetCue && props.targetCueIndex === indices.targetCueIndex)
-        || (!props.isTargetCue && props.sourceCueIndex === indices.sourceCueIndex)) {
+    if (searchReplaceVisible
+        && props.rowIndex === indices.matchedCueIndex
+        && (props.isTargetCue
+            ? props.targetCueIndex === indices.targetCueIndex
+            : props.sourceCueIndex === indices.sourceCueIndex)) {
         sanitizedHtml = injectCurrentSearchMatch(plainText, sanitizedHtml, searchReplace);
     }
     return sanitizedHtml;
 };
 
 const CueView = (props: CueViewProps): ReactElement => {
-    const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
     const searchReplaceVisible = useSelector((state: SubtitleEditState) => state.searchReplaceVisible);
     const searchReplace = useSelector((state: SubtitleEditState) => state.searchReplace);
     const dispatch = useDispatch();
 
     const html = props.hideText
         ? ""
-        : buildContent(props, editingCueIndex, searchReplaceVisible, searchReplace);
+        : buildContent(props, searchReplaceVisible, searchReplace);
 
     useEffect(() => {
         if (props.isTargetCue

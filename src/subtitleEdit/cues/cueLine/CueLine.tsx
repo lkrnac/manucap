@@ -177,6 +177,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                             return (
                                 <CueView
                                     key={`sourceCueView-${sourceCue.index}`}
+                                    rowIndex={props.rowIndex}
                                     isTargetCue={false}
                                     sourceCueIndex={sourceCue.index}
                                     targetCueIndex={firstTargetCueIndex}
@@ -241,6 +242,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                 : (
                                     <>
                                         <CueView
+                                            rowIndex={props.rowIndex}
                                             key={`targetCueView-${targetCue.index}`}
                                             isTargetCue
                                             targetCueIndex={targetCue.index}

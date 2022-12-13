@@ -1,6 +1,6 @@
 import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CueDto, CueLineDto, SubtitleEditAction } from "../../model";
+import { CueDto, CueDtoWithIndex, SubtitleEditAction } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
 import { editingTrackSlice } from "../../trackSlices";
 import { SearchDirection, SearchReplace, SearchReplaceIndices, SearchReplaceMatches } from "./model";
@@ -10,38 +10,64 @@ import sanitizeHtml from "sanitize-html";
 import _ from "lodash";
 import { updateEditingCueIndexNoThunk } from "../edit/cueEditorSlices";
 
-const getCurrentCueAndUpdateIndices = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
-    matchedCues: CueLineDto[],
-    indices: SearchReplaceIndices): CueDto | undefined => {
+const getCurrentCueAndUpdateIndices =
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState: Function): CueDto | undefined => {
+    const indices = getState().searchReplace.indices;
+    const matchedCues = getState().matchedCues.matchedCues;
+    const searchReplace = getState().searchReplace;
+    if (matchedCues.length === 0) {
+        return;
+    }
     let matchedCueIndex = indices.matchedCueIndex;
     let sourceCueIndex = indices.sourceCueIndex;
     let targetCueIndex = indices.targetCueIndex;
-    let currentCue = undefined;
+    let currentCue = undefined as unknown as CueDto;
     if (matchedCueIndex === -1) {
         matchedCueIndex++;
     }
-    const matchedCue = matchedCues[matchedCueIndex];
+    let foundMatch = false;
     do {
+        const matchedCue = matchedCues[matchedCueIndex];
         if (matchedCue.sourceCues && matchedCue.sourceCues.length > 0) {
             sourceCueIndex++;
-            if (matchedCue.sourceCues[sourceCueIndex]) {
-                currentCue = matchedCue.sourceCues[sourceCueIndex].cue;
-                break;
+            const sourceCue = matchedCue.sourceCues.find((cue: CueDtoWithIndex) => cue.index === sourceCueIndex);
+            if (sourceCue) {
+                foundMatch =
+                    searchCueText(sourceCue.cue.vttCue.text, searchReplace.find, searchReplace.matchCase).length > 0;
+                if (foundMatch) {
+                    currentCue = sourceCue.cue;
+                    sourceCueIndex = sourceCue.index;
+                    break;
+                } else {
+                    continue;
+                }
             } else {
-                sourceCueIndex = -1;
+                sourceCueIndex--;
             }
         }
         if (matchedCue.targetCues && matchedCue.targetCues.length > 0) {
             targetCueIndex++;
-            if (matchedCue.targetCues[targetCueIndex]) {
-                currentCue = matchedCue.targetCues[targetCueIndex].cue;
-                break;
+            const targetCue = matchedCue.targetCues.find((cue: CueDtoWithIndex) => cue.index === targetCueIndex);
+            if (targetCue) {
+                foundMatch =
+                    searchCueText(targetCue.cue.vttCue.text, searchReplace.find, searchReplace.matchCase).length > 0;
+                if (foundMatch) {
+                    currentCue = targetCue.cue;
+                    targetCueIndex = targetCue.index;
+                    break;
+                } else {
+                    continue;
+                }
             } else {
-                targetCueIndex = -1;
+                targetCueIndex--;
             }
         }
-    } while (!currentCue && sourceCueIndex !== -1 && targetCueIndex !== -1);
+        if (!currentCue) {
+            matchedCueIndex++;
+            // sourceCueIndex = -1;
+            // targetCueIndex = -1;
+        }
+    } while (!currentCue && sourceCueIndex !== 9999 && targetCueIndex !== 9999);
     dispatch(searchReplaceSlice.actions.setIndices({ matchedCueIndex, sourceCueIndex, targetCueIndex }));
     return currentCue;
 };
@@ -210,11 +236,6 @@ export const searchNextCues = (replacement: boolean): AppThunk =>
         }
         // TODO: check if editingCueIndex is needed
         const editingCueIndex = getState().editingCueIndex;
-        const indices = getState().searchReplace.indices;
-        const matchedCues = getState().matchedCues.matchedCues;
-        if (matchedCues.length === 0) {
-            return;
-        }
         dispatch(searchReplaceSlice.actions.setDirection("NEXT"));
         const currentMatches = getState().searchReplace.matches;
         if (currentMatches && editingCueIndex !== -1) {
@@ -226,12 +247,14 @@ export const searchNextCues = (replacement: boolean): AppThunk =>
                 // TODO: check if this is needed
                 dispatch(updateMatchedCues());
                 return;
+            } else {
+                dispatch(searchReplaceSlice.actions.setMatches({ ...currentMatches, offsetIndex: 0 }));
             }
         }
-        const currentCue = getCurrentCueAndUpdateIndices(dispatch, matchedCues, indices);
+        const currentCue = getCurrentCueAndUpdateIndices(dispatch, getState);
         if (currentCue) {
             updateSearchMatches(dispatch, getState, currentCue);
-            updateEditingCueIndexNoThunk(dispatch, indices.matchedCueIndex);
+            updateEditingCueIndexNoThunk(dispatch, getState().searchReplace.indices.matchedCueIndex);
         }
     };
 
