@@ -1,6 +1,6 @@
 import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CueDto, CueDtoWithIndex, SubtitleEditAction } from "../../model";
+import { CueDto, CueDtoWithIndex, CueLineDto, SubtitleEditAction } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
 import { editingTrackSlice } from "../../trackSlices";
 import { SearchDirection, SearchReplace, SearchReplaceIndices, SearchReplaceMatches } from "./model";
@@ -10,65 +10,89 @@ import sanitizeHtml from "sanitize-html";
 import _ from "lodash";
 import { updateEditingCueIndexNoThunk } from "../edit/cueEditorSlices";
 
-const getCurrentCueAndUpdateIndices =
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState: Function): CueDto | undefined => {
+const getCurrentCueAndUpdateIndices = (
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
+    getState: Function,
+    editingCueIndex: number
+): CueDto | undefined => {
     const indices = getState().searchReplace.indices;
     const matchedCues = getState().matchedCues.matchedCues;
     const searchReplace = getState().searchReplace;
+    const direction = searchReplace.direction;
     if (matchedCues.length === 0) {
         return;
     }
     let matchedCueIndex = indices.matchedCueIndex;
     let sourceCueIndex = indices.sourceCueIndex;
     let targetCueIndex = indices.targetCueIndex;
+    let isSourceCue = indices.isSourceCue;
     let currentCue = undefined as unknown as CueDto;
-    if (matchedCueIndex === -1) {
-        matchedCueIndex++;
+    if (matchedCueIndex === -1) { // if starting search
+        if (editingCueIndex !== -1) { // if user is editing a cue, start there
+            matchedCueIndex = _.findIndex(matchedCues, (cueLineDto: CueLineDto): boolean => {
+                if (cueLineDto.targetCues) {
+                    const targetCue = cueLineDto.targetCues.find(targetCue => targetCue.index === editingCueIndex);
+                    if (targetCue) {
+                        targetCueIndex = targetCue.index - 1; // will be increased below
+                        return true;
+                    }
+                }
+                return false;
+            });
+            if (targetCueIndex !== -1) {
+                const matchedCueWithLastSourceCueIndex = _.findIndex(matchedCues, (cueLineDto: CueLineDto): boolean =>
+                    cueLineDto.sourceCues ? cueLineDto.sourceCues.length > 0 : false, matchedCueIndex);
+                if (matchedCueWithLastSourceCueIndex !== -1) {
+                    const lastSourceCue = matchedCues[matchedCueWithLastSourceCueIndex].sourceCues.at(-1);
+                    sourceCueIndex = lastSourceCue?.index;
+                }
+            }
+        } else { // start from first line
+            matchedCueIndex++;
+        }
     }
     let foundMatch = false;
     do {
         const matchedCue = matchedCues[matchedCueIndex];
         if (matchedCue.sourceCues && matchedCue.sourceCues.length > 0) {
-            sourceCueIndex++;
+            direction === "NEXT" ? sourceCueIndex++ : sourceCueIndex--;
             const sourceCue = matchedCue.sourceCues.find((cue: CueDtoWithIndex) => cue.index === sourceCueIndex);
             if (sourceCue) {
                 foundMatch =
                     searchCueText(sourceCue.cue.vttCue.text, searchReplace.find, searchReplace.matchCase).length > 0;
                 if (foundMatch) {
                     currentCue = sourceCue.cue;
-                    sourceCueIndex = sourceCue.index;
+                    isSourceCue = true;
                     break;
                 } else {
                     continue;
                 }
             } else {
-                sourceCueIndex--;
+                direction === "NEXT" ? sourceCueIndex-- : sourceCueIndex++;
             }
         }
         if (matchedCue.targetCues && matchedCue.targetCues.length > 0) {
-            targetCueIndex++;
+            direction === "NEXT" ? targetCueIndex++ : targetCueIndex--;
             const targetCue = matchedCue.targetCues.find((cue: CueDtoWithIndex) => cue.index === targetCueIndex);
             if (targetCue) {
                 foundMatch =
                     searchCueText(targetCue.cue.vttCue.text, searchReplace.find, searchReplace.matchCase).length > 0;
                 if (foundMatch) {
                     currentCue = targetCue.cue;
-                    targetCueIndex = targetCue.index;
+                    isSourceCue = false;
                     break;
                 } else {
                     continue;
                 }
             } else {
-                targetCueIndex--;
+                direction === "NEXT" ? targetCueIndex-- : targetCueIndex++;
             }
         }
         if (!currentCue) {
-            matchedCueIndex++;
-            // sourceCueIndex = -1;
-            // targetCueIndex = -1;
+            direction === "NEXT" ? matchedCueIndex++ : matchedCueIndex--;
         }
     } while (!currentCue && sourceCueIndex !== 9999 && targetCueIndex !== 9999);
-    dispatch(searchReplaceSlice.actions.setIndices({ matchedCueIndex, sourceCueIndex, targetCueIndex }));
+    dispatch(searchReplaceSlice.actions.setIndices({ matchedCueIndex, sourceCueIndex, targetCueIndex, isSourceCue }));
     return currentCue;
 };
 
@@ -107,7 +131,8 @@ const initialSearchReplace = {
     indices: {
         matchedCueIndex: -1,
         sourceCueIndex: -1,
-        targetCueIndex: -1
+        targetCueIndex: -1,
+        isSourceCue: true
     }
 } as SearchReplace;
 
@@ -234,9 +259,8 @@ export const searchNextCues = (replacement: boolean): AppThunk =>
         if (find === "") {
             return;
         }
-        // TODO: check if editingCueIndex is needed
-        const editingCueIndex = getState().editingCueIndex;
         dispatch(searchReplaceSlice.actions.setDirection("NEXT"));
+        const editingCueIndex = getState().editingCueIndex;
         const currentMatches = getState().searchReplace.matches;
         if (currentMatches && editingCueIndex !== -1) {
             if (currentMatches.offsetIndex < currentMatches.offsets.length - 1) {
@@ -247,54 +271,47 @@ export const searchNextCues = (replacement: boolean): AppThunk =>
                 // TODO: check if this is needed
                 dispatch(updateMatchedCues());
                 return;
-            } else {
-                dispatch(searchReplaceSlice.actions.setMatches({ ...currentMatches, offsetIndex: 0 }));
             }
         }
-        const currentCue = getCurrentCueAndUpdateIndices(dispatch, getState);
+        const currentCue = getCurrentCueAndUpdateIndices(dispatch, getState, editingCueIndex);
         if (currentCue) {
             updateSearchMatches(dispatch, getState, currentCue);
-            updateEditingCueIndexNoThunk(dispatch, getState().searchReplace.indices.matchedCueIndex);
+            if (!getState().searchReplace.indices.isSourceCue) {
+                updateEditingCueIndexNoThunk(dispatch, getState().searchReplace.indices.targetCueIndex);
+            }
         }
     };
 
 export const searchPreviousCues = (): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
+        const searchReplaceVisible = getState().searchReplaceVisible;
+        if (!searchReplaceVisible) {
+            return;
+        }
         const find = getState().searchReplace.find;
         if (find === "") {
             return;
         }
-        const cues = getState().cues;
-        if (cues.length === 0) {
-            return;
-        }
         dispatch(searchReplaceSlice.actions.setDirection("PREVIOUS"));
-        // const editingCueIndex = getState().editingCueIndex;
-        // let fromIndex = editingCueIndex >= 0 ? editingCueIndex : cues.length - 1;
-        // const currentCue = cues[fromIndex];
-        // const cueMatches = currentCue.searchReplaceMatches;
-        // if (cueMatches && editingCueIndex !== -1) {
-        //     if (cueMatches.offsetIndex > 0) {
-        //         dispatch(cuesSlice.actions.addSearchMatches(
-        //             { idx: fromIndex, searchMatches: { ...cueMatches, offsetIndex: cueMatches.offsetIndex - 1 }}
-        //         ));
-        //         dispatch(updateMatchedCues());
-        //         return;
-        //     } else {
-        //         fromIndex -= 1;
-        //     }
-        // }
-        // const matchCase = getState().searchReplace.matchCase;
-        // const matchedIndex = _.findLastIndex(cues,
-        //         cue => searchCueText(cue.vttCue.text, find, matchCase).length > 0, fromIndex);
-        // if (matchedIndex !== -1) {
-        //     updateEditingCueIndexNoThunk(dispatch, getState, matchedIndex);
-        // } else if (fromIndex >= 0) {
-        //     let wrappedIndex = _.findLastIndex(cues,
-        //             cue => searchCueText(cue.vttCue.text, find, matchCase).length > 0);
-        //     wrappedIndex = wrappedIndex === (fromIndex + 1) ? -1 : wrappedIndex;
-        //     updateEditingCueIndexNoThunk(dispatch, getState, wrappedIndex);
-        // }
+        const editingCueIndex = getState().editingCueIndex;
+        const currentMatches = getState().searchReplace.matches;
+        if (currentMatches && editingCueIndex !== -1) {
+            if (currentMatches.offsetIndex > 0) {
+                dispatch(searchReplaceSlice.actions.setMatches(
+                    { ...currentMatches, offsetIndex: currentMatches.offsetIndex - 1 }
+                ));
+                // TODO: check if this is needed
+                dispatch(updateMatchedCues());
+                return;
+            }
+        }
+        const currentCue = getCurrentCueAndUpdateIndices(dispatch, getState, editingCueIndex);
+        if (currentCue) {
+            updateSearchMatches(dispatch, getState, currentCue);
+            if (!getState().searchReplace.indices.isSourceCue) {
+                updateEditingCueIndexNoThunk(dispatch, getState().searchReplace.indices.targetCueIndex);
+            }
+        }
     };
 
 export const replaceCurrentMatch = (replacement: string): AppThunk =>
