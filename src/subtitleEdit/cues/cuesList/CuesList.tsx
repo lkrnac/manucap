@@ -9,7 +9,11 @@ import { addCue } from "./cuesListActions";
 import { SubtitleEditState } from "../../subtitleEditReducers";
 import Mousetrap from "mousetrap";
 import { KeyCombination } from "../../utils/shortcutConstants";
-import { changeScrollPosition, DEFAULT_PAGE_SIZE } from "./cuesListScrollSlice";
+import {
+    changeScrollPosition,
+    scrollToFirstUnlockChunk,
+    DEFAULT_PAGE_SIZE
+} from "./cuesListScrollSlice";
 import CueListToolbar from "../../CueListToolbar";
 
 interface Props {
@@ -26,6 +30,7 @@ const CuesList = (props: Props): ReactElement => {
     const matchedCues = useSelector((state: SubtitleEditState) => state.matchedCues);
     const previousNonNullFocusedCueIndex = useRef(-1);
     const startAt = useSelector((state: SubtitleEditState) => state.focusedCueIndex);
+    const isMediaChunked = props.editingTrack?.mediaChunkStart !== undefined;
     if (startAt !== null) {
         previousNonNullFocusedCueIndex.current = startAt;
     }
@@ -95,6 +100,12 @@ const CuesList = (props: Props): ReactElement => {
         },
         [dispatch, scrollRef]
     );
+
+    useEffect(() => {
+        if (isMediaChunked) {
+            dispatch((scrollToFirstUnlockChunk()));
+        }
+    }, [dispatch, isMediaChunked]);
 
     return (
         <div
