@@ -1349,54 +1349,6 @@ describe("SubtitleEdit", () => {
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.ERROR);
     });
 
-    it("jumps to first unlocked chunk subtitle when button is clicked", async () => {
-        // GIVEN
-        const testingChunkTrack = {
-            type: "CAPTION",
-            language: { id: "en-US", name: "English (US)" } as Language,
-            default: true,
-            mediaTitle: "This is the video title",
-            mediaLength: 4000,
-            mediaChunkStart: 13000,
-            mediaChunkEnd: 305000,
-            progress: 50
-        } as Track;
-
-        const cues = [
-            { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(3, 4, "Editing Line 3"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(5, 6, "Editing Line 4"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(7, 8, "Editing Line 5"), cueCategory: "DIALOGUE" }
-        ] as CueDto[];
-        testingStore.dispatch(updateEditingTrack(testingChunkTrack) as {} as AnyAction);
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const actualNode = render(
-            <Provider store={testingStore}>
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    onComplete={(): void => undefined}
-                    onSave={(): void => undefined}
-                    onViewTrackHistory={(): void => undefined}
-                    onExportSourceFile={(): void => undefined}
-                    onExportFile={(): void => undefined}
-                    onImportFile={(): void => undefined}
-                />
-            </Provider>
-        );
-        const scrollToFirstUnlockChunkSpy = jest.spyOn(cuesListScrollSlice, "scrollToFirstUnlockChunk");
-        scrollToFirstUnlockChunkSpy.mockClear();
-
-        //WHEN
-        await act(async () => {
-            fireEvent.click(actualNode.getByTestId("sbte-jump-to-first-unlock-cue-button"));
-        });
-
-        // THEN
-        expect(scrollToFirstUnlockChunkSpy).toBeCalledTimes(1);
-    });
-
     it("cycles through error cues when button is clicked", async () => {
         // GIVEN
         const cueError = [
