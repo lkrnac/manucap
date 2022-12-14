@@ -6,6 +6,9 @@ import { useForm } from "react-hook-form";
 import { Dialog } from "primereact/dialog";
 import { Message } from "primereact/message";
 import { ShiftPosition } from "../../cues/cuesList/cuesListSlices";
+import Joi from "joi";
+import { joiResolver } from "@hookform/resolvers/joi";
+import JoiError from "../../common/JoiError";
 
 const INVALID_SHIFT_MSG = "The start time of the first cue plus the shift value must be greater or equal to 0";
 
@@ -23,6 +26,11 @@ interface Props {
     onClose: () => void;
 }
 
+const validationMessage = {
+    "number.base": " Required field",
+    "invalid": INVALID_SHIFT_MSG
+};
+
 const ShiftTimeModal = (props: Props): ReactElement => {
     const [errorMessage, setErrorMessage] = useState();
     const dispatch = useDispatch();
@@ -30,9 +38,22 @@ const ShiftTimeModal = (props: Props): ReactElement => {
     const mediaChunkStart = useSelector((state: SubtitleEditState) => state.editingTrack?.mediaChunkStart);
     const editCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
     const isMediaChunk = !!mediaChunkStart || mediaChunkStart === 0;
-    const { handleSubmit, register, watch } = useForm();
-    const shiftPositionWatch = watch("shiftPosition");
-    const shiftTimeWatch = watch("shiftTime");
+
+    const validationSchema = Joi.object({
+        shiftTime: Joi.number()
+            .required()
+            .custom((value, helpers) => {
+                const { state: { ancestors: [{ shiftPosition }] }} = helpers;
+                if (isShiftTimeInvalid(value, parseInt(shiftPosition), firstTrackTime, isMediaChunk)) {
+                    return helpers.error("invalid");
+                }
+                return value;
+            }),
+        shiftPosition: Joi.number()
+            .required()
+    }).messages(validationMessage);
+
+    const { errors, handleSubmit, register } = useForm({ resolver: joiResolver(validationSchema) });
 
     const onSubmit = (values: ShiftTimeValues): void => {
         const shiftValue = parseFloat(values.shiftTime);
@@ -65,10 +86,6 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                 <>
                     <button
                         type="submit"
-                        disabled={
-                            isShiftTimeInvalid(shiftTimeWatch, shiftPositionWatch, firstTrackTime, isMediaChunk) ||
-                            !shiftPositionWatch || !shiftTimeWatch
-                        }
                         className="dotsub-shift-modal-apply-button sbte-btn sbte-btn-primary"
                         onClick={handleSubmit(onSubmit)}
                     >
@@ -96,6 +113,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                         step={"0.100"}
                         ref={register}
                     />
+                    <JoiError errors={errors} field="shiftTime" />
                 </div>
                 <fieldset className="space-y-2">
                     <div className="form-check">
@@ -128,18 +146,11 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                             /> Shift all after editing cue
                         </label>
                     </div>
+                    <JoiError errors={errors} field="shiftPosition" />
                 </fieldset>
                 {
-                    errorMessage || isShiftTimeInvalid(shiftTimeWatch, shiftPositionWatch, firstTrackTime, isMediaChunk)
-                        ? (
-                            <div>
-                                <Message
-                                    severity="error"
-                                    className="w-full justify-start"
-                                    text={errorMessage || INVALID_SHIFT_MSG}
-                                />
-                            </div>
-                        )
+                    errorMessage
+                        ? <Message severity="error" className="w-full justify-start" text={errorMessage} />
                         : null
                 }
             </form>

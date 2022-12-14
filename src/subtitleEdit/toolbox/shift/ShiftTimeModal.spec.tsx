@@ -12,13 +12,13 @@ import { cleanup, fireEvent, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
 import { removeIds, renderWithPortal } from "../../../testUtils/testUtils";
-import { Message } from "primereact/message";
 import { updateEditingCueIndex } from "../../cues/edit/cueEditorSlices";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
     sortBy: jest.requireActual("lodash/sortBy"),
-    findIndex: jest.requireActual("lodash/findIndex")
+    findIndex: jest.requireActual("lodash/findIndex"),
+    findLastIndex: jest.requireActual("lodash/findLastIndex")
 }));
 
 const testCuesForNegativeShifting = [
@@ -138,7 +138,6 @@ describe("ShiftTimesModal", () => {
                 <div className="p-dialog-footer">
                     <button
                         type="submit"
-                        disabled
                         className="dotsub-shift-modal-apply-button sbte-btn sbte-btn-primary"
                     >
                         Apply
@@ -161,117 +160,6 @@ describe("ShiftTimesModal", () => {
         );
 
         const allCuesRadioBtn = actualNode.container.querySelectorAll(".form-check input[value='0']")[0];
-        fireEvent.click(allCuesRadioBtn);
-
-        // THEN
-        const actual = removeIds((actualNode.container.querySelector(".p-dialog") as Element).outerHTML);
-        const expected = (expectedNode.container.querySelector(".p-dialog") as Element).outerHTML;
-        expect(actual).toEqual(expected);
-    });
-
-    it("renders error message and disable apply button if shift is not valid", () => {
-        // GIVEN
-        testingStore.dispatch(updateCues(testCues) as {} as AnyAction);
-
-        const expectedNode = render(
-            <div
-                className="p-dialog p-component max-w-3xl p-dialog-enter p-dialog-enter-active"
-                role="dialog"
-                aria-labelledby=""
-                aria-describedby=""
-                aria-modal="true"
-            >
-                <div className="p-dialog-header">
-                    <div className="p-dialog-title">Shift Track Lines Time</div>
-                    <div className="p-dialog-header-icons">
-                        <button
-                            type="button"
-                            className="p-dialog-header-icon p-dialog-header-close p-link"
-                            aria-label="Close"
-                        >
-                            <span className="p-dialog-header-close-icon pi pi-times" aria-hidden="true" />
-                        </button>
-                    </div>
-                </div>
-                <div className="p-dialog-content">
-                    <form className="space-y-4">
-                        <div>
-                            <label>Time Shift in Seconds.Milliseconds</label>
-                            <input
-                                name="shiftTime"
-                                type="number"
-                                className="sbte-form-control dotsub-track-line-shift mt-2"
-                                style={{ width: "120px" }}
-                                placeholder="0.000"
-                                step="0.100"
-                                onChange={jest.fn()}
-                            />
-                        </div>
-                        <fieldset className="space-y-2">
-                            <div className="form-check">
-                                <label>
-                                    <input
-                                        name="shiftPosition"
-                                        type="radio"
-                                        value="0"
-                                    /> Shift all
-                                </label>
-                            </div>
-                            <div className="form-check">
-                                <label>
-                                    <input
-                                        name="shiftPosition"
-                                        type="radio"
-                                        value="1"
-                                    /> Shift all before editing cue
-                                </label>
-                            </div>
-                            <div className="form-check">
-                                <label>
-                                    <input
-                                        name="shiftPosition"
-                                        type="radio"
-                                        value="2"
-                                    /> Shift all after editing cue
-                                </label>
-                            </div>
-                        </fieldset>
-                        <div>
-                            <Message
-                                severity="error"
-                                className="w-full justify-start"
-                                text="The start time of the first cue plus the shift value must
-                                    be greater or equal to 0"
-                            />
-                        </div>
-                    </form>
-                </div>
-                <div className="p-dialog-footer">
-                    <button
-                        type="submit"
-                        disabled
-                        className="dotsub-shift-modal-apply-button sbte-btn sbte-btn-primary"
-                    >Apply
-                    </button>
-                    <button
-                        type="button"
-                        className="dotsub-shift-modal-close-button sbte-btn sbte-btn-light"
-                    >Close
-                    </button>
-                </div>
-            </div>
-        );
-
-        // WHEN
-        const actualNode = renderWithPortal(
-            <Provider store={testingStore}>
-                <ShiftTimesModal show onClose={jest.fn()} />
-            </Provider>
-        );
-
-        const input = actualNode.container.querySelectorAll("input[name='shiftTime']")[0];
-        const allCuesRadioBtn = actualNode.container.querySelectorAll(".form-check input[value='0']")[0];
-        userEvent.type(input, "-1");
         fireEvent.click(allCuesRadioBtn);
 
         // THEN
@@ -605,7 +493,7 @@ describe("ShiftTimesModal", () => {
         });
 
         // THEN
-        expect(container.querySelectorAll(".p-inline-message-text")[0].innerHTML)
+        expect(container.querySelectorAll(".text-red-light")[0].innerHTML)
             .toEqual("The start time of the first cue plus the shift value must be greater or equal to 0");
 
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
@@ -638,7 +526,7 @@ describe("ShiftTimesModal", () => {
         });
 
         // THEN
-        expect(container.querySelectorAll(".p-inline-message-text")[0].innerHTML)
+        expect(container.querySelectorAll(".text-red-light")[0].innerHTML)
             .toEqual("The start time of the first cue plus the shift value must be greater or equal to 0");
 
         expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
