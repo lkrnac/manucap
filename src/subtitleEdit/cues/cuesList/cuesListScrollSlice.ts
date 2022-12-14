@@ -1,6 +1,7 @@
 import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
 import { CueDto, ScrollPosition } from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
+import _ from "lodash";
 
 export const DEFAULT_PAGE_SIZE = 100;
 
@@ -57,7 +58,7 @@ const getScrollCueIndex = (
         return currentPlayerCueIndex;
     }
     if (scrollPosition === ScrollPosition.LAST_TRANSLATED) {
-        return lastTranslatedIndex - 1;
+        return lastTranslatedIndex;
     }
     if(scrollPosition === ScrollPosition.ERROR && errorCueIndex !== -1) {
         return errorCueIndex;
@@ -97,11 +98,12 @@ export const changeScrollPosition = (scrollPosition: ScrollPosition, previousFoc
         const currentPlayerTime = getState().currentPlayerTime;
         const currentPlayerCueIndex = matchCueTimeIndex(state.cues, currentPlayerTime);
         const errorCueIndex = getErrorCueIndex(state.cues, state.currentCueErrorIndex);
+        const lastTranslatedIndex = _.findLastIndex(state.cues, cue => !cue.editDisabled);
         const focusedCueIndex = getScrollCueIndex(
             state.matchedCues.matchedCues.length,
             state.matchedCues.editingFocusIndex,
             currentPlayerCueIndex,
-            state.cues.length,
+            lastTranslatedIndex,
             previousFocusedCueIndexInitiated,
             errorCueIndex,
             scrollPosition
@@ -109,3 +111,12 @@ export const changeScrollPosition = (scrollPosition: ScrollPosition, previousFoc
         dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(focusedCueIndex));
         dispatch(currentCueErrorIndexSlice.actions.changeCurrentCueErrorPosition(errorCueIndex));
     };
+
+export const scrollToFirstUnlockChunk = (): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<ScrollPosition | null>>, getState): void => {
+        const state = getState();
+        const mediaChunkStartIndex = state.cues.findIndex(cue => !cue.editDisabled);
+        if (mediaChunkStartIndex > -1) {
+            dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(mediaChunkStartIndex));
+        }
+};

@@ -38,7 +38,8 @@ jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
     isEmpty: jest.requireActual("lodash/isEmpty"),
     sortBy: jest.requireActual("lodash/sortBy"),
-    findIndex: jest.requireActual("lodash/findIndex")
+    findIndex: jest.requireActual("lodash/findIndex"),
+    findLastIndex: jest.requireActual("lodash/findLastIndex")
 }));
 
 // We are mocking here.
@@ -1310,6 +1311,47 @@ describe("SubtitleEdit", () => {
         });
 
         expect(actualNode.container.outerHTML).toContain(`Editing Line ${cueSize}`);
+        expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST_TRANSLATED);
+    });
+
+    it("jump to last unlocked translated chunk subtitle button clicked", async () => {
+        // GIVEN
+        const cues = [] as CueDto[];
+        const mediaChunkStart = 14;
+        const mediaChunkEnd = 20;
+        for (let timestamp = 0; timestamp < 50; timestamp++) {
+            cues.push({
+                vttCue: new VTTCue(timestamp, timestamp + 1, `Editing Line ${timestamp + 1}`),
+                cueCategory: "DIALOGUE",
+                editDisabled: !(timestamp >= mediaChunkStart  && ++timestamp <= mediaChunkEnd)
+            });
+        }
+        testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onComplete={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onViewTrackHistory={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                />
+            </Provider>
+        );
+        const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
+        changeScrollPositionSpy.mockClear();
+
+        //WHEN
+        await act(async () => {
+            fireEvent.click(actualNode.getByTestId("sbte-jump-to-last-translated-cue-button"));
+        });
+
+        expect(actualNode.container.outerHTML).toContain("Editing Line 15");
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST_TRANSLATED);
     });
 
