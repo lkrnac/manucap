@@ -36,7 +36,7 @@ import {
     editingCueIndexSlice,
     focusedInputSlice,
     lastCueChangeSlice,
-    updateSearchMatches,
+    // updateSearchMatches,
     validationErrorSlice
 } from "../edit/cueEditorSlices";
 import _ from "lodash";
@@ -49,6 +49,7 @@ import {
     SpellCheckRemovalAction
 } from "./cuesListSlices";
 import { callSaveTrack } from "../saveSlices";
+import { updateSearchMatches } from "../searchReplace/searchReplaceSlices";
 
 const NEW_ADDED_CUE_DEFAULT_STEP = 3;
 const DEFAULT_CUE = { vttCue: new VTTCue(0, 0, ""), cueCategory: "DIALOGUE" };
@@ -318,7 +319,7 @@ export const updateVttCue = (
             //     reorderCuesIfNeeded(dispatch, getState());
             // }
             if (getState().searchReplaceVisible) {
-                updateSearchMatches(dispatch, getState, idx);
+                updateSearchMatches(dispatch, getState, newCue);
             }
             validateCue(dispatch, idx, true, textOnly);
             if (!textOnly) {

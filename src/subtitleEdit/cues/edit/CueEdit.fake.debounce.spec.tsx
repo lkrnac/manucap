@@ -26,7 +26,6 @@ import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { Replacement, SpellCheck } from "../spellCheck/model";
-import { SearchReplaceMatches } from "../searchReplace/model";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
@@ -1431,24 +1430,6 @@ describe("CueEdit", () => {
 
             // THEN
             expect(actualNode.find(CueTextEditor).props().spellCheck).toEqual(testingSpellCheck);
-        });
-
-        it("passes down search replace matches into editor component", () => {
-            // GIVEN
-            const vttCue = new VTTCue(0, 1, "someText");
-            const testingSearchReplace = { offsets: [10, 20], offsetIndex: 0, matchLength: 5 } as SearchReplaceMatches;
-            const cue = { vttCue, cueCategory: "ONSCREEN_TEXT", searchReplaceMatches: testingSearchReplace } as CueDto;
-            testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
-
-            // WHEN
-            const actualNode = mount(
-                <Provider store={testingStore}>
-                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
-                </Provider>
-            );
-
-            // THEN
-            expect(actualNode.find(CueTextEditor).props().searchReplaceMatches).toEqual(testingSearchReplace);
         });
 
         it("passes down bindCueViewModeKeyboardShortcut to editor component", () => {

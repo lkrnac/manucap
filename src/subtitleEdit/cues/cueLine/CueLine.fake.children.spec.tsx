@@ -382,6 +382,7 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={0}
                                 cue={targetCuesWithIndexes[0].cue}
@@ -455,6 +456,7 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={0}
                                 cue={matchedCuesCaptioningEditDisabled[0].targetCues[0].cue}
@@ -525,6 +527,7 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={1}
                                 isTargetCue={false}
                                 targetCueIndex={1}
                                 cue={sourceCues[1]}
@@ -600,6 +603,7 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={2}
                                 isTargetCue={false}
                                 targetCueIndex={2}
                                 cue={sourceCues[2]}
@@ -674,6 +678,7 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
@@ -686,6 +691,7 @@ describe("CueLine", () => {
                                 editDisabled
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={0}
                                 cue={disabledTargetCue}
@@ -754,6 +760,7 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
@@ -848,6 +855,7 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
@@ -931,6 +939,7 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
                                 cue={sourceCues[0]}
                                 targetCuesLength={0}
@@ -1027,6 +1036,7 @@ describe("CueLine", () => {
                                 <div style={{ width: "100%", minHeight: "78px" }} />
                             </div>
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
@@ -1096,6 +1106,7 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
@@ -1108,6 +1119,7 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[1]}
@@ -1120,6 +1132,7 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[2]}
@@ -1133,6 +1146,7 @@ describe("CueLine", () => {
                             />
                             <div className="sbte-cue-divider-good" />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
@@ -1206,6 +1220,7 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
@@ -1219,6 +1234,7 @@ describe("CueLine", () => {
                             />
                             <div className="sbte-cue-divider-good" />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
@@ -1231,6 +1247,7 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
@@ -1243,6 +1260,7 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={2}
                                 cue={targetCues[2]}
@@ -1312,6 +1330,7 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
@@ -1324,6 +1343,7 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[1]}
@@ -1336,6 +1356,7 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[2]}
@@ -1411,6 +1432,7 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
@@ -1424,6 +1446,7 @@ describe("CueLine", () => {
                             />
                             <div className="sbte-cue-divider-good" />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
@@ -1437,6 +1460,7 @@ describe("CueLine", () => {
                             />
                             <CueEdit index={1} cue={targetCues[1]} setGlossaryTerm={jest.fn()} />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={2}
                                 cue={targetCues[2]}
@@ -1524,6 +1548,7 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
@@ -1537,6 +1562,7 @@ describe("CueLine", () => {
                             />
                             <div className="sbte-cue-divider-error" />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
@@ -1549,6 +1575,7 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
@@ -1561,6 +1588,7 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={2}
                                 cue={corruptedTargetCueWithIndex.cue}
@@ -1648,6 +1676,7 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
@@ -1661,6 +1690,7 @@ describe("CueLine", () => {
                             />
                             <div className="sbte-cue-divider-error" />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
@@ -1673,6 +1703,7 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
@@ -2043,6 +2074,7 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
@@ -2056,6 +2088,7 @@ describe("CueLine", () => {
                             />
                             <div className="sbte-cue-divider-good" />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={0}
                                 cue={targetCuesWithComments[0]}
@@ -2069,6 +2102,7 @@ describe("CueLine", () => {
                             />
                             <CueComments index={0} cue={targetCuesWithComments[0]} commentAuthor="Linguist" />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={1}
                                 cue={targetCuesWithComments[1]}
@@ -2082,6 +2116,7 @@ describe("CueLine", () => {
                             />
                             <CueComments index={1} cue={targetCuesWithComments[1]} commentAuthor="Linguist" />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
                                 targetCueIndex={2}
                                 cue={targetCuesWithComments[2]}

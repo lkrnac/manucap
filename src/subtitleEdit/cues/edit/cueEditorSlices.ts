@@ -7,6 +7,7 @@ import { cuesSlice } from "../cuesList/cuesListSlices";
 import { editingTrackSlice } from "../../trackSlices";
 import { mergeVisibleSlice } from "../merge/mergeSlices";
 import { updateMatchedCues } from "../cuesList/cuesListActions";
+import { updateSearchMatches } from "../searchReplace/searchReplaceSlices";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -40,11 +41,17 @@ export const focusedInputSlice = createSlice({
 
 export const updateEditingCueIndexNoThunk = (
     dispatch: Dispatch<SubtitleEditAction>,
+    getState: Function,
     idx: number
 ): void => {
     dispatch(focusedInputSlice.actions.updateFocusedInput("EDITOR"));
     dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx }));
     if (idx >= 0) {
+        const state = getState();
+        if (state.searchReplaceVisible) {
+            const cue = getState().cues[idx];
+            updateSearchMatches(dispatch, getState, cue);
+        }
         // TODO: check if it's needed
         dispatch(updateMatchedCues());
         dispatch(changeScrollPosition(ScrollPosition.CURRENT));
@@ -53,8 +60,8 @@ export const updateEditingCueIndexNoThunk = (
 
 // TODO: check if updateEditingCueIndexNoThunk can be called directly
 export const updateEditingCueIndex = (idx: number): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void>): void => {
-        updateEditingCueIndexNoThunk(dispatch, idx);
+    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
+        updateEditingCueIndexNoThunk(dispatch, getState, idx);
     };
 
 export const validationErrorSlice = createSlice({
