@@ -10,23 +10,132 @@ import sanitizeHtml from "sanitize-html";
 import _ from "lodash";
 import { updateEditingCueIndexNoThunk } from "../edit/cueEditorSlices";
 
-const getCurrentCueAndUpdateIndices = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
-    getState: Function,
-    editingCueIndex: number
-): CueDto | undefined => {
-    const indices = getState().searchReplace.indices;
+const getNextCue = (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState: Function): CueDto => {
     const matchedCues = getState().matchedCues.matchedCues;
     const searchReplace = getState().searchReplace;
-    const direction = searchReplace.direction;
-    if (matchedCues.length === 0) {
-        return;
-    }
+    let currentCue = undefined as unknown as CueDto;
+    const indices = searchReplace.indices;
     let matchedCueIndex = indices.matchedCueIndex;
     let sourceCueIndex = indices.sourceCueIndex;
     let targetCueIndex = indices.targetCueIndex;
     let isSourceCue = indices.isSourceCue;
+    let foundMatch = false;
+    do {
+        const matchedCue = matchedCues[matchedCueIndex];
+        if (matchedCue) {
+            if (matchedCue.sourceCues && matchedCue.sourceCues.length > 0) {
+                sourceCueIndex++;
+                const sourceCue = matchedCue.sourceCues.find((cue: CueDtoWithIndex) => cue.index === sourceCueIndex);
+                if (sourceCue) {
+                    foundMatch = searchCueText(sourceCue.cue.vttCue.text, searchReplace.find,
+                        searchReplace.matchCase).length > 0;
+                    if (foundMatch) {
+                        currentCue = sourceCue.cue;
+                        isSourceCue = true;
+                        break;
+                    } else {
+                        continue;
+                    }
+                } else {
+                    sourceCueIndex--;
+                }
+            }
+            if (matchedCue.targetCues && matchedCue.targetCues.length > 0) {
+                targetCueIndex++;
+                const targetCue = matchedCue.targetCues.find((cue: CueDtoWithIndex) => cue.index === targetCueIndex);
+                if (targetCue) {
+                    foundMatch = searchCueText(targetCue.cue.vttCue.text, searchReplace.find,
+                        searchReplace.matchCase).length > 0;
+                    if (foundMatch) {
+                        currentCue = targetCue.cue;
+                        isSourceCue = false;
+                        break;
+                    } else {
+                        continue;
+                    }
+                } else {
+                    targetCueIndex--;
+                }
+            }
+        }
+        if (!currentCue) {
+            matchedCueIndex++;
+        }
+    } while (!currentCue && sourceCueIndex !== 9999 && targetCueIndex !== 9999);
+    dispatch(searchReplaceSlice.actions.setIndices({ matchedCueIndex, sourceCueIndex, targetCueIndex, isSourceCue }));
+    return currentCue;
+};
+
+const getPreviousCue = (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState: Function): CueDto => {
+    const matchedCues = getState().matchedCues.matchedCues;
+    const searchReplace = getState().searchReplace;
     let currentCue = undefined as unknown as CueDto;
+    const indices = searchReplace.indices;
+    let matchedCueIndex = indices.matchedCueIndex;
+    let sourceCueIndex = indices.sourceCueIndex;
+    let targetCueIndex = indices.targetCueIndex;
+    let isSourceCue = indices.isSourceCue;
+    let foundMatch = false;
+    do {
+        const matchedCue = matchedCues[matchedCueIndex];
+        if (matchedCue) {
+            if (matchedCue.targetCues && matchedCue.targetCues.length > 0) {
+                targetCueIndex--;
+                const targetCue = matchedCue.targetCues.find((cue: CueDtoWithIndex) => cue.index === targetCueIndex);
+                if (targetCue) {
+                    foundMatch = searchCueText(targetCue.cue.vttCue.text, searchReplace.find,
+                        searchReplace.matchCase).length > 0;
+                    if (foundMatch) {
+                        currentCue = targetCue.cue;
+                        isSourceCue = false;
+                        break;
+                    } else {
+                        continue;
+                    }
+                } else {
+                    targetCueIndex++;
+                }
+            }
+            if (matchedCue.sourceCues && matchedCue.sourceCues.length > 0) {
+                sourceCueIndex--;
+                const sourceCue = matchedCue.sourceCues.find((cue: CueDtoWithIndex) => cue.index === sourceCueIndex);
+                if (sourceCue) {
+                    foundMatch = searchCueText(sourceCue.cue.vttCue.text, searchReplace.find,
+                        searchReplace.matchCase).length > 0;
+                    if (foundMatch) {
+                        currentCue = sourceCue.cue;
+                        isSourceCue = true;
+                        break;
+                    } else {
+                        continue;
+                    }
+                } else {
+                    sourceCueIndex++;
+                }
+            }
+        }
+        if (!currentCue) {
+            matchedCueIndex--;
+        }
+    } while (!currentCue && sourceCueIndex !== 9999 && targetCueIndex !== 9999);
+    dispatch(searchReplaceSlice.actions.setIndices({ matchedCueIndex, sourceCueIndex, targetCueIndex, isSourceCue }));
+    return currentCue;
+};
+
+const getCueAndUpdateIndices = (
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
+    getState: Function,
+    editingCueIndex: number
+): CueDto | undefined => {
+    const matchedCues = getState().matchedCues.matchedCues;
+    if (matchedCues.length === 0) {
+        return;
+    }
+    const searchReplace = getState().searchReplace;
+    const indices = searchReplace.indices;
+    let matchedCueIndex = indices.matchedCueIndex;
+    let sourceCueIndex = indices.sourceCueIndex;
+    let targetCueIndex = indices.targetCueIndex;
     if (matchedCueIndex === -1) { // if starting search
         if (editingCueIndex !== -1) { // if user is editing a cue, start there
             matchedCueIndex = _.findIndex(matchedCues, (cueLineDto: CueLineDto): boolean => {
@@ -45,55 +154,17 @@ const getCurrentCueAndUpdateIndices = (
                 if (matchedCueWithLastSourceCueIndex !== -1) {
                     const lastSourceCue = matchedCues[matchedCueWithLastSourceCueIndex].sourceCues.at(-1);
                     sourceCueIndex = lastSourceCue?.index;
+                    dispatch(searchReplaceSlice.actions.setIndices({ ...indices, sourceCueIndex }));
                 }
             }
         } else { // start from first line
             matchedCueIndex++;
+            dispatch(searchReplaceSlice.actions.setIndices({ ...indices, matchedCueIndex }));
         }
     }
-    let foundMatch = false;
-    do {
-        const matchedCue = matchedCues[matchedCueIndex];
-        if (matchedCue.sourceCues && matchedCue.sourceCues.length > 0) {
-            direction === "NEXT" ? sourceCueIndex++ : sourceCueIndex--;
-            const sourceCue = matchedCue.sourceCues.find((cue: CueDtoWithIndex) => cue.index === sourceCueIndex);
-            if (sourceCue) {
-                foundMatch =
-                    searchCueText(sourceCue.cue.vttCue.text, searchReplace.find, searchReplace.matchCase).length > 0;
-                if (foundMatch) {
-                    currentCue = sourceCue.cue;
-                    isSourceCue = true;
-                    break;
-                } else {
-                    continue;
-                }
-            } else {
-                direction === "NEXT" ? sourceCueIndex-- : sourceCueIndex++;
-            }
-        }
-        if (matchedCue.targetCues && matchedCue.targetCues.length > 0) {
-            direction === "NEXT" ? targetCueIndex++ : targetCueIndex--;
-            const targetCue = matchedCue.targetCues.find((cue: CueDtoWithIndex) => cue.index === targetCueIndex);
-            if (targetCue) {
-                foundMatch =
-                    searchCueText(targetCue.cue.vttCue.text, searchReplace.find, searchReplace.matchCase).length > 0;
-                if (foundMatch) {
-                    currentCue = targetCue.cue;
-                    isSourceCue = false;
-                    break;
-                } else {
-                    continue;
-                }
-            } else {
-                direction === "NEXT" ? targetCueIndex-- : targetCueIndex++;
-            }
-        }
-        if (!currentCue) {
-            direction === "NEXT" ? matchedCueIndex++ : matchedCueIndex--;
-        }
-    } while (!currentCue && sourceCueIndex !== 9999 && targetCueIndex !== 9999);
-    dispatch(searchReplaceSlice.actions.setIndices({ matchedCueIndex, sourceCueIndex, targetCueIndex, isSourceCue }));
-    return currentCue;
+    return searchReplace.direction === "NEXT"
+        ? getNextCue(dispatch, getState)
+        : getPreviousCue(dispatch, getState);
 };
 
 const updateCueMatchesIfNeeded = (
@@ -105,7 +176,7 @@ const updateCueMatchesIfNeeded = (
     if (cueIndex !== -1) {
         // const currentCue = getState().cues[cueIndex];
         // const offsets = searchCueText(currentCue.vttCue.text, find, matchCase);
-        // dispatch(cuesSlice.actions.addSearchMatches(
+        // dispatch(searchReplaceSlice.actions.setMatches(
         //     { idx: cueIndex, searchMatches: { offsets, matchLength: find.length, offsetIndex: 0 }}
         //     )
         // );
@@ -227,10 +298,10 @@ const finNextOffsetIndexForSearch = (
     searchReplace: SearchReplace
 ): number => {
     const lastIndex = offsets.length - 1;
-    if (searchReplace.matches && searchReplace.matches.offsetIndex >= 0) {
-        return searchReplace.matches.offsetIndex < lastIndex ?
-            searchReplace.matches.offsetIndex : lastIndex;
-    }
+    // if (searchReplace.matches && searchReplace.matches.offsetIndex >= 0) {
+    //     return searchReplace.matches.offsetIndex < lastIndex ?
+    //         searchReplace.matches.offsetIndex : lastIndex;
+    // }
     return searchReplace.direction === "NEXT" ? 0 : lastIndex;
 };
 
@@ -262,7 +333,7 @@ export const searchNextCues = (replacement: boolean): AppThunk =>
         dispatch(searchReplaceSlice.actions.setDirection("NEXT"));
         const editingCueIndex = getState().editingCueIndex;
         const currentMatches = getState().searchReplace.matches;
-        if (currentMatches && editingCueIndex !== -1) {
+        if (currentMatches) {
             if (currentMatches.offsetIndex < currentMatches.offsets.length - 1) {
                 const offsetShift = replacement ? 0 : 1;
                 dispatch(searchReplaceSlice.actions.setMatches(
@@ -273,7 +344,7 @@ export const searchNextCues = (replacement: boolean): AppThunk =>
                 return;
             }
         }
-        const currentCue = getCurrentCueAndUpdateIndices(dispatch, getState, editingCueIndex);
+        const currentCue = getCueAndUpdateIndices(dispatch, getState, editingCueIndex);
         if (currentCue) {
             updateSearchMatches(dispatch, getState, currentCue);
             if (!getState().searchReplace.indices.isSourceCue) {
@@ -295,7 +366,7 @@ export const searchPreviousCues = (): AppThunk =>
         dispatch(searchReplaceSlice.actions.setDirection("PREVIOUS"));
         const editingCueIndex = getState().editingCueIndex;
         const currentMatches = getState().searchReplace.matches;
-        if (currentMatches && editingCueIndex !== -1) {
+        if (currentMatches) {
             if (currentMatches.offsetIndex > 0) {
                 dispatch(searchReplaceSlice.actions.setMatches(
                     { ...currentMatches, offsetIndex: currentMatches.offsetIndex - 1 }
@@ -305,7 +376,7 @@ export const searchPreviousCues = (): AppThunk =>
                 return;
             }
         }
-        const currentCue = getCurrentCueAndUpdateIndices(dispatch, getState, editingCueIndex);
+        const currentCue = getCueAndUpdateIndices(dispatch, getState, editingCueIndex);
         if (currentCue) {
             updateSearchMatches(dispatch, getState, currentCue);
             if (!getState().searchReplace.indices.isSourceCue) {
