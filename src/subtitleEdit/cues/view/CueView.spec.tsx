@@ -78,6 +78,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue={false}
                     targetCueIndex={1}
                     cue={cue}
@@ -152,6 +153,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue={false}
                     targetCueIndex={1}
                     cue={cue}
@@ -226,6 +228,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
@@ -278,6 +281,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
@@ -319,6 +323,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
@@ -362,6 +367,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
@@ -405,6 +411,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
@@ -448,6 +455,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
@@ -489,6 +497,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
@@ -526,6 +535,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
@@ -560,6 +570,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
@@ -593,6 +604,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
@@ -623,6 +635,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
@@ -656,6 +669,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
@@ -694,6 +708,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
@@ -730,6 +745,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
@@ -770,6 +786,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
@@ -810,6 +827,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={1}
                     cue={cue}
@@ -835,6 +853,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={6}
                     cue={cue}
@@ -864,6 +883,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -908,6 +928,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -952,6 +973,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -996,6 +1018,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue={false}
                     targetCueIndex={0}
                     cue={cue}
@@ -1038,6 +1061,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue={false}
                     targetCueIndex={0}
                     cue={cue}

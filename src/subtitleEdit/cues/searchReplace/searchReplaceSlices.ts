@@ -169,18 +169,15 @@ const getCueAndUpdateIndices = (
 };
 
 const updateCueMatchesIfNeeded = (
-    _dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
-    _find: string,
-    _matchCase: boolean,
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
+    find: string,
+    matchCase: boolean,
     getState: Function): void => {
     const cueIndex = getState().editingCueIndex;
     if (cueIndex !== -1) {
-        // const currentCue = getState().cues[cueIndex];
-        // const offsets = searchCueText(currentCue.vttCue.text, find, matchCase);
-        // dispatch(searchReplaceSlice.actions.setMatches(
-        //     { idx: cueIndex, searchMatches: { offsets, matchLength: find.length, offsetIndex: 0 }}
-        //     )
-        // );
+        const currentCue = getState().cues[cueIndex];
+        const offsets = searchCueText(currentCue.vttCue.text, find, matchCase);
+        dispatch(searchReplaceSlice.actions.setMatches({ offsets, matchLength: find.length, offsetIndex: 0 }));
     }
 };
 
@@ -345,7 +342,7 @@ export const searchNextCues = (replacement: boolean): AppThunk =>
         if (currentCue) {
             updateSearchMatches(dispatch, getState, currentCue);
             if (!getState().searchReplace.indices.isSourceCue) {
-                updateEditingCueIndexNoThunk(dispatch, getState().searchReplace.indices.targetCueIndex);
+                updateEditingCueIndexNoThunk(dispatch, getState, getState().searchReplace.indices.targetCueIndex);
             }
         }
     };
@@ -377,7 +374,7 @@ export const searchPreviousCues = (): AppThunk =>
         if (currentCue) {
             updateSearchMatches(dispatch, getState, currentCue);
             if (!getState().searchReplace.indices.isSourceCue) {
-                updateEditingCueIndexNoThunk(dispatch, getState().searchReplace.indices.targetCueIndex);
+                updateEditingCueIndexNoThunk(dispatch, getState, getState().searchReplace.indices.targetCueIndex);
             }
         }
     };
