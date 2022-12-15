@@ -89,7 +89,7 @@ const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack, trackF
 };
 
 const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue, trackFontSizePercent?: number): void => {
-    if (lastCueChange.changeType === "EDIT" && vttCue) {
+    if (lastCueChange.vttCue && lastCueChange.changeType === "EDIT" && vttCue) {
         vttCue.text = lastCueChange.vttCue.text;
         vttCue.startTime = lastCueChange.vttCue.startTime;
         vttCue.endTime = lastCueChange.vttCue.endTime;
@@ -100,7 +100,7 @@ const handleCueEditIfNeeded = (lastCueChange: CueChange, vttCue: VTTCue, trackFo
 
 const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
                               trackFontSizePercent?: number): void => {
-    if (lastCueChange.changeType === "ADD" && videoJsTrack.cues) {
+    if (lastCueChange.vttCue && lastCueChange.changeType === "ADD" && videoJsTrack.cues) {
         const cuesTail = [];
         for (let idx = videoJsTrack.cues.length - 1; idx >= lastCueChange.index; idx--) {
             cuesTail[idx - lastCueChange.index] = videoJsTrack.cues[idx];
@@ -109,6 +109,25 @@ const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
         videoJsTrack.addCue(lastCueChange.vttCue);
         cuesTail.forEach(cue => videoJsTrack.addCue(cue));
         customizeLinePosition(videoJsTrack.cues[lastCueChange.index] as VTTCue, trackFontSizePercent);
+    }
+};
+
+const handleUpdateAllIfNeeded = (
+    props: Props,
+    lastCueChange: CueChange,
+    videoJsTrack: TextTrack,
+    player: VideoJsPlayer
+) => {
+    if (lastCueChange.changeType === "UPDATE_ALL") {
+        for (let trackIdx = 0; trackIdx < player.textTracks().length; trackIdx++) {
+            const videoJsTrack = (player.textTracks())[trackIdx];
+            if (videoJsTrack.cues) {
+                for (let cueIdx = videoJsTrack.cues.length - 1; cueIdx >= 0; cueIdx--) {
+                    videoJsTrack.removeCue(videoJsTrack.cues[cueIdx]);
+                }
+            }
+        }
+        updateCuesForVideoJsTrack(props, videoJsTrack);
     }
 };
 
@@ -180,6 +199,7 @@ class VideoPlayer extends React.Component<Props> {
             handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue,
                 prevProps.trackFontSizePercent);
             handleCueAddIfNeeded(lastCueChange, videoJsTrack, prevProps.trackFontSizePercent);
+            handleUpdateAllIfNeeded(this.props, lastCueChange, videoJsTrack, this.player);
             if (lastCueChange.changeType === "REMOVE") {
                 videoJsTrack.removeCue(videoJsTrack.cues[lastCueChange.index]);
             }
@@ -198,19 +218,24 @@ class VideoPlayer extends React.Component<Props> {
         }
 
         if (lastCueChange && this.wavesurfer) {
-            if (lastCueChange.changeType === "EDIT") {
+            if (lastCueChange.vttCue && lastCueChange.changeType === "EDIT") {
                 this.updateRegion(lastCueChange.index, lastCueChange.vttCue.startTime, lastCueChange.vttCue.endTime,
                     lastCueChange.vttCue.text);
             } else if (lastCueChange.changeType === "ADD") {
                 // if adding at the end we can just add, else we need to remove all then add
-                if (lastCueChange.index >= (this.props.cues?.length || 0) - 1) {
+                if (lastCueChange.vttCue && lastCueChange.index >= (this.props.cues?.length || 0) - 1) {
                     this.addRegion(lastCueChange.index, lastCueChange.vttCue.startTime, lastCueChange.vttCue.endTime,
                         lastCueChange.vttCue.text, randomColor());
                 } else {
                     this.reloadRegions();
                 }
-            } else if (lastCueChange.changeType === "REMOVE" || lastCueChange.changeType === "SPLIT"
-                || lastCueChange.changeType === "MERGE") {
+            // TODO: Enhance this condition somehow
+            } else if (
+                lastCueChange.changeType === "REMOVE"
+                || lastCueChange.changeType === "SPLIT"
+                || lastCueChange.changeType === "MERGE"
+                || lastCueChange.changeType === "UPDATE_ALL"
+            ) {
                 this.reloadRegions();
             }
         }

@@ -1606,8 +1606,7 @@ describe("cueSlices", () => {
         });
 
         describe("ordering of source cues", () => {
-            // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
-            it.skip("reorder cues if cue position changes when editing start time", () => {
+            it("reorder cues if cue position changes when editing start time", () => {
                 // GIVEN
                 const track = { ...testingTrack, overlapEnabled: true };
                 testingStore.dispatch(updateEditingTrack(track) as {} as AnyAction);
@@ -1626,8 +1625,8 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().lastCueChange.changeType).toEqual("EDIT");
-                expect(testingStore.getState().lastCueChange.index).toEqual(2);
+                expect(testingStore.getState().lastCueChange.changeType).toEqual("UPDATE_ALL");
+                expect(testingStore.getState().lastCueChange.index).toEqual(-1);
                 expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
                 expect(testingStore.getState().cues[1].vttCue === testingStore.getState().lastCueChange.vttCue)
                     .toBeTruthy();
@@ -1638,8 +1637,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().focusedInput).toEqual("START_TIME");
             });
 
-            // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
-            it.skip("don't reorder cues if cue position doesn't change when editing start time", () => {
+            it("don't reorder cues if cue position doesn't change when editing start time", () => {
                 // GIVEN
                 const track = { ...testingTrack, overlapEnabled: true };
                 testingStore.dispatch(updateEditingTrack(track) as {} as AnyAction);
@@ -2818,8 +2816,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
         });
 
-        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
-        it.skip("reorder cues based on start time", () => {
+        it("reorder cues based on start time", () => {
             // GIVEN
             const notOrderedCues = [
                 { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
@@ -2844,8 +2841,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(1);
         });
 
-        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
-        it.skip("resets editing cue index if out of range when reordering cues", () => {
+        it("resets editing cue index if out of range when reordering cues", () => {
             // GIVEN
             testingStore.dispatch(updateEditingCueIndex(8) as {} as AnyAction);
             const notOrderedCues = [
@@ -2923,8 +2919,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
         });
 
-        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
-        it.skip("reorder cues when shifting time before cue index", () => {
+        it("reorder cues when shifting time before cue index", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
@@ -2942,8 +2937,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
         });
 
-        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
-        it.skip("reorder cues when shifting time after cue index", () => {
+        it("reorder cues when shifting time after cue index", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
