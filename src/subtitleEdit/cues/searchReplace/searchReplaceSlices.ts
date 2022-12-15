@@ -154,7 +154,8 @@ const getCueAndUpdateIndices = (
                 if (matchedCueWithLastSourceCueIndex !== -1) {
                     const lastSourceCue = matchedCues[matchedCueWithLastSourceCueIndex].sourceCues.at(-1);
                     sourceCueIndex = lastSourceCue?.index;
-                    dispatch(searchReplaceSlice.actions.setIndices({ ...indices, sourceCueIndex }));
+                    dispatch(searchReplaceSlice.actions.setIndices(
+                        { ...indices, matchedCueIndex, sourceCueIndex, targetCueIndex }));
                 }
             }
         } else { // start from first line
@@ -298,10 +299,6 @@ const finNextOffsetIndexForSearch = (
     searchReplace: SearchReplace
 ): number => {
     const lastIndex = offsets.length - 1;
-    // if (searchReplace.matches && searchReplace.matches.offsetIndex >= 0) {
-    //     return searchReplace.matches.offsetIndex < lastIndex ?
-    //         searchReplace.matches.offsetIndex : lastIndex;
-    // }
     return searchReplace.direction === "NEXT" ? 0 : lastIndex;
 };
 
