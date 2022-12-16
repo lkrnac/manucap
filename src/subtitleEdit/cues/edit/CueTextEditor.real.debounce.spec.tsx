@@ -8,18 +8,18 @@ import { mount, ReactWrapper } from "enzyme";
 
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { CueDto, CueError, Language, Track } from "../../model";
-import { SearchReplaceMatches } from "../searchReplace/model";
 import { updateCues, updateMatchedCues } from "../cuesList/cuesListActions";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { fireEvent, render } from "@testing-library/react";
-import { replaceCurrentMatch } from "../searchReplace/searchReplaceSlices";
+import { replaceCurrentMatch, searchReplaceSlice } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateEditingCueIndex } from "./cueEditorSlices";
 import { matchedCuesSlice } from "../cuesList/cuesListSlices";
 import { Replacement, SpellCheck } from "../spellCheck/model";
+import { SearchReplaceMatches } from "../searchReplace/model";
 
 let testingStore = createTestingStore();
 
@@ -230,6 +230,7 @@ describe("CueTextEditor", () => {
             offsetIndex: 0,
             matchLength: 4
         } as SearchReplaceMatches;
+        testingStore.dispatch(searchReplaceSlice.actions.setMatches(searchReplaceMatches));
         const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
         const editUuid = testingStore.getState().cues[0].editUuid;
         const actualNode = render(
@@ -240,7 +241,6 @@ describe("CueTextEditor", () => {
                     editUuid={editUuid}
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                     unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                    searchReplaceMatches={searchReplaceMatches}
                     setGlossaryTerm={jest.fn()}
                     autoFocus
                 />
