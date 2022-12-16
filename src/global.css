@@ -289,14 +289,6 @@
 
 /** Toasts **/
 
-.p-toast {
-    @apply w-half border-none overflow-hidden max-w-none !z-100;
-}
-
-.p-toast-message {
-    @apply !bg-white !border-none overflow-hidden !z-100;
-}
-
 .p-toast .p-toast-message .p-toast-message-content .p-toast-message-icon {
     @apply hidden;
 }
@@ -311,7 +303,7 @@
 }
 
 .p-toast-message.p-toast-message-error .p-toast-message-content {
-    @apply bg-red-primary/10 border border-red-light/40 text-red-primary;
+    @apply bg-red-lighter;
 }
 
 .p-toast .p-toast-message.p-toast-message-error .p-toast-message-icon,
