@@ -30,11 +30,13 @@ module.exports = {
                 darker: withOpacityValue("--blue-darker"),
             },
             green: {
+                lighter: withOpacityValue("--green-lighter"),
                 light: withOpacityValue("--green-light"),
                 primary: withOpacityValue("--green-primary"),
                 dark: withOpacityValue("--green-dark")
             },
             yellow: {
+                lighter: withOpacityValue("--yellow-lighter"),
                 light: withOpacityValue("--yellow-light"),
                 primary: withOpacityValue("--yellow-primary"),
                 dark: withOpacityValue("--yellow-dark")

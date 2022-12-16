@@ -314,7 +314,7 @@
 }
 
 .p-toast-message.p-toast-message-warn .p-toast-message-content {
-    @apply bg-yellow-primary/10 border border-yellow-light/40 text-yellow-primary;
+    @apply bg-yellow-lighter;
 }
 
 .p-toast .p-toast-message.p-toast-message-warn .p-toast-message-icon,
@@ -325,7 +325,7 @@
 }
 
 .p-toast-message.p-toast-message-success .p-toast-message-content {
-    @apply bg-green-primary/10 border border-green-light/40 text-green-primary;
+    @apply bg-green-lighter;
 }
 
 .p-toast .p-toast-message.p-toast-message-success .p-toast-message-icon,
