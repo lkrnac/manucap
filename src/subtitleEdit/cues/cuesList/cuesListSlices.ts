@@ -129,15 +129,15 @@ export const cuesSlice = createSlice({
         applyShiftTimeByPosition: (state, action: PayloadAction<ShiftAction>): CueDto[] => {
             const shiftAction = action.payload;
             return state.map((cue: CueDto, index: number) => {
-                if (shiftAction.shiftPosition === ShiftPosition.AFTER &&
+                if (shiftAction.shiftPosition == ShiftPosition.AFTER &&
                     (index <= shiftAction.cueIndex || cue.editDisabled)) {
                     return cue;
                 }
-                if (shiftAction.shiftPosition === ShiftPosition.BEFORE &&
+                if (shiftAction.shiftPosition == ShiftPosition.BEFORE &&
                     (index >= shiftAction.cueIndex || cue.editDisabled)) {
                     return cue;
                 }
-                if (shiftAction.shiftPosition === ShiftPosition.ALL && cue.editDisabled) {
+                if (shiftAction.shiftPosition == ShiftPosition.ALL && cue.editDisabled) {
                     return cue;
                 }
                 const vttCue = cue.vttCue;
