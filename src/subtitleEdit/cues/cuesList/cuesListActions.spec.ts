@@ -31,7 +31,6 @@ import { resetEditingTrack, updateEditingTrack } from "../../trackSlices";
 import { generateSpellcheckHash } from "../spellCheck/spellCheckerUtils";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
-import * as cueEditorSlices from "../edit/cueEditorSlices";
 import { lastCueChangeSlice, updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { SaveState } from "../saveSlices";
 import { cuesSlice, matchedCuesSlice, ShiftPosition } from "./cuesListSlices";

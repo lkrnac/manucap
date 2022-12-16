@@ -10,7 +10,11 @@ import sanitizeHtml from "sanitize-html";
 import _ from "lodash";
 import { updateEditingCueIndexNoThunk } from "../edit/cueEditorSlices";
 
-const getNextCue = (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState: Function): CueDto => {
+const getNextCue = (
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
+    getState: Function,
+    previousDirection: string
+    ): CueDto => {
     const matchedCues = getState().matchedCues.matchedCues;
     const searchReplace = getState().searchReplace;
     let currentCue = undefined as unknown as CueDto;
@@ -20,8 +24,13 @@ const getNextCue = (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getSt
     let targetCueIndex = indices.targetCueIndex;
     let isSourceCue = indices.isSourceCue;
     let foundMatch = false;
+    let matchedCue = matchedCues[matchedCueIndex];
+    if (previousDirection !== "NEXT") {
+        sourceCueIndex = getFirstSourceCueIndex(matchedCue);
+        targetCueIndex = getLastTargetCueIndex(matchedCue);
+    }
     do {
-        const matchedCue = matchedCues[matchedCueIndex];
+        matchedCue = matchedCues[matchedCueIndex];
         if (matchedCue) {
             if (matchedCue.sourceCues && matchedCue.sourceCues.length > 0) {
                 sourceCueIndex++;
@@ -66,7 +75,10 @@ const getNextCue = (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getSt
     return currentCue;
 };
 
-const getPreviousCue = (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState: Function): CueDto => {
+const getPreviousCue = (
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
+    getState: Function,
+    previousDirection: string): CueDto => {
     const matchedCues = getState().matchedCues.matchedCues;
     const searchReplace = getState().searchReplace;
     let currentCue = undefined as unknown as CueDto;
@@ -76,8 +88,13 @@ const getPreviousCue = (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, g
     let targetCueIndex = indices.targetCueIndex;
     let isSourceCue = indices.isSourceCue;
     let foundMatch = false;
+    let matchedCue = matchedCues[matchedCueIndex];
+    if (previousDirection !== "PREVIOUS") {
+        sourceCueIndex = getLastSourceCueIndex(matchedCue);
+        targetCueIndex = getFirstTargetCueIndex(matchedCue);
+    }
     do {
-        const matchedCue = matchedCues[matchedCueIndex];
+        matchedCue = matchedCues[matchedCueIndex];
         if (matchedCue) {
             if (matchedCue.targetCues && matchedCue.targetCues.length > 0) {
                 targetCueIndex--;
@@ -122,10 +139,39 @@ const getPreviousCue = (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, g
     return currentCue;
 };
 
+const getFirstSourceCueIndex = (matchedCue: CueLineDto): number => {
+    if (matchedCue.sourceCues && matchedCue.sourceCues.length > 0) {
+        return matchedCue.sourceCues[0].index;
+    }
+    return -1;
+};
+
+const getLastSourceCueIndex = (matchedCue: CueLineDto): number => {
+    if (matchedCue.sourceCues && matchedCue.sourceCues.length > 0) {
+        return matchedCue.sourceCues[matchedCue.sourceCues.length - 1].index;
+    }
+    return -1;
+};
+
+const getFirstTargetCueIndex = (matchedCue: CueLineDto): number => {
+    if (matchedCue.targetCues && matchedCue.targetCues.length > 0) {
+        return matchedCue.targetCues[0].index;
+    }
+    return -1;
+};
+
+const getLastTargetCueIndex = (matchedCue: CueLineDto): number => {
+    if (matchedCue.targetCues && matchedCue.targetCues.length > 0) {
+        return matchedCue.targetCues[matchedCue.targetCues.length - 1].index;
+    }
+    return -1;
+};
+
 const getCueAndUpdateIndices = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
     getState: Function,
-    editingCueIndex: number
+    editingCueIndex: number,
+    previousDirection: string
 ): CueDto | undefined => {
     const matchedCues = getState().matchedCues.matchedCues;
     if (matchedCues.length === 0) {
@@ -164,8 +210,8 @@ const getCueAndUpdateIndices = (
         }
     }
     return searchReplace.direction === "NEXT"
-        ? getNextCue(dispatch, getState)
-        : getPreviousCue(dispatch, getState);
+        ? getNextCue(dispatch, getState, previousDirection)
+        : getPreviousCue(dispatch, getState, previousDirection);
 };
 
 const updateCueMatchesIfNeeded = (
@@ -317,6 +363,7 @@ export const updateSearchMatches = (
 export const searchNextCues = (replacement: boolean): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         const searchReplaceVisible = getState().searchReplaceVisible;
+        const previousDirection = getState().searchReplace.direction;
         if (!searchReplaceVisible) {
             return;
         }
@@ -338,7 +385,7 @@ export const searchNextCues = (replacement: boolean): AppThunk =>
                 return;
             }
         }
-        const currentCue = getCueAndUpdateIndices(dispatch, getState, editingCueIndex);
+        const currentCue = getCueAndUpdateIndices(dispatch, getState, editingCueIndex, previousDirection);
         if (currentCue) {
             updateSearchMatches(dispatch, getState, currentCue);
             if (!getState().searchReplace.indices.isSourceCue) {
@@ -350,6 +397,7 @@ export const searchNextCues = (replacement: boolean): AppThunk =>
 export const searchPreviousCues = (): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         const searchReplaceVisible = getState().searchReplaceVisible;
+        const previousDirection = getState().searchReplace.direction;
         if (!searchReplaceVisible) {
             return;
         }
@@ -370,7 +418,7 @@ export const searchPreviousCues = (): AppThunk =>
                 return;
             }
         }
-        const currentCue = getCueAndUpdateIndices(dispatch, getState, editingCueIndex);
+        const currentCue = getCueAndUpdateIndices(dispatch, getState, editingCueIndex, previousDirection);
         if (currentCue) {
             updateSearchMatches(dispatch, getState, currentCue);
             if (!getState().searchReplace.indices.isSourceCue) {
