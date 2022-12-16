@@ -1627,9 +1627,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().validationErrors).toEqual([]);
                 expect(testingStore.getState().lastCueChange.changeType).toEqual("UPDATE_ALL");
                 expect(testingStore.getState().lastCueChange.index).toEqual(-1);
-                expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
-                expect(testingStore.getState().cues[1].vttCue === testingStore.getState().lastCueChange.vttCue)
-                    .toBeTruthy();
+                expect(testingStore.getState().lastCueChange.vttCue).toBeUndefined();
                 expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
                 expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
                 expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
