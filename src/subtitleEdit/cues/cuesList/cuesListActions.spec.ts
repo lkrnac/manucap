@@ -9,7 +9,8 @@ import {
     addCueComment,
     addCuesToMergeList,
     applyShiftTimeByPosition,
-    checkErrors, checkSpelling,
+    checkErrors,
+    checkSpelling,
     deleteCue,
     deleteCueComment,
     mergeCues,
@@ -30,9 +31,10 @@ import { resetEditingTrack, updateEditingTrack } from "../../trackSlices";
 import { generateSpellcheckHash } from "../spellCheck/spellCheckerUtils";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
+import * as cueEditorSlices from "../edit/cueEditorSlices";
 import { lastCueChangeSlice, updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { SaveState } from "../saveSlices";
-import { cuesSlice, matchedCuesSlice } from "./cuesListSlices";
+import { cuesSlice, matchedCuesSlice, ShiftPosition } from "./cuesListSlices";
 import * as cuesListScrollSlice from "./cuesListScrollSlice";
 import { showSearchReplace } from "../searchReplace/searchReplaceSlices";
 
@@ -2874,7 +2876,7 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(applyShiftTimeByPosition("all", -1, 2.123) as {} as AnyAction);
+            testingStore.dispatch(applyShiftTimeByPosition(ShiftPosition.ALL, -1, 2.123) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(2.123);
@@ -2890,7 +2892,7 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(applyShiftTimeByPosition("after", 0, 2.123) as {} as AnyAction);
+            testingStore.dispatch(applyShiftTimeByPosition(ShiftPosition.AFTER, 0, 2.123) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
@@ -2906,7 +2908,7 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(applyShiftTimeByPosition("before", 2, 1.123) as {} as AnyAction);
+            testingStore.dispatch(applyShiftTimeByPosition(ShiftPosition.BEFORE, 2, 1.123) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(1.123);
@@ -2925,7 +2927,7 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(applyShiftTimeByPosition("before", 2, 2.123) as {} as AnyAction);
+            testingStore.dispatch(applyShiftTimeByPosition(ShiftPosition.BEFORE, 2, 2.123) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(2.123);
@@ -2944,7 +2946,7 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(applyShiftTimeByPosition("after", 1, -2.12) as {} as AnyAction);
+            testingStore.dispatch(applyShiftTimeByPosition(ShiftPosition.AFTER, 1, -2.12) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
@@ -2963,7 +2965,7 @@ describe("cueSlices", () => {
 
             // WHEN
             const error = () => {
-                testingStore.dispatch(applyShiftTimeByPosition("before", -1, 2.123) as {} as AnyAction);
+                testingStore.dispatch(applyShiftTimeByPosition(ShiftPosition.BEFORE, -1, 2.123) as {} as AnyAction);
             };
             // THEN
             expect(error).toThrow("No editing cue selected to begin shifting");
@@ -2975,7 +2977,7 @@ describe("cueSlices", () => {
 
             // WHEN
             const error = () => {
-                testingStore.dispatch(applyShiftTimeByPosition("after", -1, 2.123) as {} as AnyAction);
+                testingStore.dispatch(applyShiftTimeByPosition(ShiftPosition.AFTER, -1, 2.123) as {} as AnyAction);
             };
             // THEN
             expect(error).toThrow("No editing cue selected to begin shifting");
@@ -2987,7 +2989,7 @@ describe("cueSlices", () => {
 
             // WHEN
             const error = () => {
-                testingStore.dispatch(applyShiftTimeByPosition("before", 0, 2.123) as {} as AnyAction);
+                testingStore.dispatch(applyShiftTimeByPosition(ShiftPosition.BEFORE, 0, 2.123) as {} as AnyAction);
             };
             // THEN
             expect(error).toThrow("Cannot shift before first cue");
@@ -2999,7 +3001,8 @@ describe("cueSlices", () => {
 
             // WHEN
             const error = () => {
-                testingStore.dispatch(applyShiftTimeByPosition("end", 0, 2.123) as {} as AnyAction);
+                // @ts-ignore need to simulate undefined parameter
+                testingStore.dispatch(applyShiftTimeByPosition(undefined, 0, 2.123) as {} as AnyAction);
             };
             // THEN
             expect(error).toThrow("Invalid position provided, all, before or after expected");
