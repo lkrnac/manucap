@@ -25,7 +25,7 @@ const getNextCue = (
     let isSourceCue = indices.isSourceCue;
     let foundMatch = false;
     let matchedCue = matchedCues[matchedCueIndex];
-    if (previousDirection !== "NEXT") {
+    if (matchedCue && previousDirection !== "NEXT") {
         sourceCueIndex = getFirstSourceCueIndex(matchedCue);
         targetCueIndex = getLastTargetCueIndex(matchedCue);
     }
@@ -70,7 +70,7 @@ const getNextCue = (
         if (!currentCue) {
             matchedCueIndex++;
         }
-    } while (!currentCue && sourceCueIndex !== 9999 && targetCueIndex !== 9999);
+    } while (!currentCue && matchedCueIndex !== 99);
     dispatch(searchReplaceSlice.actions.setIndices({ matchedCueIndex, sourceCueIndex, targetCueIndex, isSourceCue }));
     return currentCue;
 };
@@ -89,7 +89,7 @@ const getPreviousCue = (
     let isSourceCue = indices.isSourceCue;
     let foundMatch = false;
     let matchedCue = matchedCues[matchedCueIndex];
-    if (previousDirection !== "PREVIOUS") {
+    if (matchedCue && previousDirection !== "PREVIOUS") {
         sourceCueIndex = getLastSourceCueIndex(matchedCue);
         targetCueIndex = getFirstTargetCueIndex(matchedCue);
     }
@@ -134,7 +134,7 @@ const getPreviousCue = (
         if (!currentCue) {
             matchedCueIndex--;
         }
-    } while (!currentCue && sourceCueIndex !== 9999 && targetCueIndex !== 9999);
+    } while (!currentCue && matchedCueIndex !== -99);
     dispatch(searchReplaceSlice.actions.setIndices({ matchedCueIndex, sourceCueIndex, targetCueIndex, isSourceCue }));
     return currentCue;
 };
@@ -200,9 +200,9 @@ const getCueAndUpdateIndices = (
                 if (matchedCueWithLastSourceCueIndex !== -1) {
                     const lastSourceCue = matchedCues[matchedCueWithLastSourceCueIndex].sourceCues.at(-1);
                     sourceCueIndex = lastSourceCue?.index;
-                    dispatch(searchReplaceSlice.actions.setIndices(
-                        { ...indices, matchedCueIndex, sourceCueIndex, targetCueIndex }));
                 }
+                dispatch(searchReplaceSlice.actions.setIndices(
+                    { ...indices, matchedCueIndex, sourceCueIndex, targetCueIndex }));
             }
         } else { // start from first line
             matchedCueIndex++;

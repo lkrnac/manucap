@@ -287,7 +287,7 @@ describe("SearchReplaceEditor", () => {
         // THEN
         expect(testingStore.getState().searchReplace.find).toEqual("[Line 2]");
         expect(testingStore.getState().editingCueIndex).toEqual(0);
-        expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8]);
+        expect(testingStore.getState().searchReplace.matches.offsets).toEqual([8]);
         expect(testingStore.getState().focusedCueIndex).toEqual(0);
     });
 
