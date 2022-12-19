@@ -529,6 +529,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={1}
                                 isTargetCue={false}
+                                sourceCueIndex={1}
                                 targetCueIndex={1}
                                 cue={sourceCues[1]}
                                 targetCuesLength={3}
@@ -605,6 +606,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={2}
                                 isTargetCue={false}
+                                sourceCueIndex={2}
                                 targetCueIndex={2}
                                 cue={sourceCues[2]}
                                 targetCuesLength={3}
@@ -680,6 +682,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue={false}
+                                sourceCueIndex={0}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
@@ -762,6 +765,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue={false}
+                                sourceCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
                                 className="bg-gray-0 sbte-source-cue"
@@ -857,6 +861,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue={false}
+                                sourceCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
                                 className="bg-gray-0 sbte-source-cue"
@@ -941,6 +946,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue={false}
+                                sourceCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={0}
                                 className="bg-gray-0 sbte-source-cue"
@@ -1108,6 +1114,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue={false}
+                                sourceCueIndex={0}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
@@ -1121,6 +1128,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue={false}
+                                sourceCueIndex={1}
                                 targetCueIndex={0}
                                 cue={sourceCues[1]}
                                 targetCuesLength={1}
@@ -1134,6 +1142,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue={false}
+                                sourceCueIndex={2}
                                 targetCueIndex={0}
                                 cue={sourceCues[2]}
                                 targetCuesLength={1}
@@ -1222,6 +1231,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue={false}
+                                sourceCueIndex={0}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
@@ -1332,6 +1342,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue={false}
+                                sourceCueIndex={0}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
@@ -1345,6 +1356,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue={false}
+                                sourceCueIndex={1}
                                 targetCueIndex={0}
                                 cue={sourceCues[1]}
                                 targetCuesLength={1}
@@ -1358,6 +1370,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue={false}
+                                sourceCueIndex={2}
                                 targetCueIndex={0}
                                 cue={sourceCues[2]}
                                 targetCuesLength={1}
@@ -1434,6 +1447,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue={false}
+                                sourceCueIndex={0}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
@@ -1550,6 +1564,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue={false}
+                                sourceCueIndex={0}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
@@ -1678,6 +1693,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue={false}
+                                sourceCueIndex={0}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
@@ -2076,6 +2092,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue={false}
+                                sourceCueIndex={0}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}

@@ -5,7 +5,7 @@ import {
     replaceCurrentMatch,
     searchCueText,
     searchNextCues,
-    searchPreviousCues,
+    searchPreviousCues, searchReplaceSlice,
     setFind, setMatchCase,
     setReplacement,
     showSearchReplace
@@ -13,6 +13,7 @@ import {
 import { updateCues } from "../cuesList/cuesListActions";
 import { CueDto } from "../../model";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
+import { SearchReplaceMatches } from "./model";
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -65,10 +66,9 @@ describe("searchReplaceSlices", () => {
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
-            expect(testingStore.getState().cues[1].searchReplaceMatches.offsets).toEqual([8]);
-            expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(0);
-            expect(testingStore.getState().cues[1].searchReplaceMatches.matchLength).toEqual(6);
-            expect(testingStore.getState().cues[0].searchReplaceMatches).toBeUndefined();
+            expect(testingStore.getState().searchReplace.matches.offsets).toEqual([8]);
+            expect(testingStore.getState().searchReplace.matches.offsetIndex).toEqual(0);
+            expect(testingStore.getState().searchReplace.matches.matchLength).toEqual(6);
         });
     });
 
@@ -107,10 +107,9 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("line 2");
             expect(testingStore.getState().searchReplace.matchCase).toBeTruthy();
-            expect(testingStore.getState().cues[1].searchReplaceMatches.offsets).toEqual([]);
-            expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(0);
-            expect(testingStore.getState().cues[1].searchReplaceMatches.matchLength).toEqual(6);
-            expect(testingStore.getState().cues[0].searchReplaceMatches).toBeUndefined();
+            expect(testingStore.getState().searchReplace.matches.offsets).toEqual([]);
+            expect(testingStore.getState().searchReplace.matches.offsetIndex).toEqual(0);
+            expect(testingStore.getState().searchReplace.matches.matchLength).toEqual(6);
         });
     });
 
@@ -162,15 +161,16 @@ describe("searchReplaceSlices", () => {
 
         it("searches for find term in cue with many matches next", () => {
             // GIVEN
+            const searchReplaceMatches = {
+                offsets: [8, 16],
+                offsetIndex: 0,
+                matchLength: 3
+            } as SearchReplaceMatches;
+            testingStore.dispatch(searchReplaceSlice.actions.setMatches(searchReplaceMatches));
             const testingCues = [
                 {
                     vttCue: new VTTCue(0, 2, "Caption foo and foo"),
-                    cueCategory: "DIALOGUE",
-                    searchReplaceMatches: {
-                        offsets: [8, 16],
-                        offsetIndex: 0,
-                        matchLength: 3
-                    }
+                    cueCategory: "DIALOGUE"
 
                 },
                 { vttCue: new VTTCue(2, 4, "Caption foo"), cueCategory: "ONSCREEN_TEXT" },
@@ -189,25 +189,25 @@ describe("searchReplaceSlices", () => {
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8, 16]);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(1);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.matchLength).toEqual(3);
-            expect(testingStore.getState().cues[1].searchReplaceMatches).toBeUndefined();
+            expect(testingStore.getState().searchReplace.matches.offsets).toEqual([8, 16]);
+            expect(testingStore.getState().searchReplace.matches.offsetIndex).toEqual(1);
+            expect(testingStore.getState().searchReplace.matches.matchLength).toEqual(3);
             expect(testingStore.getState().editingCueIndex).toEqual(0);
             expect(testingStore.getState().focusedCueIndex).toEqual(0);
         });
 
         it("sets editing cue index to next when current cue is end of matches", () => {
             // GIVEN
+            const searchReplaceMatches = {
+                offsets: [8, 16],
+                offsetIndex: 1,
+                matchLength: 3
+            } as SearchReplaceMatches;
+            testingStore.dispatch(searchReplaceSlice.actions.setMatches(searchReplaceMatches));
             const testingCues = [
                 {
                     vttCue: new VTTCue(0, 2, "Caption foo and foo"),
-                    cueCategory: "DIALOGUE",
-                    searchReplaceMatches: {
-                        offsets: [8, 16],
-                        offsetIndex: 1,
-                        matchLength: 3
-                    }
+                    cueCategory: "DIALOGUE"
                 },
                 { vttCue: new VTTCue(2, 4, "Caption foo"), cueCategory: "ONSCREEN_TEXT" },
                 {
@@ -231,6 +231,12 @@ describe("searchReplaceSlices", () => {
 
         it("wraps search to first when current cue is last", () => {
             // GIVEN
+            const searchReplaceMatches = {
+                offsets: [13],
+                offsetIndex: 0,
+                matchLength: 3
+            } as SearchReplaceMatches;
+            testingStore.dispatch(searchReplaceSlice.actions.setMatches(searchReplaceMatches));
             const testingCues = [
                 {
                     vttCue: new VTTCue(0, 2, "Caption foo and foo"),
@@ -240,12 +246,7 @@ describe("searchReplaceSlices", () => {
                 {
                     vttCue: new VTTCue(4, 6, "Caption Line foo"),
                     cueCategory: "ONSCREEN_TEXT",
-                    spellCheck: { matches: [{ message: "some-spell-check-problem" }]},
-                    searchReplaceMatches: {
-                        offsets: [13],
-                        offsetIndex: 0,
-                        matchLength: 3
-                    }
+                    spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
                 },
             ] as CueDto[];
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
@@ -263,6 +264,12 @@ describe("searchReplaceSlices", () => {
 
         it("stops search if last cue match is last in whole track - next", () => {
             // GIVEN
+            const searchReplaceMatches = {
+                offsets: [13],
+                offsetIndex: 0,
+                matchLength: 3
+            } as SearchReplaceMatches;
+            testingStore.dispatch(searchReplaceSlice.actions.setMatches(searchReplaceMatches));
             const testingCues = [
                 {
                     vttCue: new VTTCue(0, 2, "Caption bar and bar"),
@@ -272,12 +279,7 @@ describe("searchReplaceSlices", () => {
                 {
                     vttCue: new VTTCue(4, 6, "Caption Line foo"),
                     cueCategory: "ONSCREEN_TEXT",
-                    spellCheck: { matches: [{ message: "some-spell-check-problem" }]},
-                    searchReplaceMatches: {
-                        offsets: [13],
-                        offsetIndex: 0,
-                        matchLength: 3
-                    }
+                    spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
                 },
             ] as CueDto[];
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
@@ -289,30 +291,26 @@ describe("searchReplaceSlices", () => {
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
-            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().editingCueIndex).toEqual(2);
             expect(testingStore.getState().focusedCueIndex).toEqual(2);
         });
 
         it("sets editing cue index to next and first offsetIndex for cue", () => {
             // GIVEN
+            const searchReplaceMatches = {
+                offsets: [8, 16],
+                offsetIndex: 1,
+                matchLength: 3
+            } as SearchReplaceMatches;
+            testingStore.dispatch(searchReplaceSlice.actions.setMatches(searchReplaceMatches));
             const cues = [
                 {
                     vttCue: new VTTCue(0, 2, "Caption foo and foo"),
-                    cueCategory: "DIALOGUE",
-                    searchReplaceMatches: {
-                        offsets: [8],
-                        offsetIndex: 0,
-                        matchLength: 3
-                    }
+                    cueCategory: "DIALOGUE"
                 },
                 {
                     vttCue: new VTTCue(2, 4, "Caption foo"),
-                    cueCategory: "ONSCREEN_TEXT",
-                    searchReplaceMatches: {
-                        offsets: [8, 16],
-                        offsetIndex: 1,
-                        matchLength: 3
-                    }
+                    cueCategory: "ONSCREEN_TEXT"
                 },
                 {
                     vttCue: new VTTCue(4, 6, "Caption Line 3"),
@@ -331,10 +329,8 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
             expect(testingStore.getState().editingCueIndex).toEqual(0);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(1);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8, 16]);
-            expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(1);
-            expect(testingStore.getState().cues[1].searchReplaceMatches.offsets).toEqual([8, 16]);
+            expect(testingStore.getState().searchReplace.matches.offsetIndex).toEqual(1);
+            expect(testingStore.getState().searchReplace.matches.offsets).toEqual([8, 16]);
             expect(testingStore.getState().focusedCueIndex).toEqual(0);
         });
 
@@ -363,7 +359,7 @@ describe("searchReplaceSlices", () => {
             expect(testingStore.getState().focusedCueIndex).toEqual(1);
         });
 
-        it("skips cues with editDisabled when searches for find term in next cue", () => {
+        it("doesn't skip cues with editDisabled when searches for find term in next cue", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCuesWithEditDisabled) as {} as AnyAction);
             testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
@@ -374,11 +370,11 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
             expect(testingStore.getState().searchReplace.direction).toEqual("NEXT");
-            expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().editingCueIndex).toEqual(0);
             expect(testingStore.getState().focusedCueIndex).toEqual(1);
         });
 
-        it("skips cues with editDisabled when wrapping searches for find term in next cue", () => {
+        it("doesn't skip cues with editDisabled when wrapping searches for find term in next cue", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCuesWithEditDisabled) as {} as AnyAction);
             testingStore.dispatch(setFind("Caption Line") as {} as AnyAction);
@@ -391,7 +387,7 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("Caption Line");
             expect(testingStore.getState().searchReplace.direction).toEqual("NEXT");
-            expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().editingCueIndex).toEqual(3);
             expect(testingStore.getState().focusedCueIndex).toEqual(1);
         });
 
@@ -440,15 +436,16 @@ describe("searchReplaceSlices", () => {
 
         it("searches for find term in cue with many matches previous", () => {
             // GIVEN
+            const searchReplaceMatches = {
+                offsets: [8, 16],
+                offsetIndex: 1,
+                matchLength: 3
+            } as SearchReplaceMatches;
+            testingStore.dispatch(searchReplaceSlice.actions.setMatches(searchReplaceMatches));
             const testingCues = [
                 {
                     vttCue: new VTTCue(0, 2, "Caption foo and foo"),
-                    cueCategory: "DIALOGUE",
-                    searchReplaceMatches: {
-                        offsets: [8, 16],
-                        offsetIndex: 1,
-                        matchLength: 3
-                    }
+                    cueCategory: "DIALOGUE"
                 },
                 { vttCue: new VTTCue(2, 4, "Caption foo"), cueCategory: "ONSCREEN_TEXT" },
                 {
@@ -466,25 +463,26 @@ describe("searchReplaceSlices", () => {
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8, 16]);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(0);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.matchLength).toEqual(3);
-            expect(testingStore.getState().cues[1].searchReplaceMatches).toBeUndefined();
+            expect(testingStore.getState().searchReplace.matches.offsets).toEqual([8, 16]);
+            expect(testingStore.getState().searchReplace.matches.offsetIndex).toEqual(0);
+            expect(testingStore.getState().searchReplace.matches.matchLength).toEqual(3);
+            expect(testingStore.getState().searchReplace.matches).toBeUndefined();
             expect(testingStore.getState().editingCueIndex).toEqual(0);
             expect(testingStore.getState().focusedCueIndex).toEqual(0);
         });
 
         it("wraps search to last cue when current cue is first", () => {
             // GIVEN
+            const searchReplaceMatches = {
+                offsets: [8],
+                offsetIndex: 0,
+                matchLength: 3
+            } as SearchReplaceMatches;
+            testingStore.dispatch(searchReplaceSlice.actions.setMatches(searchReplaceMatches));
             const testingCues = [
                 {
                     vttCue: new VTTCue(0, 2, "Caption foo"),
-                    cueCategory: "DIALOGUE",
-                    searchReplaceMatches: {
-                        offsets: [8],
-                        offsetIndex: 0,
-                        matchLength: 3
-                    }
+                    cueCategory: "DIALOGUE"
                 },
                 { vttCue: new VTTCue(2, 4, "Caption foo"), cueCategory: "ONSCREEN_TEXT" },
                 {
@@ -508,6 +506,12 @@ describe("searchReplaceSlices", () => {
 
         it("stops search if last cue match is last in whole track - next", () => {
             // GIVEN
+            const searchReplaceMatches = {
+                offsets: [8],
+                offsetIndex: 0,
+                matchLength: 3
+            } as SearchReplaceMatches;
+            testingStore.dispatch(searchReplaceSlice.actions.setMatches(searchReplaceMatches));
             const testingCues = [
                 {
                     vttCue: new VTTCue(0, 2, "Caption testing"),
@@ -515,12 +519,7 @@ describe("searchReplaceSlices", () => {
                 },
                 {
                     vttCue: new VTTCue(2, 4, "Caption foo"),
-                    cueCategory: "ONSCREEN_TEXT",
-                    searchReplaceMatches: {
-                        offsets: [8],
-                        offsetIndex: 0,
-                        matchLength: 3
-                    }
+                    cueCategory: "ONSCREEN_TEXT"
                 },
                 {
                     vttCue: new VTTCue(4, 6, "Caption bar"),
@@ -543,6 +542,12 @@ describe("searchReplaceSlices", () => {
 
         it("wraps search to last cue when current cue is last on top", () => {
             // GIVEN
+            const searchReplaceMatches = {
+                offsets: [8],
+                offsetIndex: 0,
+                matchLength: 3
+            } as SearchReplaceMatches;
+            testingStore.dispatch(searchReplaceSlice.actions.setMatches(searchReplaceMatches));
             const testingCues = [
                 {
                     vttCue: new VTTCue(0, 2, "Caption testing"),
@@ -550,12 +555,7 @@ describe("searchReplaceSlices", () => {
                 },
                 {
                     vttCue: new VTTCue(2, 4, "Caption foo"),
-                    cueCategory: "ONSCREEN_TEXT",
-                    searchReplaceMatches: {
-                        offsets: [8],
-                        offsetIndex: 0,
-                        matchLength: 3
-                    }
+                    cueCategory: "ONSCREEN_TEXT"
                 },
                 {
                     vttCue: new VTTCue(4, 6, "Caption foo"),
@@ -578,6 +578,12 @@ describe("searchReplaceSlices", () => {
 
         it("sets editing cue index to previous when current cue is end of matches", () => {
             // GIVEN
+            const searchReplaceMatches = {
+                offsets: [8, 16],
+                offsetIndex: 0,
+                matchLength: 3
+            } as SearchReplaceMatches;
+            testingStore.dispatch(searchReplaceSlice.actions.setMatches(searchReplaceMatches));
             const cues = [
                 {
                     vttCue: new VTTCue(0, 2, "Caption foo"),
@@ -585,12 +591,7 @@ describe("searchReplaceSlices", () => {
                 },
                 {
                     vttCue: new VTTCue(2, 4, "Caption foo and foo"),
-                    cueCategory: "ONSCREEN_TEXT",
-                    searchReplaceMatches: {
-                        offsets: [8, 16],
-                        offsetIndex: 0,
-                        matchLength: 3
-                    }
+                    cueCategory: "ONSCREEN_TEXT"
                 },
                 {
                     vttCue: new VTTCue(4, 6, "Caption Line 3"),
@@ -613,24 +614,20 @@ describe("searchReplaceSlices", () => {
 
         it("sets editing cue index to previous and last offsetIndex for cue", () => {
             // GIVEN
+            const searchReplaceMatches = {
+                offsets: [8],
+                offsetIndex: 0,
+                matchLength: 3
+            } as SearchReplaceMatches;
+            testingStore.dispatch(searchReplaceSlice.actions.setMatches(searchReplaceMatches));
             const cues = [
                 {
                     vttCue: new VTTCue(0, 2, "Caption foo and foo"),
-                    cueCategory: "DIALOGUE",
-                    searchReplaceMatches: {
-                        offsets: [8, 16],
-                        offsetIndex: 0,
-                        matchLength: 3
-                    }
+                    cueCategory: "DIALOGUE"
                 },
                 {
                     vttCue: new VTTCue(2, 4, "Caption foo"),
-                    cueCategory: "ONSCREEN_TEXT",
-                    searchReplaceMatches: {
-                        offsets: [8],
-                        offsetIndex: 0,
-                        matchLength: 3
-                    }
+                    cueCategory: "ONSCREEN_TEXT"
                 },
                 {
                     vttCue: new VTTCue(4, 6, "Caption Line 3"),
@@ -648,10 +645,10 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("foo");
             expect(testingStore.getState().editingCueIndex).toEqual(0);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(0);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8, 16]);
-            expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(0);
-            expect(testingStore.getState().cues[1].searchReplaceMatches.offsets).toEqual([8]);
+            expect(testingStore.getState().searchReplace.matches.offsetIndex).toEqual(0);
+            expect(testingStore.getState().searchReplace.matches.offsets).toEqual([8, 16]);
+            expect(testingStore.getState().searchReplace.matches.offsetIndex).toEqual(0);
+            expect(testingStore.getState().searchReplace.matches.offsets).toEqual([8]);
             expect(testingStore.getState().focusedCueIndex).toEqual(0);
         });
 
@@ -733,10 +730,9 @@ describe("searchReplaceSlices", () => {
 
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("");
-            expect(testingStore.getState().cues[1].searchReplaceMatches.offsets).toEqual([]);
-            expect(testingStore.getState().cues[1].searchReplaceMatches.offsetIndex).toEqual(0);
-            expect(testingStore.getState().cues[1].searchReplaceMatches.matchLength).toEqual(0);
-            expect(testingStore.getState().cues[0].searchReplaceMatches).toBeUndefined();
+            expect(testingStore.getState().searchReplace.matches.offsets).toEqual([]);
+            expect(testingStore.getState().searchReplace.matches.offsetIndex).toEqual(0);
+            expect(testingStore.getState().searchReplace.matches.matchLength).toEqual(0);
         });
     });
 
