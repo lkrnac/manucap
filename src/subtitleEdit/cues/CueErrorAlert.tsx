@@ -30,7 +30,7 @@ const CueErrorAlert = (): ReactElement => {
                         toast.current.show(validationErrors.map(error => ({
                             severity: "error",
                             summary: "Unable to complete action due to the following error(s):",
-                            contentClassName: "border-red-dark text-red-primary",
+                            contentClassName: "bg-red-lighter px-6 py-4 border-red-dark text-red-primary",
                             detail: error,
                             life: 8000
                         })));

@@ -298,14 +298,6 @@
     @apply m-0;
 }
 
-.p-toast .p-toast-message .p-toast-message-content {
-    @apply px-6 py-4;
-}
-
-.p-toast-message.p-toast-message-error .p-toast-message-content {
-    @apply bg-red-lighter;
-}
-
 .p-toast .p-toast-message.p-toast-message-error .p-toast-message-icon,
 .p-toast .p-toast-message.p-toast-message-error .p-toast-icon-close,
 .p-toast-message.p-toast-message-error .p-toast-message-icon,
@@ -313,19 +305,11 @@
     @apply text-red-primary;
 }
 
-.p-toast-message.p-toast-message-warn .p-toast-message-content {
-    @apply bg-yellow-lighter;
-}
-
 .p-toast .p-toast-message.p-toast-message-warn .p-toast-message-icon,
 .p-toast .p-toast-message.p-toast-message-warn .p-toast-icon-close,
 .p-toast-message.p-toast-message-warn .p-toast-message-icon,
 .p-toast-message.p-toast-message-warn .p-toast-icon-close {
     @apply text-yellow-primary;
-}
-
-.p-toast-message.p-toast-message-success .p-toast-message-content {
-    @apply bg-green-lighter;
 }
 
 .p-toast .p-toast-message.p-toast-message-success .p-toast-message-icon,

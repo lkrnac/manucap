@@ -36,7 +36,10 @@ describe("CueErrorAlert", () => {
                         aria-live="assertive"
                         aria-atomic="true"
                     >
-                        <div className="p-toast-message-content border-red-dark text-red-primary">
+                        <div
+                            className="p-toast-message-content bg-red-lighter px-6
+                                py-4 border-red-dark text-red-primary"
+                        >
                             <span className="p-toast-message-icon pi pi-times" />
                             <div className="p-toast-message-text">
                                 <span className="p-toast-summary">
@@ -156,7 +159,10 @@ describe("CueErrorAlert", () => {
                         aria-live="assertive"
                         aria-atomic="true"
                     >
-                        <div className="p-toast-message-content border-red-dark text-red-primary">
+                        <div
+                            className="p-toast-message-content bg-red-lighter
+                                px-6 py-4 border-red-dark text-red-primary"
+                        >
                             <span className="p-toast-message-icon pi pi-times" />
                             <div className="p-toast-message-text">
                                 <span className="p-toast-summary">
