@@ -32,7 +32,7 @@ import { generateSpellcheckHash } from "../spellCheck/spellCheckerUtils";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import * as cueEditorSlices from "../edit/cueEditorSlices";
-import { lastCueChangeSlice, updateEditingCueIndex } from "../edit/cueEditorSlices";
+import { clearLastCueChange, lastCueChangeSlice, updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { SaveState } from "../saveSlices";
 import { cuesSlice, matchedCuesSlice, ShiftPosition } from "./cuesListSlices";
 import * as cuesListScrollSlice from "./cuesListScrollSlice";
@@ -170,6 +170,7 @@ describe("cueSlices", () => {
         it("doesn't update top level cue when editUuid is different", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(clearLastCueChange() as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(updateVttCue(1, new VTTCue(2, 2.5, "Dummy Cue"), uuidv4()) as {} as AnyAction);
@@ -2813,6 +2814,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
             expect(testingStore.getState().cues[0].errors).toEqual([]);
             expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
+            expect(testingStore.getState().lastCueChange.changeType).toEqual("UPDATE_ALL");
         });
 
         it("reorder cues based on start time", () => {

@@ -480,6 +480,7 @@ export const updateCues = (cues: CueDto[]): AppThunk =>
             dispatch(cuesSlice.actions.updateCues({ cues }));
         } else {
             reorderCuesIfNeeded(dispatch, getState(), cues);
+            dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "UPDATE_ALL", index: -1 }));
         }
         dispatch(updateMatchedCues());
     };
