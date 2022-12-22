@@ -304,6 +304,8 @@ class VideoPlayer extends React.Component<Props> {
                             mediaLength * ONE_MILLISECOND
                         );
 
+                        this.wavesurfer.seekTo(0);
+
                         this.wavesurfer.on("region-update-end", (updatedRegion: WaveformRegion) => {
                             if (this.props.updateCueTimecodes) {
                                 this.props.updateCueTimecodes(updatedRegion.id, updatedRegion.start, updatedRegion.end);

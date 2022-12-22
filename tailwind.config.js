@@ -18,6 +18,7 @@ module.exports = {
             white: withOpacityValue("--white"),
             black: withOpacityValue("--black"),
             red: {
+                lighter: withOpacityValue("--red-lighter"),
                 light: withOpacityValue("--red-light"),
                 primary: withOpacityValue("--red-primary"),
                 dark: withOpacityValue("--red-dark")
@@ -29,11 +30,13 @@ module.exports = {
                 darker: withOpacityValue("--blue-darker"),
             },
             green: {
+                lighter: withOpacityValue("--green-lighter"),
                 light: withOpacityValue("--green-light"),
                 primary: withOpacityValue("--green-primary"),
                 dark: withOpacityValue("--green-dark")
             },
             yellow: {
+                lighter: withOpacityValue("--yellow-lighter"),
                 light: withOpacityValue("--yellow-light"),
                 primary: withOpacityValue("--yellow-primary"),
                 dark: withOpacityValue("--yellow-dark")

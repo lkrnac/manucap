@@ -24,7 +24,10 @@ describe("CueErrorAlert", () => {
         testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
 
         const expectedNode = render(
-            <div className="p-toast p-component p-toast-top-center">
+            <div
+                className="p-toast p-component p-toast-top-center w-half
+                    border-none overflow-hidden max-w-none !z-100"
+            >
                 <div>
                     <div
                         className="p-toast-message p-toast-message-error
@@ -33,7 +36,10 @@ describe("CueErrorAlert", () => {
                         aria-live="assertive"
                         aria-atomic="true"
                     >
-                        <div className="p-toast-message-content">
+                        <div
+                            className="p-toast-message-content bg-red-lighter px-6
+                                py-4 border-red-dark text-red-primary"
+                        >
                             <span className="p-toast-message-icon pi pi-times" />
                             <div className="p-toast-message-text">
                                 <span className="p-toast-summary">
@@ -74,7 +80,10 @@ describe("CueErrorAlert", () => {
 
         const expectedNode = render(
             <>
-                <div className="p-toast p-component p-toast-top-center">
+                <div
+                    className="p-toast p-component p-toast-top-center w-half
+                        border-none overflow-hidden max-w-none !z-100"
+                >
                     <div />
                 </div>
             </>
@@ -104,7 +113,10 @@ describe("CueErrorAlert", () => {
 
         const expectedNode = render(
             <>
-                <div className="p-toast p-component p-toast-top-center">
+                <div
+                    className="p-toast p-component p-toast-top-center w-half
+                        border-none overflow-hidden max-w-none !z-100"
+                >
                     <div />
                 </div>
             </>
@@ -135,7 +147,11 @@ describe("CueErrorAlert", () => {
         // GIVEN
         testingStore.dispatch(setValidationErrors([CueError.LINE_CHAR_LIMIT_EXCEEDED]) as {} as AnyAction);
         const expectedNode = render(
-            <div className="p-toast p-component p-toast-top-center" style={{}}>
+            <div
+                className="p-toast p-component p-toast-top-center w-half
+                    border-none overflow-hidden max-w-none !z-100"
+                style={{}}
+            >
                 <div>
                     <div
                         className="p-toast-message p-toast-message-error p-toast-message-enter-done"
@@ -143,7 +159,10 @@ describe("CueErrorAlert", () => {
                         aria-live="assertive"
                         aria-atomic="true"
                     >
-                        <div className="p-toast-message-content">
+                        <div
+                            className="p-toast-message-content bg-red-lighter
+                                px-6 py-4 border-red-dark text-red-primary"
+                        >
                             <span className="p-toast-message-icon pi pi-times" />
                             <div className="p-toast-message-text">
                                 <span className="p-toast-summary">
