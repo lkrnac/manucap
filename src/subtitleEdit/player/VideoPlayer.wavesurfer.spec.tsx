@@ -67,6 +67,7 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.regions.list[0].loop).toBeFalsy();
         expect(actualComponent.wavesurfer.regions.list[0].resize).toBeTruthy();
         expect(actualComponent.wavesurfer.regions.list[0].formatTimeCallback(0, 2)).toEqual("00:00:000-00:02:000");
+        expect(actualComponent.wavesurfer.getCurrentTime()).toEqual(0);
     });
 
     it("initializes wavesurfer with regions", async () => {
