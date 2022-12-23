@@ -43,7 +43,6 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const handleTimeChange = (time: number): AppThunk => dispatch(setCurrentPlayerTime(time));
-    const cuesLoadingCounter = useSelector((state: SubtitleEditState) => state.cuesLoadingCounter);
 
     useEffect(
         () => (): void => { // nested arrow function is needed, because React will call it as callback when unmounted
@@ -89,7 +88,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                     :
                     <div style={{ display: "flex", alignItems: "flex-start", height: "100%" }}>
                         <div style={{ flex: "1 1 40%", display: "flex", flexFlow: "column", paddingRight: "10px" }}>
-                            <div className="video-player-wrapper" key={cuesLoadingCounter}>
+                            <div className="video-player-wrapper">
                                 <EditingVideoPlayer
                                     mp4={props.mp4}
                                     poster={props.poster}
