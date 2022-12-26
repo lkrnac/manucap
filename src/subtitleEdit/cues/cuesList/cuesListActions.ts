@@ -215,17 +215,12 @@ export const validateCue = (
     dispatch(checkErrors({ index, shouldSpellCheck: shouldSpellCheck }));
 };
 
-// TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
-// @ts-ignore rolled back
 const reorderCuesIfNeeded = function ( // eslint-disable-line @typescript-eslint/no-unused-vars
     dispatch: Dispatch<SubtitleEditAction>,
     state: SubtitleEditState,
     cuesToUpdate?: CueDto[]
 ): void {
     const newCues = cuesToUpdate ? cuesToUpdate : state.cues;
-    if (state.sourceCues && state.sourceCues.length !== 0) {
-        dispatch(cuesSlice.actions.updateCues({ cues: newCues }));
-    }
     const editingCueIndex = state.editingCueIndex;
     let editUuid = null;
     if (editingCueIndex > -1
@@ -237,6 +232,7 @@ const reorderCuesIfNeeded = function ( // eslint-disable-line @typescript-eslint
     const newEditingCueIndex = _.findIndex(sortedCues, [ "editUuid", editUuid ]);
     dispatch(cuesSlice.actions.updateCues({ cues: sortedCues }));
     if (editingCueIndex != newEditingCueIndex) {
+        dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "UPDATE_ALL", index: -1 }));
         dispatch(focusedInputSlice.actions.updateFocusedInput("START_TIME"));
         dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: newEditingCueIndex }));
     }
@@ -314,10 +310,9 @@ export const updateVttCue = (
             const newCue = { ...originalCue, idx, vttCue: newVttCue, editUuid: uuidv4() };
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
-            // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
-            // if (vttCue.startTime !== originalCue.vttCue.startTime) {
-            //     reorderCuesIfNeeded(dispatch, getState());
-            // }
+            if (vttCue.startTime !== originalCue.vttCue.startTime) {
+                reorderCuesIfNeeded(dispatch, getState());
+            }
             if (getState().searchReplaceVisible) {
                 updateSearchMatches(dispatch, getState, newCue);
             }
@@ -480,10 +475,14 @@ export const deleteCue = (idx: number): AppThunk =>
     };
 
 export const updateCues = (cues: CueDto[]): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction>): void => {
-        dispatch(cuesSlice.actions.updateCues({ cues }));
-        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
-        // reorderCuesIfNeeded(dispatch, getState(), cues);
+    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
+        const state = getState();
+        if (state.sourceCues && state.sourceCues.length !== 0) {
+            dispatch(cuesSlice.actions.updateCues({ cues }));
+        } else {
+            reorderCuesIfNeeded(dispatch, getState(), cues);
+            dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "UPDATE_ALL", index: -1 }));
+        }
         dispatch(updateMatchedCues());
     };
 
@@ -493,10 +492,9 @@ export const applyShiftTimeByPosition = (shiftPosition: ShiftPosition, cueIndex:
         validateShift(shiftPosition, cueIndex);
         validateShiftWithinChunkRange(shiftTime, editingTrack, getState().cues);
         dispatch(cuesSlice.actions.applyShiftTimeByPosition({ cueIndex, shiftTime, shiftPosition }));
-        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
-        // if (cueIndex > 0) {
-        //     reorderCuesIfNeeded(dispatch, getState());
-        // }
+        if (cueIndex > 0) {
+            reorderCuesIfNeeded(dispatch, getState());
+        }
         dispatch(updateMatchedCues());
         callSaveTrack(dispatch, getState, true);
     };

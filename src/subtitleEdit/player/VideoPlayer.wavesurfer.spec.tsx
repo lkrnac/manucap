@@ -1,5 +1,5 @@
 import "../../testUtils/initBrowserEnvironment";
-import { CueDto, Track, WaveformRegion } from "../model";
+import { CueDto, LanguageCues, Track, WaveformRegion } from "../model";
 import VideoPlayer from "./VideoPlayer";
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
@@ -67,6 +67,7 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.regions.list[0].loop).toBeFalsy();
         expect(actualComponent.wavesurfer.regions.list[0].resize).toBeTruthy();
         expect(actualComponent.wavesurfer.regions.list[0].formatTimeCallback(0, 2)).toEqual("00:00:000-00:02:000");
+        expect(actualComponent.wavesurfer.getCurrentTime()).toEqual(0);
     });
 
     it("initializes wavesurfer with regions", async () => {
@@ -385,6 +386,54 @@ describe("VideoPlayer with waveform", () => {
         expect(actualComponent.wavesurfer.regions.list[0].start).toEqual(0);
         expect(actualComponent.wavesurfer.regions.list[0].end).toEqual(4);
         expect(actualComponent.wavesurfer.regions.list[1]).toBeUndefined();
+    });
+
+    it("updates wavesurfer regions when cues are updated", async () => {
+        // GIVEN
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            waveform: "dummyWaveform",
+            mediaLength: 20000,
+            waveformVisible: true,
+            cues,
+            tracks,
+            languageCuesArray: [] as LanguageCues[],
+            lastCueChange: null
+        };
+        const actualNode = mount(
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
+        );
+        await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
+        const newCaptionCues = [
+            { vttCue: new VTTCue(0, 1, "New Caption Line A"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "New Caption Line B"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "New Caption Line C"), cueCategory: "DIALOGUE" }
+        ] as CueDto[];
+
+        // WHEN
+        actualNode.setProps({
+            // @ts-ignore I only need to update these props
+            lastCueChange: { changeType: "UPDATE_ALL", index: -1 },
+            cues: newCaptionCues,
+            languageCuesArray: [{ languageId: "en-US", cues: newCaptionCues }] as LanguageCues[]
+        });
+
+        // THEN
+        const videoNode = actualNode.find("VideoPlayer");
+        // @ts-ignore can't find the correct syntax
+        const actualComponent = videoNode.instance() as VideoPlayer;
+
+        expect(actualComponent.wavesurfer.regions.list[0].attributes.label).toEqual("New Caption Line A");
+        expect(actualComponent.wavesurfer.regions.list[0].start).toEqual(0);
+        expect(actualComponent.wavesurfer.regions.list[0].end).toEqual(1);
+        expect(actualComponent.wavesurfer.regions.list[1].attributes.label).toEqual("New Caption Line B");
+        expect(actualComponent.wavesurfer.regions.list[1].start).toEqual(1);
+        expect(actualComponent.wavesurfer.regions.list[1].end).toEqual(2);
+        expect(actualComponent.wavesurfer.regions.list[2].attributes.label).toEqual("New Caption Line C");
+        expect(actualComponent.wavesurfer.regions.list[2].start).toEqual(2);
+        expect(actualComponent.wavesurfer.regions.list[2].end).toEqual(3);
+        expect(actualComponent.wavesurfer.regions.list[3]).toBeUndefined();
     });
 
     it("hides waveform if no waveform url is present", async () => {

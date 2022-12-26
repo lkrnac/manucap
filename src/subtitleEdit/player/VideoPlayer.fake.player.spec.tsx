@@ -797,6 +797,63 @@ describe("VideoPlayer tested with fake player", () => {
         expect(textTracks[0].cues).toHaveLength(2);
     });
 
+    it("replaces track content when all cues are updated", () => {
+        // GIVEN
+        const captionCues = [
+            new VTTCue(0, 1, "Caption Line 1"),
+            new VTTCue(1, 2, "Caption Line 2"),
+            new VTTCue(2, 3, "Caption Line 3"),
+            new VTTCue(3, 4, "Caption Line 4")
+        ];
+        const textTracks = [
+            {
+                language: "en-US",
+                addCue: (cue: VTTCue): number => captionCues.push(cue),
+                removeCue: (cue: VTTCue): VTTCue[] => captionCues.splice(captionCues.indexOf(cue), 1),
+                length: 4,
+                cues: captionCues,
+                dispatchEvent: jest.fn()
+            },
+        ];
+        textTracks["addEventListener"] = jest.fn();
+
+        const playerMock = {
+            textTracks: (): FakeTextTrack[] => textTracks,
+            on: jest.fn()
+        };
+
+        // @ts-ignore - we are mocking the module
+        videojs.mockImplementationOnce(() => playerMock);
+        const properties = {
+            poster: "dummyPosterUrl",
+            mp4: "dummyMp4Url",
+            tracks: initialTestingTracks,
+            languageCuesArray: initialTestingLanguageCuesArray,
+            lastCueChange: null
+        };
+        const actualNode = mount(
+            React.createElement(props => (<VideoPlayer {...props} />), properties)
+        );
+        const newCaptionCues = [
+            { vttCue: new VTTCue(0, 1, "New Caption Line A"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(1, 2, "New Caption Line B"), cueCategory: "DIALOGUE" },
+            { vttCue: new VTTCue(2, 3, "New Caption Line C"), cueCategory: "DIALOGUE" }
+        ];
+
+        // WHEN
+        actualNode.setProps({
+            // @ts-ignore I only need to update these props
+            lastCueChange: { changeType: "UPDATE_ALL", index: -1 },
+            cues: newCaptionCues,
+            languageCuesArray: [{ languageId: "en-US", cues: newCaptionCues }] as LanguageCues[]
+        });
+
+        // THEN
+        expect(textTracks[0].cues[0].text).toEqual("New Caption Line A");
+        expect(textTracks[0].cues[1].text).toEqual("New Caption Line B");
+        expect(textTracks[0].cues[2].text).toEqual("New Caption Line C");
+        expect(textTracks[0].cues).toHaveLength(3);
+    });
 
     it("maintains cue styles when cue is updated", () => {
         // GIVEN

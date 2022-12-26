@@ -31,7 +31,7 @@ import { resetEditingTrack, updateEditingTrack } from "../../trackSlices";
 import { generateSpellcheckHash } from "../spellCheck/spellCheckerUtils";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
-import { lastCueChangeSlice, updateEditingCueIndex } from "../edit/cueEditorSlices";
+import { clearLastCueChange, lastCueChangeSlice, updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { SaveState } from "../saveSlices";
 import { cuesSlice, matchedCuesSlice, ShiftPosition } from "./cuesListSlices";
 import * as cuesListScrollSlice from "./cuesListScrollSlice";
@@ -168,6 +168,7 @@ describe("cueSlices", () => {
         it("doesn't update top level cue when editUuid is different", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(clearLastCueChange() as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(updateVttCue(1, new VTTCue(2, 2.5, "Dummy Cue"), uuidv4()) as {} as AnyAction);
@@ -1603,8 +1604,7 @@ describe("cueSlices", () => {
         });
 
         describe("ordering of source cues", () => {
-            // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
-            it.skip("reorder cues if cue position changes when editing start time", () => {
+            it("reorder cues if cue position changes when editing start time", () => {
                 // GIVEN
                 const track = { ...testingTrack, overlapEnabled: true };
                 testingStore.dispatch(updateEditingTrack(track) as {} as AnyAction);
@@ -1623,11 +1623,9 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().lastCueChange.changeType).toEqual("EDIT");
-                expect(testingStore.getState().lastCueChange.index).toEqual(2);
-                expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
-                expect(testingStore.getState().cues[1].vttCue === testingStore.getState().lastCueChange.vttCue)
-                    .toBeTruthy();
+                expect(testingStore.getState().lastCueChange.changeType).toEqual("UPDATE_ALL");
+                expect(testingStore.getState().lastCueChange.index).toEqual(-1);
+                expect(testingStore.getState().lastCueChange.vttCue).toBeUndefined();
                 expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
                 expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
                 expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
@@ -1635,8 +1633,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().focusedInput).toEqual("START_TIME");
             });
 
-            // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
-            it.skip("don't reorder cues if cue position doesn't change when editing start time", () => {
+            it("don't reorder cues if cue position doesn't change when editing start time", () => {
                 // GIVEN
                 const track = { ...testingTrack, overlapEnabled: true };
                 testingStore.dispatch(updateEditingTrack(track) as {} as AnyAction);
@@ -2813,10 +2810,10 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
             expect(testingStore.getState().cues[0].errors).toEqual([]);
             expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
+            expect(testingStore.getState().lastCueChange.changeType).toEqual("UPDATE_ALL");
         });
 
-        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
-        it.skip("reorder cues based on start time", () => {
+        it("reorder cues based on start time", () => {
             // GIVEN
             const notOrderedCues = [
                 { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
@@ -2841,8 +2838,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(1);
         });
 
-        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
-        it.skip("resets editing cue index if out of range when reordering cues", () => {
+        it("resets editing cue index if out of range when reordering cues", () => {
             // GIVEN
             testingStore.dispatch(updateEditingCueIndex(8) as {} as AnyAction);
             const notOrderedCues = [
@@ -2920,8 +2916,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
         });
 
-        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
-        it.skip("reorder cues when shifting time before cue index", () => {
+        it("reorder cues when shifting time before cue index", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
@@ -2939,8 +2934,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
         });
 
-        // TODO Revert when fixed: https://dotsub.atlassian.net/browse/DSD-1192
-        it.skip("reorder cues when shifting time after cue index", () => {
+        it("reorder cues when shifting time after cue index", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
