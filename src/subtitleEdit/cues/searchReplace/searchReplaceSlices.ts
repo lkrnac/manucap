@@ -10,11 +10,110 @@ import sanitizeHtml from "sanitize-html";
 import _ from "lodash";
 import { updateEditingCueIndexNoThunk } from "../edit/cueEditorSlices";
 
+export const searchReplaceVisibleSlice = createSlice({
+    name: "searchReplaceVisible",
+    initialState: false,
+    reducers: {
+        setSearchReplaceVisible: (_state, action: PayloadAction<boolean>): boolean => action.payload
+    },
+    extraReducers: {
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): boolean => false
+    }
+});
+
+const initialSearchReplace = {
+    find: "",
+    replacement: "",
+    matchCase: false,
+    direction: "NEXT",
+    indices: {
+        matchedCueIndex: -1,
+        sourceCueIndex: -1,
+        targetCueIndex: -1,
+        isSourceCue: true
+    }
+} as SearchReplace;
+
+export const searchReplaceSlice = createSlice({
+    name: "searchReplace",
+    initialState: initialSearchReplace,
+    reducers: {
+        setFind: (_state, action: PayloadAction<string>): void => {
+            _state.find = action.payload;
+        },
+        setReplacement: (_state, action: PayloadAction<string>): void => {
+            _state.replacement = action.payload;
+        },
+        setMatchCase: (_state, action: PayloadAction<boolean>): void => {
+            _state.matchCase = action.payload;
+        },
+        setDirection: (_state, action: PayloadAction<SearchDirection>): void => {
+            _state.direction = action.payload;
+        },
+        replaceMatchSignal: (state, action: PayloadAction<string>): void => {
+            state.replacement = action.payload;
+        },
+        setIndices: (state, action: PayloadAction<SearchReplaceIndices>): void => {
+            state.indices = action.payload;
+        },
+        setMatches: (state, action: PayloadAction<SearchReplaceMatches>): void => {
+            state.matches = action.payload;
+        },
+    },
+    extraReducers: {
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): SearchReplace => initialSearchReplace,
+        [mergeVisibleSlice.actions.setMergeVisible.type]: (): SearchReplace => initialSearchReplace,
+        [searchReplaceVisibleSlice.actions.setSearchReplaceVisible.type]:
+            (_state, action: PayloadAction<boolean>): SearchReplace =>
+                action.payload ? _state : initialSearchReplace
+    }
+});
+
+const updateCueMatchesIfNeeded = (
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
+    find: string,
+    matchCase: boolean,
+    getState: Function): void => {
+    const cueIndex = getState().editingCueIndex;
+    if (cueIndex !== -1) {
+        const currentCue = getState().cues[cueIndex];
+        const offsets = searchCueText(currentCue.vttCue.text, find, matchCase);
+        dispatch(searchReplaceSlice.actions.setMatches({ offsets, matchLength: find.length, offsetIndex: 0 }));
+    }
+};
+
+export const setFind = (find: string): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
+        dispatch(searchReplaceSlice.actions.setFind(find));
+        const matchCase = getState().searchReplace.matchCase;
+        updateCueMatchesIfNeeded(dispatch, find, matchCase, getState);
+    };
+
+export const setReplacement = (replacement: string): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
+        dispatch(searchReplaceSlice.actions.setReplacement(replacement));
+    };
+
+export const setMatchCase = (matchCase: boolean): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
+        dispatch(searchReplaceSlice.actions.setMatchCase(matchCase));
+        const find = getState().searchReplace.find;
+        updateCueMatchesIfNeeded(dispatch, find, matchCase, getState);
+    };
+
+export const showSearchReplace = (visible: boolean): AppThunk =>
+    (dispatch: Dispatch<PayloadAction<boolean | SubtitleEditAction>>, getState): void => {
+        dispatch(searchReplaceVisibleSlice.actions.setSearchReplaceVisible(visible));
+        const find = getState().searchReplace.find;
+        const matchCase = getState().searchReplace.matchCase;
+        updateCueMatchesIfNeeded(dispatch, find, matchCase, getState);
+    };
+
 const getNextCue = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
     getState: Function,
     previousDirection: string
-    ): CueDto => {
+): CueDto => {
     const matchedCues = getState().matchedCues.matchedCues;
     const searchReplace = getState().searchReplace;
     let currentCue = undefined as unknown as CueDto;
@@ -67,7 +166,7 @@ const getPreviousCue = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
     getState: Function,
     previousDirection: string
-    ): CueDto => {
+): CueDto => {
     const matchedCues = getState().matchedCues.matchedCues;
     const searchReplace = getState().searchReplace;
     let currentCue = undefined as unknown as CueDto;
@@ -162,105 +261,6 @@ const getCueAndUpdateIndices = (
         ? getNextCue(dispatch, getState, previousDirection)
         : getPreviousCue(dispatch, getState, previousDirection);
 };
-
-const updateCueMatchesIfNeeded = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
-    find: string,
-    matchCase: boolean,
-    getState: Function): void => {
-    const cueIndex = getState().editingCueIndex;
-    if (cueIndex !== -1) {
-        const currentCue = getState().cues[cueIndex];
-        const offsets = searchCueText(currentCue.vttCue.text, find, matchCase);
-        dispatch(searchReplaceSlice.actions.setMatches({ offsets, matchLength: find.length, offsetIndex: 0 }));
-    }
-};
-
-export const searchReplaceVisibleSlice = createSlice({
-    name: "searchReplaceVisible",
-    initialState: false,
-    reducers: {
-        setSearchReplaceVisible: (_state, action: PayloadAction<boolean>): boolean => action.payload
-    },
-    extraReducers: {
-        [editingTrackSlice.actions.resetEditingTrack.type]: (): boolean => false
-    }
-});
-
-const initialSearchReplace = {
-    find: "",
-    replacement: "",
-    matchCase: false,
-    direction: "NEXT",
-    indices: {
-        matchedCueIndex: -1,
-        sourceCueIndex: -1,
-        targetCueIndex: -1,
-        isSourceCue: true
-    }
-} as SearchReplace;
-
-export const searchReplaceSlice = createSlice({
-    name: "searchReplace",
-    initialState: initialSearchReplace,
-    reducers: {
-        setFind: (_state, action: PayloadAction<string>): void => {
-            _state.find = action.payload;
-        },
-        setReplacement: (_state, action: PayloadAction<string>): void => {
-            _state.replacement = action.payload;
-        },
-        setMatchCase: (_state, action: PayloadAction<boolean>): void => {
-            _state.matchCase = action.payload;
-        },
-        setDirection: (_state, action: PayloadAction<SearchDirection>): void => {
-            _state.direction = action.payload;
-        },
-        replaceMatchSignal: (state, action: PayloadAction<string>): void => {
-            state.replacement = action.payload;
-        },
-        setIndices: (state, action: PayloadAction<SearchReplaceIndices>): void => {
-            state.indices = action.payload;
-        },
-        setMatches: (state, action: PayloadAction<SearchReplaceMatches>): void => {
-            state.matches = action.payload;
-        },
-    },
-    extraReducers: {
-        [editingTrackSlice.actions.resetEditingTrack.type]: (): SearchReplace => initialSearchReplace,
-        [mergeVisibleSlice.actions.setMergeVisible.type]: (): SearchReplace => initialSearchReplace,
-        [searchReplaceVisibleSlice.actions.setSearchReplaceVisible.type]:
-            (_state, action: PayloadAction<boolean>): SearchReplace =>
-                action.payload ? _state : initialSearchReplace
-    }
-});
-
-export const setFind = (find: string): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
-        dispatch(searchReplaceSlice.actions.setFind(find));
-        const matchCase = getState().searchReplace.matchCase;
-        updateCueMatchesIfNeeded(dispatch, find, matchCase, getState);
-    };
-
-export const setReplacement = (replacement: string): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
-        dispatch(searchReplaceSlice.actions.setReplacement(replacement));
-    };
-
-export const setMatchCase = (matchCase: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState): void => {
-        dispatch(searchReplaceSlice.actions.setMatchCase(matchCase));
-        const find = getState().searchReplace.find;
-        updateCueMatchesIfNeeded(dispatch, find, matchCase, getState);
-    };
-
-export const showSearchReplace = (visible: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<boolean | SubtitleEditAction>>, getState): void => {
-        dispatch(searchReplaceVisibleSlice.actions.setSearchReplaceVisible(visible));
-        const find = getState().searchReplace.find;
-        const matchCase = getState().searchReplace.matchCase;
-        updateCueMatchesIfNeeded(dispatch, find, matchCase, getState);
-    };
 
 // Sourced from SO https://stackoverflow.com/a/3561711 See post for eslint disable about escaping /
 /* eslint-disable no-useless-escape */
