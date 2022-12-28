@@ -14,7 +14,7 @@ const getNextCue = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
     getState: Function,
     previousDirection: string
-): CueDto => {
+    ): CueDto => {
     const matchedCues = getState().matchedCues.matchedCues;
     const searchReplace = getState().searchReplace;
     let currentCue = undefined as unknown as CueDto;
@@ -24,14 +24,9 @@ const getNextCue = (
     let targetCueIndex = indices.targetCueIndex;
     let isSourceCue = indices.isSourceCue;
     let foundMatch = false;
-    let matchedCue = matchedCues[matchedCueIndex];
-    if (matchedCue && previousDirection !== "NEXT") {
-        sourceCueIndex = getFirstSourceCueIndex(matchedCue);
-        targetCueIndex = getLastTargetCueIndex(matchedCue);
-    }
     try {
         for (; matchedCueIndex <= matchedCues.length - 1; matchedCueIndex++) {
-            matchedCue = matchedCues[matchedCueIndex];
+            const matchedCue = matchedCues[matchedCueIndex];
             sourceCueIndex++;
             matchedCue.sourceCues?.forEach((sourceCue: CueDtoWithIndex) => {
                 if (sourceCue.index === sourceCueIndex) {
@@ -46,7 +41,7 @@ const getNextCue = (
             });
             sourceCueIndex--;
             if (!currentCue) {
-                targetCueIndex++;
+                previousDirection === "NEXT" ? targetCueIndex++ : null;
                 matchedCue.targetCues?.forEach((targetCue: CueDtoWithIndex) => {
                     if (targetCue.index === targetCueIndex) {
                         foundMatch = searchCueText(targetCue.cue.vttCue.text, searchReplace.find,
@@ -58,7 +53,7 @@ const getNextCue = (
                         }
                     }
                 });
-                targetCueIndex--;
+                previousDirection === "NEXT" ? targetCueIndex-- : null;
             }
         }
     } catch (e) {
@@ -82,14 +77,9 @@ const getPreviousCue = (
     let targetCueIndex = indices.targetCueIndex;
     let isSourceCue = indices.isSourceCue;
     let foundMatch = false;
-    let matchedCue = matchedCues[matchedCueIndex];
-    if (matchedCue && previousDirection !== "PREVIOUS") {
-        sourceCueIndex = getLastSourceCueIndex(matchedCue);
-        targetCueIndex = getFirstTargetCueIndex(matchedCue);
-    }
     try {
-        for (; matchedCueIndex > 0; matchedCueIndex--) {
-            matchedCue = matchedCues[matchedCueIndex];
+        for (; matchedCueIndex >= 0; matchedCueIndex--) {
+            const matchedCue = matchedCues[matchedCueIndex];
             targetCueIndex--;
             matchedCue.targetCues?.forEach((targetCue: CueDtoWithIndex) => {
                 if (targetCue.index === targetCueIndex) {
@@ -104,7 +94,7 @@ const getPreviousCue = (
             });
             targetCueIndex++;
             if (!currentCue) {
-                sourceCueIndex--;
+                previousDirection === "PREVIOUS" ? sourceCueIndex-- : null;
                 matchedCue.sourceCues?.forEach((sourceCue: CueDtoWithIndex) => {
                     if (sourceCue.index === sourceCueIndex) {
                         foundMatch = searchCueText(sourceCue.cue.vttCue.text, searchReplace.find,
@@ -116,7 +106,7 @@ const getPreviousCue = (
                         }
                     }
                 });
-                sourceCueIndex++;
+                previousDirection === "PREVIOUS" ? sourceCueIndex++ : null;
             }
         }
     } catch (e) {
@@ -124,34 +114,6 @@ const getPreviousCue = (
     }
     dispatch(searchReplaceSlice.actions.setIndices({ matchedCueIndex, sourceCueIndex, targetCueIndex, isSourceCue }));
     return currentCue;
-};
-
-const getFirstSourceCueIndex = (matchedCue: CueLineDto): number => {
-    if (matchedCue.sourceCues && matchedCue.sourceCues.length > 0) {
-        return matchedCue.sourceCues[0].index;
-    }
-    return -1;
-};
-
-const getLastSourceCueIndex = (matchedCue: CueLineDto): number => {
-    if (matchedCue.sourceCues && matchedCue.sourceCues.length > 0) {
-        return matchedCue.sourceCues[matchedCue.sourceCues.length - 1].index;
-    }
-    return -1;
-};
-
-const getFirstTargetCueIndex = (matchedCue: CueLineDto): number => {
-    if (matchedCue.targetCues && matchedCue.targetCues.length > 0) {
-        return matchedCue.targetCues[0].index;
-    }
-    return -1;
-};
-
-const getLastTargetCueIndex = (matchedCue: CueLineDto): number => {
-    if (matchedCue.targetCues && matchedCue.targetCues.length > 0) {
-        return matchedCue.targetCues[matchedCue.targetCues.length - 1].index;
-    }
-    return -1;
 };
 
 const getCueAndUpdateIndices = (
