@@ -32,7 +32,7 @@ describe("CueView", () => {
                     className="testingClassName border-b border-blue-light/20 sbte-click-cue-wrapper"
                 >
                     <div
-                        className="sbte-cue-line-left-section"
+                        className="sbte-cue-line-left-section-0"
                         style={{
                             flex: "1 1 300px",
                             display: "flex",
@@ -106,7 +106,7 @@ describe("CueView", () => {
                     className="border-b border-blue-light/20 sbte-click-cue-wrapper"
                 >
                     <div
-                        className="sbte-cue-line-left-section"
+                        className="sbte-cue-line-left-section-0"
                         style={{
                             flex: "1 1 300px",
                             display: "flex",
@@ -179,7 +179,7 @@ describe("CueView", () => {
                     className="border-b border-blue-light/20 sbte-click-cue-wrapper"
                 >
                     <div
-                        className="sbte-cue-line-left-section"
+                        className="sbte-cue-line-left-section-0"
                         style={{
                             flex: "1 1 300px",
                             display: "flex",

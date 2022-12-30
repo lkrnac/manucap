@@ -104,7 +104,7 @@ const CueView = (props: CueViewProps): ReactElement => {
         >
             <>
                 <div
-                    className="sbte-cue-line-left-section"
+                    className={`sbte-cue-line-left-section-${props.rowIndex}`}
                     style={{
                         flex: "1 1 300px",
                         display: "flex",
