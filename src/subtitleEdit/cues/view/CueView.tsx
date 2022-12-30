@@ -10,6 +10,7 @@ import ClickCueWrapper from "./ClickCueWrapper";
 import { validateVttCue } from "../cuesList/cuesListActions";
 
 export interface CueViewProps {
+    rowIndex: number;
     cue: CueDto;
     isTargetCue: boolean;
     targetCuesLength: number;
