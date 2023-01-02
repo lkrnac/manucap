@@ -126,33 +126,35 @@ const getNextCue = (
     try {
         for (; matchedCueIndex <= matchedCues.length - 1; matchedCueIndex++) {
             const matchedCue = matchedCues[matchedCueIndex];
-            sourceCueIndex++;
-            matchedCue.sourceCues?.forEach((sourceCue: CueDtoWithIndex) => {
-                if (sourceCue.index === sourceCueIndex) {
-                    foundMatch = searchCueText(sourceCue.cue.vttCue.text, searchReplace.find,
-                        searchReplace.matchCase).length > 0;
-                    if (foundMatch) {
-                        currentCue = sourceCue.cue;
-                        isSourceCue = true;
-                        throw "Cue found";
-                    }
-                }
-            });
-            sourceCueIndex--;
-            if (!currentCue) {
-                previousDirection === "NEXT" ? targetCueIndex++ : null;
-                matchedCue.targetCues?.forEach((targetCue: CueDtoWithIndex) => {
-                    if (targetCue.index === targetCueIndex) {
-                        foundMatch = searchCueText(targetCue.cue.vttCue.text, searchReplace.find,
+            if (matchedCue) {
+                sourceCueIndex++;
+                matchedCue.sourceCues?.forEach((sourceCue: CueDtoWithIndex) => {
+                    if (sourceCue.index === sourceCueIndex) {
+                        foundMatch = searchCueText(sourceCue.cue.vttCue.text, searchReplace.find,
                             searchReplace.matchCase).length > 0;
                         if (foundMatch) {
-                            currentCue = targetCue.cue;
-                            isSourceCue = false;
+                            currentCue = sourceCue.cue;
+                            isSourceCue = true;
                             throw "Cue found";
                         }
                     }
                 });
-                previousDirection === "NEXT" ? targetCueIndex-- : null;
+                sourceCueIndex--;
+                if (!currentCue) {
+                    previousDirection === "NEXT" ? targetCueIndex++ : null;
+                    matchedCue.targetCues?.forEach((targetCue: CueDtoWithIndex) => {
+                        if (targetCue.index === targetCueIndex) {
+                            foundMatch = searchCueText(targetCue.cue.vttCue.text, searchReplace.find,
+                                searchReplace.matchCase).length > 0;
+                            if (foundMatch) {
+                                currentCue = targetCue.cue;
+                                isSourceCue = false;
+                                throw "Cue found";
+                            }
+                        }
+                    });
+                    previousDirection === "NEXT" ? targetCueIndex-- : null;
+                }
             }
         }
     } catch (e) {
