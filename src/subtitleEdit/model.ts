@@ -117,9 +117,9 @@ export interface LoadingIndicator {
 }
 
 export interface CueChange {
-    changeType: "ADD" | "EDIT" | "REMOVE" | "SPLIT" | "MERGE";
+    changeType: "ADD" | "EDIT" | "REMOVE" | "SPLIT" | "MERGE" | "UPDATE_ALL";
     index: number;
-    vttCue: VTTCue;
+    vttCue?: VTTCue;
 }
 
 

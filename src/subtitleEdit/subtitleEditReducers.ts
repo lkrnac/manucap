@@ -12,7 +12,6 @@ import {
     scrollPositionSlice,
     currentCueErrorIndexSlice
 } from "./cues/cuesList/cuesListScrollSlice";
-import { cuesLoadingCounterSlice } from "./cues/cuesLoadingCounterSlice";
 import { searchReplaceSlice, searchReplaceVisibleSlice } from "./cues/searchReplace/searchReplaceSlices";
 import { mergeVisibleSlice, rowsToMergeSlice } from "./cues/merge/mergeSlices";
 import { spellcheckerSettingsSlice } from "./spellcheckerSettingsSlice";
@@ -35,7 +34,6 @@ export const Reducers = {
     loadingIndicator: loadingIndicatorSlices.reducer,
     saveTrack: saveTrackSlice.reducer,
     saveAction: saveActionSlice.reducer,
-    cuesLoadingCounter: cuesLoadingCounterSlice.reducer,
     spellCheckerSettings: spellcheckerSettingsSlice.reducer,
     searchReplace: searchReplaceSlice.reducer,
     searchReplaceVisible: searchReplaceVisibleSlice.reducer,

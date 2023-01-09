@@ -5,7 +5,7 @@ import deepFreeze from "deep-freeze";
 import { searchCueText, setValidationErrors, updateEditingCueIndex } from "./cueEditorSlices";
 import { CueDto, CueError, Track } from "../../model";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { updateEditingTrack } from "../../trackSlices";
+import { resetEditingTrack, updateEditingTrack } from "../../trackSlices";
 import { updateCues } from "../cuesList/cuesListActions";
 
 let testingStore = createTestingStore();
@@ -41,6 +41,17 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().editingCueIndex).toEqual(5);
+        });
+
+        it("resetEditingTrack resets the editingCueIndex flag", () => {
+            // GIVEN
+            testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(resetEditingTrack() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
         });
 
         it("update scroll position when zero", () => {

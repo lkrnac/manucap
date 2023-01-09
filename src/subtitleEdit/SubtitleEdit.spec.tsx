@@ -13,7 +13,7 @@ import {
     removeDraftJsDynamicValues,
     removeVideoPlayerDynamicValue,
 } from "../testUtils/testUtils";
-import { updateCues, updateVttCue } from "./cues/cuesList/cuesListActions";
+import { updateCues } from "./cues/cuesList/cuesListActions";
 import { updateEditingTrack } from "./trackSlices";
 import CueLine from "./cues/cueLine/CueLine";
 import SubtitleEdit from "./SubtitleEdit";
@@ -1585,62 +1585,5 @@ describe("SubtitleEdit", () => {
 
         // THEN
         expect(testingStore.getState().spellCheckerSettings.domain).toEqual("testing-domain");
-    });
-
-    it("remount EditingVideoPlayer when cues are loaded", () => {
-        // GIVEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    onViewTrackHistory={(): void => undefined}
-                    onSave={jest.fn()}
-                    onComplete={(): void => undefined}
-                    onExportSourceFile={(): void => undefined}
-                    onExportFile={(): void => undefined}
-                    onImportFile={(): void => undefined}
-                />
-            </Provider>
-        );
-
-        // WHEN
-        testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
-
-        for (let i = 0; i < 5; i++) {
-            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-            actualNode.update();
-        }
-
-        // THEN
-        expect(actualNode.find(".video-player-wrapper").key()).toEqual("5");
-    });
-
-    it("does not remount EditingVideoPlayer when cues are updated", () => {
-        // GIVEN
-        const actualNode = mount(
-            <Provider store={testingStore}>
-                <SubtitleEdit
-                    mp4="dummyMp4"
-                    poster="dummyPoster"
-                    onViewTrackHistory={(): void => undefined}
-                    onSave={jest.fn()}
-                    onComplete={(): void => undefined}
-                    onExportSourceFile={(): void => undefined}
-                    onExportFile={(): void => undefined}
-                    onImportFile={(): void => undefined}
-                />
-            </Provider>
-        );
-        testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-
-        // WHEN
-        testingStore.dispatch(updateVttCue(0, new VTTCue(2, 5, "Dummy Cue"),
-            "editUuid") as {} as AnyAction);
-        actualNode.update();
-
-        // THEN
-        expect(actualNode.find(".video-player-wrapper").key()).toEqual("1");
     });
 });
