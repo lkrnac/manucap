@@ -26,7 +26,8 @@ export const editingCueIndexSlice = createSlice({
         [cuesSlice.actions.addCue.type]:
             (_state, action: PayloadAction<CueIndexAction>): number => action.payload.idx,
         [cuesSlice.actions.deleteCue.type]: (): number => -1,
-        [mergeVisibleSlice.actions.setMergeVisible.type]: (): number => -1
+        [mergeVisibleSlice.actions.setMergeVisible.type]: (): number => -1,
+        [editingTrackSlice.actions.resetEditingTrack.type]: (): number => -1
     }
 });
 
