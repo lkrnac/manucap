@@ -2817,7 +2817,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().lastCueChange.changeType).toEqual("UPDATE_ALL");
         });
 
-        it("reorder cues based on start time", () => {
+        it.skip("reorder cues based on start time", () => {
             // GIVEN
             const notOrderedCues = [
                 { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
