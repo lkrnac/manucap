@@ -1,16 +1,12 @@
 import { ReactElement } from "react";
 import { useSelector } from "react-redux";
 import { SubtitleEditState } from "./subtitleEditReducers";
-import { CueDto, Track } from "./model";
+import { CompleteActionParameters } from "./model";
 import { isPendingSaveState, SaveState } from "./cues/saveSlices";
 
-interface CompleteAction {
-    editingTrack: Track | null;
-    cues: CueDto[];
-}
 
 interface Props {
-    onComplete: (completeAction: CompleteAction) => void;
+    onComplete: (completeAction: CompleteActionParameters) => void;
     disabled?: boolean;
 }
 

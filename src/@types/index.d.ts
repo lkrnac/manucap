@@ -1,7 +1,7 @@
 import { AppThunk, Reducers } from "../subtitleEdit/subtitleEditReducers";
 import SubtitleEdit from "../subtitleEdit/SubtitleEdit";
-import VideoPlayer from "../subtitleEdit/player/VideoPlayer";
-import { CueDto, Track, User } from "../subtitleEdit/model";
+import VideoPlayer, { Props as VideoPlayerProps } from "../subtitleEdit/player/VideoPlayer";
+import { CueDto, Track, User, SaveActionParameters, CompleteActionParameters } from "../subtitleEdit/model";
 
 declare module "@dotsub/vtms-subtitle-edit-ui" {
     const Actions: {
@@ -16,5 +16,14 @@ declare module "@dotsub/vtms-subtitle-edit-ui" {
         useMatchedCuesAsCsv: () => Function;
     };
 
-    export { VideoPlayer, Reducers, SubtitleEdit, Actions, Hooks };
+    export {
+        VideoPlayer,
+        VideoPlayerProps,
+        SubtitleEdit,
+        SaveActionParameters,
+        CompleteActionParameters,
+        Reducers,
+        Actions,
+        Hooks
+    };
 }
