@@ -128,30 +128,32 @@ const getNextCue = (
             const matchedCue = matchedCues[matchedCueIndex];
             if (matchedCue) {
                 if (matchedCue.sourceCues?.length > 0) {
-                    matchedCue.sourceCues?.forEach((sourceCue: CueDtoWithIndex) => {
-                        sourceCueIndex++;
-                        foundMatch = searchCueText(sourceCue.cue.vttCue.text, searchReplace.find,
-                            searchReplace.matchCase).length > 0;
-                        if (foundMatch) {
-                            currentCue = sourceCue.cue;
-                            isSourceCue = true;
-                            throw "Cue found";
-                        }
-                    });
-                    sourceCueIndex = indices.sourceCueIndex;
+                    previousDirection !== "NEXT" ? sourceCueIndex-- : null;
+                    matchedCue.sourceCues.filter((sourceCue: CueDtoWithIndex) => sourceCue.index > sourceCueIndex)
+                        .forEach((sourceCue: CueDtoWithIndex) => {
+                            sourceCueIndex++;
+                            foundMatch = searchCueText(sourceCue.cue.vttCue.text, searchReplace.find,
+                                searchReplace.matchCase).length > 0;
+                            if (foundMatch) {
+                                currentCue = sourceCue.cue;
+                                isSourceCue = true;
+                                throw "Cue found";
+                            }
+                        });
                 }
                 if (!currentCue && matchedCue.targetCues?.length > 0) {
-                    matchedCue.targetCues?.forEach((targetCue: CueDtoWithIndex) => {
-                        targetCueIndex++;
-                        foundMatch = searchCueText(targetCue.cue.vttCue.text, searchReplace.find,
-                            searchReplace.matchCase).length > 0;
-                        if (foundMatch) {
-                            currentCue = targetCue.cue;
-                            isSourceCue = false;
-                            throw "Cue found";
-                        }
-                    });
-                    targetCueIndex = indices.targetCueIndex;
+                    previousDirection !== "NEXT" ? targetCueIndex-- : null;
+                    matchedCue.targetCues.filter((targetCue: CueDtoWithIndex) => targetCue.index > targetCueIndex)
+                        .forEach((targetCue: CueDtoWithIndex) => {
+                            targetCueIndex++;
+                            foundMatch = searchCueText(targetCue.cue.vttCue.text, searchReplace.find,
+                                searchReplace.matchCase).length > 0;
+                            if (foundMatch) {
+                                currentCue = targetCue.cue;
+                                isSourceCue = false;
+                                throw "Cue found";
+                            }
+                        });
                 }
             }
         }
@@ -179,33 +181,35 @@ const getPreviousCue = (
     try {
         for (; matchedCueIndex >= 0; matchedCueIndex--) {
             const matchedCue = matchedCues[matchedCueIndex];
-            targetCueIndex--;
-            matchedCue.targetCues?.forEach((targetCue: CueDtoWithIndex) => {
-                if (targetCue.index === targetCueIndex) {
-                    foundMatch = searchCueText(targetCue.cue.vttCue.text, searchReplace.find,
-                        searchReplace.matchCase).length > 0;
-                    if (foundMatch) {
-                        currentCue = targetCue.cue;
-                        isSourceCue = false;
-                        throw "Cue found";
-                    }
+            if (matchedCue) {
+                if (matchedCue.targetCues?.length > 0) {
+                    previousDirection !== "PREVIOUS" ? targetCueIndex++ : null;
+                    matchedCue.targetCues.filter((targetCue: CueDtoWithIndex) => targetCue.index < targetCueIndex)
+                        .forEach((targetCue: CueDtoWithIndex) => {
+                            targetCueIndex--;
+                            foundMatch = searchCueText(targetCue.cue.vttCue.text, searchReplace.find,
+                                searchReplace.matchCase).length > 0;
+                            if (foundMatch) {
+                                currentCue = targetCue.cue;
+                                isSourceCue = false;
+                                throw "Cue found";
+                            }
+                        });
                 }
-            });
-            targetCueIndex++;
-            if (!currentCue) {
-                previousDirection === "PREVIOUS" ? sourceCueIndex-- : null;
-                matchedCue.sourceCues?.forEach((sourceCue: CueDtoWithIndex) => {
-                    if (sourceCue.index === sourceCueIndex) {
-                        foundMatch = searchCueText(sourceCue.cue.vttCue.text, searchReplace.find,
-                            searchReplace.matchCase).length > 0;
-                        if (foundMatch) {
-                            currentCue = sourceCue.cue;
-                            isSourceCue = true;
-                            throw "Cue found";
-                        }
-                    }
-                });
-                previousDirection === "PREVIOUS" ? sourceCueIndex++ : null;
+                if (!currentCue && matchedCue.sourceCues?.length > 0) {
+                    previousDirection !== "PREVIOUS" ? sourceCueIndex++ : null;
+                    matchedCue.sourceCues.filter((sourceCue: CueDtoWithIndex) => sourceCue.index < sourceCueIndex)
+                        .forEach((sourceCue: CueDtoWithIndex) => {
+                            sourceCueIndex--;
+                            foundMatch = searchCueText(sourceCue.cue.vttCue.text, searchReplace.find,
+                                searchReplace.matchCase).length > 0;
+                            if (foundMatch) {
+                                currentCue = sourceCue.cue;
+                                isSourceCue = true;
+                                throw "Cue found";
+                            }
+                    });
+                }
             }
         }
     } catch (e) {
