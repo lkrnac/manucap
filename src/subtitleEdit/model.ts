@@ -171,8 +171,9 @@ export interface CueComment {
     id?: string;
     userId?: string;
     userName?: string;
+    author?: string;
     comment: string;
-    date: Date;
+    date: string;
 }
 
 export interface WaveformRegion {

@@ -8,7 +8,7 @@ import { ReactElement, useEffect } from "react";
 import { updateCues } from "./subtitleEdit/cues/cuesList/cuesListActions";
 import { updateEditingTrack } from "./subtitleEdit/trackSlices";
 import { updateSubtitleUser } from "./subtitleEdit/userSlices";
-import { CueDto, Language, User } from "./subtitleEdit/model";
+import { CueDto, Language, Track, User } from "./subtitleEdit/model";
 import ReactDOM from "react-dom";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecifications/subtitleSpecificationSlice";
@@ -277,7 +277,7 @@ const TestApp = (): ReactElement => {
                     systemAdmin: "",
                     userId: "john.doe"
                 }
-            })),
+            } as Track)),
             500
         );
     });
