@@ -56,5 +56,5 @@ declare module "@dotsub/vtms-subtitle-edit-ui/models" {
         User,
         SaveActionParameters,
         CompleteActionParameters
-    }
+    };
 }
