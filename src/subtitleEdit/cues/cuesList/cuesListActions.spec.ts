@@ -1607,7 +1607,7 @@ describe("cueSlices", () => {
             });
         });
 
-        describe("ordering of source cues", () => {
+        describe("reordering", () => {
             it("reorder cues if cue position changes when editing start time", () => {
                 // GIVEN
                 const track = { ...testingTrack, overlapEnabled: true };
@@ -1667,6 +1667,38 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().editingCueIndex).toEqual(2);
                 expect(testingStore.getState().focusedInput).toEqual("EDITOR");
             });
+        });
+
+        // TODO: We should maybe re-consider cues matching algorithm for this test case
+        //  Check `testingStore.getState().matchedCues.matchedCues` in THEN phase. But not cure about it.
+        it("reorder also for translation interface", () => {
+            // GIVEN
+            const track = { ...testingTrack, overlapEnabled: true };
+            testingStore.dispatch(updateEditingTrack(track) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+            const editUuid = testingStore.getState().cues[1].editUuid;
+
+            // WHEN
+            testingStore.dispatch(updateVttCue(2, new VTTCue(1.5, 4, "Dummy Cue"), editUuid) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Dummy Cue");
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1.5);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+            expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 2");
+            expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
+            expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(4);
+            expect(testingStore.getState().validationErrors).toEqual([]);
+            expect(testingStore.getState().lastCueChange.changeType).toEqual("UPDATE_ALL");
+            expect(testingStore.getState().lastCueChange.index).toEqual(-1);
+            expect(testingStore.getState().lastCueChange.vttCue).toBeUndefined();
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(4);
+            expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().focusedInput).toEqual("START_TIME");
         });
     });
 
