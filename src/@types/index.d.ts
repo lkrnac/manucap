@@ -1,4 +1,3 @@
-
 declare module "@dotsub/vtms-subtitle-edit-ui" {
 
     import SubtitleEdit from "../subtitleEdit/SubtitleEdit";
