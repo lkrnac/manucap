@@ -3,13 +3,13 @@ import CompleteButton from "./CompleteButton";
 import { Tooltip } from "primereact/tooltip";
 import { useDispatch } from "react-redux";
 import { changeScrollPosition } from "./cues/cuesList/cuesListScrollSlice";
-import { CompleteActionParameters, ScrollPosition } from "./model";
+import { TrackCues, ScrollPosition } from "./model";
 import { Track } from "./model";
 
 export interface Props {
     onViewTrackHistory: () => void;
     editingTrack: Track | null;
-    onComplete: (completeAction: CompleteActionParameters) => void;
+    onComplete: (completeAction: TrackCues) => void;
     editDisabled?: boolean;
 }
 

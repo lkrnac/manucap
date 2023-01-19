@@ -12,7 +12,7 @@ import CuesList from "./cues/cuesList/CuesList";
 import { setSaveTrack } from "./cues/saveSlices";
 import { resetEditingTrack } from "./trackSlices";
 import { changeScrollPosition, setCurrentPlayerTime } from "./cues/cuesList/cuesListScrollSlice";
-import { ScrollPosition, SaveActionParameters, CompleteActionParameters, Track } from "./model";
+import { ScrollPosition, SaveActionParameters, TrackCues, Track } from "./model";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
 import { setSpellCheckDomain } from "./spellcheckerSettingsSlice";
 import CueErrorAlert from "./cues/CueErrorAlert";
@@ -29,7 +29,7 @@ export interface SubtitleEditProps {
     waveform?: string;
     onViewTrackHistory: () => void;
     onSave: (saveAction: SaveActionParameters) => void;
-    onComplete: (completeAction: CompleteActionParameters) => void;
+    onComplete: (completeAction: TrackCues) => void;
     onExportFile: (trackVersionExport: Track | null) => void;
     onExportSourceFile: () => void;
     onImportFile: () => void;

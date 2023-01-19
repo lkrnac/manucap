@@ -182,7 +182,7 @@ export interface WaveformRegion {
     end: number;
 }
 
-export interface CompleteActionParameters {
+export interface TrackCues {
     editingTrack: Track | null;
     cues: CueDto[];
 }
