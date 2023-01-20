@@ -17,9 +17,10 @@ import SyncCuesButton from "./SyncCuesButton";
 import { Menu } from "primereact/menu";
 import KeyboardShortcutsModal from "./keyboardShortcuts/KeyboardShortcutsModal";
 import ShiftTimeModal from "./shift/ShiftTimeModal";
+import { Track } from "../model";
 
 interface Props {
-    handleExportFile: () => void;
+    handleExportFile: (trackVersionExport: Track | null) => void;
     handleExportSourceFile: () => void;
     handleImportFile: () => void;
     editDisabled?: boolean;

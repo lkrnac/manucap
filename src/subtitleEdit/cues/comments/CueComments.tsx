@@ -149,4 +149,3 @@ const CueComments = (props: Props): ReactElement => {
 };
 
 export default CueComments;
-

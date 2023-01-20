@@ -1,17 +1,18 @@
 {
   "name": "@dotsub/vtms-subtitle-edit-ui",
-  "version": "2.25.14",
+  "version": "2.25.15",
   "description": "",
   "author": "Dotsub",
   "license": "",
   "repository": "dotsub/vtms-subtitle-edit-ui",
   "main": "dist/index.js",
+  "types": "dist/@types/index.d.ts",
   "engines": {
     "node": ">=8",
     "npm": ">=5"
   },
   "scripts": {
-    "test": "cross-env CI=1 react-scripts test --coverage --collectCoverageFrom=src/**/*.tsx --collectCoverageFrom=src/**/*.ts --collectCoverageFrom=!src/typings.d.ts --collectCoverageFrom=!src/index.tsx",
+    "test": "cross-env CI=1 react-scripts test --coverage --collectCoverageFrom=src/**/*.tsx --collectCoverageFrom=src/**/*.ts --collectCoverageFrom=!src/typings.d.ts --collectCoverageFrom=!src/@types/*.ts --collectCoverageFrom=!src/index.tsx",
     "test:watch": "react-scripts test",
     "build": "rollup -c",
     "compile-with-tests": "npx typescript",
@@ -33,14 +34,16 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-pro": "^6.2.0",
+    "@hookform/resolvers": "^1.3.8",
     "@types/crypto-js": "^4.1.1",
     "@types/lodash": "^4.14.185",
-    "@hookform/resolvers": "^1.3.8",
     "bowser": "^2.11.0",
     "crypto-js": "^4.1.1",
     "draft-js": "^0.11.7",
     "draft-js-export-html": "^1.4.1",
+    "immer": "^9.0.17",
     "immutable": "^4.1.0",
+    "joi": "^17.6.0",
     "lodash": "^4.17.21",
     "moment": "2.29.4",
     "mousetrap": "1.6.5",
@@ -55,8 +58,7 @@
     "sanitize-html": "^2.7.1",
     "uuid": "^9.0.0",
     "video.js": "7.20.3",
-    "wavesurfer.js": "^6.2.0",
-    "joi": "^17.6.0"
+    "wavesurfer.js": "^6.2.0"
   },
   "devDependencies": {
     "@reduxjs/toolkit": "1.6.2",
@@ -115,6 +117,7 @@
     "react-scripts": "5.0.1",
     "redux-logger": "^3.0.6",
     "rollup": "^2.79.0",
+    "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
     "simulant": "^0.2.2",
