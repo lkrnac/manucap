@@ -109,9 +109,12 @@ const buildContent = (
     const indices = searchReplace.indices;
     if (searchReplaceVisible
         && props.rowIndex === indices.matchedCueIndex
-        && (props.isTargetCue
-            ? props.targetCueIndex === indices.targetCueIndex && !indices.isSourceCue
-            : props.sourceCueIndex === indices.sourceCueIndex && indices.isSourceCue)) {
+        && (
+            props.isTargetCue
+                ? props.targetCueIndex === indices.targetCueIndex
+                : props.sourceCueIndex === indices.sourceCueIndex
+        )
+    ) {
         sanitizedHtml = injectCurrentSearchMatch(plainText, sanitizedHtml, searchReplace);
     }
     return sanitizedHtml;

@@ -20,5 +20,4 @@ export interface SearchReplaceIndices {
     matchedCueIndex: number;
     sourceCueIndex: number;
     targetCueIndex: number;
-    isSourceCue: boolean;
 }

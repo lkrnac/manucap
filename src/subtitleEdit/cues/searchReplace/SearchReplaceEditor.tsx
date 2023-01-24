@@ -103,7 +103,8 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 style={{ marginLeft: "5px" }}
                 data-testid="sbte-search-next"
                 onClick={(): void => {
-                    dispatch(searchNextCues(false));
+                    // dispatch(searchNextCues(false));
+                    dispatch(searchNextCues());
                 }}
             >
                 <i className="fa-duotone fa-arrow-down" />

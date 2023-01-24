@@ -352,7 +352,8 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             props.setGlossaryTerm(undefined);
             if (replacement !== "") {
                 dispatch(setReplacement(""));
-                dispatch(searchNextCues(true));
+                // dispatch(searchNextCues(true));
+                dispatch(searchNextCues());
             }
             previousEditorStateRef.current = decoratedEditorState;
             setEditorState(decoratedEditorState);
