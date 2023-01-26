@@ -29,12 +29,13 @@ import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 
 import { SearchReplaceMatch } from "../searchReplace/SearchReplaceMatch";
 import { replaceContent } from "./editUtils";
-import { SearchReplaceMatches } from "../searchReplace/model";
+// import { SearchReplaceMatches } from "../searchReplace/model";
 import { searchNextCues, setReplacement } from "../searchReplace/searchReplaceSlices";
 import { CueExtraCharacters } from "./CueExtraCharacters";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { Track } from "../../model";
+import { SearchReplaceIndices } from "../searchReplace/model";
 
 const findSpellCheckIssues = (props: CueTextEditorProps, editingTrack: Track | null, spellcheckerEnabled: boolean) =>
     (_contentBlock: ContentBlock, callback: Function): void => {
@@ -47,11 +48,11 @@ const findSpellCheckIssues = (props: CueTextEditorProps, editingTrack: Track | n
         }
     };
 
-const findSearchReplaceMatch = (searchReplaceMatches: SearchReplaceMatches | undefined) =>
+const findSearchReplaceMatch = (searchReplaceIndices: SearchReplaceIndices | undefined) =>
     (_contentBlock: ContentBlock, callback: Function): void => {
-        if (searchReplaceMatches && searchReplaceMatches.offsets.length > 0) {
-            const offset = searchReplaceMatches.offsets[searchReplaceMatches.offsetIndex];
-            callback(offset, offset + searchReplaceMatches.matchLength);
+        if (searchReplaceIndices) {
+            const offset = searchReplaceIndices.offset;
+            callback(offset, offset + searchReplaceIndices.matchLength);
         }
     };
 
@@ -200,18 +201,17 @@ const insertGlossaryTermIfNeeded = (editorState: EditorState, glossaryTerm?: str
 
 const replaceIfNeeded = (
     editorState: EditorState,
-    searchReplaceMatches: SearchReplaceMatches | undefined,
+    searchReplaceIndices: SearchReplaceIndices | undefined,
     replacement: string
 ): EditorState => {
     if (replacement
         && replacement !== ""
-        && searchReplaceMatches
-        && searchReplaceMatches.offsets.length > 0
+        && searchReplaceIndices
     ) {
         const content = editorState.getCurrentContent();
-        const offset = searchReplaceMatches.offsets[searchReplaceMatches.offsetIndex];
+        const offset = searchReplaceIndices.offset;
         const selectionState = editorState.getSelection();
-        const endOffset = offset + searchReplaceMatches.matchLength;
+        const endOffset = offset + searchReplaceIndices.matchLength;
         const searchSelection =
             selectionState.set("anchorOffset", offset).set("focusOffset", endOffset) as SelectionState;
         editorState = EditorState.forceSelection(editorState, searchSelection);
@@ -289,14 +289,14 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     setEditorStateFOR_TESTING = setEditorState;
 
     let decoratedEditorState = insertGlossaryTermIfNeeded(editorState, props.glossaryTerm);
-    decoratedEditorState = replaceIfNeeded(decoratedEditorState, searchReplace.matches, replacement);
+    decoratedEditorState = replaceIfNeeded(decoratedEditorState, searchReplace.indices, replacement);
 
     // If in composition mode (i.e. for IME input or diacritics), the decorator re-renders cannot
     // happen because it will cause an error in the draft-js composition handler.
     if (!imeCompositionRef.current) {
         const newCompositeDecorator = new CompositeDecorator([
             {
-                strategy: findSearchReplaceMatch(searchReplace.matches),
+                strategy: findSearchReplaceMatch(searchReplace.indices),
                 component: SearchReplaceMatch,
             },
             {

@@ -7,17 +7,20 @@ export interface SearchReplace {
     matchCase: boolean;
     direction: SearchDirection;
     indices: SearchReplaceIndices;
-    matches?: SearchReplaceMatches;
+    // matches?: SearchReplaceMatches;
 }
 
-export interface SearchReplaceMatches {
-    offsets: number[];
-    matchLength: number;
-    offsetIndex: number;
-}
+// export interface SearchReplaceMatches {
+//     offsets: number[];
+//     matchLength: number;
+//     offsetIndex: number;
+// }
 
 export interface SearchReplaceIndices {
     matchedCueIndex: number;
     sourceCueIndex: number;
     targetCueIndex: number;
+    offset: number;
+    offsetIndex: number;
+    matchLength: number;
 }

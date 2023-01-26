@@ -79,10 +79,10 @@ const injectCurrentSearchMatch = (
     sanitizedHtml: string,
     searchReplace: SearchReplace
 ): string => {
-    const matchLength = searchReplace.matches?.matchLength;
-    const offsetIndex = searchReplace.matches?.offsetIndex;
-    const offset = offsetIndex !== undefined ? searchReplace.matches?.offsets[offsetIndex] : undefined;
-    if (matchLength && offsetIndex !== undefined && offset !== undefined) {
+    const matchLength = searchReplace.indices?.matchLength;
+    const offset = searchReplace.indices?.offset;
+    const offsetIndex = searchReplace.indices?.offsetIndex;
+    if (matchLength && offset !== undefined) {
         const match = plainText.substring(offset, offset + matchLength);
         const htmlOffset = getWordOccurrenceIndex(sanitizedHtml, match, offsetIndex + 1);
         const partialHtml = sanitizedHtml.substring(htmlOffset);

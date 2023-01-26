@@ -49,7 +49,7 @@ import {
     SpellCheckRemovalAction
 } from "./cuesListSlices";
 import { callSaveTrack } from "../saveSlices";
-import { updateSearchMatches } from "../searchReplace/searchReplaceSlices";
+// import { updateSearchMatches } from "../searchReplace/searchReplaceSlices";
 
 const NEW_ADDED_CUE_DEFAULT_STEP = 3;
 const DEFAULT_CUE = { vttCue: new VTTCue(0, 0, ""), cueCategory: "DIALOGUE" };
@@ -313,9 +313,10 @@ export const updateVttCue = (
             if (vttCue.startTime !== originalCue.vttCue.startTime) {
                 reorderCuesIfNeeded(dispatch, getState());
             }
-            if (getState().searchReplaceVisible) {
-                updateSearchMatches(dispatch, getState, newCue);
-            }
+            // TODO: Enable this with new model
+            // if (getState().searchReplaceVisible) {
+            //     updateSearchMatches(dispatch, getState, newCue);
+            // }
             validateCue(dispatch, idx, true, textOnly);
             if (!textOnly) {
                 dispatch(updateMatchedCues());
