@@ -121,7 +121,10 @@ const getNextCue = (
 ): CueDto | undefined => {
     const matchedCues = getState().matchedCues.matchedCues;
     const searchReplace = getState().searchReplace;
-    const indices = searchReplace.indices;
+    const indices = _.clone(searchReplace.indices);
+    indices.sourceCueIndex = indices.sourceCueIndex == -1 ? MAX : indices.sourceCueIndex;
+    indices.targetCueIndex = indices.targetCueIndex == -1 ? MAX : indices.targetCueIndex;
+
     let matchedCueIndex = indices.matchedCueIndex;
     let sourceCueIndex = indices.sourceCueIndex;
     let targetCueIndex = indices.targetCueIndex;
@@ -199,7 +202,10 @@ const getPreviousCue = (
 ): CueDto | undefined => {
     const matchedCues = getState().matchedCues.matchedCues;
     const searchReplace = getState().searchReplace;
-    const indices = searchReplace.indices;
+    const indices = _.clone(searchReplace.indices);
+    indices.sourceCueIndex = indices.sourceCueIndex == MAX ? -1 : indices.sourceCueIndex;
+    indices.targetCueIndex = indices.targetCueIndex == MAX ? -1 : indices.targetCueIndex;
+
     let matchedCueIndex = indices.matchedCueIndex;
     let sourceCueIndex = indices.sourceCueIndex;
     let targetCueIndex = indices.targetCueIndex;
