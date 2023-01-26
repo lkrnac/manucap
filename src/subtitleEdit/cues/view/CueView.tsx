@@ -52,7 +52,7 @@ const injectGlossaryTerms = (plainText: string, props: CueViewProps, sanitizedHt
         const deduplicatedMatches = [ ...props.cue.glossaryMatches ].sort(
             (first, second) => second.source.length - first.source.length
         )
-        .filter(match => !!match.source && match.source.length > 0)
+        .filter(match => !!match.source && match.source.trim().length > 0)
         .reduce((result: GlossaryMatchDto[], match: GlossaryMatchDto) => {
             return result.findIndex(ele => ele.source.includes(match.source)) !== -1 ? result : [...result, match];
         }, []);

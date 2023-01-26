@@ -549,7 +549,9 @@ describe("CueView", () => {
             cueCategory: "DIALOGUE",
             glossaryMatches: [
                 { source: "", replacements: ["this is a replacement"]},
-                { source: "", replacements: ["another replacement"]}
+                { source: "", replacements: ["another replacement"]},
+                { source: " ", replacements: ["another replacement"]},
+                { source: "  ", replacements: ["another replacement"]}
             ]
         } as CueDto;
 
