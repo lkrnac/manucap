@@ -157,6 +157,7 @@ const getNextCue = (
                         };
                         if (!_.isEqual(indices, currentIndices)) {
                             dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
+                            updateEditingCueIndexNoThunk(dispatch, -1);
                             return sourceCue.cue;
                         }
                     }
@@ -265,6 +266,7 @@ const getPreviousCue = (
                         };
                         if (!_.isEqual(indices, currentIndices)) {
                             dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
+                            updateEditingCueIndexNoThunk(dispatch, -1);
                             return sourceCue.cue;
                         }
                     }
