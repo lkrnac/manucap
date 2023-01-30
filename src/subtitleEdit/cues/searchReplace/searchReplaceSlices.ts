@@ -214,14 +214,14 @@ const getPreviousCue = (
     for (
         ;
         matchedCueIndex >= 0;
-        matchedCueIndex--, sourceCueIndex = MAX, targetCueIndex = MAX, offsetIndex = 0
+        matchedCueIndex--, sourceCueIndex = MAX, targetCueIndex = MAX, offsetIndex = MAX
     ) {
         const matchedCue = matchedCues[matchedCueIndex];
         if (matchedCue) {
             for (
                 ;
                 targetCueIndex > -1;
-                targetCueIndex--, sourceCueIndex = MAX, offsetIndex = 0
+                targetCueIndex--, sourceCueIndex = MAX, offsetIndex = MAX
             ) {
                 const targetCue = matchedCue.targetCues[targetCueIndex];
                 if (targetCue) {
@@ -230,7 +230,10 @@ const getPreviousCue = (
                         searchReplace.find,
                         searchReplace.matchCase
                     );
-                    for (; offsetIndex < offsets.length; offsetIndex++) {
+                    if (offsetIndex === MAX) {
+                        offsetIndex = offsets.length - 1;
+                    }
+                    for (; offsetIndex > -1; offsetIndex--) {
                         const currentIndices = {
                             matchedCueIndex,
                             sourceCueIndex: -1,
@@ -252,7 +255,7 @@ const getPreviousCue = (
             for (
                 ;
                 sourceCueIndex > -1;
-                sourceCueIndex--, offsetIndex = 0
+                sourceCueIndex--, offsetIndex = MAX
             ) {
                 const sourceCue =  matchedCue.sourceCues[sourceCueIndex];
                 if (sourceCue) {
@@ -261,7 +264,10 @@ const getPreviousCue = (
                         searchReplace.find,
                         searchReplace.matchCase
                     );
-                    for (; offsetIndex < offsets.length; offsetIndex++) {
+                    if (offsetIndex === MAX) {
+                        offsetIndex = offsets.length - 1;
+                    }
+                    for (; offsetIndex > -1; offsetIndex--) {
                         const currentIndices = {
                             matchedCueIndex,
                             sourceCueIndex,
