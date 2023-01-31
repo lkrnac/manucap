@@ -74,14 +74,23 @@ export const updateEditingCueIndex = (idx: number, matchedCueIndex?: number): Ap
                 const targetCue = targetCues[0];
                 const searchReplace = getState().searchReplace;
                 const offsets = searchCueText(targetCue.cue.vttCue.text, searchReplace.find, searchReplace.matchCase);
-                const currentIndices = {
-                    matchedCueIndex: offsets.length > 0 ? matchedCueIndex : -1,
-                    sourceCueIndex: -1,
-                    targetCueIndex: matchedTargetCueIndex,
-                    matchLength: searchReplace.find.length,
-                    offset: offsets.length > 0 ? offsets[0] : -1,
-                    offsetIndex: 0
-                };
+                const currentIndices = offsets.length > 0
+                    ? {
+                        matchedCueIndex: matchedCueIndex,
+                        sourceCueIndex: -1,
+                        targetCueIndex: matchedTargetCueIndex,
+                        matchLength: searchReplace.find.length,
+                        offset: offsets[0],
+                        offsetIndex: 0
+                    }
+                    : {
+                        matchedCueIndex: -1,
+                        sourceCueIndex: -1,
+                        targetCueIndex: -1,
+                        matchLength: 0,
+                        offset: -1,
+                        offsetIndex: 0
+                    };
 
                 dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
             }
