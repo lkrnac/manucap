@@ -76,7 +76,7 @@ export const updateEditingCueIndex = (idx: number, matchedCueIndex?: number): Ap
                 const offsets = searchCueText(targetCue.cue.vttCue.text, searchReplace.find, searchReplace.matchCase);
                 const currentIndices = offsets.length > 0
                     ? {
-                        matchedCueIndex: matchedCueIndex,
+                        matchedCueIndex,
                         sourceCueIndex: -1,
                         targetCueIndex: matchedTargetCueIndex,
                         matchLength: searchReplace.find.length,
@@ -84,7 +84,7 @@ export const updateEditingCueIndex = (idx: number, matchedCueIndex?: number): Ap
                         offsetIndex: 0
                     }
                     : {
-                        matchedCueIndex: -1,
+                        matchedCueIndex,
                         sourceCueIndex: -1,
                         targetCueIndex: -1,
                         matchLength: 0,
