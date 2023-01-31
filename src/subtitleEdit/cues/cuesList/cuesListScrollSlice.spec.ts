@@ -6,7 +6,7 @@ import each from "jest-each";
 import { MatchedCuesWithEditingFocus } from "./cuesListTimeMatching";
 import deepFreeze from "deep-freeze";
 
-const testingMatchedCues = { matchedCues: [], editingFocusIndex: 58 } as MatchedCuesWithEditingFocus;
+const testingMatchedCues = { matchedCues: [], matchedCuesFocusIndex: 58 } as MatchedCuesWithEditingFocus;
 testingMatchedCues.matchedCues = Array.from({ length: 120 }, () => ({}));
 
 const testingSourceCues = Array.from({ length: 120 }, (_element, index) => (

@@ -1,9 +1,12 @@
 import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CueDto,
+import {
+    // CueDto,
+    ScrollPosition,
     // CueDtoWithIndex,
     // CueLineDto,
-    SubtitleEditAction } from "../../model";
+    SubtitleEditAction
+} from "../../model";
 import { AppThunk } from "../../subtitleEditReducers";
 import { editingTrackSlice } from "../../trackSlices";
 import { SearchDirection, SearchReplace, SearchReplaceIndices,
@@ -14,6 +17,8 @@ import { mergeVisibleSlice } from "../merge/mergeSlices";
 import sanitizeHtml from "sanitize-html";
 import _ from "lodash";
 import { updateEditingCueIndexNoThunk } from "../edit/cueEditorSlices";
+import { changeScrollPosition } from "../cuesList/cuesListScrollSlice";
+import { matchedCuesSlice } from "../cuesList/cuesListSlices";
 
 const MAX = Number.MAX_SAFE_INTEGER;
 
@@ -115,10 +120,7 @@ export const showSearchReplace = (visible: boolean): AppThunk =>
         // updateCueMatchesIfNeeded(dispatch, find, matchCase, getState);
     };
 
-const getNextCue = (
-    dispatch: Dispatch<SubtitleEditAction>,
-    getState: Function,
-): CueDto | undefined => {
+const getNextCue = (dispatch: Dispatch<SubtitleEditAction>, getState: Function,): number => {
     const matchedCues = getState().matchedCues.matchedCues;
     const searchReplace = getState().searchReplace;
     const indices = _.clone(searchReplace.indices);
@@ -161,7 +163,7 @@ const getNextCue = (
                         if (!_.isEqual(indices, currentIndices)) {
                             dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
                             updateEditingCueIndexNoThunk(dispatch, -1);
-                            return sourceCue.cue;
+                            return matchedCueIndex;
                         }
                     }
                 }
@@ -186,20 +188,17 @@ const getNextCue = (
                         if (!_.isEqual(indices, currentIndices)) {
                             dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
                             updateEditingCueIndexNoThunk(dispatch, targetCue.index);
-                            return targetCue.cue;
+                            return matchedCueIndex;
                         }
                     }
                 }
             }
         }
     }
-    return undefined;
+    return -1;
 };
 
-const getPreviousCue = (
-    dispatch: Dispatch<SubtitleEditAction>,
-    getState: Function,
-): CueDto | undefined => {
+const getPreviousCue = (dispatch: Dispatch<SubtitleEditAction>, getState: Function): number => {
     const matchedCues = getState().matchedCues.matchedCues;
     const searchReplace = getState().searchReplace;
     const indices = _.clone(searchReplace.indices);
@@ -245,7 +244,7 @@ const getPreviousCue = (
                         if (!_.isEqual(indices, currentIndices)) {
                             dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
                             updateEditingCueIndexNoThunk(dispatch, targetCue.index);
-                            return targetCue.cue;
+                            return matchedCueIndex;
                         }
                     }
                 } else {
@@ -279,7 +278,7 @@ const getPreviousCue = (
                         if (!_.isEqual(indices, currentIndices)) {
                             dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
                             updateEditingCueIndexNoThunk(dispatch, -1);
-                            return sourceCue.cue;
+                            return matchedCueIndex;
                         }
                     }
                 } else {
@@ -288,14 +287,14 @@ const getPreviousCue = (
             }
         }
     }
-    return undefined;
+    return -1;
 };
 
 const getCueAndUpdateIndices = (
     dispatch: Dispatch<SubtitleEditAction>,
     getState: Function,
     // editingCueIndex: number,
-): CueDto | undefined => {
+): void => {
     const matchedCues = getState().matchedCues.matchedCues;
     if (matchedCues.length === 0) {
         return;
@@ -333,9 +332,13 @@ const getCueAndUpdateIndices = (
     //         dispatch(searchReplaceSlice.actions.setIndices({ ...indices, matchedCueIndex }));
     //     }
     // }
-    return searchReplace.direction === "NEXT"
+    const matchedCueIndex = searchReplace.direction === "NEXT"
         ? getNextCue(dispatch, getState)
         : getPreviousCue(dispatch, getState);
+    if (matchedCueIndex > 0) {
+        dispatch(matchedCuesSlice.actions.updateMatchedCuesFocusIndex(matchedCueIndex));
+        dispatch(changeScrollPosition(ScrollPosition.CURRENT));
+    }
 };
 
 // Sourced from SO https://stackoverflow.com/a/3561711 See post for eslint disable about escaping /

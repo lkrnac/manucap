@@ -101,7 +101,7 @@ export const changeScrollPosition = (scrollPosition: ScrollPosition, previousFoc
         const lastTranslatedIndex = _.findLastIndex(state.cues, cue => !cue.editDisabled);
         const focusedCueIndex = getScrollCueIndex(
             state.matchedCues.matchedCues.length,
-            state.matchedCues.editingFocusIndex,
+            state.matchedCues.matchedCuesFocusIndex,
             currentPlayerCueIndex,
             lastTranslatedIndex,
             previousFocusedCueIndexInitiated,

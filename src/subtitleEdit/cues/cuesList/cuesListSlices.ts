@@ -182,7 +182,7 @@ interface MatchedCueAction {
 
 export const matchedCuesSlice = createSlice({
     name: "matchedCues",
-    initialState: { matchedCues: [], editingFocusIndex: 0 } as MatchedCuesWithEditingFocus,
+    initialState: { matchedCues: [], matchedCuesFocusIndex: 0 } as MatchedCuesWithEditingFocus,
     reducers: {
         matchCuesByTime: (_state, action: PayloadAction<MatchCuesAction>): MatchedCuesWithEditingFocus => {
             return matchCuesByTime(action.payload.cues, action.payload.sourceCues, action.payload.editingCueIndex);
@@ -196,6 +196,9 @@ export const matchedCuesSlice = createSlice({
                 state.matchedCues[action.payload.editingIndexMatchedCues].targetCues = targetCues;
             }
             return state;
+        },
+        updateMatchedCuesFocusIndex: (state, action: PayloadAction<number>): MatchedCuesWithEditingFocus => {
+            return { matchedCues: state.matchedCues, matchedCuesFocusIndex: action.payload };
         }
     },
 });
