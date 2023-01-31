@@ -143,6 +143,7 @@ const CueView = (props: CueViewProps): ReactElement => {
             nextTargetCueIndex={props.nextTargetCueIndex}
             className={props.className}
             editDisabled={props.editDisabled}
+            matchedCueIndex={props.rowIndex}
         >
             <>
                 <div

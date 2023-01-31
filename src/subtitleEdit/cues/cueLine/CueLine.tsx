@@ -223,6 +223,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                             index={targetCue.index}
                                             cue={targetCue.cue}
                                             nextCueLine={props.rowProps.matchedCues[props.rowIndex + 1]}
+                                            matchedCuesIndex={props.rowIndex}
                                             glossaryTerm={glossaryTerm}
                                             setGlossaryTerm={setGlossaryTerm}
                                         />

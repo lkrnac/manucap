@@ -7,7 +7,7 @@ import { cuesSlice } from "../cuesList/cuesListSlices";
 import { editingTrackSlice } from "../../trackSlices";
 import { mergeVisibleSlice } from "../merge/mergeSlices";
 import { updateMatchedCues } from "../cuesList/cuesListActions";
-// import { updateSearchMatches } from "../searchReplace/searchReplaceSlices";
+import { searchCueText, searchReplaceSlice } from "../searchReplace/searchReplaceSlices";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -59,9 +59,33 @@ export const updateEditingCueIndexNoThunk = (
 };
 
 // TODO: check if updateEditingCueIndexNoThunk can be called directly
-export const updateEditingCueIndex = (idx: number): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void>): void => {
+export const updateEditingCueIndex = (idx: number, matchedCueIndex?: number): AppThunk =>
+    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         updateEditingCueIndexNoThunk(dispatch, idx);
+        if (getState().searchReplaceVisible && matchedCueIndex) {
+            const targetCues = getState().matchedCues.matchedCues[matchedCueIndex].targetCues;
+            if (targetCues) {
+                let matchedTargetCueIndex = 0;
+                for (; matchedTargetCueIndex < targetCues.length; matchedTargetCueIndex++) {
+                    if (targetCues[matchedTargetCueIndex].index === idx) {
+                        break;
+                    }
+                }
+                const targetCue = targetCues[0];
+                const searchReplace = getState().searchReplace;
+                const offsets = searchCueText(targetCue.cue.vttCue.text, searchReplace.find, searchReplace.matchCase);
+                const currentIndices = {
+                    matchedCueIndex: offsets.length > 0 ? matchedCueIndex : -1,
+                    sourceCueIndex: -1,
+                    targetCueIndex: matchedTargetCueIndex,
+                    matchLength: searchReplace.find.length,
+                    offset: offsets.length > 0 ? offsets[0] : -1,
+                    offsetIndex: 0
+                };
+
+                dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
+            }
+        }
     };
 
 export const validationErrorSlice = createSlice({
