@@ -49,6 +49,7 @@ import {
     SpellCheckRemovalAction
 } from "./cuesListSlices";
 import { callSaveTrack } from "../saveSlices";
+import { searchReplaceSlice } from "../searchReplace/searchReplaceSlices";
 // import { updateSearchMatches } from "../searchReplace/searchReplaceSlices";
 
 const NEW_ADDED_CUE_DEFAULT_STEP = 3;
@@ -314,14 +315,26 @@ export const updateVttCue = (
                 reorderCuesIfNeeded(dispatch, getState());
             }
 
-            // TODO: This is not possible, because of this discussion:
+            // TODO: This is not possible to support searching of newly edited term, because of this discussion:
             //  https://dotsub.slack.com/archives/C02P5HLGC/p1675253139271659
             //  If we would want to enable this we would do something like in cueEditorSlices.updateEditingCueIndex
-            //  But with current structure of this method + cues + matchedCues interaction, it is impossible
+            //  But with current structure of this method + cues + matchedCues interaction,
+            //  there would be endless recursion.
             //  Refactoring as suggested in function signature could help with this
-            // if (getState().searchReplaceVisible) {
-            //     ... search in edited cue
-            // }
+            //  BTW, for effectively supporting this use case, we need to know current matchedCueIndex,
+            //  which is not easy as we don't have it in hand
+            if (getState().searchReplaceVisible) {
+                const currentIndices = {
+                    matchedCueIndex: -1,
+                    sourceCueIndex: -1,
+                    targetCueIndex: -1,
+                    matchLength: 0,
+                    offset: -1,
+                    offsetIndex: 0
+                };
+
+                dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
+            }
 
             validateCue(dispatch, idx, true, textOnly);
             if (!textOnly) {
