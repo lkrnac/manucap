@@ -38,21 +38,10 @@ export const focusedInputSlice = createSlice({
     }
 });
 
-export const updateEditingCueIndexNoThunk = (
-    dispatch: Dispatch<SubtitleEditAction>,
-    // getState: Function,
-    idx: number
-): void => {
+export const updateEditingCueIndexNoThunk = (dispatch: Dispatch<SubtitleEditAction>, idx: number): void => {
     dispatch(focusedInputSlice.actions.updateFocusedInput("EDITOR"));
     dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx }));
     if (idx >= 0) {
-        // TODO: Update this to store search and replace indices for current editor -> to me it should find first ony
-        // const state = getState();
-        // if (state.searchReplaceVisible) {
-        //     const cue = getState().cues[idx];
-        //     updateSearchMatches(dispatch, getState, cue);
-        // }
-        // TODO: check if it's needed
         dispatch(updateMatchedCues());
         dispatch(changeScrollPosition(ScrollPosition.CURRENT));
     }
