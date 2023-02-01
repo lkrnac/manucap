@@ -313,10 +313,16 @@ export const updateVttCue = (
             if (vttCue.startTime !== originalCue.vttCue.startTime) {
                 reorderCuesIfNeeded(dispatch, getState());
             }
-            // TODO: Enable this with new model
+
+            // TODO: This is not possible, because of this discussion:
+            //  https://dotsub.slack.com/archives/C02P5HLGC/p1675253139271659
+            //  If we would want to enable this we would do something like in cueEditorSlices.updateEditingCueIndex
+            //  But with current structure of this method + cues + matchedCues interaction, it is impossible
+            //  Refactoring as suggested in function signature could help with this
             // if (getState().searchReplaceVisible) {
-            //     updateSearchMatches(dispatch, getState, newCue);
+            //     ... search in edited cue
             // }
+
             validateCue(dispatch, idx, true, textOnly);
             if (!textOnly) {
                 dispatch(updateMatchedCues());
