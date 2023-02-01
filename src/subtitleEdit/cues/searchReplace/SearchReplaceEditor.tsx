@@ -13,10 +13,11 @@ import {
 } from "./searchReplaceSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import { updateVttCue } from "../cuesList/cuesListActions";
-import { CueDto } from "../../model";
+import { CueDto, SubtitleEditAction } from "../../model";
 import { replaceVttCueContent } from "../edit/editUtils";
 import ToggleButton from "../../toolbox/ToggleButton";
 import { SearchReplace } from "./model";
+import { editingCueIndexSlice } from "../edit/cueEditorSlices";
 
 const replaceAllInVttCue = (
     vttCue: VTTCue,
@@ -44,7 +45,7 @@ const replaceAllInVttCue = (
 };
 
 const searchReplaceAll = (
-    dispatch: Dispatch<AppThunk>,
+    dispatch: Dispatch<SubtitleEditAction>,
     cues: Array<CueDto>,
     searchReplace: SearchReplace,
     replacement: string
@@ -67,6 +68,7 @@ const searchReplaceAll = (
             dispatch(updateVttCue(cueIndex, newVTTCue, cue.editUuid, true, true));
         }
     }
+    dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: -1 }));
 };
 
 const SearchReplaceEditor = (): ReactElement | null => {
