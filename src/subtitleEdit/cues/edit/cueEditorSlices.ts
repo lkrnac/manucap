@@ -47,7 +47,6 @@ export const updateEditingCueIndexNoThunk = (dispatch: Dispatch<SubtitleEditActi
     }
 };
 
-// TODO: check if updateEditingCueIndexNoThunk can be called directly
 export const updateEditingCueIndex = (idx: number, matchedCueIndex?: number): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         updateEditingCueIndexNoThunk(dispatch, idx);
