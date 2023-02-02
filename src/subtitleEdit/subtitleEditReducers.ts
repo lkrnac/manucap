@@ -24,6 +24,8 @@ import {
 } from "./cues/edit/cueEditorSlices";
 import { commentsVisibleSlice } from "./cues/comments/commentsSlices";
 import { waveformVisibleSlice } from "./player/waveformSlices";
+import { saveCueUpdateSlice } from "./cues/saveCueUpdateSlices";
+import { saveCueDeleteSlice } from "./cues/saveCueDeleteSlices";
 
 export const Reducers = {
     cues: cuesSlice.reducer,
@@ -33,6 +35,8 @@ export const Reducers = {
     videoSectionToPlay: playVideoSectionSlice.reducer,
     loadingIndicator: loadingIndicatorSlices.reducer,
     saveTrack: saveTrackSlice.reducer,
+    saveCueUpdates: saveCueUpdateSlice.reducer,
+    saveCueDeletes: saveCueDeleteSlice.reducer,
     saveAction: saveActionSlice.reducer,
     spellCheckerSettings: spellcheckerSettingsSlice.reducer,
     searchReplace: searchReplaceSlice.reducer,
