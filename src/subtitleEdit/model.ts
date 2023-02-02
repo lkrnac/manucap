@@ -36,6 +36,7 @@ export const CUE_LINE_STATE_CLASSES = new Map ([
 ]);
 
 export interface CueDto {
+    id?: string;
     readonly vttCue: VTTCue;
     readonly cueCategory: CueCategory;
     editUuid?: string;
