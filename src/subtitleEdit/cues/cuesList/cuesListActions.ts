@@ -49,7 +49,7 @@ import {
     SpellCheckRemovalAction
 } from "./cuesListSlices";
 import { callSaveTrack } from "../saveSlices";
-import { searchReplaceSlice } from "../searchReplace/searchReplaceSlices";
+// import { searchReplaceSlice } from "../searchReplace/searchReplaceSlices";
 // import { updateSearchMatches } from "../searchReplace/searchReplaceSlices";
 
 const NEW_ADDED_CUE_DEFAULT_STEP = 3;
@@ -323,18 +323,9 @@ export const updateVttCue = (
             //  Refactoring as suggested in function signature could help with this
             //  BTW, for effectively supporting this use case, we need to know current matchedCueIndex,
             //  which is not easy as we don't have it in hand
-            if (getState().searchReplaceVisible) {
-                const currentIndices = {
-                    matchedCueIndex: -1,
-                    sourceCueIndex: -1,
-                    targetCueIndex: -1,
-                    matchLength: 0,
-                    offset: -1,
-                    offsetIndex: 0
-                };
-
-                dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
-            }
+            // if (getState().searchReplaceVisible) {
+            // ...
+            // }
 
             validateCue(dispatch, idx, true, textOnly);
             if (!textOnly) {

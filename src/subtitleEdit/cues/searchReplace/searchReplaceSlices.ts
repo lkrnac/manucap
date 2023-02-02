@@ -195,6 +195,17 @@ const getNextCue = (dispatch: Dispatch<SubtitleEditAction>, getState: Function,)
             }
         }
     }
+    const currentIndices = {
+        matchedCueIndex: -1,
+        sourceCueIndex: -1,
+        targetCueIndex: -1,
+        matchLength: 0,
+        offset: -1,
+        offsetIndex: 0
+    };
+
+    dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
+    updateEditingCueIndexNoThunk(dispatch, -1);
     return -1;
 };
 
