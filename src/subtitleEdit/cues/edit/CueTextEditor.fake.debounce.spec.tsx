@@ -34,6 +34,7 @@ import { act } from "react-dom/test-utils";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateEditingCueIndex } from "./cueEditorSlices";
+import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
 
 jest.mock("lodash", () => (
     {
@@ -351,8 +352,18 @@ describe("CueTextEditor", () => {
         it("triggers autosave and when changed", () => {
             // GIVEN
             const saveTrack = jest.fn();
+            const updateCueCallback = jest.fn();
+            const editingTrack = { language: { id: "en-US" }, timecodesUnlocked: true } as Track;
+            const testCue = { ...testingStore.getState().cues[0] };
+            testCue.errors = [];
+            testCue.vttCue.text = "someText Paste text to end";
+            const expectedCueUpdate = {
+                editingTrack,
+                cues: [ testCue ]
+            };
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(updateEditingTrack({ language: { id: "en-US" }} as Track) as {} as AnyAction);
+            testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
+            testingStore.dispatch(updateEditingTrack(editingTrack) as {} as AnyAction);
 
             const editor = mountEditorNode();
 
@@ -365,7 +376,10 @@ describe("CueTextEditor", () => {
             });
 
             // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(1);
+            // needs to be updated because it is updated by editor on edit
+            testCue.editUuid = testingStore.getState().cues[0].editUuid;
+            expect(updateCueCallback).toHaveBeenCalledWith(expectedCueUpdate);
+            expect(saveTrack).not.toHaveBeenCalled();
         });
 
         it("doesn't trigger autosave when user selects text", () => {
