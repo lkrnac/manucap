@@ -18,7 +18,7 @@ import { setSpellCheckDomain } from "./spellcheckerSettingsSlice";
 import CueErrorAlert from "./cues/CueErrorAlert";
 import MergeEditor from "./cues/merge/MergeEditor";
 import { saveCueUpdateSlice } from "./cues/saveCueUpdateSlices";
-import {DeleteTrackCueIds, saveCueDeleteSlice} from "./cues/saveCueDeleteSlices";
+import { DeleteTrackCueIds, saveCueDeleteSlice } from "./cues/saveCueDeleteSlices";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426

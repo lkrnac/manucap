@@ -2,10 +2,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { debounce } from "lodash";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
-import {CueDto, SubtitleEditAction, Track, TrackCues} from "../model";
+import { CueDto, SubtitleEditAction, Track, TrackCues } from "../model";
 import { editingTrackSlice } from "../trackSlices";
-import {retrySaveCueUpdateIfNeeded} from "./saveCueUpdateSlices";
-import {DeleteTrackCueIds, retrySaveCueDeleteIfNeeded} from "./saveCueDeleteSlices";
+import { retrySaveCueUpdateIfNeeded } from "./saveCueUpdateSlices";
+import { DeleteTrackCueIds, retrySaveCueDeleteIfNeeded } from "./saveCueDeleteSlices";
 
 const DEBOUNCE_TIMEOUT = 2500;
 interface SaveActionWithPayload extends SubtitleEditAction {

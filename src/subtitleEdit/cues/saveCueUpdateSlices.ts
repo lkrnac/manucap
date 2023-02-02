@@ -1,8 +1,8 @@
-import { createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { debounce } from "lodash";
 import { Dispatch } from "react";
 import { CueDto, TrackCues } from "../model";
-import {SaveAction, saveActionSlice, SaveState} from "./saveSlices";
+import { SaveAction, saveActionSlice, SaveState } from "./saveSlices";
 
 const DEBOUNCE_TIMEOUT = 2500;
 export interface SaveCueUpdateCallback {
