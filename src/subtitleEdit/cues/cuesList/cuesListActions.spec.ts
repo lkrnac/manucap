@@ -56,9 +56,10 @@ const testingChunkTrack = {
 } as Track;
 
 const testingCues = [
-    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+    { id: "1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+    { id: "2", vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
     {
+        id: "3",
         vttCue: new VTTCue(4, 6, "Caption Line 3"),
         cueCategory: "ONSCREEN_TEXT",
         spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
@@ -132,24 +133,8 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue === testingStore.getState().lastCueChange.vttCue)
                 .toBeTruthy();
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
-        });
-
-        it("stores multi cues flag if defined", () => {
-            // GIVEN
-            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            const editUuid = testingStore.getState().cues[1].editUuid;
-
-            // WHEN
-            testingStore.dispatch(
-                updateVttCue(1, new VTTCue(2, 2.5, "Dummy Cue"), editUuid, true, true
-            ) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
         });
 
         it("preserves all other existing cue parameters", () => {
@@ -1631,7 +1616,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().lastCueChange.index).toEqual(-1);
                 expect(testingStore.getState().lastCueChange.vttCue).toBeUndefined();
                 expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
                 expect(testingStore.getState().editingCueIndex).toEqual(1);
                 expect(testingStore.getState().focusedInput).toEqual("START_TIME");
@@ -1662,7 +1647,7 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[2].vttCue === testingStore.getState().lastCueChange.vttCue)
                     .toBeTruthy();
                 expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
                 expect(testingStore.getState().editingCueIndex).toEqual(2);
                 expect(testingStore.getState().focusedInput).toEqual("EDITOR");
@@ -1695,7 +1680,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().lastCueChange.index).toEqual(-1);
             expect(testingStore.getState().lastCueChange.vttCue).toBeUndefined();
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(4);
             expect(testingStore.getState().editingCueIndex).toEqual(1);
             expect(testingStore.getState().focusedInput).toEqual("START_TIME");
@@ -1729,7 +1714,7 @@ describe("cueSlices", () => {
                 [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP]);
             expect(testingStore.getState().cues[3].errors).toEqual([CueError.TIME_GAP_OVERLAP]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(testingStore.getState().matchedCues.matchedCues["0"].targetCues["0"].cue.errors).toBeUndefined();
             expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors).toBeUndefined();
             expect(testingStore.getState().matchedCues.matchedCues["2"].targetCues["0"].cue.errors).toEqual(
@@ -1763,7 +1748,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[3].errors).toEqual([]);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
 
         it("does not mark cues as corrupted if maxCharactersPerLine is 0", () => {
@@ -1792,7 +1777,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[3].errors).toEqual([]);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
 
         it("does trigger autosave if errors count is different", () => {
@@ -1821,7 +1806,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[3].errors).toEqual([]);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
 
         it("marks cue as corrupted if chars per second max is exceeded", () => {
@@ -1845,7 +1830,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors)
                 .toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
 
         it("marks cue as corrupted if chars per second max is exceeded in multiple lines", () => {
@@ -1869,7 +1854,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors)
                 .toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
 
         it("marks cue as corrupted if chars per second max and chars per line are exceeded", () => {
@@ -1895,7 +1880,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors)
                 .toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.CHARS_PER_SECOND_EXCEEDED]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
 
         it("marks cue as corrupted if chars per second max and lines per caption are exceeded", () => {
@@ -1922,7 +1907,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors)
                 .toEqual([CueError.LINE_COUNT_EXCEEDED, CueError.CHARS_PER_SECOND_EXCEEDED]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
 
         it("doesn't mark cue as corrupted if chars per second max is not exceeded", () => {
@@ -1945,7 +1930,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
 
         it("ignores max chars per second if null in subtitle specs", () => {
@@ -1968,7 +1953,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
 
         it("ignores max chars per second if subtitle specs are disabled", () => {
@@ -1991,7 +1976,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
 
         it("do not count HTML tags into max chars per second limitation", () => {
@@ -2015,7 +2000,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
     });
 
@@ -2100,7 +2085,7 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[1].cueCategory).toEqual("AUDIO_DESCRIPTION");
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
 
         it("preserves all other existing cue parameters", () => {
@@ -2732,7 +2717,7 @@ describe("cueSlices", () => {
             expect(testingStore.getState().lastCueChange.changeType).toEqual("REMOVE");
             expect(testingStore.getState().lastCueChange.index).toEqual(0);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
 
         it("deletes cue in the middle of the cue array", () => {

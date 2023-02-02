@@ -63,7 +63,8 @@ const searchReplaceAll = (
         const matches = searchCueText(vttText, find, searchReplace.matchCase);
         if (matches.length > 0) {
             const  newVTTCue = replaceAllInVttCue(cue.vttCue, find, replacement, searchReplace.matchCase, matches);
-            dispatch(updateVttCue(cueIndex, newVTTCue, cue.editUuid, true, true));
+            // TODO: do something here more efficient, maybe add flag to not save, then call save track after for?
+            dispatch(updateVttCue(cueIndex, newVTTCue, cue.editUuid, true));
         }
     }
     dispatch(updateMatchedCues());
