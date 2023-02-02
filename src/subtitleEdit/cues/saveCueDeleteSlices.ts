@@ -35,7 +35,7 @@ export const saveCueDeleteSlice = createSlice({
         addCueIdForDelete: (state, action: PayloadAction<string>): void => {
             state.cueDeleteIds.add(action.payload);
         },
-        clearCueIdsForDelete: (state, _action: PayloadAction): void => {
+        clearCueIdsForDelete: (state): void => {
             state.cueDeleteIds.clear();
         }
     }
