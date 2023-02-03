@@ -133,11 +133,15 @@ const changeVttCueInRedux = (
     currentContent: ContentState,
     props: CueTextEditorProps,
     dispatch: Dispatch<AppThunk>,
+    replacement: string
 ): void => {
     const vttText = getVttText(currentContent);
     const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, vttText);
     copyNonConstructorProperties(vttCue, props.vttCue);
     dispatch(updateVttCue(props.index, vttCue, props.editUuid, true));
+    if (replacement !== "") {
+        dispatch(searchNextCues());
+    }
 };
 
 const changeVttCueInReduxDebounced = _.debounce(changeVttCueInRedux, 200);
@@ -352,8 +356,6 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
             props.setGlossaryTerm(undefined);
             if (replacement !== "") {
                 dispatch(setReplacement(""));
-                // dispatch(searchNextCues(true));
-                dispatch(searchNextCues());
             }
             previousEditorStateRef.current = decoratedEditorState;
             setEditorState(decoratedEditorState);
@@ -373,7 +375,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 && unmountContentRef.current !== currentContent;
             unmountContentRef.current = currentContent;
             if (shouldUpdateVttCue) {
-                changeVttCueInReduxDebounced(currentContent, props, dispatch);
+                changeVttCueInReduxDebounced(currentContent, props, dispatch, replacement);
             }
         },
         // Two bullet points in this suppression:
@@ -399,7 +401,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
         () => (): void => {
             changeVttCueInReduxDebounced.cancel();
             if (unmountContentRef.current !== null && unmountContentRef.current !== currentContent) {
-                changeVttCueInRedux(unmountContentRef.current, props, dispatch);
+                changeVttCueInRedux(unmountContentRef.current, props, dispatch, replacement);
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps

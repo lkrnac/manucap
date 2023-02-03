@@ -120,7 +120,7 @@ export const showSearchReplace = (visible: boolean): AppThunk =>
         // updateCueMatchesIfNeeded(dispatch, find, matchCase, getState);
     };
 
-const getNextCue = (dispatch: Dispatch<SubtitleEditAction>, getState: Function,): number => {
+const getNextCue = (dispatch: Dispatch<SubtitleEditAction>, getState: Function): number => {
     const matchedCues = getState().matchedCues.matchedCues;
     const searchReplace = getState().searchReplace;
     const indices = _.clone(searchReplace.indices);
