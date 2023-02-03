@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { debounce } from "lodash";
 import { Dispatch } from "react";
-import { CueDto, TrackCues } from "../model";
-import { SaveAction, saveActionSlice, SaveState } from "./saveSlices";
+import { CueDto, SubtitleEditAction, TrackCues } from "../model";
+import { checkSaveStateAndSave, SaveAction, saveActionSlice, SaveState } from "./saveSlices";
 
 const DEBOUNCE_TIMEOUT = 2500;
 export interface SaveCueUpdateCallback {
@@ -68,22 +68,12 @@ const saveCueUpdateCurrent = (
 const saveCueUpdateDebounced = debounce(saveCueUpdateCurrent, DEBOUNCE_TIMEOUT, { leading: false, trailing: true });
 
 export const callSaveCueUpdate = (
-    dispatch: Dispatch<PayloadAction<TrackCues | SaveAction | number | undefined>>,
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
     getState: Function,
     cueIndex: number
 ): void => {
     dispatch(saveCueUpdateSlice.actions.addCueIndexForUpdate(cueIndex));
-    const saveAction = getState().saveAction;
-    if (saveAction.saveState === SaveState.REQUEST_SENT || saveAction.saveState === SaveState.RETRY) {
-        dispatch(saveActionSlice.actions.setState(
-            { saveState: SaveState.RETRY, multiCuesEdit: saveAction.multiCuesEdit }
-        ));
-    } else {
-        dispatch(saveActionSlice.actions.setState(
-            { saveState: SaveState.TRIGGERED, multiCuesEdit: false }
-        ));
-        saveCueUpdateDebounced(dispatch, getState);
-    }
+    checkSaveStateAndSave(dispatch, getState, saveCueUpdateDebounced, false);
 };
 
 export const retrySaveCueUpdateIfNeeded = (

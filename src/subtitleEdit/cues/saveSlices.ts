@@ -95,22 +95,31 @@ const saveTrackCurrent = (
 
 const saveTrackDebounced = debounce(saveTrackCurrent, DEBOUNCE_TIMEOUT, { leading: false, trailing: true });
 
+export const checkSaveStateAndSave = (
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
+    getState: Function,
+    saveFunction: Function,
+    multiCuesEdit: boolean
+): void => {
+    const saveAction = getState().saveAction;
+    if (saveAction.saveState === SaveState.REQUEST_SENT || saveAction.saveState === SaveState.RETRY) {
+        dispatch(saveActionSlice.actions.setState(
+            { saveState: SaveState.RETRY, multiCuesEdit: saveAction.multiCuesEdit || multiCuesEdit }
+        ));
+    } else {
+        dispatch(saveActionSlice.actions.setState(
+            { saveState: SaveState.TRIGGERED, multiCuesEdit }
+        ));
+        saveFunction(dispatch, getState);
+    }
+};
+
 export const callSaveTrack = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
     getState: Function
 ): void => {
-        const saveAction = getState().saveAction;
-        if (saveAction.saveState === SaveState.REQUEST_SENT || saveAction.saveState === SaveState.RETRY) {
-            dispatch(saveActionSlice.actions.setState(
-                { saveState: SaveState.RETRY, multiCuesEdit: true }
-            ));
-        } else {
-            dispatch(saveActionSlice.actions.setState(
-                { saveState: SaveState.TRIGGERED, multiCuesEdit: true }
-            ));
-            saveTrackDebounced(dispatch, getState);
-        }
-    };
+    checkSaveStateAndSave(dispatch, getState, saveTrackDebounced, true);
+};
 
 type AutoSaveSuccessDispatch = boolean | SaveActionWithPayload | SaveAction | TrackCues | DeleteTrackCueIds | undefined;
 
