@@ -301,7 +301,7 @@ const findCueAndUpdateIndices = (
             ? getNextCue(dispatch, getState, 0)
             : getPreviousCue(dispatch, getState, MAX);
     }
-    if (matchedCueIndex > 0) {
+    if (matchedCueIndex > -1) {
         dispatch(matchedCuesSlice.actions.updateMatchedCuesFocusIndex(matchedCueIndex));
         dispatch(changeScrollPosition(ScrollPosition.CURRENT));
     }
