@@ -29,7 +29,6 @@ import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 
 import { SearchReplaceMatch } from "../searchReplace/SearchReplaceMatch";
 import { replaceContent } from "./editUtils";
-// import { SearchReplaceMatches } from "../searchReplace/model";
 import { searchNextCues, setReplacement } from "../searchReplace/searchReplaceSlices";
 import { CueExtraCharacters } from "./CueExtraCharacters";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";

@@ -36,7 +36,6 @@ import {
     editingCueIndexSlice,
     focusedInputSlice,
     lastCueChangeSlice,
-    // updateSearchMatches,
     validationErrorSlice
 } from "../edit/cueEditorSlices";
 import _ from "lodash";
@@ -49,8 +48,6 @@ import {
     SpellCheckRemovalAction
 } from "./cuesListSlices";
 import { callSaveTrack } from "../saveSlices";
-// import { searchReplaceSlice } from "../searchReplace/searchReplaceSlices";
-// import { updateSearchMatches } from "../searchReplace/searchReplaceSlices";
 
 const NEW_ADDED_CUE_DEFAULT_STEP = 3;
 const DEFAULT_CUE = { vttCue: new VTTCue(0, 0, ""), cueCategory: "DIALOGUE" };
