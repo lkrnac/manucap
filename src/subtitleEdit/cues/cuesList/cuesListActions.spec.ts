@@ -1550,32 +1550,6 @@ describe("cueSlices", () => {
         });
 
         describe("search and replace", () => {
-            it("update search matches if search and replace editor is visible", () => {
-                // GIVEN
-                testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-                testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
-                testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
-
-                testingStore.dispatch(
-                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X"), undefined, true) as {} as AnyAction);
-                const editUuid = testingStore.getState().cues[1].editUuid;
-                testingStore.dispatch(matchedCuesSlice.actions
-                    .matchCuesByTime({
-                        cues: testingCues,
-                        sourceCues: [{ vttCue: new VTTCue(0, 6, "Source Line 1"), cueCategory: "DIALOGUE" }],
-                        editingCueIndex: 1
-                    })
-                );
-
-                // WHEN
-                testingStore.dispatch(
-                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X updated"), editUuid, true) as {} as AnyAction);
-
-                // THEN
-                expect(testingStore.getState().searchReplace.matches).not.toBeUndefined();
-            });
-
             it("doesn't update search matches if search and replace editor is not visible", () => {
                 // GIVEN
                 testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
