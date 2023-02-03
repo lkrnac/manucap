@@ -88,14 +88,18 @@ export const showSearchReplace = (visible: boolean): AppThunk =>
         dispatch(searchReplaceVisibleSlice.actions.setSearchReplaceVisible(visible));
     };
 
-const getNextCue = (dispatch: Dispatch<SubtitleEditAction>, getState: Function): number => {
+const getNextCue = (
+    dispatch: Dispatch<SubtitleEditAction>,
+    getState: Function,
+    startingMatchedCueIndex?: number
+): number => {
     const matchedCues = getState().matchedCues.matchedCues;
     const searchReplace = getState().searchReplace;
     const indices = _.clone(searchReplace.indices);
     indices.sourceCueIndex = indices.sourceCueIndex == -1 ? MAX : indices.sourceCueIndex;
     indices.targetCueIndex = indices.targetCueIndex == -1 ? MAX : indices.targetCueIndex;
 
-    let matchedCueIndex = indices.matchedCueIndex;
+    let matchedCueIndex = startingMatchedCueIndex ? startingMatchedCueIndex : indices.matchedCueIndex;
     let sourceCueIndex = indices.sourceCueIndex;
     let targetCueIndex = indices.targetCueIndex;
     let offsetIndex = indices.offsetIndex;
@@ -177,14 +181,20 @@ const getNextCue = (dispatch: Dispatch<SubtitleEditAction>, getState: Function):
     return -1;
 };
 
-const getPreviousCue = (dispatch: Dispatch<SubtitleEditAction>, getState: Function): number => {
+const getPreviousCue = (
+    dispatch: Dispatch<SubtitleEditAction>,
+    getState: Function,
+    startingMatchedCueIndex?: number
+): number => {
     const matchedCues = getState().matchedCues.matchedCues;
     const searchReplace = getState().searchReplace;
     const indices = _.clone(searchReplace.indices);
     indices.sourceCueIndex = indices.sourceCueIndex == MAX ? -1 : indices.sourceCueIndex;
     indices.targetCueIndex = indices.targetCueIndex == MAX ? -1 : indices.targetCueIndex;
 
-    let matchedCueIndex = indices.matchedCueIndex;
+    let matchedCueIndex = startingMatchedCueIndex || startingMatchedCueIndex === MAX
+        ? matchedCues.length
+        : indices.matchedCueIndex;
     let sourceCueIndex = indices.sourceCueIndex;
     let targetCueIndex = indices.targetCueIndex;
     let offsetIndex = indices.offsetIndex;
@@ -283,9 +293,14 @@ const findCueAndUpdateIndices = (
     if (matchedCues.length === 0) {
         return;
     }
-    const matchedCueIndex = direction === "NEXT"
+    let matchedCueIndex = direction === "NEXT"
         ? getNextCue(dispatch, getState)
         : getPreviousCue(dispatch, getState);
+    if (matchedCueIndex === -1) {
+        matchedCueIndex = direction === "NEXT"
+            ? getNextCue(dispatch, getState, 0)
+            : getPreviousCue(dispatch, getState, MAX);
+    }
     if (matchedCueIndex > 0) {
         dispatch(matchedCuesSlice.actions.updateMatchedCuesFocusIndex(matchedCueIndex));
         dispatch(changeScrollPosition(ScrollPosition.CURRENT));
