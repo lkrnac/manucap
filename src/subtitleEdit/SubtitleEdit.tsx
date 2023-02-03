@@ -12,7 +12,7 @@ import CuesList from "./cues/cuesList/CuesList";
 import { setSaveTrack } from "./cues/saveSlices";
 import { resetEditingTrack } from "./trackSlices";
 import { changeScrollPosition, setCurrentPlayerTime } from "./cues/cuesList/cuesListScrollSlice";
-import { ScrollPosition, SaveActionParameters, TrackCues, Track } from "./model";
+import { ScrollPosition, SaveActionParameters, TrackCues, Track, TrackCue, CueDto } from "./model";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
 import { setSpellCheckDomain } from "./spellcheckerSettingsSlice";
 import CueErrorAlert from "./cues/CueErrorAlert";
@@ -31,7 +31,7 @@ export interface SubtitleEditProps {
     waveform?: string;
     onViewTrackHistory: () => void;
     onSave: (saveAction: SaveActionParameters) => void;
-    onUpdateCues: (trackCues: TrackCues) => void;
+    onUpdateCue: (trackCue: TrackCue) => Promise<CueDto>;
     onDeleteCues: (trackCues: DeleteTrackCueIds) => void;
     onComplete: (completeAction: TrackCues) => void;
     onExportFile: (trackVersionExport: Track | null) => void;
@@ -59,7 +59,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     useEffect(
         (): void => {
             dispatch(setSaveTrack(props.onSave));
-            dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(props.onUpdateCues));
+            dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(props.onUpdateCue));
             dispatch(saveCueDeleteSlice.actions.setDeleteCueCallback(props.onDeleteCues));
             dispatch(setSpellCheckDomain(props.spellCheckerDomain));
             dispatch(changeScrollPosition(ScrollPosition.FIRST));

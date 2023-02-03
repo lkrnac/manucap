@@ -2,10 +2,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { debounce } from "lodash";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
-import { CueDto, SubtitleEditAction, Track, TrackCues } from "../model";
+import { CueDto, SubtitleEditAction, Track } from "../model";
 import { editingTrackSlice } from "../trackSlices";
 import { retrySaveCueUpdateIfNeeded } from "./saveCueUpdateSlices";
-import { DeleteTrackCueIds, retrySaveCueDeleteIfNeeded } from "./saveCueDeleteSlices";
+import { retrySaveCueDeleteIfNeeded } from "./saveCueDeleteSlices";
 
 const DEBOUNCE_TIMEOUT = 2500;
 interface SaveActionWithPayload extends SubtitleEditAction {
@@ -121,7 +121,7 @@ export const callSaveTrack = (
     checkSaveStateAndSave(dispatch, getState, saveTrackDebounced, true);
 };
 
-type AutoSaveSuccessDispatch = boolean | SaveActionWithPayload | SaveAction | TrackCues | DeleteTrackCueIds | undefined;
+type AutoSaveSuccessDispatch = boolean | SaveActionWithPayload | SaveAction | SubtitleEditAction | undefined;
 
 export const setAutoSaveSuccess = (success: boolean): AppThunk =>
     (dispatch: Dispatch<PayloadAction<AutoSaveSuccessDispatch>>, getState): void => {

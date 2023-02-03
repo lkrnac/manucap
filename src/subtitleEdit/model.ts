@@ -188,6 +188,11 @@ export interface TrackCues {
     cues: CueDto[];
 }
 
+export interface TrackCue {
+    editingTrack: Track;
+    cue: CueDto;
+}
+
 export interface SaveActionParameters {
     cues: CueDto[];
     editingTrack: Track;
