@@ -7,7 +7,7 @@ import { setFind, setReplacement, showSearchReplace } from "./searchReplaceSlice
 import { AnyAction } from "@reduxjs/toolkit";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { CueDto, Track } from "../../model";
-import { updateCues } from "../cuesList/cuesListActions";
+import { updateCues, updateMatchedCues } from "../cuesList/cuesListActions";
 import { SaveState, setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import ToggleButton from "../../toolbox/ToggleButton";
@@ -235,6 +235,7 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().focusedCueIndex).toEqual(0);
     });
 
+    // TODO: Covert these test cases
     it("searches for previous match when Previous button is clicked", () => {
         // GIVEN
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
@@ -364,9 +365,7 @@ describe("SearchReplaceEditor", () => {
         );
         const replaceAllButton = getByText("Replace All");
         const replaceInput = getByPlaceholderText("Replace");
-        testingStore.dispatch(matchedCuesSlice.actions
-            .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
-        );
+        testingStore.dispatch(updateMatchedCues() as {} as AnyAction);
 
         // WHEN
         fireEvent.change(replaceInput, { target: { value: "New Line 5" }});
