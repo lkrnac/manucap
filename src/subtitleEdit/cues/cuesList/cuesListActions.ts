@@ -136,10 +136,12 @@ export const applySpellcheckerOnCue = createAsyncThunk(
             if (track && track.language?.id && spellCheckerSettings.enabled) {
                 return fetchSpellCheck(text, spellCheckerSettings, track.language.id)
                     .then(spellCheck => {
-                        addSpellCheck(thunkApi.dispatch, index, spellCheck, track.id);
-                        const freshState: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
-                        updateMatchedCue(thunkApi.dispatch, freshState, index);
-                        callSaveTrack(thunkApi.dispatch, thunkApi.getState);
+                        if (spellCheck?.matches?.length > 0) {
+                            addSpellCheck(thunkApi.dispatch, index, spellCheck, track.id);
+                            const freshState: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
+                            updateMatchedCue(thunkApi.dispatch, freshState, index);
+                            callSaveTrack(thunkApi.dispatch, thunkApi.getState);
+                        }
                     });
             }
         }
