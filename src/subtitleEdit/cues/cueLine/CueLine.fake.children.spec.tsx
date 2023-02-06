@@ -533,7 +533,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={1}
                                 isTargetCue={false}
-                                sourceCueIndex={1}
+                                sourceCueIndex={0}
                                 targetCueIndex={1}
                                 cue={sourceCues[1]}
                                 targetCuesLength={3}
@@ -577,6 +577,9 @@ describe("CueLine", () => {
             );
 
             // THEN
+            console.log(actualNode.container.outerHTML);
+            console.log(expectedNode.container.outerHTML);
+
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
         });
 
@@ -611,7 +614,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={2}
                                 isTargetCue={false}
-                                sourceCueIndex={2}
+                                sourceCueIndex={0}
                                 targetCueIndex={2}
                                 cue={sourceCues[2]}
                                 targetCuesLength={3}
