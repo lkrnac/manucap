@@ -116,6 +116,7 @@ describe("CueLine", () => {
                                 cue={targetCues[0]}
                                 nextCueLine={matchedCuesCaptioning[1]}
                                 setGlossaryTerm={jest.fn()}
+                                matchedCuesIndex={0}
                             />
                         </div>
                     </div>
@@ -185,6 +186,7 @@ describe("CueLine", () => {
                                 cue={corruptedCue}
                                 nextCueLine={matchedCuesCaptioning[1]}
                                 setGlossaryTerm={jest.fn()}
+                                matchedCuesIndex={0}
                             />
                         </div>
                     </div>
@@ -252,6 +254,7 @@ describe("CueLine", () => {
                                 cue={corruptedCue}
                                 nextCueLine={matchedCuesCaptioning[1]}
                                 setGlossaryTerm={jest.fn()}
+                                matchedCuesIndex={0}
                             />
                             <div className="sbte-cues-errors">• Max Characters Per Line Exceeded<br /></div>
                         </div>
@@ -318,6 +321,7 @@ describe("CueLine", () => {
                                 cue={corruptedCue}
                                 nextCueLine={matchedCuesCaptioning[1]}
                                 setGlossaryTerm={jest.fn()}
+                                matchedCuesIndex={0}
                             />
                             <div className="sbte-cues-errors">
                                 {/*eslint-disable-next-line react/jsx-child-element-spacing */}
@@ -545,6 +549,7 @@ describe("CueLine", () => {
                                 cue={targetCues[1]}
                                 nextCueLine={matchedCuesTranslation[2]}
                                 setGlossaryTerm={jest.fn()}
+                                matchedCuesIndex={1}
                             />
                         </div>
                     </div>
@@ -617,7 +622,7 @@ describe("CueLine", () => {
                                 nextTargetCueIndex={2}
                                 editDisabled={false}
                             />
-                            <CueEdit index={2} cue={targetCues[2]} setGlossaryTerm={jest.fn()} />
+                            <CueEdit index={2} cue={targetCues[2]} setGlossaryTerm={jest.fn()} matchedCuesIndex={2} />
                         </div>
                     </div>
                 </Provider>
@@ -1382,7 +1387,7 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <div className="sbte-cue-divider-good" />
-                            <CueEdit index={0} cue={targetCues[0]} setGlossaryTerm={jest.fn()} />
+                            <CueEdit index={0} cue={targetCues[0]} setGlossaryTerm={jest.fn()} matchedCuesIndex={0} />
                         </div>
                     </div>
                 </Provider>
@@ -1472,7 +1477,7 @@ describe("CueLine", () => {
                                 nextTargetCueIndex={0}
                                 editDisabled={false}
                             />
-                            <CueEdit index={1} cue={targetCues[1]} setGlossaryTerm={jest.fn()} />
+                            <CueEdit index={1} cue={targetCues[1]} setGlossaryTerm={jest.fn()} matchedCuesIndex={0} />
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
@@ -1735,6 +1740,7 @@ describe("CueLine", () => {
                                 index={2}
                                 cue={corruptedTargetCueWithIndex.cue}
                                 setGlossaryTerm={jest.fn()}
+                                matchedCuesIndex={0}
                             />
                             <div className="sbte-cues-errors">• Max Characters Per Line Exceeded<br /></div>
                         </div>
@@ -2028,6 +2034,7 @@ describe("CueLine", () => {
                                 cue={targetCuesWithComments[0]}
                                 nextCueLine={matchedCuesWithCommentsCaptioning[1]}
                                 setGlossaryTerm={jest.fn()}
+                                matchedCuesIndex={0}
                             />
                             <CueComments index={0} cue={targetCuesWithComments[0]} commentAuthor="Linguist" />
                         </div>
