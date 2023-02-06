@@ -12,7 +12,6 @@ import {
 } from "./searchReplaceSlices";
 import { updateCues } from "../cuesList/cuesListActions";
 import { CueDto } from "../../model";
-import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -47,6 +46,11 @@ describe("searchReplaceSlices", () => {
     });
 
     describe("setFind", () => {
+        it("default is empty string", () => {
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("");
+        });
+
         it("sets search replace find state", () => {
             // WHEN
             testingStore.dispatch(setFind("testing") as {} as AnyAction);
@@ -54,24 +58,14 @@ describe("searchReplaceSlices", () => {
             // THEN
             expect(testingStore.getState().searchReplace.find).toEqual("testing");
         });
-
-        it("updates search matches on editing cue", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
-            expect(testingStore.getState().searchReplace.matches.offsets).toEqual([8]);
-            expect(testingStore.getState().searchReplace.matches.offsetIndex).toEqual(0);
-            expect(testingStore.getState().searchReplace.matches.matchLength).toEqual(6);
-        });
     });
 
     describe("setReplacement", () => {
+        it("default is empty string", () => {
+            // THEN
+            expect(testingStore.getState().searchReplace.replacement).toEqual("");
+        });
+
         it("sets search replace replacement state", () => {
             // WHEN
             testingStore.dispatch(setReplacement("testing-repl") as {} as AnyAction);
@@ -86,29 +80,17 @@ describe("searchReplaceSlices", () => {
             testingStore.dispatch(setMatchCase(false) as {} as AnyAction);
         });
 
+        it("default is false", () => {
+            // THEN
+            expect(testingStore.getState().searchReplace.matchCase).toBeFalsy();
+        });
+
         it("sets match case state", () => {
             // WHEN
             testingStore.dispatch(setMatchCase(true) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().searchReplace.matchCase).toBeTruthy();
-        });
-
-        it("updates search matches on editing cue", () => {
-            // GIVEN
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
-            testingStore.dispatch(setFind("line 2") as {} as AnyAction);
-
-            // WHEN
-            testingStore.dispatch(setMatchCase(true) as {} as AnyAction);
-
-            // THEN
-            expect(testingStore.getState().searchReplace.find).toEqual("line 2");
-            expect(testingStore.getState().searchReplace.matchCase).toBeTruthy();
-            expect(testingStore.getState().searchReplace.matches.offsets).toEqual([]);
-            expect(testingStore.getState().searchReplace.matches.offsetIndex).toEqual(0);
-            expect(testingStore.getState().searchReplace.matches.matchLength).toEqual(6);
         });
     });
 
