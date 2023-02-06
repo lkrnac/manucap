@@ -2111,12 +2111,81 @@ describe("cueSlices", () => {
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
 
+        it("triggers autosave if there are different spellcheck matches", async () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(4, 6, "Caption Long Overlappped 3"),
+                    cueCategory: "DIALOGUE",
+                    spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
+                },
+                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: null,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
+
+            const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+            const testingResponse = {
+                matches: [
+                    {
+                        message: "Possible spelling mistake found.",
+                        replacements: [
+                            { value: "Overlapped" },
+                            { value: "Over" }
+                        ],
+                        offset: 13, length: 8, context: { text: "text", length: 4, offset: 13 }, rule: { id: ruleId }
+                    }
+                ]
+            };
+            testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+            testingStore.dispatch(updateEditingTrack(
+                { language: { id: "en-US" }, id: trackId } as Track
+            ) as {} as AnyAction);
+            // @ts-ignore modern browsers does have it
+            global.fetch = jest.fn()
+                .mockImplementation(() =>
+                    new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
+
+            // WHEN
+            await act(async () => {
+                testingStore.dispatch(checkErrors({ index: 2, shouldSpellCheck: true }) as {} as AnyAction);
+            });
+
+            // THEN
+            // @ts-ignore modern browsers does have it
+            expect(global.fetch).toBeCalledWith(
+                "https://testing-domain/v2/check",
+                {
+                    method: "POST",
+                    body: "language=en-US&text=Caption Long Overlappped 3" +
+                        "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
+                }
+            );
+            expect(testingStore.getState().cues[0].errors).toBeUndefined();
+            expect(testingStore.getState().cues[1].errors).toBeUndefined();
+            expect(testingStore.getState().cues[2].errors).toEqual(["Spelling Error(s)"]);
+            expect(testingStore.getState().cues[3].errors).toBeUndefined();
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+        });
+
         it("does not trigger autosave if there are no spellcheck matches", async () => {
             // GIVEN
             const cuesCorrupted = [
                 { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
+                {
+                    vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"),
+                    cueCategory: "DIALOGUE",
+                    spellCheck: { matches: []}
+                },
                 { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
             const testingSubtitleSpecification = {
@@ -2129,6 +2198,84 @@ describe("cueSlices", () => {
 
             const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
             const testingResponse = { matches: []};
+            testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+            testingStore.dispatch(updateEditingTrack(
+                { language: { id: "en-US" }, id: trackId } as Track
+            ) as {} as AnyAction);
+            // @ts-ignore modern browsers does have it
+            global.fetch = jest.fn()
+                .mockImplementation(() =>
+                    new Promise((resolve) => resolve({ json: () => testingResponse, ok: true })));
+
+            // WHEN
+            await act(async () => {
+                testingStore.dispatch(checkErrors({ index: 2, shouldSpellCheck: true }) as {} as AnyAction);
+            });
+
+            // THEN
+            // @ts-ignore modern browsers does have it
+            expect(global.fetch).toBeCalledWith(
+                "https://testing-domain/v2/check",
+                {
+                    method: "POST",
+                    body: "language=en-US&text=Caption Long Overlapped 3" +
+                        "&disabledRules=UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END"
+                }
+            );
+            expect(testingStore.getState().cues[0].errors).toBeUndefined();
+            expect(testingStore.getState().cues[1].errors).toBeUndefined();
+            expect(testingStore.getState().cues[2].errors).toEqual([]);
+            expect(testingStore.getState().cues[3].errors).toBeUndefined();
+            expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+        });
+
+        it("does not trigger autosave if the spellcheck matches are the same", async () => {
+            // GIVEN
+            const cuesCorrupted = [
+                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                {
+                    vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"),
+                    cueCategory: "DIALOGUE",
+                    spellCheck: {
+                        matches: [
+                            {
+                                message: "Possible spelling mistake found.",
+                                replacements: [
+                                    { value: "Overlapped" },
+                                    { value: "Over" }
+                                ],
+                                offset: 13, length: 8, context: { text: "text", length: 4, offset: 13 },
+                                rule: { id: ruleId }
+                            }
+                        ]
+                    }
+                },
+                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            const testingSubtitleSpecification = {
+                maxLinesPerCaption: 2,
+                maxCharactersPerLine: null,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
+
+            const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
+            const testingResponse = {
+                matches: [
+                    {
+                        message: "Possible spelling mistake found.",
+                        replacements: [
+                            { value: "Overlapped" },
+                            { value: "Over" }
+                        ],
+                        offset: 13, length: 8, context: { text: "text", length: 4, offset: 13 }, rule: { id: ruleId }
+                    }
+                ]
+            };
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
             testingStore.dispatch(updateEditingTrack(
                 { language: { id: "en-US" }, id: trackId } as Track
