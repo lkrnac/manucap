@@ -572,6 +572,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
+                    rowIndex={0}
                     targetCueIndex={1}
                     cue={cue}
                     showGlossaryTerms
