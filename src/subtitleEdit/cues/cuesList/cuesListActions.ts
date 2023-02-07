@@ -86,7 +86,13 @@ const shouldBlink = (x: VTTCue, y: VTTCue, textOnly?: boolean): boolean => {
 const createAndAddCue = (previousCue: CueDto, startTime: number, endTime: number): CueDto => {
     const newCue = new VTTCue(startTime, endTime, "");
     copyNonConstructorProperties(newCue, previousCue.vttCue);
-    return { vttCue: newCue, cueCategory: previousCue.cueCategory, editUuid: uuidv4(), addId: uuidv4() };
+    return {
+        vttCue: newCue,
+        cueCategory: previousCue.cueCategory,
+        editUuid: uuidv4(),
+        trackVersionId: previousCue.trackVersionId,
+        addId: uuidv4()
+    };
 };
 
 const validateShiftWithinChunkRange = (shiftTime: number, track: Track | null, cues: CueDto[]): void => {
@@ -419,6 +425,7 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "ADD", index: idx, vttCue: cue.vttCue }));
             dispatch(updateMatchedCues());
             dispatch(changeScrollPosition(ScrollPosition.CURRENT));
+            callSaveCueUpdate(dispatch, getState, idx);
         } else {
             const error = overlapStartPrevented || overlapEndPrevented
                 ? CueError.TIME_GAP_OVERLAP
