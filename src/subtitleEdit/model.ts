@@ -46,6 +46,7 @@ export interface CueDto {
     glossaryMatches?: GlossaryMatchDto[];
     errors?: CueError[] | null;
     comments?: CueComment[];
+    trackVersionId?: string;
     addId?: string;
 }
 
