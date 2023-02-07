@@ -4,8 +4,13 @@ import { Dispatch } from "react";
 import { CueDto, SubtitleEditAction, TrackCue } from "../model";
 import { checkSaveStateAndSave, saveActionSlice, SaveState, setAutoSaveSuccess } from "./saveSlices";
 import { AppThunk } from "../subtitleEditReducers";
+import {cuesSlice} from "./cuesList/cuesListSlices";
 
 const DEBOUNCE_TIMEOUT = 2500;
+
+const isRejected = (input: PromiseSettledResult<unknown>): input is PromiseRejectedResult =>
+    input.status === "rejected";
+
 export interface SaveCueUpdateCallback {
     updateCue: ((trackCue: TrackCue) => Promise<CueDto>) | null;
     cueUpdateIndexes: Set<number>;
@@ -32,8 +37,22 @@ export const saveCueUpdateSlice = createSlice({
     }
 });
 
-const saveCueUpdateRequest = (
+const updateAddedCueIdIfNeeded = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction | AppThunk | undefined>>,
+    getState: Function,
+    cueAddId: string,
+    cue: CueDto
+): void => {
+    if (cueAddId) {
+        const foundCueIndex = getState().cues.findIndex((aCue: CueDto) => aCue.addId === cueAddId);
+        if (foundCueIndex !== -1) {
+            dispatch(cuesSlice.actions.updateAddedCueId({ idx: foundCueIndex, cue }))
+        }
+    }
+};
+
+const saveCueUpdateRequest = (
+    dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
     getState: Function
 ): void => {
     const updateCueCallback = getState().saveCueUpdates.updateCue;
@@ -43,34 +62,27 @@ const saveCueUpdateRequest = (
     dispatch(saveCueUpdateSlice.actions.clearCueUpdateIndexes());
     cueIndexesToUpdate.forEach((index: number) => {
         const cueToUpdate = getState().cues[index];
-        const updatePromise = updateCueCallback({ editingTrack, cue: cueToUpdate });
+        const updatePromise = updateCueCallback({ editingTrack, cue: cueToUpdate })
+            .then((responseCueDto: CueDto) => {
+                updateAddedCueIdIfNeeded(dispatch, getState, cueToUpdate.addId, responseCueDto);
+                return responseCueDto;
+            });
         cuesToUpdatePromises.push(updatePromise);
     });
     dispatch(saveActionSlice.actions.setState(
         { saveState: SaveState.REQUEST_SENT, multiCuesEdit: false }
     ));
-    const isRejected = (input: PromiseSettledResult<unknown>): input is PromiseRejectedResult =>
-        input.status === "rejected";
     Promise.allSettled(cuesToUpdatePromises).
         then((results) => {
-            results.forEach((result) => {
-                if (isRejected(result)) {
-                    console.log("returned status: " + JSON.stringify(result.status));
-                } else {
-                    console.log("returned status: " + JSON.stringify(result.status));
-                    console.log("returned cue dto: " + JSON.stringify(result.value));
-                }
-            });
-            // TODO figure out TS error
-            // @ts-ignore
-            dispatch(setAutoSaveSuccess(true));
+            const rejected = results.some((result) => isRejected(result));
+            dispatch(setAutoSaveSuccess(!rejected));
         }
     );
 
 };
 
 const saveCueUpdateCurrent = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction | undefined>>,
+    dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
     getState: Function
 ): void => {
     const saveAction = getState().saveAction;
@@ -91,7 +103,7 @@ export const callSaveCueUpdate = (
 };
 
 export const retrySaveCueUpdateIfNeeded = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction | undefined>>,
+    dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
     getState: Function
 ): void => {
     if (!getState().saveCueUpdates.cueUpdateIndexes.isEmpty()) {

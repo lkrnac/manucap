@@ -46,6 +46,7 @@ export interface CueDto {
     glossaryMatches?: GlossaryMatchDto[];
     errors?: CueError[] | null;
     comments?: CueComment[];
+    addId?: string;
 }
 
 export interface CueDtoWithIndex {

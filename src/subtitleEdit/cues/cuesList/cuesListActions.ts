@@ -86,7 +86,7 @@ const shouldBlink = (x: VTTCue, y: VTTCue, textOnly?: boolean): boolean => {
 const createAndAddCue = (previousCue: CueDto, startTime: number, endTime: number): CueDto => {
     const newCue = new VTTCue(startTime, endTime, "");
     copyNonConstructorProperties(newCue, previousCue.vttCue);
-    return { vttCue: newCue, cueCategory: previousCue.cueCategory, editUuid: uuidv4() };
+    return { vttCue: newCue, cueCategory: previousCue.cueCategory, editUuid: uuidv4(), addId: uuidv4() };
 };
 
 const validateShiftWithinChunkRange = (shiftTime: number, track: Track | null, cues: CueDto[]): void => {

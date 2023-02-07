@@ -125,6 +125,10 @@ export const cuesSlice = createSlice({
                 };
             }
         },
+        updateAddedCueId: (state, action: PayloadAction<CueAction>): void => {
+            state[action.payload.idx].id = action.payload.cue.id;
+            state[action.payload.idx].addId = undefined;
+        },
         updateCues: (_state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues,
         applyShiftTimeByPosition: (state, action: PayloadAction<ShiftAction>): CueDto[] => {
             const shiftAction = action.payload;

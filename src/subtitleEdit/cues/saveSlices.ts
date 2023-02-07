@@ -124,7 +124,7 @@ export const callSaveTrack = (
 type AutoSaveSuccessDispatch = boolean | SaveActionWithPayload | SaveAction | SubtitleEditAction | undefined;
 
 export const setAutoSaveSuccess = (success: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<AutoSaveSuccessDispatch>>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<AutoSaveSuccessDispatch> | AppThunk>, getState): void => {
         const saveAction = getState().saveAction;
         if (saveAction.saveState === SaveState.RETRY) {
             if (saveAction.multiCuesEdit) {
