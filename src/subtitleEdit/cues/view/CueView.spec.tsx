@@ -552,6 +552,41 @@ describe("CueView", () => {
             .toEqual(expectedSourceCueContent);
     });
 
+    it("filters out string sources from glossary that are empty", () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
+            cueCategory: "DIALOGUE",
+            glossaryMatches: [
+                { source: "", replacements: ["this is a replacement"]},
+                { source: "", replacements: ["another replacement"]},
+                { source: " ", replacements: ["another replacement"]},
+                { source: "  ", replacements: ["another replacement"]}
+            ]
+        } as CueDto;
+
+        const expectedSourceCueContent = "<i>Source <b>Line</b></i> <br>Wrapped text";
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView
+                    isTargetCue
+                    targetCueIndex={1}
+                    cue={cue}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+            .toEqual(expectedSourceCueContent);
+    });
+
     it("should only highlight whole words glossary matches", () => {
         // GIVEN
         const cue = {

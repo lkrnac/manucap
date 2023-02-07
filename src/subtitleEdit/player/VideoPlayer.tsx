@@ -112,13 +112,13 @@ const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
     }
 };
 
-const handleUpdateAllIfNeeded = (
+const updateVideoJsTrackIfNeeded = (
     props: Props,
     lastCueChange: CueChange,
     videoJsTrack: TextTrack,
     player: VideoJsPlayer
 ) => {
-    if (lastCueChange.changeType === "UPDATE_ALL") {
+    if (lastCueChange.changeType === "UPDATE_ALL" || lastCueChange.changeType === "MERGE") {
         for (let trackIdx = 0; trackIdx < player.textTracks().length; trackIdx++) {
             const videoJsTrack = (player.textTracks())[trackIdx];
             if (videoJsTrack.cues) {
@@ -199,7 +199,7 @@ class VideoPlayer extends React.Component<Props> {
             handleCueEditIfNeeded(lastCueChange, videoJsTrack.cues[lastCueChange.index] as VTTCue,
                 prevProps.trackFontSizePercent);
             handleCueAddIfNeeded(lastCueChange, videoJsTrack, prevProps.trackFontSizePercent);
-            handleUpdateAllIfNeeded(this.props, lastCueChange, videoJsTrack, this.player);
+            updateVideoJsTrackIfNeeded(this.props, lastCueChange, videoJsTrack, this.player);
             if (lastCueChange.changeType === "REMOVE") {
                 videoJsTrack.removeCue(videoJsTrack.cues[lastCueChange.index]);
             }

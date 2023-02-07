@@ -1,11 +1,18 @@
 import { SpellCheck } from "./cues/spellCheck/model";
 
+export type TrackType = "CAPTION" | "TRANSLATION";
 export type LanguageDirection = "RTL" | "LTR";
 
 export interface Language {
     readonly id: string;
     readonly name: string;
-    readonly direction: LanguageDirection;
+    readonly direction?: LanguageDirection;
+    countryCode?: string;
+    alpha1Code?: string;
+    alpha2TCode?: string;
+    alpha2BCode?: string;
+    code?: string | null;
+    localizedName?: string;
 }
 
 export type CueCategory = "DIALOGUE" | "ONSCREEN_TEXT" | "AUDIO_DESCRIPTION" | "LYRICS";
@@ -58,8 +65,13 @@ export interface LanguageCues {
     readonly cues: CueDto[];
 }
 
+export interface TrackVersionDto extends Track {
+    trackVersionId: string;
+    completion: number;
+}
+
 export interface Track {
-    readonly type: "CAPTION" | "TRANSLATION";
+    readonly type: TrackType;
     readonly language: Language;
     readonly default: boolean;
     readonly mediaTitle: string;
@@ -67,25 +79,22 @@ export interface Track {
     readonly mediaChunkStart?: number;
     readonly mediaChunkEnd?: number;
     readonly sourceLanguage?: Language;
+    trackSource?: boolean;
     readonly progress: number;
     overlapEnabled?: boolean;
     timecodesUnlocked?: boolean;
     id?: string;
     createdBy: User;
+    currentVersion: TrackVersionDto;
+    createdAt: string;
+    title: string;
+    trackId: string;
+    name: string;
 }
 
 export interface SpellcheckerSettings {
     enabled: boolean;
     domain: string | null | undefined;
-}
-
-export interface Task {
-    readonly type: "TASK_CAPTION" | "TASK_TRANSLATE" | "TASK_DIRECT_TRANSLATE" | "TASK_PIVOT_TRANSLATE" | "TASK_REVIEW"
-        | "TASK_POST_EDITING" | "TASK_PROOF_READING" | "TASK_SIGN_OFF";
-    readonly projectName: string;
-    readonly dueDate: string;
-    readonly editDisabled: boolean;
-    readonly finalChunkReview?: boolean;
 }
 
 export interface User {
@@ -159,6 +168,7 @@ export enum CueError {
 export interface CueComment {
     id?: string;
     userId?: string;
+    userName?: string;
     author?: string;
     comment: string;
     date: string;
@@ -168,4 +178,15 @@ export interface WaveformRegion {
     id: number;
     start: number;
     end: number;
+}
+
+export interface TrackCues {
+    editingTrack: Track | null;
+    cues: CueDto[];
+}
+
+export interface SaveActionParameters {
+    cues: CueDto[];
+    editingTrack: Track;
+    shouldCreateNewVersion: boolean;
 }
