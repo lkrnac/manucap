@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import * as React from "react";
 import { EditorState, SelectionState } from "draft-js";
 import { editorStateFOR_TESTING, setEditorStateFOR_TESTING } from "../edit/CueTextEditor";
+import { searchReplaceSlice, showSearchReplace } from "../searchReplace/searchReplaceSlices";
 
 
 let testingStore = createTestingStore();
@@ -183,6 +184,206 @@ describe("CueLine", () => {
 
             // THEN
             expect(actualNode.container.outerHTML).toContain("Editi#lineReplacement1#ng Line 1");
+        });
+    });
+
+    describe("search term", () => {
+        it("highlights search term in first source cue", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+                default: true,
+                mediaTitle: "Sample Polish",
+                mediaLength: 4000,
+                progress: 50
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const sourceCue = {
+                vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
+                cueCategory: "DIALOGUE",
+                glossaryMatches: []
+            } as CueDto;
+            const targetCue = { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto;
+
+            const matchedCue = {
+                sourceCues: [{ index: 0, cue: sourceCue }],
+                targetCues: [{ index: 0, cue: targetCue }]
+            };
+            const dummyCue = { sourceCues: [], targetCues: []};
+            const currentIndices = {
+                matchedCueIndex: 3,
+                sourceCueIndex: 0,
+                targetCueIndex: -1,
+                matchLength: 4,
+                offset: 7,
+                offsetIndex: 0
+            };
+
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
+
+            const cueLineRowProps = {
+                playerTime: 0,
+                withoutSourceCues: true,
+                targetCuesLength: 3,
+                matchedCues: [dummyCue, dummyCue, dummyCue, matchedCue],
+                commentAuthor: "Linguist"
+            } as CueLineRowProps;
+
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueLine
+                        rowIndex={3}
+                        data={matchedCue}
+                        rowProps={cueLineRowProps}
+                        rowRef={React.createRef()}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(actualNode.container.outerHTML).toContain(
+                "<i>Source <b>" +
+                "<span style=\"background-color:#D9E9FF\" data-reactroot=\"\">Line</span>" +
+                "</b></i> <br>Wrapped text"
+            );
+        });
+
+        it("doesn't highlight search term for different matched cue", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+                default: true,
+                mediaTitle: "Sample Polish",
+                mediaLength: 4000,
+                progress: 50
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const sourceCue = {
+                vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
+                cueCategory: "DIALOGUE",
+                glossaryMatches: []
+            } as CueDto;
+            const targetCue = { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto;
+
+            const matchedCue = {
+                sourceCues: [{ index: 0, cue: sourceCue }],
+                targetCues: [{ index: 0, cue: targetCue }]
+            };
+            const dummyCue = { sourceCues: [], targetCues: []};
+            const currentIndices = {
+                matchedCueIndex: 2,
+                sourceCueIndex: 0,
+                targetCueIndex: -1,
+                matchLength: 4,
+                offset: 7,
+                offsetIndex: 0
+            };
+
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
+
+            const cueLineRowProps = {
+                playerTime: 0,
+                withoutSourceCues: true,
+                targetCuesLength: 3,
+                matchedCues: [dummyCue, dummyCue, dummyCue, matchedCue],
+                commentAuthor: "Linguist"
+            } as CueLineRowProps;
+
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueLine
+                        rowIndex={3}
+                        data={matchedCue}
+                        rowProps={cueLineRowProps}
+                        rowRef={React.createRef()}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(actualNode.container.outerHTML).toContain("<i>Source <b>Line</b></i> <br>Wrapped text");
+        });
+
+        it("highlights search term in third source cue", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+                default: true,
+                mediaTitle: "Sample Polish",
+                mediaLength: 4000,
+                progress: 50
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const sourceCue = {
+                vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
+                cueCategory: "DIALOGUE",
+                glossaryMatches: []
+            } as CueDto;
+            const sourceCueNotMatched = {
+                vttCue: new VTTCue(1, 2, "<i>Source Wrapped text"), cueCategory: "DIALOGUE", glossaryMatches: []
+            } as CueDto;
+            const targetCue = { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto;
+
+            const matchedCue = {
+                sourceCues: [
+                    { index: 0, cue: sourceCueNotMatched },
+                    { index: 1, cue: sourceCueNotMatched },
+                    { index: 2, cue: sourceCue },
+                ],
+                targetCues: [{ index: 0, cue: targetCue }]
+            };
+            const dummyCue = { sourceCues: [], targetCues: []};
+            const currentIndices = {
+                matchedCueIndex: 3,
+                sourceCueIndex: 2,
+                targetCueIndex: -1,
+                matchLength: 4,
+                offset: 7,
+                offsetIndex: 0
+            };
+
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
+
+            const cueLineRowProps = {
+                playerTime: 0,
+                withoutSourceCues: true,
+                targetCuesLength: 3,
+                matchedCues: [dummyCue, dummyCue, dummyCue, matchedCue],
+                commentAuthor: "Linguist"
+            } as CueLineRowProps;
+
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueLine
+                        rowIndex={3}
+                        data={matchedCue}
+                        rowProps={cueLineRowProps}
+                        rowRef={React.createRef()}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(actualNode.container.outerHTML).toContain(
+                "<i>Source <b>" +
+                "<span style=\"background-color:#D9E9FF\" data-reactroot=\"\">Line</span>" +
+                "</b></i> <br>Wrapped text"
+            );
         });
     });
 });
