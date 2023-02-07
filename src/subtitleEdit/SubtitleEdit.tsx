@@ -18,7 +18,7 @@ import { setSpellCheckDomain } from "./spellcheckerSettingsSlice";
 import CueErrorAlert from "./cues/CueErrorAlert";
 import MergeEditor from "./cues/merge/MergeEditor";
 import { saveCueUpdateSlice } from "./cues/saveCueUpdateSlices";
-import { DeleteTrackCueIds, saveCueDeleteSlice } from "./cues/saveCueDeleteSlices";
+import { DeleteTrackCueId, saveCueDeleteSlice } from "./cues/saveCueDeleteSlices";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -32,7 +32,7 @@ export interface SubtitleEditProps {
     onViewTrackHistory: () => void;
     onSave: (saveAction: SaveActionParameters) => void;
     onUpdateCue: (trackCue: TrackCue) => Promise<CueDto>;
-    onDeleteCues: (trackCues: DeleteTrackCueIds) => void;
+    onDeleteCue: (trackCues: DeleteTrackCueId) => Promise<string>;
     onComplete: (completeAction: TrackCues) => void;
     onExportFile: (trackVersionExport: Track | null) => void;
     onExportSourceFile: () => void;
@@ -60,7 +60,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
         (): void => {
             dispatch(setSaveTrack(props.onSave));
             dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(props.onUpdateCue));
-            dispatch(saveCueDeleteSlice.actions.setDeleteCueCallback(props.onDeleteCues));
+            dispatch(saveCueDeleteSlice.actions.setDeleteCueCallback(props.onDeleteCue));
             dispatch(setSpellCheckDomain(props.spellCheckerDomain));
             dispatch(changeScrollPosition(ScrollPosition.FIRST));
         },

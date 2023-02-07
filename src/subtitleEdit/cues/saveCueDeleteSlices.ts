@@ -1,17 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dispatch } from "react";
 import { CueDto, SubtitleEditAction, Track } from "../model";
-import { checkSaveStateAndSave, SaveAction, saveActionSlice, SaveState } from "./saveSlices";
+import { checkSaveStateAndSave, SaveState } from "./saveSlices";
 import { debounce } from "lodash";
+import { updateSaveActionStateIfNeeded } from "./saveCueUpdateSlices";
+import { AppThunk } from "../subtitleEditReducers";
 
 const DEBOUNCE_TIMEOUT = 2500;
-export interface DeleteTrackCueIds {
-    editingTrack: Track | null;
-    cueIds: string[];
+
+export interface DeleteTrackCueId {
+    editingTrack: Track;
+    cueId: string;
 }
 
 export interface SaveCueDelete {
-    deleteCue: ((trackCues: DeleteTrackCueIds) => void) | null;
+    deleteCue: ((trackCues: DeleteTrackCueId) => Promise<string>) | null;
     cueDeleteIds: Set<string>;
 }
 
@@ -21,16 +24,11 @@ const initSaveCueDelete = {
 } as SaveCueDelete;
 
 export const saveCueDeleteSlice = createSlice({
-    name: "callSaveCueDelete",
+    name: "saveCueDeletes",
     initialState: initSaveCueDelete,
     reducers: {
-        setDeleteCueCallback: (state, action: PayloadAction<(trackCue: DeleteTrackCueIds) => void>): void => {
+        setDeleteCueCallback: (state, action: PayloadAction<(trackCue: DeleteTrackCueId) => Promise<string>>): void => {
             state.deleteCue = action.payload;
-        },
-        callDeleteCueCallback: (state, action: PayloadAction<DeleteTrackCueIds>): void => {
-            if (state.deleteCue) {
-                state.deleteCue(action.payload);
-            }
         },
         addCueIdForDelete: (state, action: PayloadAction<string>): void => {
             state.cueDeleteIds.add(action.payload);
@@ -42,20 +40,23 @@ export const saveCueDeleteSlice = createSlice({
 });
 
 const saveCueDeleteRequest = (
-    dispatch: Dispatch<PayloadAction<DeleteTrackCueIds | SaveAction | undefined>>,
+    dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
     getState: Function
 ): void => {
+    const deleteCueCallback = getState().saveCueDeletes.deleteCue;
+    const cuesToDeletePromises: Promise<CueDto>[] = [];
     const editingTrack = getState().editingTrack;
     const cueIdsToDelete = [ ...getState().saveCueDeletes.cueDeleteIds ];
     dispatch(saveCueDeleteSlice.actions.clearCueIdsForDelete());
-    dispatch(saveCueDeleteSlice.actions.callDeleteCueCallback({ editingTrack, cueIds: cueIdsToDelete }));
-    dispatch(saveActionSlice.actions.setState(
-        { saveState: SaveState.REQUEST_SENT, multiCuesEdit: false }
-    ));
+    cueIdsToDelete.forEach((cueId: string) => {
+        const deletePromise = deleteCueCallback({ editingTrack, cueId });
+        cuesToDeletePromises.push(deletePromise);
+    });
+    updateSaveActionStateIfNeeded(dispatch, cuesToDeletePromises);
 };
 
 const saveCueDeleteCurrent = (
-    dispatch: Dispatch<PayloadAction<DeleteTrackCueIds | SaveAction | undefined>>,
+    dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
     getState: Function
 ): void => {
     const saveAction = getState().saveAction;
@@ -67,7 +68,7 @@ const saveCueDeleteCurrent = (
 const saveCueDeleteDebounced = debounce(saveCueDeleteCurrent, DEBOUNCE_TIMEOUT, { leading: false, trailing: true });
 
 export const callSaveCueDelete = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction | undefined>>,
     getState: Function,
     cueToDelete: CueDto
 ): void => {
@@ -79,10 +80,10 @@ export const callSaveCueDelete = (
 };
 
 export const retrySaveCueDeleteIfNeeded = (
-    dispatch: Dispatch<PayloadAction<DeleteTrackCueIds | SaveAction | undefined>>,
+    dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
     getState: Function
 ): void => {
-    if (!getState().saveCueDeletes.cueDeleteIds.isEmpty()) {
+    if (getState().saveCueDeletes.cueDeleteIds.size > 0) {
         saveCueDeleteRequest(dispatch, getState);
     }
 };
