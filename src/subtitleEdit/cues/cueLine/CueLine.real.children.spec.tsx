@@ -10,6 +10,7 @@ import * as React from "react";
 import { EditorState, SelectionState } from "draft-js";
 import { editorStateFOR_TESTING, setEditorStateFOR_TESTING } from "../edit/CueTextEditor";
 import { searchReplaceSlice, showSearchReplace } from "../searchReplace/searchReplaceSlices";
+import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 
 
 let testingStore = createTestingStore();
@@ -517,6 +518,159 @@ describe("CueLine", () => {
             expect(actualNode.container.outerHTML).toContain(
                 "Editing <span style=\"background-color:#D9E9FF\" data-reactroot=\"\">Line</span> 3"
             );
+        });
+
+        it("highlights search term in first target cue editor", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+                default: true,
+                mediaTitle: "Sample Polish",
+                mediaLength: 4000,
+                progress: 50
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const sourceCue = {
+                vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
+                cueCategory: "DIALOGUE",
+                glossaryMatches: []
+            } as CueDto;
+            const targetCue = { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto;
+
+            const matchedCue = {
+                sourceCues: [{ index: 0, cue: sourceCue }],
+                targetCues: [{ index: 0, cue: targetCue }]
+            };
+            const currentIndices = {
+                matchedCueIndex: 0,
+                sourceCueIndex: -1,
+                targetCueIndex: 0,
+                matchLength: 4,
+                offset: 8,
+                offsetIndex: 0
+            };
+
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
+
+            const cueLineRowProps = {
+                playerTime: 0,
+                withoutSourceCues: true,
+                targetCuesLength: 3,
+                matchedCues: [matchedCue],
+                commentAuthor: "Linguist"
+            } as CueLineRowProps;
+
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+
+            const expectedNode = render(
+                <div
+                    data-offset-key=""
+                    className="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"
+                >
+                    <span data-offset-key=""><span data-text="true">Editing </span></span>
+                    <span style={{ backgroundColor: "rgb(217, 233, 255)" }}>
+                        <span data-offset-key=""><span data-text="true">Line</span></span>
+                    </span>
+                    <span data-offset-key=""><span data-text="true"> 1</span></span>
+                </div>
+            );
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueLine
+                        rowIndex={0}
+                        data={matchedCue}
+                        rowProps={cueLineRowProps}
+                        rowRef={React.createRef()}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
+                .toContain(expectedNode.container.innerHTML);
+        });
+
+        it("highlights search term in third target cue editor", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+                default: true,
+                mediaTitle: "Sample Polish",
+                mediaLength: 4000,
+                progress: 50
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const sourceCue = {
+                vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
+                cueCategory: "DIALOGUE",
+                glossaryMatches: []
+            } as CueDto;
+            const targetCue = { vttCue: new VTTCue(0, 1, "Editing Line 3"), cueCategory: "DIALOGUE" } as CueDto;
+            const targetCueNotMatched = { vttCue: new VTTCue(0, 1, "Editing 1"), cueCategory: "DIALOGUE" } as CueDto;
+
+            const matchedCue = {
+                sourceCues: [{ index: 0, cue: sourceCue }],
+                targetCues: [
+                    { index: 0, cue: targetCueNotMatched },
+                    { index: 1, cue: targetCueNotMatched },
+                    { index: 2, cue: targetCue }
+                ]
+            };
+            const currentIndices = {
+                matchedCueIndex: 0,
+                sourceCueIndex: -1,
+                targetCueIndex: 2,
+                matchLength: 4,
+                offset: 8,
+                offsetIndex: 0
+            };
+
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
+
+            const cueLineRowProps = {
+                playerTime: 0,
+                withoutSourceCues: true,
+                targetCuesLength: 3,
+                matchedCues: [matchedCue],
+                commentAuthor: "Linguist"
+            } as CueLineRowProps;
+
+            testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+
+            const expectedNode = render(
+                <div
+                    data-offset-key=""
+                    className="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"
+                >
+                    <span data-offset-key=""><span data-text="true">Editing </span></span>
+                    <span style={{ backgroundColor: "rgb(217, 233, 255)" }}>
+                        <span data-offset-key=""><span data-text="true">Line</span></span>
+                    </span>
+                    <span data-offset-key=""><span data-text="true"> 3</span></span>
+                </div>
+            );
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueLine
+                        rowIndex={0}
+                        data={matchedCue}
+                        rowProps={cueLineRowProps}
+                        rowRef={React.createRef()}
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML))
+                .toContain(expectedNode.container.innerHTML);
         });
     });
 });
