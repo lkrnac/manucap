@@ -579,9 +579,6 @@ describe("CueLine", () => {
             );
 
             // THEN
-            console.log(actualNode.container.outerHTML);
-            console.log(expectedNode.container.outerHTML);
-
             expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
         });
 
