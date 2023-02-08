@@ -331,7 +331,7 @@ describe("CueLine", () => {
                 glossaryMatches: []
             } as CueDto;
             const sourceCueNotMatched = {
-                vttCue: new VTTCue(1, 2, "<i>Source Wrapped text"), cueCategory: "DIALOGUE", glossaryMatches: []
+                vttCue: new VTTCue(1, 2, "Source Wrapped text"), cueCategory: "DIALOGUE", glossaryMatches: []
             } as CueDto;
             const targetCue = { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto;
 
@@ -383,6 +383,139 @@ describe("CueLine", () => {
                 "<i>Source <b>" +
                 "<span style=\"background-color:#D9E9FF\" data-reactroot=\"\">Line</span>" +
                 "</b></i> <br>Wrapped text"
+            );
+        });
+
+        it("highlights search term in first disabled target cue", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+                default: true,
+                mediaTitle: "Sample Polish",
+                mediaLength: 4000,
+                progress: 50
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const sourceCue = {
+                vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
+                cueCategory: "DIALOGUE",
+                glossaryMatches: []
+            } as CueDto;
+            const targetCue = { vttCue: new VTTCue(0, 1, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto;
+
+            const matchedCue = {
+                sourceCues: [{ index: 0, cue: sourceCue }],
+                targetCues: [{ index: 0, cue: targetCue }]
+            };
+            const dummyCue = { sourceCues: [], targetCues: []};
+            const currentIndices = {
+                matchedCueIndex: 3,
+                sourceCueIndex: -1,
+                targetCueIndex: 0,
+                matchLength: 4,
+                offset: 8,
+                offsetIndex: 0
+            };
+
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
+
+            const cueLineRowProps = {
+                playerTime: 0,
+                withoutSourceCues: true,
+                targetCuesLength: 3,
+                matchedCues: [dummyCue, dummyCue, dummyCue, matchedCue],
+                commentAuthor: "Linguist"
+            } as CueLineRowProps;
+
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueLine
+                        rowIndex={3}
+                        data={matchedCue}
+                        rowProps={cueLineRowProps}
+                        rowRef={React.createRef()}
+                        editDisabled
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(actualNode.container.outerHTML).toContain(
+                "Editing <span style=\"background-color:#D9E9FF\" data-reactroot=\"\">Line</span> 1"
+            );
+        });
+
+        it("highlights search term in third disabled target cue", () => {
+            // GIVEN
+            const testingTrack = {
+                type: "CAPTION",
+                language: { id: "ar-SA", name: "Arabic", direction: "RTL" } as Language,
+                default: true,
+                mediaTitle: "Sample Polish",
+                mediaLength: 4000,
+                progress: 50
+            } as Track;
+            testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+            const sourceCue = {
+                vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text"),
+                cueCategory: "DIALOGUE",
+                glossaryMatches: []
+            } as CueDto;
+            const targetCue = { vttCue: new VTTCue(0, 1, "Editing Line 3"), cueCategory: "DIALOGUE" } as CueDto;
+            const targetCueNotMatched = { vttCue: new VTTCue(0, 1, "Editing 1"), cueCategory: "DIALOGUE" } as CueDto;
+
+            const matchedCue = {
+                sourceCues: [{ index: 0, cue: sourceCue }],
+                targetCues: [
+                    { index: 0, cue: targetCueNotMatched },
+                    { index: 1, cue: targetCueNotMatched },
+                    { index: 2, cue: targetCue }
+                ]
+            };
+            const dummyCue = { sourceCues: [], targetCues: []};
+            const currentIndices = {
+                matchedCueIndex: 3,
+                sourceCueIndex: -1,
+                targetCueIndex: 2,
+                matchLength: 4,
+                offset: 8,
+                offsetIndex: 0
+            };
+
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
+
+            const cueLineRowProps = {
+                playerTime: 0,
+                withoutSourceCues: true,
+                targetCuesLength: 3,
+                matchedCues: [dummyCue, dummyCue, dummyCue, matchedCue],
+                commentAuthor: "Linguist"
+            } as CueLineRowProps;
+
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+
+            // WHEN
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <CueLine
+                        rowIndex={3}
+                        data={matchedCue}
+                        rowProps={cueLineRowProps}
+                        rowRef={React.createRef()}
+                        editDisabled
+                    />
+                </Provider>
+            );
+
+            // THEN
+            expect(actualNode.container.outerHTML).toContain(
+                "Editing <span style=\"background-color:#D9E9FF\" data-reactroot=\"\">Line</span> 3"
             );
         });
     });
