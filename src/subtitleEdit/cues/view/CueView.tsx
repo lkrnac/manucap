@@ -102,7 +102,7 @@ const buildContent = (
     const plainText = sanitizeHtml(props.cue.vttCue.text, { allowedTags: []});
     let sanitizedHtml = convertVttToHtml(sanitizeHtml(props.cue.vttCue.text, { allowedTags: ["b", "i", "u"]}));
 
-    if (props.showGlossaryTerms) {
+    if (props.showGlossaryTerms && !props.editDisabled) {
         // @ts-ignore We need to define function as global, because it will be used
         // in glossary decorator onClick event injected into HTML via string manipulation + dangerouslySetInnerHTML
         global.pickSetGlossaryTerm = (term: string): void => props?.setGlossaryTerm(term);
