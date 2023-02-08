@@ -21,7 +21,7 @@ export interface CueViewProps {
     showGlossaryTerms: boolean;
     sourceCuesIndexes: number[];
     nextTargetCueIndex: number;
-    sourceCueIndex?: number;
+    matchedNestedIndex?: number;
     targetCueIndex?: number;
     languageDirection?: LanguageDirection;
     className?: string;
@@ -111,8 +111,10 @@ const buildContent = (
     const indices = searchReplace.indices;
     if (searchReplaceVisible
         && props.rowIndex === indices.matchedCueIndex
-        && !props.isTargetCue
-        && props.sourceCueIndex === indices.sourceCueIndex
+        && (
+            !props.isTargetCue && props.matchedNestedIndex === indices.sourceCueIndex
+            || props.isTargetCue && props.matchedNestedIndex === indices.targetCueIndex
+        )
     ) {
         sanitizedHtml = injectCurrentSearchMatch(plainText, sanitizedHtml, searchReplace);
     }

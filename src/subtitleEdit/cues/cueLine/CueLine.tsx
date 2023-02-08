@@ -179,7 +179,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     key={`sourceCueView-${sourceCue.index}`}
                                     rowIndex={props.rowIndex}
                                     isTargetCue={false}
-                                    sourceCueIndex={sourceCueIndex}
+                                    matchedNestedIndex={sourceCueIndex}
                                     targetCueIndex={firstTargetCueIndex}
                                     cue={sourceCue.cue}
                                     targetCuesLength={props.rowProps.targetCuesLength}
@@ -214,7 +214,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                 {hasMultipleCues ? <div className={dividerClass} /> : null}
                 {
                     props.data.targetCues && props.data.targetCues.length > 0
-                        ? props.data.targetCues.map(targetCue => {
+                        ? props.data.targetCues.map((targetCue, targetCueIndex) => {
                             return editingCueIndex === targetCue.index && !cueLineEditDisabled
                                 ? (
                                     <>
@@ -246,6 +246,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                             rowIndex={props.rowIndex}
                                             key={`targetCueView-${targetCue.index}`}
                                             isTargetCue
+                                            matchedNestedIndex={targetCueIndex}
                                             targetCueIndex={targetCue.index}
                                             cue={targetCue.cue}
                                             targetCuesLength={props.rowProps.targetCuesLength}

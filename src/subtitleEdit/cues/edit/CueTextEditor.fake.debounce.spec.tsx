@@ -1610,7 +1610,7 @@ describe("CueTextEditor", () => {
     //         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
     //         const searchReplaceIndices = {
     //             matchedCueIndex: 0,
-    //             sourceCueIndex: 0,
+    //             matchedNestedIndex: 0,
     //             targetCueIndex: -1,
     //             offset: 0,
     //             matchLength: 0
