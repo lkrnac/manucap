@@ -388,6 +388,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={targetCuesWithIndexes[0].cue}
                                 targetCuesLength={3}
@@ -462,6 +463,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={matchedCuesCaptioningEditDisabled[0].targetCues[0].cue}
                                 targetCuesLength={3}
@@ -704,6 +706,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={disabledTargetCue}
                                 targetCuesLength={1}
@@ -1052,6 +1055,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={1}
@@ -1165,6 +1169,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={1}
@@ -1254,6 +1259,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
@@ -1267,6 +1273,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={1}
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
                                 targetCuesLength={3}
@@ -1280,6 +1287,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={2}
                                 targetCueIndex={2}
                                 cue={targetCues[2]}
                                 targetCuesLength={3}
@@ -1470,6 +1478,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
@@ -1484,6 +1493,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={2}
                                 targetCueIndex={2}
                                 cue={targetCues[2]}
                                 targetCuesLength={3}
@@ -1587,6 +1597,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
@@ -1600,6 +1611,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={1}
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
                                 targetCuesLength={3}
@@ -1613,6 +1625,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={2}
                                 targetCueIndex={2}
                                 cue={corruptedTargetCueWithIndex.cue}
                                 targetCuesLength={3}
@@ -1716,6 +1729,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
@@ -1729,6 +1743,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={1}
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
                                 targetCuesLength={3}
@@ -2117,6 +2132,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={targetCuesWithComments[0]}
                                 targetCuesLength={3}
@@ -2131,6 +2147,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={1}
                                 targetCueIndex={1}
                                 cue={targetCuesWithComments[1]}
                                 targetCuesLength={3}
@@ -2145,6 +2162,7 @@ describe("CueLine", () => {
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={2}
                                 targetCueIndex={2}
                                 cue={targetCuesWithComments[2]}
                                 targetCuesLength={3}
