@@ -22,7 +22,7 @@ const initSaveCueCallbacks = {
 } as SaveCueUpdateCallback;
 
 export const saveCueUpdateSlice = createSlice({
-    name: "saveCueUpdates",
+    name: "saveCueUpdate",
     initialState: initSaveCueCallbacks,
     reducers: {
         setUpdateCueCallback: (state, action: PayloadAction<(trackCue: TrackCue) => Promise<CueDto>>): void => {
@@ -46,7 +46,7 @@ const updateAddedCueIdIfNeeded = (
     if (cueAddId) {
         const foundCueIndex = getState().cues.findIndex((aCue: CueDto) => aCue.addId === cueAddId);
         if (foundCueIndex !== -1) {
-            dispatch(cuesSlice.actions.updateAddedCueId({ idx: foundCueIndex, cue }));
+            dispatch(cuesSlice.actions.updateAddedCue({ idx: foundCueIndex, cue }));
         }
     }
 };
@@ -72,10 +72,10 @@ const saveCueUpdateRequest = (
     dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
     getState: Function
 ): void => {
-    const updateCueCallback = getState().saveCueUpdates.updateCue;
+    const updateCueCallback = getState().saveCueUpdate.updateCue;
     const cuesToUpdatePromises: Promise<CueDto>[] = [];
     const editingTrack = getState().editingTrack;
-    const cueIdsToUpdate: string[] = [ ...getState().saveCueUpdates.cueUpdateIds ];
+    const cueIdsToUpdate: string[] = [ ...getState().saveCueUpdate.cueUpdateIds ];
     dispatch(saveCueUpdateSlice.actions.clearCueUpdateIds());
     cueIdsToUpdate.forEach((cueId: string) => {
         const cueToUpdate = getState().cues.find((aCue: CueDto) => aCue.id === cueId || aCue.addId === cueId);
@@ -118,7 +118,7 @@ export const retrySaveCueUpdateIfNeeded = (
     dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
     getState: Function
 ): void => {
-    if (getState().saveCueUpdates.cueUpdateIds.size > 0) {
+    if (getState().saveCueUpdate.cueUpdateIds.size > 0) {
         saveCueUpdateRequest(dispatch, getState);
     }
 };

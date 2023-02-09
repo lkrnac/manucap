@@ -24,7 +24,7 @@ const initSaveCueDelete = {
 } as SaveCueDelete;
 
 export const saveCueDeleteSlice = createSlice({
-    name: "saveCueDeletes",
+    name: "saveCueDelete",
     initialState: initSaveCueDelete,
     reducers: {
         setDeleteCueCallback: (state, action: PayloadAction<(trackCue: DeleteTrackCueId) => Promise<string>>): void => {
@@ -43,10 +43,10 @@ const saveCueDeleteRequest = (
     dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
     getState: Function
 ): void => {
-    const deleteCueCallback = getState().saveCueDeletes.deleteCue;
-    const cuesToDeletePromises: Promise<CueDto>[] = [];
+    const deleteCueCallback = getState().saveCueDelete.deleteCue;
+    const cuesToDeletePromises: Promise<string>[] = [];
     const editingTrack = getState().editingTrack;
-    const cueIdsToDelete = [ ...getState().saveCueDeletes.cueDeleteIds ];
+    const cueIdsToDelete = [ ...getState().saveCueDelete.cueDeleteIds ];
     dispatch(saveCueDeleteSlice.actions.clearCueIdsForDelete());
     cueIdsToDelete.forEach((cueId: string) => {
         const deletePromise = deleteCueCallback({ editingTrack, cueId });
@@ -83,7 +83,7 @@ export const retrySaveCueDeleteIfNeeded = (
     dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
     getState: Function
 ): void => {
-    if (getState().saveCueDeletes.cueDeleteIds.size > 0) {
+    if (getState().saveCueDelete.cueDeleteIds.size > 0) {
         saveCueDeleteRequest(dispatch, getState);
     }
 };
