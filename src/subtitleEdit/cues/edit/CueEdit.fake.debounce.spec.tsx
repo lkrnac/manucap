@@ -1296,6 +1296,7 @@ describe("CueEdit", () => {
             // THEN
             expect(testingStore.getState().cues.length).toEqual(1);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().matchedCuesIndex).toEqual(-1);
         });
 
         it("uses source cues times when new cue is inserted via + button", async () => {

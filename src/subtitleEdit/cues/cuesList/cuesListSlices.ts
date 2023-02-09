@@ -199,6 +199,10 @@ export const matchedCuesSlice = createSlice({
         },
         updateMatchedCuesFocusIndex: (state, action: PayloadAction<number>): MatchedCuesWithEditingFocus => {
             return { matchedCues: state.matchedCues, matchedCuesFocusIndex: action.payload };
-        }
+        },
+        // setMatchCuesForTesting: (_state, action: PayloadAction<MatchCuesAction>): MatchedCuesWithEditingFocus => {
+        //     return action;
+        // },
+
     },
 });
