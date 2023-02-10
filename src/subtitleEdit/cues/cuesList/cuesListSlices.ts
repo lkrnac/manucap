@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { CueCategory, CueComment, CueDto, CueError, SubtitleEditAction } from "../../model";
+import { CueCategory, CueComment, CueDto, CueError, CueLineDto, SubtitleEditAction } from "../../model";
 import { copyNonConstructorProperties } from "../cueUtils";
 import { editingTrackSlice } from "../../trackSlices";
 import { Match, SpellCheck } from "../spellCheck/model";
@@ -200,9 +200,9 @@ export const matchedCuesSlice = createSlice({
         updateMatchedCuesFocusIndex: (state, action: PayloadAction<number>): MatchedCuesWithEditingFocus => {
             return { matchedCues: state.matchedCues, matchedCuesFocusIndex: action.payload };
         },
-        // setMatchCuesForTesting: (_state, action: PayloadAction<MatchCuesAction>): MatchedCuesWithEditingFocus => {
-        //     return action;
-        // },
-
+        // DO NOT USE THIS IN PRODUCTION!!!
+        setMatchCuesForTesting: (state, action: PayloadAction<CueLineDto[]>): MatchedCuesWithEditingFocus => {
+            return { matchedCues: action.payload, matchedCuesFocusIndex: state.matchedCuesFocusIndex };
+        },
     },
 });
