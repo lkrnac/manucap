@@ -33,6 +33,9 @@ const initialSearchReplace = {
         matchedCueIndex: -1,
         sourceCueIndex: -1,
         targetCueIndex: -1,
+        matchLength: 0,
+        offset: -1,
+        offsetIndex: 0
     }
 } as SearchReplace;
 
