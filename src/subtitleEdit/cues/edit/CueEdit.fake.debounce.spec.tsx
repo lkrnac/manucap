@@ -20,7 +20,7 @@ import {
     MockedDebouncedFunction,
     removeDraftJsDynamicValues
 } from "../../../testUtils/testUtils";
-import { updateCues } from "../cuesList/cuesListActions";
+import { updateCues, updateMatchedCues } from "../cuesList/cuesListActions";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { setSaveTrack } from "../saveSlices";
@@ -32,6 +32,7 @@ import { updateSourceCues } from "../view/sourceCueSlices";
 import { updateEditingCueIndex } from "./cueEditorSlices";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import { setCurrentPlayerTime } from "../cuesList/cuesListScrollSlice";
+import { showSearchReplace } from "../searchReplace/searchReplaceSlices";
 
 jest.mock("lodash", () => (
     {
@@ -1277,7 +1278,7 @@ describe("CueEdit", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(1);
         });
 
-        it("closes cue editing mode when ESCAPE is pressed", () => {
+        it("closes cue editing mode when ESCAPE is pressed and search/replace is turned off", () => {
             // GIVEN
             const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
             testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
@@ -1296,7 +1297,31 @@ describe("CueEdit", () => {
             // THEN
             expect(testingStore.getState().cues.length).toEqual(1);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
-            expect(testingStore.getState().matchedCuesIndex).toEqual(-1);
+            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
+        });
+
+        it("closes cue editing mode when ESCAPE is pressed and search/replace is turned on", () => {
+            // GIVEN
+            const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
+            testingStore.dispatch(updateCues([cue]) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(updateMatchedCues() as {} as AnyAction);
+            mount(
+                <Provider store={testingStore} >
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} />
+                </Provider>
+            );
+
+            // WHEN
+            simulant.fire(
+                document.documentElement, "keydown", { keyCode: Character.ESCAPE });
+
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(1);
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
         });
 
         it("uses source cues times when new cue is inserted via + button", async () => {

@@ -50,7 +50,7 @@ export const updateEditingCueIndexNoThunk = (dispatch: Dispatch<SubtitleEditActi
 export const updateEditingCueIndex = (idx: number, matchedCueIndex?: number): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         updateEditingCueIndexNoThunk(dispatch, idx);
-        if (getState().searchReplaceVisible && matchedCueIndex) {
+        if (getState().searchReplaceVisible && matchedCueIndex && matchedCueIndex > -1) {
             const targetCues = getState().matchedCues.matchedCues[matchedCueIndex].targetCues;
             if (targetCues) {
                 let matchedTargetCueIndex = 0;
