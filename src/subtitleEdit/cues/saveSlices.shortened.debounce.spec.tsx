@@ -248,11 +248,11 @@ describe("saveSlices", () => {
             // THEN - doesn't blow up with "State is not a function" error
         });
 
-        it("retries save immediately in case of transition from RETRY state", () => {
+        it("retries save track immediately in case of transition from RETRY state", () => {
             // GIVEN
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             testingStore.dispatch(saveActionSlice.actions.setState(
-                { saveState: SaveState.RETRY, multiCuesEdit: false }
+                { saveState: SaveState.RETRY, multiCuesEdit: true }
             ) as {} as AnyAction);
 
             // WHEN
@@ -261,10 +261,10 @@ describe("saveSlices", () => {
             // THEN
             expect(saveTrack).toHaveBeenCalledTimes(1);
             expect(saveTrack).toBeCalledWith(
-                { cues: testingCues, editingTrack: testingTrack, shouldCreateNewVersion: false }
+                { cues: testingCues, editingTrack: testingTrack, shouldCreateNewVersion: true }
             );
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
         });
 
         each([

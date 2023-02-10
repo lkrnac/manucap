@@ -898,7 +898,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={6}
+                    targetCueIndex={0}
                     cue={cue}
                     showGlossaryTerms
                     targetCuesLength={8}
@@ -914,7 +914,7 @@ describe("CueView", () => {
         });
 
         // THEN
-        expect(testingStore.getState().editingCueIndex).toEqual(6);
+        expect(testingStore.getState().editingCueIndex).toEqual(0);
     });
 
     it("doesn't propagate click event on actions panel to parent DOM node", async () => {

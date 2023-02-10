@@ -114,9 +114,11 @@ export const callSaveCueUpdate = (
     cueIndex: number
 ): void => {
     const cue = getState().cues[cueIndex];
-    const cueId = cue.addId ? cue.addId : cue.id;
-    dispatch(saveCueUpdateSlice.actions.addCueIdsForUpdate(cueId));
-    checkSaveStateAndSave(dispatch, getState, saveCueUpdateDebounced, false);
+    if (cue) {
+        const cueId = cue.addId ? cue.addId : cue.id;
+        dispatch(saveCueUpdateSlice.actions.addCueIdsForUpdate(cueId));
+        checkSaveStateAndSave(dispatch, getState, saveCueUpdateDebounced, false);
+    }
 };
 
 export const retrySaveCueUpdateIfNeeded = (

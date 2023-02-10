@@ -84,7 +84,7 @@ describe("saveSlices", () => {
                 { cues: testingCues, editingTrack: testingTrack, shouldCreateNewVersion: true }
             );
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
         });
 
         it("saves track and create new version", () => {
@@ -93,7 +93,7 @@ describe("saveSlices", () => {
                 { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", errors: []}
             ] as CueDto[];
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            callSaveTrack(testingStore.dispatch, testingStore.getState, true);
+            callSaveTrack(testingStore.dispatch, testingStore.getState);
 
             // WHEN
             testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);

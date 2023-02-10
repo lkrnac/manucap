@@ -33,6 +33,7 @@ import { updateSourceCues } from "../view/sourceCueSlices";
 import { updateEditingCueIndex } from "./cueEditorSlices";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import { setCurrentPlayerTime } from "../cuesList/cuesListScrollSlice";
+import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
 
 jest.mock("lodash", () => (
     {
@@ -449,7 +450,9 @@ describe("CueEdit", () => {
             testingStore.dispatch(
                 updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const saveTrack = jest.fn();
+            const updateCueCallback = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
             const cue = {
                 vttCue: new VTTCue(0, 2, "Caption Line 1"),
                 cueCategory: "DIALOGUE",
@@ -468,7 +471,8 @@ describe("CueEdit", () => {
                 .simulate("change", { target: { value: "00:00:03.000", selectionEnd: 12 }});
 
             // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(1);
+            expect(updateCueCallback).toHaveBeenCalledTimes(1);
+            expect(saveTrack).not.toBeCalled();
         });
 
         it("updates cue in redux store when end time changed", () => {
@@ -496,7 +500,9 @@ describe("CueEdit", () => {
             testingStore.dispatch(
                 updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const saveTrack = jest.fn();
+            const updateCueCallback = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
             const cue = {
                 vttCue: new VTTCue(3, 7, "Caption Line 2"),
                 cueCategory: "DIALOGUE",
@@ -515,7 +521,8 @@ describe("CueEdit", () => {
                 .simulate("change", { target: { value: "00:00:05.500", selectionEnd: 12 }});
 
             // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(1);
+            expect(updateCueCallback).toHaveBeenCalledTimes(1);
+            expect(saveTrack).not.toBeCalled();
         });
 
         it("maintains cue styling when start time changes", () => {
@@ -602,7 +609,9 @@ describe("CueEdit", () => {
         it("calls saveTrack in redux store when cue position changes", () => {
             // GIVEN
             const saveTrack = jest.fn();
+            const updateCueCallback = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
 
             const vttCue = new VTTCue(0, 1, "someText");
             const cue = {
@@ -621,7 +630,8 @@ describe("CueEdit", () => {
             actualNode.find(PositionButton).props().changePosition(Position.Row2Column5);
 
             // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(1);
+            expect(updateCueCallback).toHaveBeenCalledTimes(1);
+            expect(saveTrack).not.toBeCalled();
         });
 
         it("updates line category", () => {
@@ -646,7 +656,9 @@ describe("CueEdit", () => {
         it("calls saveTrack in redux store when line category changes", () => {
             // GIVEN
             const saveTrack = jest.fn();
+            const updateCueCallback = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
 
             const vttCue = new VTTCue(0, 1, "someText");
             const cue = { vttCue, cueCategory: "DIALOGUE" } as CueDto;
@@ -662,7 +674,8 @@ describe("CueEdit", () => {
             actualNode.find("#cueCategoryMenu span").at(1).simulate("click");
 
             // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(1);
+            expect(updateCueCallback).toHaveBeenCalledTimes(1);
+            expect(saveTrack).not.toBeCalled();
         });
 
         it("passes down current line category", () => {

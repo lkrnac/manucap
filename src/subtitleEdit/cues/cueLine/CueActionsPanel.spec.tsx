@@ -15,6 +15,7 @@ import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import SplitCueLineButton from "../edit/SplitCueLineButton";
+import { saveCueDeleteSlice } from "../saveCueDeleteSlices";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
@@ -148,20 +149,31 @@ describe("CueActionsPanel", () => {
     });
 
 
-    it("calls saveTrack in redux store when delete button is clicked", () => {
+    it("calls deleteCueCallback in redux store when delete button is clicked", () => {
         // GIVEN
+        const cues = [
+            { id: "test-cue-1", vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
+            { id: "test-cue-2", vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },
+        ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueActionsPanel index={1} cue={cues[1]} isEdit sourceCueIndexes={[]} />
             </Provider>
         );
         saveTrack.mockReset();
+        const deleteCueCallback = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(saveCueDeleteSlice.actions.setDeleteCueCallback(deleteCueCallback));
 
         // WHEN
         fireEvent.click(actualNode.container.querySelector(".sbte-delete-cue-button") as Element);
 
         // THEN
-        expect(saveTrack).toHaveBeenCalledTimes(1);
+        expect(deleteCueCallback).toHaveBeenCalledWith(
+            { "cueId": "test-cue-2", "editingTrack": { "timecodesUnlocked": true }}
+        );
+        expect(saveTrack).not.toBeCalled();
     });
 
     it("splits cue line when split button is clicked", () => {
