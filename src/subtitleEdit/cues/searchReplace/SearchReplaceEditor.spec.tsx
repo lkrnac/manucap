@@ -13,9 +13,7 @@ import { updateEditingTrack } from "../../trackSlices";
 import ToggleButton from "../../toolbox/ToggleButton";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { matchedCuesSlice } from "../cuesList/cuesListSlices";
-import {
-    createTestingMatchedCues,
-} from "../cuesList/cuesListTestUtils.spec";
+import { createTestingMatchedCues } from "../cuesList/cuesListTestUtils.spec";
 
 let testingStore = createTestingStore();
 
@@ -50,15 +48,11 @@ const testingCuesWithEditDisabled = [
 ] as CueDto[];
 
 let testingMatchedCues = createTestingMatchedCues(3);
-// let testingSourceCues = createTestingSourceCues(testingMatchedCues);
-// let testingTargetCues = createTestingTargetCues(testingMatchedCues);
 
 describe("SearchReplaceEditor", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
         testingMatchedCues = createTestingMatchedCues(3);
-        // testingSourceCues = createTestingSourceCues(testingMatchedCues);
-        // testingTargetCues = createTestingTargetCues(testingMatchedCues);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
     });
 
@@ -530,40 +524,40 @@ describe("SearchReplaceEditor", () => {
             });
         });
 
-        // it("searches for next match with regex special chars when Next button is clicked", () => {
-        //     // GIVEN
-        //     const testingCues = [
-        //         { vttCue: new VTTCue(0, 2, "Caption [Line 2]"), cueCategory: "DIALOGUE" },
-        //         { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
-        //         {
-        //             vttCue: new VTTCue(4, 6, "Caption Line 3"),
-        //             cueCategory: "ONSCREEN_TEXT",
-        //             spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
-        //         },
-        //         {
-        //             vttCue: new VTTCue(6, 8, "Caption [Line 2]"),
-        //             cueCategory: "ONSCREEN_TEXT"
-        //         },
-        //     ] as CueDto[];
-        //     testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-        //     testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
-        //     testingStore.dispatch(setFind("[Line 2]") as {} as AnyAction);
-        //     const { getByTestId } = render(
-        //         <Provider store={testingStore}>
-        //             <SearchReplaceEditor />
-        //         </Provider>
-        //     );
-        //     const nextButton = getByTestId("sbte-search-next");
-        //
-        //     // WHEN
-        //     fireEvent.click(nextButton);
-        //
-        //     // THEN
-        //     expect(testingStore.getState().searchReplace.find).toEqual("[Line 2]");
-        //     expect(testingStore.getState().editingCueIndex).toEqual(0);
-        //     expect(testingStore.getState().searchReplace.matches.offsets).toEqual([8]);
-        //     expect(testingStore.getState().focusedCueIndex).toEqual(0);
-        // });
+        it("searches for next match with regex special chars when Next button is clicked", () => {
+            // GIVEN
+            const testingCues = [
+                { vttCue: new VTTCue(0, 2, "Caption [Line 2]"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+                {
+                    vttCue: new VTTCue(4, 6, "Caption Line 3"),
+                    cueCategory: "ONSCREEN_TEXT",
+                    spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
+                },
+                {
+                    vttCue: new VTTCue(6, 8, "Caption [Line 2]"),
+                    cueCategory: "ONSCREEN_TEXT"
+                },
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("[Line 2]") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const nextButton = getByTestId("sbte-search-next");
+
+            // WHEN
+            fireEvent.click(nextButton);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("[Line 2]");
+            expect(testingStore.getState().editingCueIndex).toEqual(0);
+            expect(testingStore.getState().searchReplace.indices.offset).toEqual(8);
+            expect(testingStore.getState().focusedCueIndex).toEqual(0);
+        });
     });
 
     describe("search previous", () => {
