@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dispatch } from "react";
 import { CueDto, SubtitleEditAction, Track } from "../model";
-import { checkSaveStateAndSave, SaveState } from "./saveSlices";
+import { checkSaveStateAndSave, saveActionSlice, SaveState, setAutoSaveSuccess } from "./saveSlices";
 import { debounce } from "lodash";
-import { updateSaveActionStateIfNeeded } from "./saveCueUpdateSlices";
 import { AppThunk } from "../subtitleEditReducers";
+import { editingTrackSlice } from "../trackSlices";
 
 const DEBOUNCE_TIMEOUT = 2500;
 
@@ -39,20 +39,46 @@ export const saveCueDeleteSlice = createSlice({
     }
 });
 
+const executeCueDeleteCallback = async (
+    dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
+    getState: Function,
+    cueIdsToDelete: string[]
+): Promise<boolean> => {
+    const deleteCueCallback = getState().saveCueDelete.deleteCue;
+    let deleteCueError = false;
+    for (const cueId of cueIdsToDelete) {
+        try {
+            const editingTrack = getState().editingTrack;
+            await deleteCueCallback({ editingTrack, cueId })
+                .then(() => {
+                    const lockingVersion = editingTrack.lockingVersion;
+                    if (lockingVersion) {
+                        dispatch(editingTrackSlice.actions.updateEditingTrackLockingVersion(lockingVersion + 1));
+                    }
+                });
+        } catch (e) {
+            deleteCueError = true;
+        }
+    }
+    return deleteCueError;
+};
+
 const saveCueDeleteRequest = (
     dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
     getState: Function
 ): void => {
-    const deleteCueCallback = getState().saveCueDelete.deleteCue;
-    const cuesToDeletePromises: Promise<string>[] = [];
-    const editingTrack = getState().editingTrack;
     const cueIdsToDelete = [ ...getState().saveCueDelete.cueDeleteIds ];
     dispatch(saveCueDeleteSlice.actions.clearCueIdsForDelete());
-    cueIdsToDelete.forEach((cueId: string) => {
-        const deletePromise = deleteCueCallback({ editingTrack, cueId });
-        cuesToDeletePromises.push(deletePromise);
-    });
-    updateSaveActionStateIfNeeded(dispatch, cuesToDeletePromises);
+    if (cueIdsToDelete.length === 0) {
+        return;
+    }
+    dispatch(saveActionSlice.actions.setState(
+        { saveState: SaveState.REQUEST_SENT, multiCuesEdit: false }
+    ));
+    executeCueDeleteCallback(dispatch, getState, cueIdsToDelete)
+        .then((deleteCueError) => {
+            dispatch(setAutoSaveSuccess(!deleteCueError));
+        });
 };
 
 const saveCueDeleteCurrent = (
