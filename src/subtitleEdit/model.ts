@@ -47,6 +47,7 @@ export interface CueDto {
     errors?: CueError[] | null;
     comments?: CueComment[];
     trackVersionId?: string;
+    trackVersionLockingVersion?: number;
     addId?: string;
 }
 
@@ -95,6 +96,7 @@ export interface Track {
     title: string;
     trackId: string;
     name: string;
+    lockingVersion: number;
 }
 
 export interface SpellcheckerSettings {
