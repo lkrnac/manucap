@@ -40,7 +40,9 @@ describe("saveSlices", () => {
 
             // THEN
             expect(saveTrack).toHaveBeenCalledTimes(1);
-            expect(saveTrack).toBeCalledWith({ cues: testingCues, editingTrack: testingTrack });
+            expect(saveTrack).toBeCalledWith(
+                { cues: testingCues, editingTrack: testingTrack, shouldCreateNewVersion: true }
+            );
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
         });
 
@@ -52,7 +54,7 @@ describe("saveSlices", () => {
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
 
             // WHEN
-            callSaveTrack(testingStore.dispatch, testingStore.getState, true);
+            callSaveTrack(testingStore.dispatch, testingStore.getState);
 
             // THEN
             expect(saveTrack).toHaveBeenCalledTimes(1);
@@ -78,9 +80,11 @@ describe("saveSlices", () => {
 
             // THEN
             expect(saveTrack).toHaveBeenCalledTimes(1);
-            expect(saveTrack).toBeCalledWith({ cues: testingCues, editingTrack: testingTrack });
+            expect(saveTrack).toBeCalledWith(
+                { cues: testingCues, editingTrack: testingTrack, shouldCreateNewVersion: true }
+            );
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
         });
 
         it("saves track and create new version", () => {

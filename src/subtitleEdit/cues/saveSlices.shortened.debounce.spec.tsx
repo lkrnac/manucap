@@ -49,9 +49,10 @@ describe("saveSlices", () => {
             setTimeout(
                 () => {
                     expect(saveTrack).toHaveBeenCalledTimes(1);
-                    expect(saveTrack).toBeCalledWith({ cues: testingCues, editingTrack: testingTrack });
+                    expect(saveTrack).toBeCalledWith(
+                        { cues: testingCues, editingTrack: testingTrack, shouldCreateNewVersion: true });
                     expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                    expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+                    expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                     done();
                 },
                 60
@@ -81,13 +82,15 @@ describe("saveSlices", () => {
 
             // THEN
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
             setTimeout(
                 () => {
                     expect(saveTrack).toHaveBeenCalledTimes(1);
-                    expect(saveTrack).toBeCalledWith({ cues: expectedTestingCues, editingTrack: testingTrack });
+                    expect(saveTrack).toBeCalledWith(
+                        { cues: expectedTestingCues, editingTrack: testingTrack, shouldCreateNewVersion: true  }
+                    );
                     expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                    expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+                    expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                     done();
                 },
                 60
@@ -103,7 +106,7 @@ describe("saveSlices", () => {
                 () => {
                     // THEN
                     expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                    expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+                    expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                     done();
                 },
                 60
@@ -126,7 +129,7 @@ describe("saveSlices", () => {
                 () => {
                     expect(saveTrack).not.toBeCalled();
                     expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.RETRY);
-                    expect(testingStore.getState().saveAction.multiCuesEdit).toBeUndefined();
+                    expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                     done();
                 },
                 80
@@ -135,7 +138,7 @@ describe("saveSlices", () => {
 
         it("turns on multi cues text flag if first action is does multi cues action", (done) => {
             // WHEN
-            callSaveTrack(testingStore.dispatch, testingStore.getState, true);
+            callSaveTrack(testingStore.dispatch, testingStore.getState);
             callSaveTrack(testingStore.dispatch, testingStore.getState);
             callSaveTrack(testingStore.dispatch, testingStore.getState);
 
@@ -158,7 +161,7 @@ describe("saveSlices", () => {
         it("turns on multi cues text flag if middle action is does multi cues action", (done) => {
             // WHEN
             callSaveTrack(testingStore.dispatch, testingStore.getState);
-            callSaveTrack(testingStore.dispatch, testingStore.getState, true);
+            callSaveTrack(testingStore.dispatch, testingStore.getState);
             callSaveTrack(testingStore.dispatch, testingStore.getState);
 
             // THEN
@@ -181,7 +184,7 @@ describe("saveSlices", () => {
             // WHEN
             callSaveTrack(testingStore.dispatch, testingStore.getState);
             callSaveTrack(testingStore.dispatch, testingStore.getState);
-            callSaveTrack(testingStore.dispatch, testingStore.getState, true);
+            callSaveTrack(testingStore.dispatch, testingStore.getState);
 
             // THEN
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
@@ -202,7 +205,7 @@ describe("saveSlices", () => {
         it("turns on multi cues edit flag while request is still ongoing", (done) => {
             // GIVEN
             callSaveTrack(testingStore.dispatch, testingStore.getState);
-            callSaveTrack(testingStore.dispatch, testingStore.getState, true);
+            callSaveTrack(testingStore.dispatch, testingStore.getState);
             callSaveTrack(testingStore.dispatch, testingStore.getState);
             setTimeout(() => saveTrack.mockReset(), 60);
 

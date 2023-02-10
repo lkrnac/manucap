@@ -20,6 +20,7 @@ import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateEditingCueIndex } from "./cueEditorSlices";
 import { matchedCuesSlice } from "../cuesList/cuesListSlices";
 import { Replacement, SpellCheck } from "../spellCheck/model";
+import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
 
 let testingStore = createTestingStore();
 
@@ -224,7 +225,9 @@ describe("CueTextEditor", () => {
         // GIVEN
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
         const saveTrack = jest.fn();
+        const updateCueCallback = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
         const searchReplaceMatches = {
             offsets: [10],
             offsetIndex: 0,
@@ -259,7 +262,8 @@ describe("CueTextEditor", () => {
         // THEN
         setTimeout(
             () => {
-                expect(saveTrack).toHaveBeenCalledTimes(1);
+                expect(updateCueCallback).toHaveBeenCalledTimes(1);
+                expect(saveTrack).not.toBeCalled();
                 expect(testingStore.getState().cues[0].vttCue.text)
                     .toEqual("some <i>HTML</i> <b>abcd efg</b> sample");
                 expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.vttCue.text)
@@ -299,7 +303,9 @@ describe("CueTextEditor", () => {
     it("triggers autosave only once immediately after text change", (done) => {
         // GIVEN
         const saveTrack = jest.fn();
+        const updateCueCallback = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
         const editor = createEditorNode();
 
         // WHEN
@@ -313,7 +319,8 @@ describe("CueTextEditor", () => {
         // THEN
         setTimeout(
             () => {
-                expect(saveTrack).toBeCalledTimes(1);
+                expect(updateCueCallback).toBeCalledTimes(1);
+                expect(saveTrack).not.toBeCalled();
                 done();
             },
             6000
@@ -495,7 +502,9 @@ describe("CueTextEditor", () => {
         // GIVEN
         const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
         const saveTrack = jest.fn();
+        const updateCueCallback = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
         const testingTrack = {
             type: "CAPTION",
             language: { id: "en-US", name: "English (US)" } as Language,
@@ -569,7 +578,8 @@ describe("CueTextEditor", () => {
 
         setTimeout(
             () => {
-                expect(saveTrack).toBeCalled();
+                expect(updateCueCallback).toBeCalled();
+                expect(saveTrack).not.toBeCalled();
                 done();
             },
             6000

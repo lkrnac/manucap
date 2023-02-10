@@ -171,7 +171,8 @@ describe("CueView", () => {
     it("renders with actions panel", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(1, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto;
-
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
@@ -216,7 +217,7 @@ describe("CueView", () => {
                         >
                             Caption Line 1
                         </div>
-                        <CueActionsPanel index={1} cue={cue} isEdit={false} sourceCueIndexes={[]} />
+                        <CueActionsPanel index={0} cue={cue} isEdit={false} sourceCueIndexes={[]} />
                     </div>
                 </div>
             </Provider>
@@ -227,7 +228,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={1}
+                    targetCueIndex={0}
                     cue={cue}
                     showGlossaryTerms
                     targetCuesLength={0}
@@ -256,6 +257,8 @@ describe("CueView", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         // GIVEN
         const cue = { vttCue: new VTTCue(1, 2, "text\nwrapped"), cueCategory: "DIALOGUE" } as CueDto;
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedText = render(
             <div
                 className="sbte-cue-editor"
@@ -279,7 +282,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={1}
+                    targetCueIndex={0}
                     cue={cue}
                     showGlossaryTerms
                     languageDirection={testingTrack.language.direction}
@@ -298,6 +301,8 @@ describe("CueView", () => {
     it("converts VTT text to HTML", () => {
         // GIVEN
         const cue = { vttCue: new VTTCue(1, 2, "text\nwrapped"), cueCategory: "DIALOGUE" } as CueDto;
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedText = render(
             <div
                 className="sbte-cue-editor"
@@ -320,7 +325,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={1}
+                    targetCueIndex={0}
                     cue={cue}
                     showGlossaryTerms
                     targetCuesLength={0}
@@ -341,6 +346,8 @@ describe("CueView", () => {
             vttCue: new VTTCue(1, 2, "some<script>alert(\"problem\")</script>text"),
             cueCategory: "DIALOGUE"
         } as CueDto;
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedText = render(
             <div
                 className="sbte-cue-editor"
@@ -363,7 +370,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={1}
+                    targetCueIndex={0}
                     cue={cue}
                     showGlossaryTerms
                     targetCuesLength={0}
@@ -384,6 +391,8 @@ describe("CueView", () => {
             vttCue: new VTTCue(1, 2, "<b>bold</b><i>italic</i><u>underline</u>"),
             cueCategory: "DIALOGUE"
         } as CueDto;
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedText = render(
             <div
                 className="sbte-cue-editor"
@@ -406,7 +415,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={1}
+                    targetCueIndex={0}
                     cue={cue}
                     showGlossaryTerms
                     targetCuesLength={0}
@@ -427,6 +436,8 @@ describe("CueView", () => {
             vttCue: new VTTCue(1, 2, "<v speaker><div>some text</div>"),
             cueCategory: "DIALOGUE"
         } as CueDto;
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedText = render(
             <div
                 className="sbte-cue-editor"
@@ -449,7 +460,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={1}
+                    targetCueIndex={0}
                     cue={cue}
                     showGlossaryTerms
                     targetCuesLength={0}
@@ -470,6 +481,8 @@ describe("CueView", () => {
             vttCue: new VTTCue(1, 2, "some text"),
             cueCategory: "DIALOGUE"
         } as CueDto;
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedText = render(
             <div
                 className="sbte-cue-editor"
@@ -490,7 +503,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={1}
+                    targetCueIndex={0}
                     cue={cue}
                     hideText
                     showGlossaryTerms
@@ -516,7 +529,8 @@ describe("CueView", () => {
                 { source: "Line", replacements: ["lineReplacement1"]}
             ]
         } as CueDto;
-
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedSourceCueContent = "<i>Source <b><span onclick=\"pickSetGlossaryTerm('lineReplacement1')\" " +
             "class=\"sbte-glossary-match\">Line</span></b></i> <br>Wrapped " +
             "<span onclick=\"pickSetGlossaryTerm('text replacement1/text replacement2')\" " +
@@ -527,7 +541,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={1}
+                    targetCueIndex={0}
                     cue={cue}
                     showGlossaryTerms
                     targetCuesLength={0}
@@ -554,7 +568,8 @@ describe("CueView", () => {
                 { source: "  ", replacements: ["another replacement"]}
             ]
         } as CueDto;
-
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedSourceCueContent = "<i>Source <b>Line</b></i> <br>Wrapped text";
 
         // WHEN
@@ -562,7 +577,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={1}
+                    targetCueIndex={0}
                     cue={cue}
                     showGlossaryTerms
                     targetCuesLength={0}
@@ -587,7 +602,8 @@ describe("CueView", () => {
                 { source: "ample", replacements: ["amplio"]}
             ]
         } as CueDto;
-
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedSourceCueContent = "This is <span onclick=\"pickSetGlossaryTerm('qualche')\" " +
             "class=\"sbte-glossary-match\">some</span> sample text";
 
@@ -596,7 +612,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={1}
+                    targetCueIndex={0}
                     cue={cue}
                     showGlossaryTerms
                     targetCuesLength={0}
@@ -621,7 +637,8 @@ describe("CueView", () => {
                 { source: "Line", replacements: ["lineReplacement1"]}
             ]
         } as CueDto;
-
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedSourceCueContent = "<i>Source <b>Line</b></i> <br>Wrapped text";
 
         // WHEN
@@ -629,7 +646,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={1}
+                    targetCueIndex={0}
                     cue={cue}
                     showGlossaryTerms={false}
                     targetCuesLength={0}
@@ -654,12 +671,14 @@ describe("CueView", () => {
                 { source: "Line", replacements: ["lineReplacement1"]}
             ]
         } as CueDto;
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const setGlossaryTerm = jest.fn();
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={1}
+                    targetCueIndex={0}
                     cue={cue}
                     showGlossaryTerms
                     targetCuesLength={0}
@@ -687,12 +706,14 @@ describe("CueView", () => {
                 { source: "Line", replacements: ["lineReplacement1"]}
             ]
         } as CueDto;
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const setGlossaryTerm = jest.fn();
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={1}
+                    targetCueIndex={0}
                     cue={cue}
                     showGlossaryTerms
                     targetCuesLength={0}
@@ -719,7 +740,8 @@ describe("CueView", () => {
                 { source: "line", replacements: ["replacement"]}
             ]
         } as CueDto;
-
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedSourceCueContent = "<i>Source <b><span onclick=\"pickSetGlossaryTerm('replacement')\" " +
             "class=\"sbte-glossary-match\">Line</span></b></i> <br>Wrapped text " +
             "<span onclick=\"pickSetGlossaryTerm('replacement')\" " +
@@ -730,7 +752,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={1}
+                    targetCueIndex={0}
                     cue={cue}
                     showGlossaryTerms
                     targetCuesLength={0}
@@ -755,7 +777,8 @@ describe("CueView", () => {
                 { source: "Source Line", replacements: ["lineReplacement1"]}
             ]
         } as CueDto;
-
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedSourceCueContent = "<i><span onclick=\"pickSetGlossaryTerm('lineReplacement1')\" " +
             "class=\"sbte-glossary-match\">Source Line</span></i> <br>" +
             "<span onclick=\"pickSetGlossaryTerm('text replacement1/text replacement2')\" " +
@@ -766,7 +789,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={1}
+                    targetCueIndex={0}
                     cue={cue}
                     showGlossaryTerms
                     targetCuesLength={0}
@@ -794,7 +817,8 @@ describe("CueView", () => {
                 { source: "security", replacements: ["moretext"]}
             ]
         } as CueDto;
-
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedSourceCueContent =
             "<span onclick=\"pickSetGlossaryTerm('connection;connecting')\" " +
             "class=\"sbte-glossary-match\">Networking</span> and " +
@@ -806,7 +830,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={1}
+                    targetCueIndex={0}
                     cue={cue}
                     showGlossaryTerms
                     targetCuesLength={0}
@@ -834,7 +858,8 @@ describe("CueView", () => {
                 { source: "security", replacements: ["moretext"]}
             ]
         } as CueDto;
-
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedSourceCueContent =
             "<span onclick=\"pickSetGlossaryTerm('connection;connecting')\" " +
             "class=\"sbte-glossary-match\">Networking</span> and " +
@@ -846,7 +871,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={1}
+                    targetCueIndex={0}
                     cue={cue}
                     showGlossaryTerms
                     targetCuesLength={0}
@@ -867,6 +892,8 @@ describe("CueView", () => {
             vttCue: new VTTCue(1, 2, "some text"),
             cueCategory: "DIALOGUE"
         } as CueDto;
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
@@ -896,6 +923,8 @@ describe("CueView", () => {
             vttCue: new VTTCue(1, 2, "some text"),
             cueCategory: "DIALOGUE"
         } as CueDto;
+        const cues = [ cue ] as CueDto[];
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView

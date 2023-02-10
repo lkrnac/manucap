@@ -15,6 +15,7 @@ import { setSaveTrack } from "../saveSlices";
 //@ts-ignore
 import { LodashDebounce } from "lodash/ts3.1/fp";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
+import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
 
 jest.mock("lodash", () => ({
     debounce: (fn: LodashDebounce): Function => {
@@ -156,7 +157,9 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
     it("select an option using enter shortcut", () => {
         //GIVEN
         const saveTrack = jest.fn();
+        const updateCueCallback = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
 
         const { container, unmount } = render(createEditorNode("SomeText", spellCheckFakeMatches),
             { container: document.body });
@@ -178,7 +181,8 @@ describe("CueTextEditor.SpellChecker keyboard shortcut", () => {
         unmount();
 
         //THEN
-        expect(saveTrack).toBeCalled();
+        expect(updateCueCallback).toBeCalled();
+        expect(saveTrack).not.toBeCalled();
         expect(bindCueViewModeKeyboardShortcutSpy).toBeCalled();
     });
 
