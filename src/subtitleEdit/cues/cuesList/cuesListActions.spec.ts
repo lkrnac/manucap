@@ -20,6 +20,7 @@ import {
     updateCueCategory,
     updateCues,
     updateVttCue,
+    updateVttCueTextOnly,
     validateCorruptedCues,
     validateVttCue,
 } from "./cuesListActions";
@@ -1440,7 +1441,7 @@ describe("cueSlices", () => {
 
                 // WHEN
                 testingStore.dispatch(
-                    updateVttCue(0, new VTTCue(1, 3, "Caption Line X"), editUuid, true) as {} as AnyAction);
+                    updateVttCueTextOnly(0, new VTTCue(1, 3, "Caption Line X"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
@@ -1456,7 +1457,7 @@ describe("cueSlices", () => {
 
                 // WHEN
                 testingStore.dispatch(
-                    updateVttCue(0, new VTTCue(1, 3, "Caption Line X"), editUuid, true) as {} as AnyAction);
+                    updateVttCueTextOnly(0, new VTTCue(1, 3, "Caption Line X"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line X");
@@ -1469,7 +1470,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
                 testingStore.dispatch(
-                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X"), undefined, true) as {} as AnyAction);
+                    updateVttCueTextOnly(1, new VTTCue(1, 3, "Caption Line X"), undefined) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
                 testingStore.dispatch(matchedCuesSlice.actions
                     .matchCuesByTime({ cues: testingCues, sourceCues: [], editingCueIndex: 1 })
@@ -1478,7 +1479,7 @@ describe("cueSlices", () => {
 
                 // WHEN
                 testingStore.dispatch(
-                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X updated"), editUuid, true) as {} as AnyAction);
+                    updateVttCueTextOnly(1, new VTTCue(1, 3, "Caption Line X updated"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
@@ -1493,7 +1494,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
                 testingStore.dispatch(
-                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X"), undefined, true) as {} as AnyAction);
+                    updateVttCueTextOnly(1, new VTTCue(1, 3, "Caption Line X"), undefined) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
                 testingStore.dispatch(matchedCuesSlice.actions
                     .matchCuesByTime({
@@ -1506,7 +1507,7 @@ describe("cueSlices", () => {
 
                 // WHEN
                 testingStore.dispatch(
-                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X updated"), editUuid, true) as {} as AnyAction);
+                    updateVttCueTextOnly(1, new VTTCue(1, 3, "Caption Line X updated"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(1);
@@ -1520,7 +1521,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 testingStore.dispatch(
-                    updateVttCue(0, new VTTCue(1, 3, "Caption Line X"), undefined, true) as {} as AnyAction);
+                    updateVttCueTextOnly(0, new VTTCue(1, 3, "Caption Line X"), undefined) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
                 testingStore.dispatch(matchedCuesSlice.actions
                     .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
@@ -1528,7 +1529,7 @@ describe("cueSlices", () => {
 
                 // WHEN
                 testingStore.dispatch(
-                    updateVttCue(0, new VTTCue(1, 3, "Caption Line X updated"), editUuid, false) as {} as AnyAction);
+                    updateVttCue(0, new VTTCue(1, 3, "Caption Line X updated"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
@@ -1545,7 +1546,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
 
                 testingStore.dispatch(
-                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X"), undefined, true) as {} as AnyAction);
+                    updateVttCueTextOnly(1, new VTTCue(1, 3, "Caption Line X"), undefined) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
                 testingStore.dispatch(matchedCuesSlice.actions
                     .matchCuesByTime({
@@ -1558,7 +1559,7 @@ describe("cueSlices", () => {
 
                 // WHEN
                 testingStore.dispatch(
-                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X updated"), editUuid, true) as {} as AnyAction);
+                    updateVttCueTextOnly(1, new VTTCue(1, 3, "Caption Line X updated"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(updateSearchMatchesSpy).toBeCalled();
@@ -1572,7 +1573,7 @@ describe("cueSlices", () => {
                 testingStore.dispatch(showSearchReplace(false) as {} as AnyAction);
 
                 testingStore.dispatch(
-                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X"), undefined, true) as {} as AnyAction);
+                    updateVttCueTextOnly(1, new VTTCue(1, 3, "Caption Line X"), undefined) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
                 testingStore.dispatch(matchedCuesSlice.actions
                     .matchCuesByTime({
@@ -1585,7 +1586,7 @@ describe("cueSlices", () => {
 
                 // WHEN
                 testingStore.dispatch(
-                    updateVttCue(1, new VTTCue(1, 3, "Caption Line X updated"), editUuid, true) as {} as AnyAction);
+                    updateVttCueTextOnly(1, new VTTCue(1, 3, "Caption Line X updated"), editUuid) as {} as AnyAction);
 
                 // THEN
                 expect(updateSearchMatchesSpy).not.toBeCalled();

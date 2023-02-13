@@ -10,7 +10,7 @@ import {
     showSearchReplace
 } from "./searchReplaceSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
-import { updateMatchedCues, updateVttCue } from "../cuesList/cuesListActions";
+import {updateMatchedCues, updateVttCueTextOnly} from "../cuesList/cuesListActions";
 import { CueDto } from "../../model";
 import { replaceVttCueContent } from "../edit/editUtils";
 import ToggleButton from "../../toolbox/ToggleButton";
@@ -63,8 +63,7 @@ const searchReplaceAll = (
         const matches = searchCueText(vttText, find, searchReplace.matchCase);
         if (matches.length > 0) {
             const  newVTTCue = replaceAllInVttCue(cue.vttCue, find, replacement, searchReplace.matchCase, matches);
-            // TODO: do something here more efficient, maybe add flag to not save, then call save track after for?
-            dispatch(updateVttCue(cueIndex, newVTTCue, cue.editUuid, true));
+            dispatch(updateVttCueTextOnly(cueIndex, newVTTCue, cue.editUuid));
         }
     }
     dispatch(updateMatchedCues());

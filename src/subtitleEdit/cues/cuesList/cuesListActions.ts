@@ -77,10 +77,8 @@ const findMatchedIndexes = (state: SubtitleEditState, index: number): MatchedCue
     return { targetCuesIndex, editingIndexMatchedCues };
 };
 
-const shouldBlink = (x: VTTCue, y: VTTCue, textOnly?: boolean): boolean => {
-    return textOnly ?
-        x.text !== y.text :
-        JSON.stringify(constructCueValuesArray(x)) !== JSON.stringify(constructCueValuesArray(y));
+const shouldBlink = (x: VTTCue, y: VTTCue): boolean => {
+    return JSON.stringify(constructCueValuesArray(x)) !== JSON.stringify(constructCueValuesArray(y));
 };
 
 const createAndAddCue = (previousCue: CueDto, startTime: number, endTime: number): CueDto => {
@@ -213,13 +211,10 @@ export const checkErrors = createAsyncThunk(
 export const validateCue = (
     dispatch: Dispatch<SubtitleEditAction | void>,
     index: number,
-    shouldSpellCheck: boolean,
-    textOnly?: boolean
+    shouldSpellCheck: boolean
 ): void => {
-    if (!textOnly) {
-        dispatch(checkErrors({ index: index - 1, shouldSpellCheck: false }));
-        dispatch(checkErrors({ index: index + 1, shouldSpellCheck: false }));
-    }
+    dispatch(checkErrors({ index: index - 1, shouldSpellCheck: false }));
+    dispatch(checkErrors({ index: index + 1, shouldSpellCheck: false }));
     dispatch(checkErrors({ index, shouldSpellCheck: shouldSpellCheck }));
 };
 
@@ -257,8 +252,7 @@ const reorderCuesIfNeeded = function ( // eslint-disable-line @typescript-eslint
 export const updateVttCue = (
     idx: number,
     vttCue: VTTCue,
-    editUuid?: string,
-    textOnly?: boolean
+    editUuid?: string
 ): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
         const cues = getState().cues;
@@ -269,12 +263,7 @@ export const updateVttCue = (
             && getState().lastCueChange?.changeType !== "REMOVE"
         ) { // cue wasn't removed/changed in the meantime
             let newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
-            if (textOnly) {
-                newVttCue = new VTTCue(originalCue.vttCue.startTime, originalCue.vttCue.endTime, vttCue.text);
-                copyNonConstructorProperties(newVttCue, originalCue.vttCue);
-            } else {
-                copyNonConstructorProperties(newVttCue, vttCue);
-            }
+            copyNonConstructorProperties(newVttCue, vttCue);
 
             const previousCue = cues[idx - 1];
             const followingCue = cues[idx + 1];
@@ -310,7 +299,7 @@ export const updateVttCue = (
                 }
             }
 
-            if (shouldBlink(vttCue, newVttCue, textOnly)) {
+            if (shouldBlink(vttCue, newVttCue)) {
                 dispatch(validationErrorSlice.actions.setValidationErrors(cueErrors));
             }
 
@@ -323,13 +312,36 @@ export const updateVttCue = (
             if (getState().searchReplaceVisible) {
                 updateSearchMatches(dispatch, getState, idx);
             }
-            validateCue(dispatch, idx, true, textOnly);
-            if (!textOnly) {
-                dispatch(updateMatchedCues());
-                dispatch(changeScrollPosition(ScrollPosition.CURRENT));
-            } else {
-                updateMatchedCue(dispatch, getState(), idx);
+            validateCue(dispatch, idx, true);
+            dispatch(updateMatchedCues());
+            dispatch(changeScrollPosition(ScrollPosition.CURRENT));
+            callSaveCueUpdate(dispatch, getState, idx);
+        }
+    };
+
+export const updateVttCueTextOnly = (
+    idx: number,
+    vttCue: VTTCue,
+    editUuid?: string
+): AppThunk =>
+    (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
+        const cues = getState().cues;
+        const originalCue = cues[idx];
+
+        if (originalCue && editUuid === originalCue.editUuid
+            && getState().lastCueChange?.changeType !== "REMOVE"
+        ) { // cue wasn't removed/changed in the meantime
+            const newVttCue = new VTTCue(originalCue.vttCue.startTime, originalCue.vttCue.endTime, vttCue.text);
+            copyNonConstructorProperties(newVttCue, originalCue.vttCue);
+
+            const newCue = { ...originalCue, idx, vttCue: newVttCue, editUuid: uuidv4() };
+            dispatch(cuesSlice.actions.updateVttCue(newCue));
+            dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
+            if (getState().searchReplaceVisible) {
+                updateSearchMatches(dispatch, getState, idx);
             }
+            dispatch(checkErrors({ index: idx, shouldSpellCheck: true }));
+            updateMatchedCue(dispatch, getState(), idx);
             callSaveCueUpdate(dispatch, getState, idx);
         }
     };

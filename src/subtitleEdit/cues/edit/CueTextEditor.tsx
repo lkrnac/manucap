@@ -23,7 +23,7 @@ import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUti
 import { convertVttToHtml, getVttText } from "./cueTextConverter";
 import CueLineCounts from "../cueLine/CueLineCounts";
 import InlineStyleButton from "./InlineStyleButton";
-import { applySpellcheckerOnCue, checkErrors, updateVttCue } from "../cuesList/cuesListActions";
+import {applySpellcheckerOnCue, checkErrors, updateVttCueTextOnly} from "../cuesList/cuesListActions";
 import { SpellCheck } from "../spellCheck/model";
 import { SpellCheckIssue } from "../spellCheck/SpellCheckIssue";
 
@@ -136,7 +136,7 @@ const changeVttCueInRedux = (
     const vttText = getVttText(currentContent);
     const vttCue = new VTTCue(props.vttCue.startTime, props.vttCue.endTime, vttText);
     copyNonConstructorProperties(vttCue, props.vttCue);
-    dispatch(updateVttCue(props.index, vttCue, props.editUuid, true));
+    dispatch(updateVttCueTextOnly(props.index, vttCue, props.editUuid));
 };
 
 const changeVttCueInReduxDebounced = _.debounce(changeVttCueInRedux, 200);
