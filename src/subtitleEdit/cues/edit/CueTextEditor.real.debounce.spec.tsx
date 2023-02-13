@@ -25,8 +25,8 @@ import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
 let testingStore = createTestingStore();
 
 const cues = [
-    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", editUuid: "1" } as CueDto,
-    { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE", editUuid: "2" } as CueDto
+    { id: "c-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", editUuid: "1" } as CueDto,
+    { id: "c-2", vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE", editUuid: "2" } as CueDto
 ];
 const bindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
 const unbindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
