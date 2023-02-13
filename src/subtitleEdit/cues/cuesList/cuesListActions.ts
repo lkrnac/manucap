@@ -145,8 +145,6 @@ export const applySpellcheckerOnCue = createAsyncThunk(
                         addSpellCheck(thunkApi.dispatch, index, spellCheck, track.id);
                         const freshState: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
                         updateMatchedCue(thunkApi.dispatch, freshState, index);
-                        // TODO: is this saved needed, no spellcheck saved in db
-                        // callSaveTrack(thunkApi.dispatch, thunkApi.getState);
                     });
             }
         }
@@ -174,7 +172,8 @@ export const checkSpelling = createAsyncThunk(
                 { index: index, errors: cueErrors } as CueErrorsPayload));
             if (cueErrors.length !== oldErrorsCount) {
                 updateMatchedCue(thunkApi.dispatch, state, index);
-                callSaveCueUpdate(thunkApi.dispatch, thunkApi.getState, index);
+                // @ts-ignore TODO fix this
+                thunkApi.dispatch(callSaveCueUpdate(index));
             }
         }
     });
@@ -182,7 +181,7 @@ export const checkSpelling = createAsyncThunk(
 export const checkErrors = createAsyncThunk(
     "validations/checkErrors",
     async ({ index, shouldSpellCheck }: { index: number; shouldSpellCheck: boolean },
-           thunkApi) => {
+           thunkApi): Promise<void> => {
         if (index !== undefined) {
             const state: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
             const subtitleSpecification = state.subtitleSpecifications;
@@ -203,7 +202,8 @@ export const checkErrors = createAsyncThunk(
                 { index: index, errors: cueErrors } as CueErrorsPayload));
             if (cueErrors.length !== oldErrorsCount) {
                 updateMatchedCue(thunkApi.dispatch, state, index);
-                callSaveCueUpdate(thunkApi.dispatch, thunkApi.getState, index);
+                // @ts-ignore TODO fix this
+                thunkApi.dispatch(callSaveCueUpdate(index));
             }
         }
     });
@@ -262,7 +262,7 @@ export const updateVttCue = (
         if (originalCue && editUuid === originalCue.editUuid
             && getState().lastCueChange?.changeType !== "REMOVE"
         ) { // cue wasn't removed/changed in the meantime
-            let newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
+            const newVttCue = new VTTCue(vttCue.startTime, vttCue.endTime, vttCue.text);
             copyNonConstructorProperties(newVttCue, vttCue);
 
             const previousCue = cues[idx - 1];
@@ -315,7 +315,7 @@ export const updateVttCue = (
             validateCue(dispatch, idx, true);
             dispatch(updateMatchedCues());
             dispatch(changeScrollPosition(ScrollPosition.CURRENT));
-            callSaveCueUpdate(dispatch, getState, idx);
+            dispatch(callSaveCueUpdate(idx));
         }
     };
 
@@ -342,7 +342,6 @@ export const updateVttCueTextOnly = (
             }
             dispatch(checkErrors({ index: idx, shouldSpellCheck: true }));
             updateMatchedCue(dispatch, getState(), idx);
-            callSaveCueUpdate(dispatch, getState, idx);
         }
     };
 
@@ -351,7 +350,7 @@ export const validateVttCue = (idx: number): AppThunk =>
         validateCue(dispatch, idx, false);
         updateMatchedCue(dispatch, getState(), idx);
         // TODO this is called for all cues when first open, change to save track instead
-        callSaveCueUpdate(dispatch, getState, idx);
+        dispatch(callSaveCueUpdate(idx));
     };
 
 export const removeIgnoredSpellcheckedMatchesFromAllCues = (): AppThunk =>
@@ -378,21 +377,21 @@ export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThu
     (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
         dispatch(cuesSlice.actions.updateCueCategory({ idx, cueCategory }));
         updateMatchedCue(dispatch, getState(), idx);
-        callSaveCueUpdate(dispatch, getState, idx);
+        dispatch(callSaveCueUpdate(idx));
     };
 
 export const addCueComment = (idx: number, cueComment: CueComment): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         dispatch(cuesSlice.actions.addCueComment({ idx, cueComment }));
         updateMatchedCue(dispatch, getState(), idx);
-        callSaveCueUpdate(dispatch, getState, idx);
+        dispatch(callSaveCueUpdate(idx));
     };
 
 export const deleteCueComment = (idx: number, cueCommentIndex: number): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         dispatch(cuesSlice.actions.deleteCueComment({ idx, cueCommentIndex }));
         updateMatchedCue(dispatch, getState(), idx);
-        callSaveCueUpdate(dispatch, getState, idx);
+        dispatch(callSaveCueUpdate(idx));
     };
 
 export const saveTrack = (): AppThunk =>
@@ -438,7 +437,7 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
             dispatch(updateMatchedCues());
             dispatch(changeScrollPosition(ScrollPosition.CURRENT));
             if (cues.length > 0) {
-                callSaveCueUpdate(dispatch, getState, idx);
+                dispatch(callSaveCueUpdate(idx));
             } else {
                 callSaveTrack(dispatch, getState);
             }

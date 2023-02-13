@@ -10,7 +10,7 @@ import {
     showSearchReplace
 } from "./searchReplaceSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
-import {updateMatchedCues, updateVttCueTextOnly} from "../cuesList/cuesListActions";
+import { saveTrack, updateMatchedCues, updateVttCueTextOnly } from "../cuesList/cuesListActions";
 import { CueDto } from "../../model";
 import { replaceVttCueContent } from "../edit/editUtils";
 import ToggleButton from "../../toolbox/ToggleButton";
@@ -67,6 +67,7 @@ const searchReplaceAll = (
         }
     }
     dispatch(updateMatchedCues());
+    dispatch(saveTrack());
 };
 
 const SearchReplaceEditor = (): ReactElement | null => {

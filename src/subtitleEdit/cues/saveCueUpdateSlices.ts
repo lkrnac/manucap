@@ -6,6 +6,7 @@ import { checkSaveStateAndSave, saveActionSlice, SaveState, setAutoSaveSuccess }
 import { AppThunk } from "../subtitleEditReducers";
 import { cuesSlice } from "./cuesList/cuesListSlices";
 import { editingTrackSlice } from "../trackSlices";
+import { AnyAction } from "redux";
 
 const DEBOUNCE_TIMEOUT = 2500;
 
@@ -26,8 +27,10 @@ export const saveCueUpdateSlice = createSlice({
         setUpdateCueCallback: (state, action: PayloadAction<(trackCue: TrackCue) => Promise<CueDto>>): void => {
             state.updateCue = action.payload;
         },
-        addCueIdsForUpdate: (state, action: PayloadAction<string>): void => {
-            state.cueUpdateIds.add(action.payload);
+        addCueIdsForUpdate: (state, action: PayloadAction<string | undefined>): void => {
+            if (action.payload) {
+                state.cueUpdateIds.add(action.payload);
+            }
         },
         clearCueUpdateIds: (state): void => {
             state.cueUpdateIds.clear();
@@ -108,11 +111,8 @@ const saveCueUpdateCurrent = (
 
 const saveCueUpdateDebounced = debounce(saveCueUpdateCurrent, DEBOUNCE_TIMEOUT, { leading: false, trailing: true });
 
-export const callSaveCueUpdate = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
-    getState: Function,
-    cueIndex: number
-): void => {
+export const callSaveCueUpdate = (cueIndex: number): AppThunk =>
+    (dispatch: Dispatch<AnyAction | PayloadAction<SubtitleEditAction | undefined> | void>, getState): void => {
     const cue = getState().cues[cueIndex];
     if (cue) {
         const cueId = cue.addId ? cue.addId : cue.id;
