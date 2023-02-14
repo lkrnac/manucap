@@ -53,8 +53,8 @@ const testingTrack = {
 } as Track;
 
 const testingCues = [
-    { id: "c-1", vttCue: new VTTCue(0, 1.225, "Caption Line 1"), cueCategory: "DIALOGUE" },
-    { id: "c-2", vttCue: new VTTCue(1.225, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+    { id: "cue-1", vttCue: new VTTCue(0, 1.225, "Caption Line 1"), cueCategory: "DIALOGUE" },
+    { id: "cue-2", vttCue: new VTTCue(1.225, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
 ] as CueDto[];
 
 let testingStore = createTestingStore();

@@ -525,13 +525,13 @@ describe("CueTextEditor", () => {
         } as SpellCheck;
 
         const cues = [
-            { vttCue: new VTTCue(0, 2, "Caption Linex 1"),
+            { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Linex 1"),
                 cueCategory: "DIALOGUE", spellCheck: spellCheck,
                 errors: [CueError.SPELLCHECK_ERROR]},
-            { vttCue: new VTTCue(2, 4, "Caption Linex 2"),
+            { id: "cue-2", vttCue: new VTTCue(2, 4, "Caption Linex 2"),
                 cueCategory: "DIALOGUE", spellCheck: spellCheck,
                 errors: [CueError.SPELLCHECK_ERROR]},
-            { vttCue: new VTTCue(4, 6, "Caption Linex 2"),
+            { id: "cue-3", vttCue: new VTTCue(4, 6, "Caption Linex 2"),
                 cueCategory: "DIALOGUE", errors: [CueError.SPELLCHECK_ERROR]}
         ] as CueDto[];
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
