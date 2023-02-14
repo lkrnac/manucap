@@ -29,7 +29,7 @@ import { updateSourceCues } from "../view/sourceCueSlices";
 import { updateEditingCueIndex } from "./cueEditorSlices";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import { setCurrentPlayerTime } from "../cuesList/cuesListScrollSlice";
-import { showSearchReplace } from "../searchReplace/searchReplaceSlices";
+import { setFind, showSearchReplace } from "../searchReplace/searchReplaceSlices";
 
 jest.mock("lodash", () => (
     {
@@ -40,7 +40,8 @@ jest.mock("lodash", () => (
         get: jest.requireActual("lodash/get"),
         sortBy: jest.requireActual("lodash/sortBy"),
         findIndex: jest.requireActual("lodash/findIndex"),
-        findLastIndex: jest.requireActual("lodash/findLastIndex")
+        findLastIndex: jest.requireActual("lodash/findLastIndex"),
+        unescape: jest.requireActual("lodash/unescape")
     }));
 jest.mock("../spellCheck/spellCheckFetch");
 // @ts-ignore we are mocking this function
@@ -958,7 +959,14 @@ describe("CueEdit", () => {
             // THEN
             expect(testingStore.getState().cues.length).toEqual(2);
             expect(testingStore.getState().editingCueIndex).toEqual(1);
-            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: -1,
+                sourceCueIndex: -1,
+                targetCueIndex: -1,
+                matchLength: 0,
+                offset: -1,
+                offsetIndex: 0
+            });
         });
 
         it("adds cue when on ENTER for last translation cue, " +
@@ -993,7 +1001,14 @@ describe("CueEdit", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
-            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: -1,
+                sourceCueIndex: -1,
+                targetCueIndex: -1,
+                matchLength: 0,
+                offset: -1,
+                offsetIndex: 0
+            });
         });
 
         it("doesn't add cue when ENTER is pressed on last caption cue out of range of chunk", () => {
@@ -1019,7 +1034,14 @@ describe("CueEdit", () => {
             // THEN
             expect(testingStore.getState().cues.length).toEqual(1);
             expect(testingStore.getState().editingCueIndex).toEqual(0);
-            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: -1,
+                sourceCueIndex: -1,
+                targetCueIndex: -1,
+                matchLength: 0,
+                offset: -1,
+                offsetIndex: 0
+            });
         });
 
         it("adds cue when ENTER is pressed on last caption cue in range of chunk", () => {
@@ -1044,7 +1066,14 @@ describe("CueEdit", () => {
             // THEN
             expect(testingStore.getState().cues.length).toEqual(2);
             expect(testingStore.getState().editingCueIndex).toEqual(1);
-            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: -1,
+                sourceCueIndex: -1,
+                targetCueIndex: -1,
+                matchLength: 0,
+                offset: -1,
+                offsetIndex: 0
+            });
         });
 
         it("doesn't add cue when on ENTER for last translation cue, where cue index is smaller than amount " +
@@ -1083,7 +1112,14 @@ describe("CueEdit", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(0);
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
-            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: -1,
+                sourceCueIndex: -1,
+                targetCueIndex: -1,
+                matchLength: 0,
+                offset: -1,
+                offsetIndex: 0
+            });
         });
 
         it("adds cue when on ENTER for last translation cue, where cue index is smaller than amount " +
@@ -1126,7 +1162,14 @@ describe("CueEdit", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
-            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: -1,
+                sourceCueIndex: -1,
+                targetCueIndex: -1,
+                matchLength: 0,
+                offset: -1,
+                offsetIndex: 0
+            });
         });
 
         it("adds cue when on ENTER for last translation cue, when there are no more source cues", () => {
@@ -1153,7 +1196,14 @@ describe("CueEdit", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: -1,
+                sourceCueIndex: -1,
+                targetCueIndex: -1,
+                matchLength: 0,
+                offset: -1,
+                offsetIndex: 0
+            });
         });
 
         it("moves cue editing mode to next cue when ENTER is pressed on non-last", () => {
@@ -1188,7 +1238,14 @@ describe("CueEdit", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
-            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: -1,
+                sourceCueIndex: -1,
+                targetCueIndex: -1,
+                matchLength: 0,
+                offset: -1,
+                offsetIndex: 0
+            });
         });
 
         it("doesn't move cue editing mode to next cue when ENTER is pressed on non-last if out of chunk range",
@@ -1227,7 +1284,14 @@ describe("CueEdit", () => {
                 expect(testingStore.getState().editingCueIndex).toEqual(0);
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
-                expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
+                expect(testingStore.getState().searchReplace.indices).toEqual({
+                    matchedCueIndex: -1,
+                    sourceCueIndex: -1,
+                    targetCueIndex: -1,
+                    matchLength: 0,
+                    offset: -1,
+                    offsetIndex: 0
+                });
             });
 
         it("doesn't move cue editing mode to next cue when ENTER is pressed on non-last if cue is editDisabled",
@@ -1256,7 +1320,14 @@ describe("CueEdit", () => {
                 expect(testingStore.getState().editingCueIndex).toEqual(0);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
-                expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
+                expect(testingStore.getState().searchReplace.indices).toEqual({
+                    matchedCueIndex: -1,
+                    sourceCueIndex: -1,
+                    targetCueIndex: -1,
+                    matchLength: 0,
+                    offset: -1,
+                    offsetIndex: 0
+                });
             });
 
         it("created new cue on ENTER where next cue line/match doest have target cue", () => {
@@ -1291,7 +1362,100 @@ describe("CueEdit", () => {
             // THEN
             expect(testingStore.getState().cues.length).toEqual(3);
             expect(testingStore.getState().editingCueIndex).toEqual(2);
-            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: -1,
+                sourceCueIndex: -1,
+                targetCueIndex: -1,
+                matchLength: 0,
+                offset: -1,
+                offsetIndex: 0
+            });
+        });
+
+        it("doesn't update search and replace indices is matchedCueIndex is not passed", () => {
+            // GIVEN
+            const cues = [
+                { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE", editDisabled: false }
+            ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(0, 1, "Source Cue 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Source Cue 2"), cueCategory: "DIALOGUE" }
+            ] as CueDto[];
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            mount(
+                <Provider store={testingStore} >
+                    <CueEdit
+                        index={0}
+                        cue={cues[0]}
+                        nextCueLine={{ targetCues: [{ index: 1, cue: cues[1] }]}}
+                        setGlossaryTerm={jest.fn()}
+                    />
+                </Provider>
+            );
+
+            // WHEN
+            simulant.fire(document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(2);
+            expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: -1,
+                sourceCueIndex: -1,
+                targetCueIndex: -1,
+                matchLength: 0,
+                offset: -1,
+                offsetIndex: 0
+            });
+        });
+
+        it("highlight search term in cue editor", () => {
+            // GIVEN
+            const cues = [
+                { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Cue Search 2"), cueCategory: "DIALOGUE", editDisabled: false }
+            ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(0, 1, "Source Cue 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Source Cue 2"), cueCategory: "DIALOGUE" }
+            ] as CueDto[];
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("Search") as {} as AnyAction);
+            mount(
+                <Provider store={testingStore} >
+                    <CueEdit
+                        index={0}
+                        cue={cues[0]}
+                        nextCueLine={{ targetCues: [{ index: 1, cue: cues[1] }]}}
+                        matchedCuesIndex={0}
+                        setGlossaryTerm={jest.fn()}
+                    />
+                </Provider>
+            );
+
+            // WHEN
+            simulant.fire(document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(2);
+            expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 1,
+                sourceCueIndex: -1,
+                targetCueIndex: 0,
+                matchLength: 6,
+                offset: 4,
+                offsetIndex: 0
+            });
         });
 
         it("closes cue editing mode when ESCAPE is pressed and search/replace is turned off", () => {
@@ -1313,7 +1477,14 @@ describe("CueEdit", () => {
             // THEN
             expect(testingStore.getState().cues.length).toEqual(1);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
-            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: -1,
+                sourceCueIndex: -1,
+                targetCueIndex: -1,
+                matchLength: 0,
+                offset: -1,
+                offsetIndex: 0
+            });
         });
 
         it("closes cue editing mode when ESCAPE is pressed and search/replace is turned on", () => {
@@ -1337,7 +1508,14 @@ describe("CueEdit", () => {
             // THEN
             expect(testingStore.getState().cues.length).toEqual(1);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
-            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: -1,
+                sourceCueIndex: -1,
+                targetCueIndex: -1,
+                matchLength: 0,
+                offset: -1,
+                offsetIndex: 0
+            });
         });
 
         it("uses source cues times when new cue is inserted via + button", async () => {

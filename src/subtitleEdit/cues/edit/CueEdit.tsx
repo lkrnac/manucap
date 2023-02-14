@@ -59,20 +59,14 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                 || props.nextCueLine.targetCues.length === 0
                 || props.nextCueLine.targetCues[0].cue.editDisabled
                     ? dispatch(addCue(props.index + 1, nextSourceCuesIndexes))
-                    : dispatch(updateEditingCueIndex(
-                        props.index + 1,
-                        props.matchedCuesIndex ? props.matchedCuesIndex + 1 : -1
-                    ));
+                    : dispatch(updateEditingCueIndex(props.index + 1, props.matchedCuesIndex));
         });
     };
 
     useEffect(() => {
         bindCueViewModeKeyboardShortcut();
         Mousetrap.bind([KeyCombination.MOD_SHIFT_ESCAPE, KeyCombination.ALT_SHIFT_ESCAPE],
-            () => dispatch(updateEditingCueIndex(
-                props.index - 1,
-                props.matchedCuesIndex ? props.matchedCuesIndex - 1: -1
-            ))
+            () => dispatch(updateEditingCueIndex(props.index - 1, props.matchedCuesIndex))
         );
 
         // no need for dependencies here since binding kb shortcuts should be done once

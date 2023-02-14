@@ -47,42 +47,51 @@ export const updateEditingCueIndexNoThunk = (dispatch: Dispatch<SubtitleEditActi
     }
 };
 
+const adjustSearchReplaceIndices = (
+    dispatch: Dispatch<SubtitleEditAction>,
+    getState: Function,
+    idx: number,
+    matchedCueIndex?: number
+): void =>  {
+    if (getState().searchReplaceVisible && matchedCueIndex !== undefined && matchedCueIndex > -1) {
+        const targetCues = getState().matchedCues.matchedCues[matchedCueIndex + 1].targetCues;
+        const searchReplace = getState().searchReplace;
+        if (targetCues) {
+            let matchedTargetCueIndex = 0;
+            for (; matchedTargetCueIndex < targetCues.length; matchedTargetCueIndex++) {
+                if (targetCues[matchedTargetCueIndex].index === idx) {
+                    break;
+                }
+            }
+            const targetCue = targetCues[0];
+            const offsets = searchCueText(targetCue.cue.vttCue.text, searchReplace.find, searchReplace.matchCase);
+            const currentIndices = offsets.length > 0
+                ? {
+                    matchedCueIndex: matchedCueIndex + 1,
+                    sourceCueIndex: -1,
+                    targetCueIndex: matchedTargetCueIndex,
+                    matchLength: searchReplace.find.length,
+                    offset: offsets[0],
+                    offsetIndex: 0
+                }
+                : {
+                    matchedCueIndex: matchedCueIndex + 1,
+                    sourceCueIndex: -1,
+                    targetCueIndex: -1,
+                    matchLength: 0,
+                    offset: -1,
+                    offsetIndex: 0
+                };
+
+            dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
+        }
+    }
+};
+
 export const updateEditingCueIndex = (idx: number, matchedCueIndex?: number): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
         updateEditingCueIndexNoThunk(dispatch, idx);
-        if (getState().searchReplaceVisible && matchedCueIndex && matchedCueIndex > -1) {
-            const targetCues = getState().matchedCues.matchedCues[matchedCueIndex].targetCues;
-            if (targetCues) {
-                let matchedTargetCueIndex = 0;
-                for (; matchedTargetCueIndex < targetCues.length; matchedTargetCueIndex++) {
-                    if (targetCues[matchedTargetCueIndex].index === idx) {
-                        break;
-                    }
-                }
-                const targetCue = targetCues[0];
-                const searchReplace = getState().searchReplace;
-                const offsets = searchCueText(targetCue.cue.vttCue.text, searchReplace.find, searchReplace.matchCase);
-                const currentIndices = offsets.length > 0
-                    ? {
-                        matchedCueIndex,
-                        sourceCueIndex: -1,
-                        targetCueIndex: matchedTargetCueIndex,
-                        matchLength: searchReplace.find.length,
-                        offset: offsets[0],
-                        offsetIndex: 0
-                    }
-                    : {
-                        matchedCueIndex,
-                        sourceCueIndex: -1,
-                        targetCueIndex: -1,
-                        matchLength: 0,
-                        offset: -1,
-                        offsetIndex: 0
-                    };
-
-                dispatch(searchReplaceSlice.actions.setIndices(currentIndices));
-            }
-        }
+        adjustSearchReplaceIndices(dispatch, getState, idx, matchedCueIndex);
     };
 
 export const validationErrorSlice = createSlice({
