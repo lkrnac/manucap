@@ -16,10 +16,7 @@ import CueTextEditor from "./CueTextEditor";
 import { Position } from "../cueUtils";
 import PositionButton from "./PositionButton";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import {
-    MockedDebouncedFunction,
-    removeDraftJsDynamicValues
-} from "../../../testUtils/testUtils";
+import { MockedDebouncedFunction, removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { updateCues, updateMatchedCues } from "../cuesList/cuesListActions";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
@@ -288,7 +285,8 @@ describe("CueEdit", () => {
         it("renders for translation task with timecodes unlocked", () => {
             // GIVEN
             testingStore.dispatch(
-                updateEditingTrack({ ...testTranslationTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
+                updateEditingTrack({ ...testTranslationTrack, timecodesUnlocked: true } as Track) as {} as AnyAction
+            );
 
             // noinspection HtmlUnknownAttribute
             const expectedNode = mount(
@@ -745,7 +743,8 @@ describe("CueEdit", () => {
 
             // WHEN
             simulant.fire(
-                document.documentElement, "keydown", { keyCode: Character.ARROW_DOWN, shiftKey: true, altKey: true });
+                document.documentElement, "keydown", { keyCode: Character.ARROW_DOWN, shiftKey: true, altKey: true }
+            );
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
@@ -959,6 +958,7 @@ describe("CueEdit", () => {
             // THEN
             expect(testingStore.getState().cues.length).toEqual(2);
             expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
         });
 
         it("adds cue when on ENTER for last translation cue, " +
@@ -993,6 +993,7 @@ describe("CueEdit", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
         });
 
         it("doesn't add cue when ENTER is pressed on last caption cue out of range of chunk", () => {
@@ -1018,6 +1019,7 @@ describe("CueEdit", () => {
             // THEN
             expect(testingStore.getState().cues.length).toEqual(1);
             expect(testingStore.getState().editingCueIndex).toEqual(0);
+            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
         });
 
         it("adds cue when ENTER is pressed on last caption cue in range of chunk", () => {
@@ -1042,6 +1044,7 @@ describe("CueEdit", () => {
             // THEN
             expect(testingStore.getState().cues.length).toEqual(2);
             expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
         });
 
         it("doesn't add cue when on ENTER for last translation cue, where cue index is smaller than amount " +
@@ -1080,6 +1083,7 @@ describe("CueEdit", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(0);
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
+            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
         });
 
         it("adds cue when on ENTER for last translation cue, where cue index is smaller than amount " +
@@ -1122,6 +1126,7 @@ describe("CueEdit", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
         });
 
         it("adds cue when on ENTER for last translation cue, when there are no more source cues", () => {
@@ -1148,6 +1153,7 @@ describe("CueEdit", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
         });
 
         it("moves cue editing mode to next cue when ENTER is pressed on non-last", () => {
@@ -1182,6 +1188,7 @@ describe("CueEdit", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
         });
 
         it("doesn't move cue editing mode to next cue when ENTER is pressed on non-last if out of chunk range",
@@ -1220,6 +1227,7 @@ describe("CueEdit", () => {
                 expect(testingStore.getState().editingCueIndex).toEqual(0);
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
+                expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
             });
 
         it("doesn't move cue editing mode to next cue when ENTER is pressed on non-last if cue is editDisabled",
@@ -1248,6 +1256,7 @@ describe("CueEdit", () => {
                 expect(testingStore.getState().editingCueIndex).toEqual(0);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+                expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
             });
 
         it("created new cue on ENTER where next cue line/match doest have target cue", () => {
