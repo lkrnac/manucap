@@ -1265,15 +1265,21 @@ describe("CueEdit", () => {
                 { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
                 { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(0, 1, "Source Cue 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Source Cue 2"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 3, "Source Cue 3"), cueCategory: "DIALOGUE" },
+            ] as CueDto[];
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
             testingStore.dispatch(updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
             testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
             mount(
                 <Provider store={testingStore} >
                     <CueEdit
-                        index={0}
-                        cue={cues[0]}
-                        nextCueLine={{ targetCues: [{ index: 1, cue: cues[1] }]}}
+                        index={1}
+                        cue={cues[1]}
+                        nextCueLine={{ targetCues: [], sourceCues: [{ index: 2, cue: sourceCues[2] }]}}
                         setGlossaryTerm={jest.fn()}
                     />
                 </Provider>
@@ -1283,8 +1289,9 @@ describe("CueEdit", () => {
             simulant.fire(document.documentElement, "keydown", { keyCode: Character.ENTER });
 
             // THEN
-            expect(testingStore.getState().cues.length).toEqual(2);
-            expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().cues.length).toEqual(3);
+            expect(testingStore.getState().editingCueIndex).toEqual(2);
+            expect(testingStore.getState().matchedCuesIndex).toBeUndefined();
         });
 
         it("closes cue editing mode when ESCAPE is pressed and search/replace is turned off", () => {
