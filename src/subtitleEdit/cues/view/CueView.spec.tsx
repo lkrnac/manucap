@@ -923,8 +923,6 @@ describe("CueView", () => {
             vttCue: new VTTCue(1, 2, "some text"),
             cueCategory: "DIALOGUE"
         } as CueDto;
-        const cues = [ cue ] as CueDto[];
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
