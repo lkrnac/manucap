@@ -626,9 +626,9 @@ describe("CuesList", () => {
             // THEN
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
-            expect(scrolledElement.outerHTML).toContain("Target Line 0");
-            expect(actualNode.container.outerHTML).toContain("Target Line 0");
-            expect(actualNode.container.outerHTML).toContain("Target Line 49");
+            expect(scrolledElement.outerHTML).toContain("TrgLine0-0TrgLine0-0TrgLine0-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine0-0TrgLine0-0TrgLine0-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine49-0TrgLine49-0TrgLine49-0");
         });
 
         it("renders first page and editing cue 49", () => {
@@ -653,9 +653,9 @@ describe("CuesList", () => {
             // THEN
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
-            expect(scrolledElement.outerHTML).toContain("Target Line 49");
-            expect(actualNode.container.outerHTML).toContain("Target Line 0");
-            expect(actualNode.container.outerHTML).toContain("Target Line 49");
+            expect(scrolledElement.outerHTML).toContain("TrgLine49-0TrgLine49-0TrgLine49-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine0-0TrgLine0-0TrgLine0-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine49-0TrgLine49-0TrgLine49-0");
         });
 
         it("renders second page and editing cue 50", () => {
@@ -680,9 +680,9 @@ describe("CuesList", () => {
             // THEN
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
-            expect(scrolledElement.outerHTML).toContain("Target Line 50");
-            expect(actualNode.container.outerHTML).toContain("Target Line 50");
-            expect(actualNode.container.outerHTML).toContain("Target Line 99");
+            expect(scrolledElement.outerHTML).toContain("TrgLine50-0TrgLine50-0TrgLine50-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine50-0TrgLine50-0TrgLine50-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine99-0TrgLine99-0TrgLine99-0");
         });
 
         it("renders third page and editing cue 111", () => {
@@ -707,9 +707,9 @@ describe("CuesList", () => {
             // THEN
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
-            expect(scrolledElement.outerHTML).toContain("Target Line 111");
-            expect(actualNode.container.outerHTML).toContain("Target Line 100");
-            expect(actualNode.container.outerHTML).toContain("Target Line 119");
+            expect(scrolledElement.outerHTML).toContain("TrgLine111-0TrgLine111-0TrgLine111-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine100-0TrgLine100-0TrgLine100-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine129-0TrgLine129-0TrgLine129-0");
         });
     });
 
@@ -736,9 +736,9 @@ describe("CuesList", () => {
             // THEN
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
-            expect(scrolledElement.outerHTML).toContain("Target Line 0");
-            expect(actualNode.container.outerHTML).toContain("Target Line 0");
-            expect(actualNode.container.outerHTML).toContain("Target Line 49");
+            expect(scrolledElement.outerHTML).toContain("TrgLine0-0TrgLine0-0TrgLine0-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine0-0TrgLine0-0TrgLine0-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine49-0TrgLine49-0TrgLine49-0");
         });
 
         it("renders first page and focused cue 49", () => {
@@ -763,9 +763,9 @@ describe("CuesList", () => {
             // THEN
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
-            expect(scrolledElement.outerHTML).toContain("Target Line 49");
-            expect(actualNode.container.outerHTML).toContain("Target Line 0");
-            expect(actualNode.container.outerHTML).toContain("Target Line 49");
+            expect(scrolledElement.outerHTML).toContain("TrgLine49-0TrgLine49-0TrgLine49-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine0-0TrgLine0-0TrgLine0-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine49-0TrgLine49-0TrgLine49-0");
         });
 
         it("renders second page and focused cue 50", () => {
@@ -790,9 +790,9 @@ describe("CuesList", () => {
             // THEN
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
-            expect(scrolledElement.outerHTML).toContain("Target Line 50");
-            expect(actualNode.container.outerHTML).toContain("Target Line 50");
-            expect(actualNode.container.outerHTML).toContain("Target Line 99");
+            expect(scrolledElement.outerHTML).toContain("TrgLine50-0TrgLine50-0TrgLine50-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine50-0TrgLine50-0TrgLine50-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine99-0TrgLine99-0TrgLine99-0");
         });
 
         it("renders third page and focused cue 111", () => {
@@ -817,9 +817,9 @@ describe("CuesList", () => {
             // THEN
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
-            expect(scrolledElement.outerHTML).toContain("Target Line 111");
-            expect(actualNode.container.outerHTML).toContain("Target Line 100");
-            expect(actualNode.container.outerHTML).toContain("Target Line 119");
+            expect(scrolledElement.outerHTML).toContain("TrgLine111-0TrgLine111-0TrgLine111-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine100-0TrgLine100-0TrgLine100-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine119-0TrgLine119-0TrgLine119-0");
         });
     });
 
@@ -1237,7 +1237,7 @@ describe("CuesList", () => {
             // THEN
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
-            expect(scrolledElement.outerHTML).toContain("Target Line 50");
+            expect(scrolledElement.outerHTML).toContain("TrgLine50-0TrgLine50-0TrgLine50-0");
         });
     });
 });
