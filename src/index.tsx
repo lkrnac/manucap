@@ -241,6 +241,7 @@ const TestApp = (): ReactElement => {
                 });
             }
             targetCues.push({
+                id: "aa-bb" + idx,
                 vttCue: new VTTCue(randomStart, randomEnd, text),
                 cueCategory: "DIALOGUE",
                 editDisabled: !withinChunkRange,
@@ -339,6 +340,13 @@ const TestApp = (): ReactElement => {
                     }, 500
                 );
                 return;
+            }}
+            onUpdateCue={(trackCue): Promise<CueDto> => {
+                const promiseMs = Math.floor(randomTime(5) * 1000);
+                return new Promise((resolve) => setTimeout(() => resolve(trackCue.cue), promiseMs));
+            }}
+            onDeleteCue={(trackCue): Promise<string> => {
+                return new Promise((resolve) => setTimeout(() => resolve(trackCue.cueId), 1000));
             }}
             onComplete={(): void => undefined}
             onExportSourceFile={(): void => undefined}
