@@ -13,13 +13,12 @@ import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { fireEvent, render } from "@testing-library/react";
-// import { replaceCurrentMatch, searchReplaceSlice } from "../searchReplace/searchReplaceSlices";
+import { replaceCurrentMatch, searchReplaceSlice } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateEditingCueIndex } from "./cueEditorSlices";
 import { matchedCuesSlice } from "../cuesList/cuesListSlices";
 import { Replacement, SpellCheck } from "../spellCheck/model";
-// import { SearchReplaceMatches } from "../searchReplace/model";
 
 let testingStore = createTestingStore();
 
@@ -220,56 +219,59 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(2);
     });
 
-    // it("updates cue in redux for single match/replace when unmounted for next match - single", (done) => {
-    //     // GIVEN
-    //     testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
-    //     const saveTrack = jest.fn();
-    //     testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-    //     const searchReplaceMatches = {
-    //         offsets: [10],
-    //         offsetIndex: 0,
-    //         matchLength: 4
-    //     } as SearchReplaceMatches;
-    //     testingStore.dispatch(searchReplaceSlice.actions.setMatches(searchReplaceMatches));
-    //     const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
-    //     const editUuid = testingStore.getState().cues[0].editUuid;
-    //     const actualNode = render(
-    //         <Provider store={testingStore}>
-    //             <CueTextEditor
-    //                 index={0}
-    //                 vttCue={vttCue}
-    //                 editUuid={editUuid}
-    //                 bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
-    //                 unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-    //                 setGlossaryTerm={jest.fn()}
-    //                 autoFocus
-    //             />
-    //         </Provider>
-    //     );
-    //     act(() => {
-    //         testingStore.dispatch(replaceCurrentMatch("abcd efg") as {} as AnyAction);
-    //     });
-    //     testingStore.dispatch(matchedCuesSlice.actions
-    //         .matchCuesByTime({ cues, sourceCues: [], editingCueIndex: 0 })
-    //     );
-    //
-    //     // WHEN
-    //     actualNode.unmount();
-    //
-    //     // THEN
-    //     setTimeout(
-    //         () => {
-    //             expect(saveTrack).toHaveBeenCalledTimes(1);
-    //             expect(testingStore.getState().cues[0].vttCue.text)
-    //                 .toEqual("some <i>HTML</i> <b>abcd efg</b> sample");
-    //             expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.vttCue.text)
-    //                 .toEqual("some <i>HTML</i> <b>abcd efg</b> sample");
-    //             expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(2);
-    //             done();
-    //         },
-    //         3000
-    //     );
-    // });
+    it("updates cue in redux for single match/replace when unmounted for next match - single", (done) => {
+        // GIVEN
+        testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+        const saveTrack = jest.fn();
+        testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        const searchReplaceMatches = {
+            matchedCueIndex: 0,
+            sourceCueIndex: 9007199254740991,
+            targetCueIndex: 0,
+            offset: 10,
+            offsetIndex: 0,
+            matchLength: 4
+        };
+        testingStore.dispatch(searchReplaceSlice.actions.setIndices(searchReplaceMatches));
+        const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
+        const editUuid = testingStore.getState().cues[0].editUuid;
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueTextEditor
+                    index={0}
+                    vttCue={vttCue}
+                    editUuid={editUuid}
+                    bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                    unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                    setGlossaryTerm={jest.fn()}
+                    autoFocus
+                />
+            </Provider>
+        );
+        act(() => {
+            testingStore.dispatch(replaceCurrentMatch("abcd efg") as {} as AnyAction);
+        });
+        testingStore.dispatch(matchedCuesSlice.actions
+            .matchCuesByTime({ cues, sourceCues: [], editingCueIndex: 0 })
+        );
+
+        // WHEN
+        actualNode.unmount();
+
+        // THEN
+        setTimeout(
+            () => {
+                expect(saveTrack).toHaveBeenCalledTimes(1);
+                expect(testingStore.getState().cues[0].vttCue.text)
+                    .toEqual("some <i>HTML</i> <b>abcd efg</b> sample");
+                expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.vttCue.text)
+                    .toEqual("some <i>HTML</i> <b>abcd efg</b> sample");
+                expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(2);
+                done();
+            },
+            3000
+        );
+    });
 
     it("doesn't update cue in redux when unmounted if no change to text", () => {
         // GIVEN
