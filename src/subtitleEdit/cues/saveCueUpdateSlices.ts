@@ -6,7 +6,6 @@ import { checkSaveStateAndSave, saveActionSlice, SaveState, setAutoSaveSuccess }
 import { AppThunk } from "../subtitleEditReducers";
 import { cuesSlice } from "./cuesList/cuesListSlices";
 import { editingTrackSlice } from "../trackSlices";
-import { AnyAction } from "redux";
 
 const DEBOUNCE_TIMEOUT = 2500;
 
@@ -112,7 +111,7 @@ const saveCueUpdateCurrent = (
 const saveCueUpdateDebounced = debounce(saveCueUpdateCurrent, DEBOUNCE_TIMEOUT, { leading: false, trailing: true });
 
 export const callSaveCueUpdate = (cueIndex: number): AppThunk =>
-    (dispatch: Dispatch<AnyAction | PayloadAction<SubtitleEditAction | undefined> | void>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | undefined> | void>, getState): void => {
     const cue = getState().cues[cueIndex];
     if (cue) {
         const cueId = cue.addId ? cue.addId : cue.id;

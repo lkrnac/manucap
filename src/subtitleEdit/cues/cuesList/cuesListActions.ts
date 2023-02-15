@@ -159,12 +159,16 @@ export const updateMatchedCues = (): AppThunk =>
         ));
     };
 
-export const checkSpelling = createAsyncThunk(
+export const checkSpelling = createAsyncThunk<
+        void,
+        { index: number },
+        { state: SubtitleEditState }
+    >(
     "validations/checkSpelling",
-    async ({ index }: { index: number },
+    async ({ index },
            thunkApi) => {
         if (index !== undefined) {
-            const state: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
+            const state = thunkApi.getState();
             const currentCue = state.cues[index];
             const oldErrorsCount = currentCue.errors?.length || 0;
             const cueErrors = conformToSpelling(currentCue);
@@ -172,18 +176,21 @@ export const checkSpelling = createAsyncThunk(
                 { index: index, errors: cueErrors } as CueErrorsPayload));
             if (cueErrors.length !== oldErrorsCount) {
                 updateMatchedCue(thunkApi.dispatch, state, index);
-                // @ts-ignore TODO fix this
                 thunkApi.dispatch(callSaveCueUpdate(index));
             }
         }
     });
 
-export const checkErrors = createAsyncThunk(
+export const checkErrors = createAsyncThunk<
+        void,
+        { index: number; shouldSpellCheck: boolean },
+        { state: SubtitleEditState }
+    >(
     "validations/checkErrors",
-    async ({ index, shouldSpellCheck }: { index: number; shouldSpellCheck: boolean },
-           thunkApi): Promise<void> => {
+    async ({ index, shouldSpellCheck },
+           thunkApi) => {
         if (index !== undefined) {
-            const state: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
+            const state = thunkApi.getState();
             const subtitleSpecification = state.subtitleSpecifications;
             const overlapEnabled = state.editingTrack?.overlapEnabled;
             const cues = state.cues;
@@ -202,7 +209,6 @@ export const checkErrors = createAsyncThunk(
                 { index: index, errors: cueErrors } as CueErrorsPayload));
             if (cueErrors.length !== oldErrorsCount) {
                 updateMatchedCue(thunkApi.dispatch, state, index);
-                // @ts-ignore TODO fix this
                 thunkApi.dispatch(callSaveCueUpdate(index));
             }
         }
@@ -362,10 +368,14 @@ export const removeIgnoredSpellcheckedMatchesFromAllCues = (): AppThunk =>
         }
     };
 
-export const validateCorruptedCues = createAsyncThunk(
+export const validateCorruptedCues = createAsyncThunk<
+        void,
+        string,
+        { state: SubtitleEditState }
+    >(
     "validations/validateCorruptedCues",
-    async (matchText: string, thunkAPI) => {
-        const state: SubtitleEditState = thunkAPI.getState() as SubtitleEditState;
+    async (matchText, thunkAPI) => {
+        const state: SubtitleEditState = thunkAPI.getState();
         const cues = state.cues;
         cues.filter(cue => cue.errors
             && cue.vttCue.text.includes(matchText)).forEach((cue: CueDto) => {
