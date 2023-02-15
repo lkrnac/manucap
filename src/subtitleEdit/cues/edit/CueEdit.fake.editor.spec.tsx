@@ -79,7 +79,7 @@ describe("CueEdit", () => {
             // render(
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CueEdit index={1} cue={cue} setGlossaryTerm={jest.fn()} />
+                    <CueEdit index={1} cue={cue} setGlossaryTerm={jest.fn()} matchedCuesIndex={0} />
                 </Provider>
             );
 
@@ -107,7 +107,7 @@ describe("CueEdit", () => {
             // render(
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CueEdit index={1} cue={cue} setGlossaryTerm={jest.fn()} />
+                    <CueEdit index={1} cue={cue} setGlossaryTerm={jest.fn()} matchedCuesIndex={1} />
                 </Provider>
             );
 

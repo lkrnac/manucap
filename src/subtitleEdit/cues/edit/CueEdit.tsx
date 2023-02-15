@@ -19,7 +19,7 @@ import { Tooltip } from "primereact/tooltip";
 export interface CueEditProps {
     index: number;
     cue: CueDto;
-    matchedCuesIndex?: number;
+    matchedCuesIndex: number;
     nextCueLine?: CueLineDto;
     glossaryTerm?: string;
     setGlossaryTerm: (glossaryTerm?: string) => void;
@@ -59,14 +59,20 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                 || props.nextCueLine.targetCues.length === 0
                 || props.nextCueLine.targetCues[0].cue.editDisabled
                     ? dispatch(addCue(props.index + 1, nextSourceCuesIndexes))
-                    : dispatch(updateEditingCueIndex(props.index + 1, props.matchedCuesIndex));
+                    : dispatch(updateEditingCueIndex(
+                        props.index + 1,
+                        props.matchedCuesIndex > -1 ? props.matchedCuesIndex + 1 : -1
+                    ));
         });
     };
 
     useEffect(() => {
         bindCueViewModeKeyboardShortcut();
         Mousetrap.bind([KeyCombination.MOD_SHIFT_ESCAPE, KeyCombination.ALT_SHIFT_ESCAPE],
-            () => dispatch(updateEditingCueIndex(props.index - 1, props.matchedCuesIndex))
+            () => dispatch(updateEditingCueIndex(
+                props.index - 1,
+                props.matchedCuesIndex > -1 ? props.matchedCuesIndex - 1 : -1
+            ))
         );
 
         // no need for dependencies here since binding kb shortcuts should be done once

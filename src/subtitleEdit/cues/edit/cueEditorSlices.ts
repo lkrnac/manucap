@@ -54,7 +54,7 @@ const adjustSearchReplaceIndices = (
     matchedCueIndex?: number
 ): void =>  {
     if (getState().searchReplaceVisible && matchedCueIndex !== undefined && matchedCueIndex > -1) {
-        const targetCues = getState().matchedCues.matchedCues[matchedCueIndex + 1].targetCues;
+        const targetCues = getState().matchedCues.matchedCues[matchedCueIndex].targetCues;
         const searchReplace = getState().searchReplace;
         if (targetCues) {
             let matchedTargetCueIndex = 0;
@@ -67,7 +67,7 @@ const adjustSearchReplaceIndices = (
             const offsets = searchCueText(targetCue.cue.vttCue.text, searchReplace.find, searchReplace.matchCase);
             const currentIndices = offsets.length > 0
                 ? {
-                    matchedCueIndex: matchedCueIndex + 1,
+                    matchedCueIndex,
                     sourceCueIndex: -1,
                     targetCueIndex: matchedTargetCueIndex,
                     matchLength: searchReplace.find.length,
@@ -75,7 +75,7 @@ const adjustSearchReplaceIndices = (
                     offsetIndex: 0
                 }
                 : {
-                    matchedCueIndex: matchedCueIndex + 1,
+                    matchedCueIndex,
                     sourceCueIndex: -1,
                     targetCueIndex: -1,
                     matchLength: 0,
