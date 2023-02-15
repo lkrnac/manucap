@@ -82,6 +82,7 @@ describe("CueEdit", () => {
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
     });
 
+    // TODO: this treting section is almost all the test cases, we really need to granulate it further
     describe("major use cases", () => {
 
         it("renders for caption task", () => {
@@ -1381,7 +1382,7 @@ describe("CueEdit", () => {
             });
         });
 
-        it("doesn't update search and replace indices is matchedCueIndex is not set", () => {
+        it("doesn't update search and replace indices if matchedCueIndex is not set when hitting ENTER", () => {
             // GIVEN
             const cues = [
                 { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
@@ -1424,7 +1425,7 @@ describe("CueEdit", () => {
             });
         });
 
-        it("highlight search term in cue editor", () => {
+        it("highlight search term in cue editor when next cue is opened via ENTER", () => {
             // GIVEN
             const cues = [
                 { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
@@ -1615,6 +1616,96 @@ describe("CueEdit", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(1);
         });
 
+        it("doesn't update search indices if matchedCueIndex is not set when hitting CTRL+SHIFT+ESCAPE", () => {
+            // GIVEN
+            const cues = [
+                { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE", editDisabled: false }
+            ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(0, 1, "Source Cue 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Source Cue 2"), cueCategory: "DIALOGUE" }
+            ] as CueDto[];
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            mount(
+                <Provider store={testingStore} >
+                    <CueEdit
+                        index={1}
+                        cue={cues[1]}
+                        nextCueLine={{ targetCues: [{ index: 0, cue: cues[0] }]}}
+                        setGlossaryTerm={jest.fn()}
+                        matchedCuesIndex={-1}
+                    />
+                </Provider>
+            );
+
+            // WHEN
+            simulant.fire(
+                document.documentElement, "keydown", { keyCode: Character.ESCAPE, shiftKey: true, altKey: true });
+
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(2);
+            expect(testingStore.getState().editingCueIndex).toEqual(0);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: -1,
+                sourceCueIndex: -1,
+                targetCueIndex: -1,
+                matchLength: 0,
+                offset: -1,
+                offsetIndex: 0
+            });
+        });
+
+        it("highlight search term in cue editor when previous cue is opened via CTRL+SHIFT+ESCAPE", () => {
+            // GIVEN
+            const cues = [
+                { vttCue: new VTTCue(0, 1, "Cue Search 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE", editDisabled: false }
+            ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(0, 1, "Source Cue 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Source Cue 2"), cueCategory: "DIALOGUE" }
+            ] as CueDto[];
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("Search") as {} as AnyAction);
+            mount(
+                <Provider store={testingStore} >
+                    <CueEdit
+                        index={1}
+                        cue={cues[1]}
+                        nextCueLine={{ targetCues: [{ index: 0, cue: cues[0] }]}}
+                        matchedCuesIndex={1}
+                        setGlossaryTerm={jest.fn()}
+                    />
+                </Provider>
+            );
+
+            // WHEN
+            simulant.fire(
+                document.documentElement, "keydown", { keyCode: Character.ESCAPE, shiftKey: true, altKey: true });
+
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(2);
+            expect(testingStore.getState().editingCueIndex).toEqual(0);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 0,
+                sourceCueIndex: -1,
+                targetCueIndex: 0,
+                matchLength: 6,
+                offset: 4,
+                offsetIndex: 0
+            });
+        });
+
+        // TODO: We really need to put more effort to explain test/use case in user terms
         it("edits last cue startTime(currentPlayerTime) and endTime(currentPlayerTime + 3) on ALT+SHIFT+UP", () => {
             // GIVEN
             const cues = [
