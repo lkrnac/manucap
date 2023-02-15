@@ -29,7 +29,7 @@ const ClickCueWrapper = (props: CueViewProps): ReactElement => {
                     } else if (!props.editDisabled) {
                         dispatch(updateEditingCueIndex(
                             props.targetCueIndex,
-                            props.matchedCueIndex ? props.matchedCueIndex: -1
+                            props.matchedCueIndex !== undefined ? props.matchedCueIndex : -1
                         ));
                     }
                 } else {
