@@ -13,7 +13,7 @@ import { updateEditingTrack } from "../../trackSlices";
 import ToggleButton from "../../toolbox/ToggleButton";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { matchedCuesSlice } from "../cuesList/cuesListSlices";
-import { createTestingMatchedCues } from "../cuesList/cuesListTestUtils.spec";
+import { createTestingMatchedCues } from "../cuesList/cuesListTestUtils";
 
 let testingStore = createTestingStore();
 

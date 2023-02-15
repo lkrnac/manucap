@@ -18,7 +18,7 @@ import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import AddCueLineButton from "../edit/AddCueLineButton";
 import { matchedCuesSlice } from "./cuesListSlices";
 import CueListToolbar from "../../CueListToolbar";
-import { createTestingMatchedCues, createTestingSourceCues, createTestingTargetCues } from "./cuesListTestUtils.spec";
+import { createTestingMatchedCues, createTestingSourceCues, createTestingTargetCues } from "./cuesListTestUtils";
 
 const scrollIntoViewCallsTracker = jest.fn();
 
