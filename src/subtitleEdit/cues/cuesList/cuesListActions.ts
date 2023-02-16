@@ -355,8 +355,6 @@ export const validateVttCue = (idx: number): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
         validateCue(dispatch, idx, false);
         updateMatchedCue(dispatch, getState(), idx);
-        // TODO this is called for all cues when first open, change to save track instead
-        dispatch(callSaveCueUpdate(idx));
     };
 
 export const removeIgnoredSpellcheckedMatchesFromAllCues = (): AppThunk =>

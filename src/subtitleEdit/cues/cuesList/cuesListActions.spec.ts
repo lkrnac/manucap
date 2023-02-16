@@ -34,10 +34,12 @@ import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import * as cueEditorSlices from "../edit/cueEditorSlices";
 import { clearLastCueChange, lastCueChangeSlice, updateEditingCueIndex } from "../edit/cueEditorSlices";
-import { SaveState } from "../saveSlices";
+import {SaveState, setSaveTrack} from "../saveSlices";
 import { cuesSlice, matchedCuesSlice, ShiftPosition } from "./cuesListSlices";
 import * as cuesListScrollSlice from "./cuesListScrollSlice";
 import { showSearchReplace } from "../searchReplace/searchReplaceSlices";
+import {saveCueUpdateSlice} from "../saveCueUpdateSlices";
+import {saveCueDeleteSlice} from "../saveCueDeleteSlices";
 
 const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
 const updateSearchMatchesSpy = jest.spyOn(cueEditorSlices, "updateSearchMatches");
@@ -57,10 +59,10 @@ const testingChunkTrack = {
 } as Track;
 
 const testingCues = [
-    { id: "1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-    { id: "2", vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+    { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+    { id: "cue-2", vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
     {
-        id: "3",
+        id: "cue-3",
         vttCue: new VTTCue(4, 6, "Caption Line 3"),
         cueCategory: "ONSCREEN_TEXT",
         spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
@@ -75,12 +77,19 @@ const testComments = [
 
 const testingCuesWithComments = [
     {
+        id: "cue-c-1",
         vttCue: new VTTCue(0, 2, "Caption Line 1"),
         cueCategory: "DIALOGUE",
         comments: [testComments[0], testComments[1]]
     },
-    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT", comments: [testComments[2]]},
     {
+        id: "cue-c-1",
+        vttCue: new VTTCue(2, 4, "Caption Line 2"),
+        cueCategory: "ONSCREEN_TEXT",
+        comments: [testComments[2]]
+    },
+    {
+        id: "cue-c-1",
         vttCue: new VTTCue(4, 6, "Caption Line 3"),
         cueCategory: "ONSCREEN_TEXT",
         spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
@@ -88,9 +97,15 @@ const testingCuesWithComments = [
 ] as CueDto[];
 
 const testingCuesEditDisabled = [
-    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", editDisabled: true },
-    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
     {
+        id: "cue-e-1",
+        vttCue: new VTTCue(0, 2, "Caption Line 1"),
+        cueCategory: "DIALOGUE",
+        editDisabled: true
+    },
+    { id: "cue-e-1", vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+    {
+        id: "cue-e-1",
         vttCue: new VTTCue(4, 6, "Caption Line 3"),
         cueCategory: "ONSCREEN_TEXT",
         spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
@@ -98,9 +113,9 @@ const testingCuesEditDisabled = [
 ] as CueDto[];
 
 const testingCuesWithGaps = [
-    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-    { vttCue: new VTTCue(4, 6, "Caption Line 2"), cueCategory: "DIALOGUE" },
-    { vttCue: new VTTCue(12, 18, "Caption Line 3"), cueCategory: "DIALOGUE" },
+    { id: "cue-g-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+    { id: "cue-g-1", vttCue: new VTTCue(4, 6, "Caption Line 2"), cueCategory: "DIALOGUE" },
+    { id: "cue-g-1", vttCue: new VTTCue(12, 18, "Caption Line 3"), cueCategory: "DIALOGUE" },
 ] as CueDto[];
 const ruleId = "MORFOLOGIK_RULE_EN_US";
 const ignoredKeyword = "falsex";
@@ -108,11 +123,29 @@ const ignoredKeyword = "falsex";
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
 
+jest.mock("lodash", () => ({
+    debounce: (callback: Function): Function => callback,
+    sortBy: jest.requireActual("lodash/sortBy"),
+    findIndex: jest.requireActual("lodash/findIndex"),
+    findLastIndex: jest.requireActual("lodash/findLastIndex"),
+    remove: jest.requireActual("lodash/remove")
+}));
+
+const updateCueMock = jest.fn();
+const deleteCueMock = jest.fn();
+const saveTrackMock = jest.fn();
+
 describe("cueSlices", () => {
     beforeEach(() => {
+        localStorage.clear();
         testingStore = createTestingStore();
+        // @ts-ignore mocking here
+        testingStore.dispatch(setSaveTrack(saveTrackMock));
+        testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueMock));
+        testingStore.dispatch(saveCueDeleteSlice.actions.setDeleteCueCallback(deleteCueMock));
         jest.clearAllMocks();
     });
+
     describe("updateVttCue", () => {
         it("update top level cue", () => {
             // GIVEN
@@ -133,9 +166,12 @@ describe("cueSlices", () => {
             expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
             expect(testingStore.getState().cues[1].vttCue === testingStore.getState().lastCueChange.vttCue)
                 .toBeTruthy();
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
+            expect(updateCueMock).toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("preserves all other existing cue parameters", () => {
@@ -151,6 +187,9 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
             expect(testingStore.getState().cues[2].spellCheck)
                 .toEqual({ matches: [{ message: "some-spell-check-problem" }]});
+            expect(updateCueMock).toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("doesn't update top level cue when editUuid is different", () => {
@@ -167,6 +206,9 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
             expect(testingStore.getState().validationErrors).toEqual([]);
             expect(testingStore.getState().lastCueChange).toBeNull();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("doesn't update top level cue when not existing already in the array", () => {
@@ -177,15 +219,13 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues.length).toEqual(0);
             expect(testingStore.getState().validationErrors).toEqual([]);
             expect(testingStore.getState().lastCueChange).toBeNull();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         describe("spell checking", () => {
             const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
-            beforeEach(() => {
-                localStorage.clear();
-                testingStore = createTestingStore();
-                jest.clearAllMocks();
-            });
 
             it("updates cues in redux with spell checking state", async () => {
                 // GIVEN
@@ -1616,11 +1656,14 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().lastCueChange.changeType).toEqual("UPDATE_ALL");
                 expect(testingStore.getState().lastCueChange.index).toEqual(-1);
                 expect(testingStore.getState().lastCueChange.vttCue).toBeUndefined();
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
                 expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
                 expect(testingStore.getState().editingCueIndex).toEqual(1);
                 expect(testingStore.getState().focusedInput).toEqual("START_TIME");
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("don't reorder cues if cue position doesn't change when editing start time", () => {
@@ -1647,11 +1690,14 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
                 expect(testingStore.getState().cues[2].vttCue === testingStore.getState().lastCueChange.vttCue)
                     .toBeTruthy();
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
                 expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
                 expect(testingStore.getState().editingCueIndex).toEqual(2);
                 expect(testingStore.getState().focusedInput).toEqual("EDITOR");
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
         });
 
@@ -1680,11 +1726,14 @@ describe("cueSlices", () => {
             expect(testingStore.getState().lastCueChange.changeType).toEqual("UPDATE_ALL");
             expect(testingStore.getState().lastCueChange.index).toEqual(-1);
             expect(testingStore.getState().lastCueChange.vttCue).toBeUndefined();
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(4);
             expect(testingStore.getState().editingCueIndex).toEqual(1);
             expect(testingStore.getState().focusedInput).toEqual("START_TIME");
+            expect(updateCueMock).toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
     });
 
@@ -1692,10 +1741,10 @@ describe("cueSlices", () => {
         it("mark cue as corrupted if it doesn't conform to rules", () => {
             // GIVEN
             const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(5, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { id: "cue-2", vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { id: "cue-3", vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
+                { id: "cue-4", vttCue: new VTTCue(5, 8, "Caption 4"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
             const testingSubtitleSpecification = {
                 maxLinesPerCaption: 2,
@@ -1714,22 +1763,27 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].errors).toEqual(
                 [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP]);
             expect(testingStore.getState().cues[3].errors).toEqual([CueError.TIME_GAP_OVERLAP]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(testingStore.getState().matchedCues.matchedCues["0"].targetCues["0"].cue.errors).toBeUndefined();
             expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors).toBeUndefined();
             expect(testingStore.getState().matchedCues.matchedCues["2"].targetCues["0"].cue.errors).toEqual(
                 [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP]);
             expect(testingStore.getState().matchedCues.matchedCues["3"].targetCues["0"].cue.errors).toBeUndefined();
+            expect(updateCueMock).toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("does not mark cues as corrupted if maxCharactersPerLine is null", () => {
             // GIVEN
             const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Long 1"),
+                    cueCategory: "DIALOGUE" },
+                { id: "cue-2", vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { id: "cue-3", vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"),
+                    cueCategory: "DIALOGUE" },
+                { id: "cue-4", vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
             const testingSubtitleSpecification = {
                 maxLinesPerCaption: 2,
@@ -1748,17 +1802,22 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("does not mark cues as corrupted if maxCharactersPerLine is 0", () => {
             // GIVEN
             const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Long 1"),
+                    cueCategory: "DIALOGUE" },
+                { id: "cue-2", vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { id: "cue-3", vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"),
+                    cueCategory: "DIALOGUE" },
+                { id: "cue-4", vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
             const testingSubtitleSpecification = {
                 maxLinesPerCaption: 2,
@@ -1777,17 +1836,28 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("does trigger autosave if errors count is different", () => {
             // GIVEN
             const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+                {
+                    id: "cue-c-1",
+                    vttCue: new VTTCue(0, 2, "Caption Long 1"),
+                    cueCategory: "DIALOGUE"
+                },
+                { id: "cue-c-2", vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                {
+                    id: "cue-c-3",
+                    vttCue: new VTTCue(4, 6, "Caption Long\nLine 2\nLine 3"),
+                    cueCategory: "DIALOGUE"
+                },
+                { id: "cue-c-4", vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
             const testingSubtitleSpecification = {
                 maxLinesPerCaption: 2,
@@ -1803,18 +1873,25 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[0].errors).toBeUndefined();
             expect(testingStore.getState().cues[1].errors).toEqual([]);
-            expect(testingStore.getState().cues[2].errors).toEqual([]);
+            expect(testingStore.getState().cues[2].errors).toEqual(["Max Lines Per Caption Exceeded"]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("marks cue as corrupted if chars per second max is exceeded", () => {
             // GIVEN
             const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "line with too many characters per second."), cueCategory: "DIALOGUE" },
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                {
+                    id: "cue-2",
+                    vttCue: new VTTCue(2, 4, "line with too many characters per second."),
+                    cueCategory: "DIALOGUE"
+                },
             ] as CueDto[];
             const testingSubtitleSpecification = {
                 maxCharactersPerSecondPerCaption: 20,
@@ -1830,15 +1907,22 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].errors).toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors)
                 .toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("marks cue as corrupted if chars per second max is exceeded in multiple lines", () => {
             // GIVEN
             const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "line with too many \ncharacters \nper second."), cueCategory: "DIALOGUE" },
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                {
+                    id: "cue-2",
+                    vttCue: new VTTCue(2, 4, "line with too many \ncharacters \nper second."),
+                    cueCategory: "DIALOGUE"
+                },
             ] as CueDto[];
             const testingSubtitleSpecification = {
                 maxCharactersPerSecondPerCaption: 20,
@@ -1854,15 +1938,22 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].errors).toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors)
                 .toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("marks cue as corrupted if chars per second max and chars per line are exceeded", () => {
             // GIVEN
             const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "line with too many characters per second."), cueCategory: "DIALOGUE" },
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                {
+                    id: "cue-2",
+                    vttCue: new VTTCue(2, 4, "line with too many characters per second."),
+                    cueCategory: "DIALOGUE"
+                },
             ] as CueDto[];
             const testingSubtitleSpecification = {
                 maxCharactersPerLine: 15,
@@ -1880,15 +1971,22 @@ describe("cueSlices", () => {
                 [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.CHARS_PER_SECOND_EXCEEDED]);
             expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors)
                 .toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.CHARS_PER_SECOND_EXCEEDED]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("marks cue as corrupted if chars per second max and lines per caption are exceeded", () => {
             // GIVEN
             const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "line with\ntoo many\ncharacters per second."), cueCategory: "DIALOGUE" },
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                {
+                    id: "cue-2",
+                    vttCue: new VTTCue(2, 4, "line with\ntoo many\ncharacters per second."),
+                    cueCategory: "DIALOGUE"
+                },
             ] as CueDto[];
             const testingSubtitleSpecification = {
                 maxLinesPerCaption: 2,
@@ -1907,15 +2005,22 @@ describe("cueSlices", () => {
                 [CueError.LINE_COUNT_EXCEEDED, CueError.CHARS_PER_SECOND_EXCEEDED]);
             expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors)
                 .toEqual([CueError.LINE_COUNT_EXCEEDED, CueError.CHARS_PER_SECOND_EXCEEDED]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("doesn't mark cue as corrupted if chars per second max is not exceeded", () => {
             // GIVEN
             const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "line with many characters, but not too many"), cueCategory: "DIALOGUE" },
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                {
+                    id: "cue-2",
+                    vttCue: new VTTCue(2, 4, "line with many characters, but not too many"),
+                    cueCategory: "DIALOGUE"
+                },
             ] as CueDto[];
             const testingSubtitleSpecification = {
                 maxCharactersPerSecondPerCaption: 40,
@@ -1930,15 +2035,19 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("ignores max chars per second if null in subtitle specs", () => {
             // GIVEN
             const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "line with too many characters per second"), cueCategory: "DIALOGUE" },
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                { id: "cue-2", vttCue: new VTTCue(2, 4, "line with too many characters per second"),
+                    cueCategory: "DIALOGUE" },
             ] as CueDto[];
             const testingSubtitleSpecification = {
                 enabled: true,
@@ -1953,15 +2062,19 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("ignores max chars per second if subtitle specs are disabled", () => {
             // GIVEN
             const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "line with too many characters per second"), cueCategory: "DIALOGUE" },
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                { id: "cue-2", vttCue: new VTTCue(2, 4, "line with too many characters per second"),
+                    cueCategory: "DIALOGUE" },
             ] as CueDto[];
             const testingSubtitleSpecification = {
                 enabled: false,
@@ -1976,15 +2089,18 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("do not count HTML tags into max chars per second limitation", () => {
             // GIVEN
             const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4,
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
+                { id: "cue-2", vttCue: new VTTCue(2, 4,
                         "line with <i>too</i> many <b>characters</b> per second"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
             const testingSubtitleSpecification = {
@@ -2000,8 +2116,11 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
     });
 
@@ -2009,10 +2128,10 @@ describe("cueSlices", () => {
         it("does not trigger autosave if error count is the same", () => {
             // GIVEN
             const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { id: "cue-2", vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { id: "cue-3", vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
+                { id: "cue-4", vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
             const testingSubtitleSpecification = {
                 maxLinesPerCaption: 2,
@@ -2033,6 +2152,9 @@ describe("cueSlices", () => {
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
     });
 
@@ -2040,10 +2162,10 @@ describe("cueSlices", () => {
         it("does not trigger autosave if error count is the same", () => {
             // GIVEN
             const cuesCorrupted = [
-                { vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
+                { id: "cue-2", vttCue: new VTTCue(2, 4, "Caption 2"), cueCategory: "DIALOGUE" },
+                { id: "cue-3", vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
+                { id: "cue-4", vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
             const testingSubtitleSpecification = {
                 maxLinesPerCaption: 2,
@@ -2064,6 +2186,9 @@ describe("cueSlices", () => {
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
     });
 
@@ -2074,6 +2199,10 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[3]).toBeUndefined();
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("updates top level cues", () => {
@@ -2085,8 +2214,11 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[1].cueCategory).toEqual("AUDIO_DESCRIPTION");
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("preserves all other existing cue parameters", () => {
@@ -2104,6 +2236,11 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
             expect(testingStore.getState().cues[2].spellCheck)
                 .toEqual({ matches: [{ message: "some-spell-check-problem" }]});
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
     });
 
@@ -2122,7 +2259,11 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[1].comments).toEqual([newComment]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("adds a comment to a cue with comments", () => {
@@ -2148,7 +2289,11 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[0].comments).toEqual([existingComment, newComment]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
     });
 
@@ -2172,7 +2317,11 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[0].comments).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
     });
 
@@ -2190,6 +2339,11 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().focusedCueIndex).toEqual(3);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         describe("without source cues", () => {
@@ -2211,6 +2365,11 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(5);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).toHaveBeenCalled();
             });
 
             it("adds first cue to the cue array", () => {
@@ -2229,6 +2388,11 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
                 expect(testingStore.getState().editingCueIndex).toEqual(0);
                 expect(testingStore.getState().validationErrors).toEqual([]);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).toHaveBeenCalled();
             });
 
             it("record cues change when cue is added", () => {
@@ -2245,6 +2409,11 @@ describe("cueSlices", () => {
                 expect(lastCueChange.vttCue.text).toEqual("");
                 expect(lastCueChange.vttCue.startTime).toEqual(0);
                 expect(lastCueChange.vttCue.endTime).toEqual(3);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).toHaveBeenCalled();
             });
 
             it("adds cue to the end of the cue array", () => {
@@ -2263,13 +2432,18 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[3].cueCategory).toEqual("ONSCREEN_TEXT");
                 expect(testingStore.getState().editingCueIndex).toEqual(3);
                 expect(testingStore.getState().validationErrors).toEqual([]);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("add cue in middle of cue array cues", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues([
-                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(4.225, 5, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                    { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-2", vttCue: new VTTCue(4.225, 5, "Caption Line 2"), cueCategory: "DIALOGUE" },
                 ] as CueDto[]) as {} as AnyAction);
 
                 // WHEN
@@ -2281,13 +2455,18 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].cueCategory).toEqual("DIALOGUE");
                 expect(testingStore.getState().editingCueIndex).toEqual(1);
                 expect(testingStore.getState().validationErrors).toEqual([]);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("doesn't add cue in middle of cue array cues if there's overlap", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues([
-                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                    { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-2", vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
                 ] as CueDto[]) as {} as AnyAction);
 
                 // WHEN
@@ -2298,13 +2477,17 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_OVERLAP);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("adds cue in middle of cue array cues if there's overlap but overlapping is enabled", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues([
-                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                    { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-2", vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
                 ] as CueDto[]) as {} as AnyAction);
 
                 // WHEN
@@ -2319,6 +2502,11 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().validationErrors).toEqual([]);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("doesn't add cue to the end of the cue array if out of chunk range", () => {
@@ -2326,8 +2514,8 @@ describe("cueSlices", () => {
                 const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 4000 };
                 testingStore.dispatch(updateEditingTrack(chunkTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues([
-                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                    { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-2", vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
                 ] as CueDto[]) as {} as AnyAction);
 
                 // WHEN
@@ -2340,6 +2528,10 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_LIMIT_EXCEEDED);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("adds cue to the end of the cue array if in chunk range", () => {
@@ -2347,8 +2539,8 @@ describe("cueSlices", () => {
                 const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 10000 };
                 testingStore.dispatch(updateEditingTrack(chunkTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues([
-                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                    { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-2", vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
                 ] as CueDto[]) as {} as AnyAction);
 
                 // WHEN
@@ -2363,6 +2555,11 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(7);
                 expect(testingStore.getState().validationErrors).toEqual([]);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
         });
 
@@ -2371,8 +2568,8 @@ describe("cueSlices", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues([]) as {} as AnyAction);
                 testingStore.dispatch(updateSourceCues([
-                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+                    { id: "cue-1", vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-2", vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
                 ] as CueDto[]) as {} as AnyAction);
 
                 // WHEN
@@ -2385,15 +2582,21 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
                 expect(testingStore.getState().editingCueIndex).toEqual(0);
                 expect(testingStore.getState().validationErrors).toEqual([]);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).toHaveBeenCalled();
             });
 
             it("adds cue to the end of the cue array", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const sourceCues = [
-                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "ONSCREEN_TEXT" },
+                    { id: "cue-1", vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-2", vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "ONSCREEN_TEXT" },
                     {
+                        id: "cue-3",
                         vttCue: new VTTCue(4, 6, "Source Line 3"),
                         cueCategory: "ONSCREEN_TEXT",
                         spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
@@ -2413,18 +2616,23 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[3].cueCategory).toEqual("ONSCREEN_TEXT");
                 expect(testingStore.getState().editingCueIndex).toEqual(3);
                 expect(testingStore.getState().validationErrors).toEqual([]);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("add cue in middle of cue array cues with one source cue", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues([
-                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(4.225, 5, "Caption Line 3"), cueCategory: "DIALOGUE" },
+                    { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-2", vttCue: new VTTCue(4.225, 5, "Caption Line 3"), cueCategory: "DIALOGUE" },
                 ] as CueDto[]) as {} as AnyAction);
                 testingStore.dispatch(updateSourceCues([
-                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(3, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(4.225, 5, "Source Line 3"), cueCategory: "DIALOGUE" },
+                    { id: "cue-3", vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-4", vttCue: new VTTCue(3, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+                    { id: "cue-5", vttCue: new VTTCue(4.225, 5, "Source Line 3"), cueCategory: "DIALOGUE" },
                 ] as CueDto[]) as {} as AnyAction);
 
                 // WHEN
@@ -2436,19 +2644,24 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].cueCategory).toEqual("DIALOGUE");
                 expect(testingStore.getState().editingCueIndex).toEqual(1);
                 expect(testingStore.getState().validationErrors).toEqual([]);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("add cue in middle of cue array cues with two source cues", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues([
-                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(4.225, 5, "Caption Line 3"), cueCategory: "DIALOGUE" },
+                    { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-2", vttCue: new VTTCue(4.225, 5, "Caption Line 3"), cueCategory: "DIALOGUE" },
                 ] as CueDto[]) as {} as AnyAction);
                 testingStore.dispatch(updateSourceCues([
-                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(3, 3.5, "Source Line 2"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(3.5, 4, "Source Line 3"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(4.225, 5, "Source Line 4"), cueCategory: "DIALOGUE" },
+                    { id: "cue-3", vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-4", vttCue: new VTTCue(3, 3.5, "Source Line 2"), cueCategory: "DIALOGUE" },
+                    { id: "cue-5", vttCue: new VTTCue(3.5, 4, "Source Line 3"), cueCategory: "DIALOGUE" },
+                    { id: "cue-6", vttCue: new VTTCue(4.225, 5, "Source Line 4"), cueCategory: "DIALOGUE" },
                 ] as CueDto[]) as {} as AnyAction);
 
                 // WHEN
@@ -2460,19 +2673,24 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].cueCategory).toEqual("DIALOGUE");
                 expect(testingStore.getState().editingCueIndex).toEqual(1);
                 expect(testingStore.getState().validationErrors).toEqual([]);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("adds cue in middle of cue array cues if there's overlap but overlapping is enabled", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues([
-                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(2, 5, "Caption Line 3"), cueCategory: "DIALOGUE" },
+                    { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-2", vttCue: new VTTCue(2, 5, "Caption Line 3"), cueCategory: "DIALOGUE" },
                 ] as CueDto[]) as {} as AnyAction);
                 testingStore.dispatch(updateSourceCues([
-                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(3, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(2, 3.1, "Source Line 3"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(4.225, 5, "Source Line 4"), cueCategory: "DIALOGUE" },
+                    { id: "cue-3", vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-4", vttCue: new VTTCue(3, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+                    { id: "cue-5", vttCue: new VTTCue(2, 3.1, "Source Line 3"), cueCategory: "DIALOGUE" },
+                    { id: "cue-6", vttCue: new VTTCue(4.225, 5, "Source Line 4"), cueCategory: "DIALOGUE" },
                 ] as CueDto[]) as {} as AnyAction);
 
                 // WHEN
@@ -2490,6 +2708,11 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(5);
                 expect(testingStore.getState().validationErrors).toEqual([]);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("cue is not added when minimum time gap is exceeded", () => {
@@ -2502,14 +2725,14 @@ describe("cueSlices", () => {
                     } as SubtitleSpecification) as {} as AnyAction
                 );
                 testingStore.dispatch(updateCues([
-                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(3, 4, "Caption Line 3"), cueCategory: "DIALOGUE" },
+                    { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-2", vttCue: new VTTCue(3, 4, "Caption Line 3"), cueCategory: "DIALOGUE" },
                 ] as CueDto[]) as {} as AnyAction);
                 testingStore.dispatch(updateSourceCues([
-                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(3, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(2, 3.1, "Source Line 3"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(4.225, 5, "Source Line 4"), cueCategory: "DIALOGUE" },
+                    { id: "cue-3", vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-4", vttCue: new VTTCue(3, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+                    { id: "cue-5", vttCue: new VTTCue(2, 3.1, "Source Line 3"), cueCategory: "DIALOGUE" },
+                    { id: "cue-6", vttCue: new VTTCue(4.225, 5, "Source Line 4"), cueCategory: "DIALOGUE" },
                 ] as CueDto[]) as {} as AnyAction);
 
                 // WHEN
@@ -2520,12 +2743,16 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().cues.length).toEqual(2);
                 expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_LIMIT_EXCEEDED);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("uses source cues times for target cue with index 0", () => {
                 // GIVEN
                 testingStore.dispatch(updateSourceCues([
-                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" }
+                    { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" }
                 ]) as {} as AnyAction);
 
                 // WHEN
@@ -2540,6 +2767,11 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
                 expect(testingStore.getState().editingCueIndex).toEqual(0);
                 expect(testingStore.getState().validationErrors).toEqual([]);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).toHaveBeenCalled();
             });
 
             it("doesn't add cue to the end of the cue array if out of chunk range", () => {
@@ -2548,9 +2780,10 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateEditingTrack(chunkTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const sourceCues = [
-                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "ONSCREEN_TEXT" },
+                    { id: "cue-1", vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-2", vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "ONSCREEN_TEXT" },
                     {
+                        id: "cue-3",
                         vttCue: new VTTCue(4, 6, "Source Line 3"),
                         cueCategory: "ONSCREEN_TEXT",
                         spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
@@ -2568,6 +2801,10 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_LIMIT_EXCEEDED);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("adds cue to the end of the cue array if in chunk range", () => {
@@ -2576,9 +2813,10 @@ describe("cueSlices", () => {
                 testingStore.dispatch(updateEditingTrack(chunkTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const sourceCues = [
-                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "ONSCREEN_TEXT" },
+                    { id: "cue-1", vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-2", vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "ONSCREEN_TEXT" },
                     {
+                        id: "cue-3",
                         vttCue: new VTTCue(4, 6, "Source Line 3"),
                         cueCategory: "ONSCREEN_TEXT",
                         spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
@@ -2598,6 +2836,11 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[3].cueCategory).toEqual("ONSCREEN_TEXT");
                 expect(testingStore.getState().editingCueIndex).toEqual(3);
                 expect(testingStore.getState().validationErrors).toEqual([]);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
         });
 
@@ -2616,6 +2859,11 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().validationErrors).toEqual([]);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("does not add cue if duration is less than min gap limit", () => {
@@ -2638,6 +2886,10 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
                 expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_OVERLAP);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("picks default step if it less than max gap limit provided by subtitle specs", () => {
@@ -2659,6 +2911,11 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues.length).toEqual(4);
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(9);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("picks subtitle specs max gap as step if it is greater than default step value", () => {
@@ -2680,6 +2937,11 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues.length).toEqual(4);
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(8);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("uses default NEW_ADDED_CUE_DEFAULT_STEP if no subtitle specs provided", () => {
@@ -2695,6 +2957,11 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues.length).toEqual(4);
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(9);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
         });
     });
@@ -2717,28 +2984,36 @@ describe("cueSlices", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
             expect(testingStore.getState().lastCueChange.changeType).toEqual("REMOVE");
             expect(testingStore.getState().lastCueChange.index).toEqual(0);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("deletes cue in the middle of the cue array", () => {
             // GIVEN
             testingStore.dispatch(updateCues([
-                { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(4.225, 5, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                { id: "cue-2", vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                { id: "cue-3", vttCue: new VTTCue(4.225, 5, "Caption Line 3"), cueCategory: "DIALOGUE" },
             ] as CueDto[]) as {} as AnyAction);
-            testingStore.dispatch(addCue(1, []) as {} as AnyAction);
 
             // WHEN
             testingStore.dispatch(deleteCue(1) as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue).toEqual(new VTTCue(0, 2, "Caption Line 1"));
-            expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(4.225, 5, "Caption Line 2"));
+            expect(testingStore.getState().cues[1].vttCue).toEqual(new VTTCue(4.225, 5, "Caption Line 3"));
             expect(testingStore.getState().cues.length).toEqual(2);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
             expect(testingStore.getState().lastCueChange.changeType).toEqual("REMOVE");
             expect(testingStore.getState().lastCueChange.index).toEqual(1);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("deletes cue at the end of the cue array", () => {
@@ -2755,6 +3030,11 @@ describe("cueSlices", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
             expect(testingStore.getState().lastCueChange.changeType).toEqual("REMOVE");
             expect(testingStore.getState().lastCueChange.index).toEqual(2);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("delete all cues in the array leaves one default empty cue", () => {
@@ -2777,6 +3057,11 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.line).toEqual("auto");
             expect(testingStore.getState().cues[0].vttCue.position).toEqual("auto");
             expect(testingStore.getState().cues[0].vttCue.positionAlign).toEqual("auto");
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.RETRY);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("record an edit change when removing last cue", () => {
@@ -2792,6 +3077,11 @@ describe("cueSlices", () => {
             expect(recordCueChangeSpy).toBeCalledWith(
                 { "changeType": "EDIT", "index": 0,
                     "vttCue": new VTTCue(0, 0, "") });
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
     });
 
@@ -2799,8 +3089,8 @@ describe("cueSlices", () => {
         it("initializes cues", () => {
             // GIVEN
             const expectedCues = [
-                { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
-                { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT", errors: []},
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
+                { id: "cue-2", vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT", errors: []},
             ] as CueDto[];
 
             // WHEN
@@ -2815,13 +3105,17 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].cueCategory).toEqual("ONSCREEN_TEXT");
             expect(testingStore.getState().cues[1].errors).toBeUndefined();
             expect(testingStore.getState().cues[1].editUuid).not.toBeNull();
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("replaces existing cues", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             const replacementCues = [
-                { vttCue: new VTTCue(2, 3, "Replacement"), cueCategory: "DIALOGUE", errors: []},
+                { id: "cue-1", vttCue: new VTTCue(2, 3, "Replacement"), cueCategory: "DIALOGUE", errors: []},
             ] as CueDto[];
 
             // WHEN
@@ -2833,15 +3127,20 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].errors).toEqual([]);
             expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
             expect(testingStore.getState().lastCueChange.changeType).toEqual("UPDATE_ALL");
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it.skip("reorder cues based on start time", () => {
             // GIVEN
             const notOrderedCues = [
-                { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
-                { vttCue: new VTTCue(4, 6, "Caption Line 2"), cueCategory: "DIALOGUE", errors: []},
-                { vttCue: new VTTCue(1, 3, "Caption Line 3"), cueCategory: "DIALOGUE", errors: [], editUuid: "lala" },
-                { vttCue: new VTTCue(2, 4, "Caption Line 4"), cueCategory: "ONSCREEN_TEXT", errors: []},
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
+                { id: "cue-2", vttCue: new VTTCue(4, 6, "Caption Line 2"), cueCategory: "DIALOGUE", errors: []},
+                { id: "cue-3", vttCue: new VTTCue(1, 3, "Caption Line 3"), cueCategory: "DIALOGUE",
+                    errors: [], editUuid: "lala" },
+                { id: "cue-4", vttCue: new VTTCue(2, 4, "Caption Line 4"), cueCategory: "ONSCREEN_TEXT", errors: []},
             ] as CueDto[];
             testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
 
@@ -2858,16 +3157,20 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[3].vttCue.startTime).toEqual(4);
             expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(6);
             expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("resets editing cue index if out of range when reordering cues", () => {
             // GIVEN
             testingStore.dispatch(updateEditingCueIndex(8) as {} as AnyAction);
             const notOrderedCues = [
-                { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
-                { vttCue: new VTTCue(4, 6, "Caption Line 2"), cueCategory: "DIALOGUE", errors: []},
-                { vttCue: new VTTCue(1, 3, "Caption Line 3"), cueCategory: "DIALOGUE", errors: []},
-                { vttCue: new VTTCue(2, 4, "Caption Line 4"), cueCategory: "ONSCREEN_TEXT", errors: []},
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
+                { id: "cue-2", vttCue: new VTTCue(4, 6, "Caption Line 2"), cueCategory: "DIALOGUE", errors: []},
+                { id: "cue-3", vttCue: new VTTCue(1, 3, "Caption Line 3"), cueCategory: "DIALOGUE", errors: []},
+                { id: "cue-4", vttCue: new VTTCue(2, 4, "Caption Line 4"), cueCategory: "ONSCREEN_TEXT", errors: []},
             ] as CueDto[];
 
             // WHEN
@@ -2884,10 +3187,18 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(6);
             expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(6);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
     });
 
     describe("applyShiftTimeByPosition", () => {
+        beforeEach(() => {
+            testingStore.dispatch(updateEditingTrack(testingTrack as Track) as {} as AnyAction);
+        });
+
         it("apply shift time to all cues", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
@@ -2900,8 +3211,11 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4.123);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4.123);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6.123);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).toHaveBeenCalled();
         });
 
         it("apply shift time after cue index", () => {
@@ -2916,8 +3230,11 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4.123);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6.123);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).toHaveBeenCalled();
         });
 
         it("apply shift time before cue index", () => {
@@ -2934,8 +3251,11 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(5.123);
             expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4);
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(6);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).toHaveBeenCalled();
         });
 
         it("reorder cues when shifting time before cue index", () => {
@@ -2952,8 +3272,11 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
             expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4.123);
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(6.123);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).toHaveBeenCalled();
         });
 
         it("reorder cues when shifting time after cue index", () => {
@@ -2970,8 +3293,11 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(3.88);
             expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(4);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).toHaveBeenCalled();
         });
 
         it("validate start cue index for shift position BEFORE", () => {
@@ -2984,6 +3310,10 @@ describe("cueSlices", () => {
             };
             // THEN
             expect(error).toThrow("No editing cue selected to begin shifting");
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("validate start cue index for shift position AFTER", () => {
@@ -2996,6 +3326,10 @@ describe("cueSlices", () => {
             };
             // THEN
             expect(error).toThrow("No editing cue selected to begin shifting");
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("validate shift not possible before first cue", () => {
@@ -3008,6 +3342,10 @@ describe("cueSlices", () => {
             };
             // THEN
             expect(error).toThrow("Cannot shift before first cue");
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("validate shift position provided", () => {
@@ -3021,6 +3359,10 @@ describe("cueSlices", () => {
             };
             // THEN
             expect(error).toThrow("Invalid position provided, all, before or after expected");
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
     });
 
@@ -3034,6 +3376,10 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues.length).toEqual(0);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("Resets source cues on resetEditingTrack", () => {
@@ -3045,10 +3391,18 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().sourceCues.length).toEqual(0);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
     });
 
     describe("syncCues", () => {
+        beforeEach(() => {
+            testingStore.dispatch(updateEditingTrack(testingTrack as Track) as {} as AnyAction);
+        });
+
         it("doesn't sync timecodes if there are no sourceCues", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
@@ -3061,15 +3415,19 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("syncs timecodes between sourceCues and cues", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             const sourceTestingCues = [
-                { vttCue: new VTTCue(1, 3, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(3, 5, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
-                { vttCue: new VTTCue(5, 7, "Caption Line 3"), cueCategory: "ONSCREEN_TEXT" },
+                { id: "cue-1", vttCue: new VTTCue(1, 3, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                { id: "cue-2", vttCue: new VTTCue(3, 5, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+                { id: "cue-3", vttCue: new VTTCue(5, 7, "Caption Line 3"), cueCategory: "ONSCREEN_TEXT" },
             ] as CueDto[];
             testingStore.dispatch(updateSourceCues(sourceTestingCues) as {} as AnyAction);
 
@@ -3081,17 +3439,20 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(5);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.TRIGGERED);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).toHaveBeenCalled();
         });
 
         it("doesn't syncs timecodes between sourceCues and cues if editDisabled", () => {
             // GIVEN
             testingStore.dispatch(updateCues(testingCuesEditDisabled) as {} as AnyAction);
             const sourceTestingCues = [
-                { vttCue: new VTTCue(1, 3, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                { vttCue: new VTTCue(3, 5, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
-                { vttCue: new VTTCue(5, 7, "Caption Line 3"), cueCategory: "ONSCREEN_TEXT" },
+                { id: "cue-1", vttCue: new VTTCue(1, 3, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                { id: "cue-2", vttCue: new VTTCue(3, 5, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+                { id: "cue-3", vttCue: new VTTCue(5, 7, "Caption Line 3"), cueCategory: "ONSCREEN_TEXT" },
             ] as CueDto[];
             testingStore.dispatch(updateSourceCues(sourceTestingCues) as {} as AnyAction);
 
@@ -3105,39 +3466,48 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(5);
             expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(5);
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(7);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).toHaveBeenCalled();
         });
     });
 
     describe("validateCorruptedCues", () => {
-        it("validate only corrupted cues with ignored text", () => {
+        it("validate only corrupted cues with ignored text", async () => {
             // GIVEN
             const cues = [
                 {
+                    id: "cue-1",
                     vttCue: new VTTCue(0, 3, "Caption Linex 1"),
                     cueCategory: "DIALOGUE", errors: []
                 },
                 {
+                    id: "cue-2",
                     vttCue: new VTTCue(2, 4, "Caption Linex 2"),
                     cueCategory: "DIALOGUE", errors: []
                 },
                 {
+                    id: "cue-3",
                     vttCue: new VTTCue(4, 6, "Caption Line 3"),
                     cueCategory: "DIALOGUE", errors: []
                 },
                 {
+                    id: "cue-4",
                     vttCue: new VTTCue(6, 8, "Caption Line 4"),
                     cueCategory: "DIALOGUE", errors: []
                 },
                 {
+                    id: "cue-5",
                     vttCue: new VTTCue(8, 0, "Caption Line 5"), // bad timing
                     cueCategory: "DIALOGUE", errors: []
                 }
             ] as CueDto[];
-
-            testingStore = createTestingStore({ cues });
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(validateCorruptedCues("Linex") as {} as AnyAction);
+            await testingStore.dispatch(validateCorruptedCues("Linex") as {} as AnyAction);
 
             // THEN
             expect(testingStore.getState().cues[0].errors).toEqual([CueError.TIME_GAP_OVERLAP]);
@@ -3145,6 +3515,11 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
             expect(testingStore.getState().cues[4].errors).toEqual([]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+            expect(updateCueMock).toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
     });
 
@@ -3156,6 +3531,10 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().rowsToMerge).toEqual([{ index: 1 }]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
     });
 
@@ -3168,6 +3547,10 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().rowsToMerge).toEqual([]);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
     });
 
@@ -3195,6 +3578,11 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).toHaveBeenCalled();
             });
 
             it("doesn't merge 2 single cue lines if merged cue is too long", () => {
@@ -3220,6 +3608,10 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().validationErrors).toEqual([CueError.MERGE_ERROR]);
                 expect(testingStore.getState().cues.length).toEqual(3);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("merges 3 single cue lines", () => {
@@ -3240,15 +3632,20 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(6);
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual(
                     "Caption Line 1\nCaption Line 2\nCaption Line 3");
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).toHaveBeenCalled();
             });
 
             it("merges 2 multiple cue lines", () => {
                 // GIVEN
                 const cues = [
-                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(4, 6, "Caption Line 3"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(6, 8, "Caption Line 4"), cueCategory: "DIALOGUE" }
+                    { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-2", vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
+                    { id: "cue-3", vttCue: new VTTCue(4, 6, "Caption Line 3"), cueCategory: "DIALOGUE" },
+                    { id: "cue-4", vttCue: new VTTCue(6, 8, "Caption Line 4"), cueCategory: "DIALOGUE" }
                 ] as CueDto[];
 
                 testingStore.dispatch(addCuesToMergeList({
@@ -3275,6 +3672,11 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(8);
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual(
                     "Caption Line 1\nCaption Line 2\nCaption Line 3\nCaption Line 4");
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).toHaveBeenCalled();
             });
 
             it("scrolls to merged cue on edit mode on merge", () => {
@@ -3290,6 +3692,11 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().editingCueIndex).toEqual(0);
                 expect(testingStore.getState().focusedCueIndex).toEqual(0);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).toHaveBeenCalled();
             });
 
             it("merges 2 single cue lines with errors", () => {
@@ -3313,6 +3720,11 @@ describe("cueSlices", () => {
                     [CueError.LINE_COUNT_EXCEEDED, CueError.LINE_CHAR_LIMIT_EXCEEDED]);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).toHaveBeenCalled();
             });
 
             it("merges 2 single cue lines with errors", () => {
@@ -3338,6 +3750,11 @@ describe("cueSlices", () => {
                     [{ source: "1", replacements: ["rep1"]}, { source: "2", replacements: ["rep2"]}]);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).toHaveBeenCalled();
             });
 
             it("merges 2 single cue lines with comments", () => {
@@ -3356,19 +3773,26 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");
                 expect(testingStore.getState().cues[0].comments).toEqual(testComments);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).toHaveBeenCalled();
             });
 
             it("merges 2 multiple cue lines with comments", () => {
                 // GIVEN
                 const cues = [
-                    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
                     {
+                        id: "cue-2",
                         vttCue: new VTTCue(2, 4, "Caption Line 2"),
                         cueCategory: "DIALOGUE",
                         comments: [testComments[0]]
                     },
-                    { vttCue: new VTTCue(4, 6, "Caption Line 3"), cueCategory: "DIALOGUE" },
+                    { id: "cue-3", vttCue: new VTTCue(4, 6, "Caption Line 3"), cueCategory: "DIALOGUE" },
                     {
+                        id: "cue-4",
                         vttCue: new VTTCue(6, 8, "Caption Line 4"),
                         cueCategory: "DIALOGUE",
                         comments: [testComments[1], testComments[2]]
@@ -3400,15 +3824,21 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual(
                     "Caption Line 1\nCaption Line 2\nCaption Line 3\nCaption Line 4");
                 expect(testingStore.getState().cues[0].comments).toEqual(testComments);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).toHaveBeenCalled();
             });
         });
 
         describe("without source cues", () => {
             it("merges 2 single cue lines", () => {
                 // GIVEN
+                testingStore.dispatch(updateEditingTrack(testingTrack as Track) as {} as AnyAction);
                 testingStore.dispatch(updateSourceCues([
-                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+                    { id: "cue-1", vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                    { id: "cue-2", vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
                 ] as CueDto[]) as {} as AnyAction);
                 testingStore.dispatch(addCuesToMergeList(
                     { index: 0, cues: [{ index: 0, cue: testingCues[0] }]}) as {} as AnyAction);
@@ -3425,6 +3855,11 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+                expect(updateCueMock).not.toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).toHaveBeenCalled();
             });
         });
     });
@@ -3434,88 +3869,104 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateEditingTrack(testingTrack as Track) as {} as AnyAction);
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
         });
-        describe("without source cues", () => {
-            it("splits cue", () => {
-                // GIVEN
-                // WHEN
-                testingStore.dispatch(splitCue(0) as {} as AnyAction);
 
-                // THEN
-                expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().cues.length).toEqual(4);
-                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
-                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
-                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
-                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
-                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
-                expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
-            });
+        it("splits cue", async () => {
+            // GIVEN
+            // WHEN
+            await testingStore.dispatch(splitCue(0) as {} as AnyAction);
 
-            it("splits cue with comments", () => {
-                // GIVEN
-                testingStore.dispatch(updateCues(testingCuesWithComments) as {} as AnyAction);
-
-                // WHEN
-                testingStore.dispatch(splitCue(0) as {} as AnyAction);
-
-                // THEN
-                expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().cues.length).toEqual(4);
-                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
-                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
-                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
-                expect(testingStore.getState().cues[0].comments).toEqual([testComments[0], testComments[1]]);
-                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
-                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
-                expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
-                expect(testingStore.getState().cues[1].comments).toBeUndefined();
-            });
-
-            it("doesn't split too short cue", () => {
-                // GIVEN
-                const testingSubtitleSpecification = {
-                    minCaptionDurationInMillis: 2000,
-                    maxCaptionDurationInMillis: 4000,
-                    enabled: true
-                } as SubtitleSpecification;
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
-
-                // WHEN
-                testingStore.dispatch(splitCue(0) as {} as AnyAction);
-
-                // THEN
-                expect(testingStore.getState().validationErrors).toEqual([CueError.SPLIT_ERROR]);
-                expect(testingStore.getState().cues.length).toEqual(3);
-                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
-                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
-                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
-                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
-                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-                expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
-            });
+            // THEN
+            expect(testingStore.getState().validationErrors).toEqual([]);
+            expect(testingStore.getState().cues.length).toEqual(4);
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).toHaveBeenCalled();
         });
 
-        describe("without source cues", () => {
-            it("splits cue", () => {
-                // GIVEN
-                testingStore.dispatch(updateSourceCues([
-                    { vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
-                    { vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
-                ] as CueDto[]) as {} as AnyAction);
+        it("splits cue with comments", async () => {
+            // GIVEN
+            testingStore.dispatch(updateCues(testingCuesWithComments) as {} as AnyAction);
 
-                // WHEN
-                testingStore.dispatch(splitCue(0) as {} as AnyAction);
+            // WHEN
+            await testingStore.dispatch(splitCue(0) as {} as AnyAction);
 
-                // THEN
-                expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().cues.length).toEqual(4);
-                expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
-                expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
-                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
-                expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
-                expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
-                expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
-            });
+            // THEN
+            expect(testingStore.getState().validationErrors).toEqual([]);
+            expect(testingStore.getState().cues.length).toEqual(4);
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
+            expect(testingStore.getState().cues[0].comments).toEqual([testComments[0], testComments[1]]);
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
+            expect(testingStore.getState().cues[1].comments).toBeUndefined();
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).toHaveBeenCalled();
+        });
+
+        it("doesn't split too short cue", async () => {
+            // GIVEN
+            const testingSubtitleSpecification = {
+                minCaptionDurationInMillis: 2000,
+                maxCaptionDurationInMillis: 4000,
+                enabled: true
+            } as SubtitleSpecification;
+            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+
+            // WHEN
+            await testingStore.dispatch(splitCue(0) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().validationErrors).toEqual([CueError.SPLIT_ERROR]);
+            expect(testingStore.getState().cues.length).toEqual(3);
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
+        });
+
+        it("splits cue with source cues", async () => {
+            // GIVEN
+            testingStore.dispatch(updateSourceCues([
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Source Line 1"), cueCategory: "DIALOGUE" },
+                { id: "cue-2", vttCue: new VTTCue(2, 4, "Source Line 2"), cueCategory: "DIALOGUE" },
+            ] as CueDto[]) as {} as AnyAction);
+
+            // WHEN
+            await testingStore.dispatch(splitCue(0) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().validationErrors).toEqual([]);
+            expect(testingStore.getState().cues.length).toEqual(4);
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(1);
+            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
+            expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
+            expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
+            expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
+            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).toHaveBeenCalled();
         });
     });
 });
