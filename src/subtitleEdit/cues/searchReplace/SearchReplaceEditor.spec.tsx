@@ -52,8 +52,8 @@ let testingMatchedCues = createTestingMatchedCues(3);
 describe("SearchReplaceEditor", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
-        testingMatchedCues = createTestingMatchedCues(3);
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingMatchedCues = createTestingMatchedCues(3);
     });
 
     it("renders", () => {
