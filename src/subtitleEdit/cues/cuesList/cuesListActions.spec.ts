@@ -40,6 +40,7 @@ import * as cuesListScrollSlice from "./cuesListScrollSlice";
 import { showSearchReplace } from "../searchReplace/searchReplaceSlices";
 import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
 import { saveCueDeleteSlice } from "../saveCueDeleteSlices";
+import { waitFor } from "@testing-library/react";
 
 const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
 const updateSearchMatchesSpy = jest.spyOn(cueEditorSlices, "updateSearchMatches");
@@ -128,10 +129,13 @@ jest.mock("lodash", () => ({
     sortBy: jest.requireActual("lodash/sortBy"),
     findIndex: jest.requireActual("lodash/findIndex"),
     findLastIndex: jest.requireActual("lodash/findLastIndex"),
-    remove: jest.requireActual("lodash/remove")
+    remove: jest.requireActual("lodash/remove"),
+    get: jest.requireActual("lodash/get")
 }));
 
 const updateCueMock = jest.fn();
+updateCueMock.mockImplementation(() => Promise.resolve({}));
+
 const deleteCueMock = jest.fn();
 const saveTrackMock = jest.fn();
 
@@ -278,7 +282,6 @@ describe("cueSlices", () => {
                         .dispatch(updateVttCue(2, new VTTCue(2, 2.5, "Dummy Cue")) as {} as AnyAction);
                 });
 
-
                 // THEN
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledWith(
@@ -295,6 +298,11 @@ describe("cueSlices", () => {
                     [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
                 expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
                 expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("does not mark a cue as corrupted if a spell check is fixed", async () => {
@@ -320,6 +328,11 @@ describe("cueSlices", () => {
 
                 // THEN
                 expect(testingStore.getState().cues[2].errors).toEqual([]);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("retains corrupted mark if spell check problems are added to existing ones", async () => {
@@ -357,6 +370,11 @@ describe("cueSlices", () => {
 
                 // THEN
                 expect(testingStore.getState().cues[2].errors).toEqual([CueError.SPELLCHECK_ERROR]);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("retains corrupted mark if spell check problems are added to existing ones and cue has other errors",
@@ -396,6 +414,11 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().cues[2].errors).toEqual(
                     [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
+                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED);
+                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
+                expect(updateCueMock).toHaveBeenCalled();
+                expect(deleteCueMock).not.toHaveBeenCalled();
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("triggers autosave content is changed", () => {
@@ -1738,7 +1761,7 @@ describe("cueSlices", () => {
     });
 
     describe("validateCue", () => {
-        it("mark cue as corrupted if it doesn't conform to rules", () => {
+        it("mark cue as corrupted if it doesn't conform to rules", async () => {
             // GIVEN
             const cuesCorrupted = [
                 { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Long 1"), cueCategory: "DIALOGUE" },
@@ -1755,15 +1778,18 @@ describe("cueSlices", () => {
             testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // WHEN
-            testingStore.dispatch(validateVttCue(2) as {} as AnyAction);
+            await testingStore.dispatch(validateVttCue(2) as {} as AnyAction);
 
             // THEN
+            await waitFor(
+                () => expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED),
+                { timeout: 3000 }
+            );
             expect(testingStore.getState().cues[0].errors).toBeUndefined();
             expect(testingStore.getState().cues[1].errors).toEqual([]);
             expect(testingStore.getState().cues[2].errors).toEqual(
                 [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP]);
             expect(testingStore.getState().cues[3].errors).toEqual([CueError.TIME_GAP_OVERLAP]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
             expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(testingStore.getState().matchedCues.matchedCues["0"].targetCues["0"].cue.errors).toBeUndefined();
             expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors).toBeUndefined();
