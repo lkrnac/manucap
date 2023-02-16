@@ -15,6 +15,8 @@ import {
 import { updateCues } from "../cuesList/cuesListActions";
 import { CueDto } from "../../model";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
+import { matchedCuesSlice } from "../cuesList/cuesListSlices";
+import { createTestingMatchedCues } from "../cuesList/cuesListTestUtils";
 
 const testingCues = [
     { vttCue: new VTTCue(0, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -42,10 +44,12 @@ const testingCuesWithEditDisabled = [
 ] as CueDto[];
 
 let testingStore = createTestingStore();
+let testingMatchedCues = createTestingMatchedCues(3);
 
 describe("searchReplaceSlices", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
+        testingMatchedCues = createTestingMatchedCues(3);
     });
 
     describe("setFind", () => {
@@ -514,6 +518,150 @@ describe("searchReplaceSlices", () => {
                 offsetIndex: 0
             });
         });
+
+        it("finds first match in source cues", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("SrcLine2-0") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(2);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 2,
+                sourceCueIndex: 0,
+                targetCueIndex: 9007199254740991,
+                matchLength: 10,
+                offset: 0,
+                offsetIndex: 0
+            });
+        });
+
+        it("finds second match in source cues", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices({
+                matchedCueIndex: 2,
+                sourceCueIndex: 0,
+                targetCueIndex: 9007199254740991,
+                matchLength: 10,
+                offset: 0,
+                offsetIndex: 0
+            }));
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("SrcLine2-0") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(2);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 2,
+                sourceCueIndex: 0,
+                targetCueIndex: 9007199254740991,
+                matchLength: 10,
+                offset: 10,
+                offsetIndex: 1
+            });
+        });
+
+        it("finds last match in source cues", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices({
+                matchedCueIndex: 2,
+                sourceCueIndex: 0,
+                targetCueIndex: 9007199254740991,
+                matchLength: 10,
+                offset: 10,
+                offsetIndex: 1
+            }));
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("SrcLine2-0") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(2);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 2,
+                sourceCueIndex: 0,
+                targetCueIndex: 9007199254740991,
+                matchLength: 10,
+                offset: 20,
+                offsetIndex: 2
+            });
+        });
+
+        it("finds match in multi-matched source cues", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("SrcLine2-1") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(2);
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices({
+                matchedCueIndex: 2,
+                sourceCueIndex: 1,
+                targetCueIndex: 9007199254740991,
+                matchLength: 10,
+                offset: 0,
+                offsetIndex: 0
+            }));
+        });
+
+        it("finds match when search direction is changed", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices({
+                matchedCueIndex: 2,
+                sourceCueIndex: 0,
+                targetCueIndex: -1,
+                matchLength: 10,
+                offset: 10,
+                offsetIndex: 1
+            }));
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("SrcLine2-0") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchNextCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(2);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 2,
+                sourceCueIndex: 0,
+                targetCueIndex: 9007199254740991,
+                matchLength: 10,
+                offset: 20,
+                offsetIndex: 2
+            });
+        });
     });
 
     describe("searchPreviousCues", () => {
@@ -887,6 +1035,150 @@ describe("searchReplaceSlices", () => {
                 matchLength: 0,
                 offset: -1,
                 offsetIndex: 0
+            });
+        });
+
+        it("finds first match in source cues", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices({
+                matchedCueIndex: 2,
+                sourceCueIndex: 0,
+                targetCueIndex: -1,
+                matchLength: 10,
+                offset: 10,
+                offsetIndex: 1
+            }));
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("SrcLine2-0") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchPreviousCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(2);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 2,
+                sourceCueIndex: 0,
+                targetCueIndex: -1,
+                matchLength: 10,
+                offset: 0,
+                offsetIndex: 0
+            });
+        });
+
+        it("finds second match in source cues", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices({
+                matchedCueIndex: 2,
+                sourceCueIndex: 0,
+                targetCueIndex: -1,
+                matchLength: 10,
+                offset: 20,
+                offsetIndex: 2
+            }));
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("SrcLine2-0") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchPreviousCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(2);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 2,
+                sourceCueIndex: 0,
+                targetCueIndex: -1,
+                matchLength: 10,
+                offset: 10,
+                offsetIndex: 1
+            });
+        });
+
+        it("finds last match in source cues", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("SrcLine2-0") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchPreviousCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(2);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 2,
+                sourceCueIndex: 0,
+                targetCueIndex: -1,
+                matchLength: 10,
+                offset: 20,
+                offsetIndex: 2
+            });
+        });
+
+        it("finds match in multi-matched source cues", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("SrcLine2-1") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchPreviousCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(2);
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices({
+                matchedCueIndex: 2,
+                sourceCueIndex: 1,
+                targetCueIndex: 9007199254740991,
+                matchLength: 10,
+                offset: 20,
+                offsetIndex: 2
+            }));
+        });
+
+        it("finds match when search direction is changed", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices({
+                matchedCueIndex: 2,
+                sourceCueIndex: 0,
+                targetCueIndex: 9007199254740991,
+                matchLength: 10,
+                offset: 20,
+                offsetIndex: 2
+            }));
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("SrcLine2-0") as {} as AnyAction);
+
+            // WHEN
+            testingStore.dispatch(searchPreviousCues() as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(2);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 2,
+                sourceCueIndex: 0,
+                targetCueIndex: -1,
+                matchLength: 10,
+                offset: 10,
+                offsetIndex: 1
             });
         });
     });
