@@ -34,12 +34,12 @@ import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import * as cueEditorSlices from "../edit/cueEditorSlices";
 import { clearLastCueChange, lastCueChangeSlice, updateEditingCueIndex } from "../edit/cueEditorSlices";
-import {SaveState, setSaveTrack} from "../saveSlices";
+import { SaveState, setSaveTrack } from "../saveSlices";
 import { cuesSlice, matchedCuesSlice, ShiftPosition } from "./cuesListSlices";
 import * as cuesListScrollSlice from "./cuesListScrollSlice";
 import { showSearchReplace } from "../searchReplace/searchReplaceSlices";
-import {saveCueUpdateSlice} from "../saveCueUpdateSlices";
-import {saveCueDeleteSlice} from "../saveCueDeleteSlices";
+import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
+import { saveCueDeleteSlice } from "../saveCueDeleteSlices";
 
 const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
 const updateSearchMatchesSpy = jest.spyOn(cueEditorSlices, "updateSearchMatches");
