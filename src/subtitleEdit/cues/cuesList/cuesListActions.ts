@@ -224,11 +224,23 @@ export const validateCue = (
     dispatch(checkErrors({ index, shouldSpellCheck: shouldSpellCheck }));
 };
 
-const reorderCuesIfNeeded = function ( // eslint-disable-line @typescript-eslint/no-unused-vars
+const findNewEditingCueIndexForReorder = (
+    sortedCues: CueDto[],
+    editUuid: string | undefined | null,
+    editingCueIndex: number,
+    cuesToUpdate?: CueDto[]
+): number => {
+    const newEditingCueIndex = _.findIndex(sortedCues, [ "editUuid", editUuid ]);
+    const isFirstCueAddUpdateCues = newEditingCueIndex === -1 && cuesToUpdate && !editUuid && editingCueIndex === 0
+        && sortedCues.length === 1;
+    return isFirstCueAddUpdateCues ? editingCueIndex : newEditingCueIndex;
+};
+
+const reorderCuesIfNeeded = (
     dispatch: Dispatch<SubtitleEditAction>,
     state: SubtitleEditState,
     cuesToUpdate?: CueDto[]
-): void {
+): void => {
     const newCues = cuesToUpdate ? cuesToUpdate : state.cues;
     const editingCueIndex = state.editingCueIndex;
     let editUuid = null;
@@ -238,7 +250,7 @@ const reorderCuesIfNeeded = function ( // eslint-disable-line @typescript-eslint
         editUuid = newCues[editingCueIndex].editUuid;
     }
     const sortedCues = _.sortBy(newCues, (cue: CueDto) => cue.vttCue.startTime);
-    const newEditingCueIndex = _.findIndex(sortedCues, [ "editUuid", editUuid ]);
+    const newEditingCueIndex = findNewEditingCueIndexForReorder(sortedCues, editUuid, editingCueIndex, cuesToUpdate);
     dispatch(cuesSlice.actions.updateCues({ cues: sortedCues }));
     if (editingCueIndex != newEditingCueIndex) {
         dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "UPDATE_ALL", index: -1 }));

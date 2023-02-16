@@ -3159,7 +3159,7 @@ describe("cueSlices", () => {
             expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
-        it.skip("reorder cues based on start time", () => {
+        it("reorder cues based on start time", () => {
             // GIVEN
             const notOrderedCues = [
                 { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
@@ -3213,6 +3213,26 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(6);
             expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(6);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
+            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(deleteCueMock).not.toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
+        });
+
+        it("set editing cue index to 0 if cues are first cue being updated while editing", () => {
+            // GIVEN
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            const notOrderedCues = [
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
+            ] as CueDto[];
+
+            // WHEN
+            testingStore.dispatch(updateCues(notOrderedCues) as {} as AnyAction);
+
+            // THEN
+            expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
+            expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
+            expect(testingStore.getState().editingCueIndex).toEqual(0);
             expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
