@@ -61,63 +61,75 @@ const TestApp = (): ReactElement => {
 
             if (TIME_MATCH_TESTING) {
                 sourceCues.push({
+                    id: "cue-src-1000001",
                     vttCue: new VTTCue(0, 1, "text"),
                     cueCategory: "DIALOGUE",
                     editDisabled: !inChunkRange(0, 1)
                 });
                 sourceCues.push({
+                    id: "cue-src-1000002",
                     vttCue: new VTTCue(1, 2, "text"),
                     cueCategory: "DIALOGUE",
                     editDisabled: !inChunkRange(1, 2)
                 });
                 sourceCues.push({
+                    id: "cue-src-1000003",
                     vttCue: new VTTCue(2, 3, "text"),
                     cueCategory: "DIALOGUE",
                     editDisabled: !inChunkRange(2, 3)
                 });
                 sourceCues.push({
+                    id: "cue-src-1000004",
                     vttCue: new VTTCue(3, 6, "text"),
                     cueCategory: "DIALOGUE",
                     editDisabled: !inChunkRange(3, 6)
                 });
 
                 sourceCues.push({
+                    id: "cue-src-1000005",
                     vttCue: new VTTCue(7.673, 10.208, "text"),
                     cueCategory: "DIALOGUE",
                     editDisabled: !inChunkRange(7.673, 10.208)
                 });
                 sourceCues.push({
+                    id: "cue-src-1000006",
                     vttCue: new VTTCue(10.746, 11.782, "text"),
                     cueCategory: "DIALOGUE",
                     editDisabled: !inChunkRange(10.746, 11.782)
                 });
                 sourceCues.push({
+                    id: "cue-src-1000007",
                     vttCue: new VTTCue(12.504, 14.768, "text"),
                     cueCategory: "DIALOGUE",
                     editDisabled: !inChunkRange(12.504, 14.768)
                 });
                 sourceCues.push({
+                    id: "cue-src-1000008",
                     vttCue: new VTTCue(15.169, 17.110, "text"),
                     cueCategory: "DIALOGUE",
                     editDisabled: !inChunkRange(15.169, 17.110)
                 });
 
                 sourceCues.push({
+                    id: "cue-src-1000009",
                     vttCue: new VTTCue(18.954, 20.838, "text"),
                     cueCategory: "DIALOGUE",
                     editDisabled: !inChunkRange(18.954, 20.838)
                 });
                 sourceCues.push({
+                    id: "cue-src-1000001",
                     vttCue: new VTTCue(21.674, 23.656, "text"),
                     cueCategory: "DIALOGUE",
                     editDisabled: !inChunkRange(21.674, 23.656)
                 });
                 sourceCues.push({
+                    id: "cue-src-1000010",
                     vttCue: new VTTCue(24.024, 24.504, "text"),
                     cueCategory: "DIALOGUE",
                     editDisabled: !inChunkRange(24.024, 24.504)
                 });
                 sourceCues.push({
+                    id: "cue-src-1000011",
                     vttCue: new VTTCue(25.383, 28.115, "text"),
                     cueCategory: "DIALOGUE",
                     editDisabled: !inChunkRange(25.383, 28.115)
@@ -130,6 +142,7 @@ const TestApp = (): ReactElement => {
                 const randomEnd = endTime = TIME_MATCH_TESTING ? randomStart + randomTime(3) : (idx + 1) * 3;
                 const withinChunkRange = inChunkRange(randomStart, randomEnd);
                 sourceCues.push({
+                   id: `cue-src-${idx}`,
                    vttCue: new VTTCue(randomStart, randomEnd, `<i>Source <b>Line</b></i> ${idx + 1}\nWrapped text.`),
                     cueCategory: "DIALOGUE",
                     editDisabled: !withinChunkRange,
@@ -154,63 +167,75 @@ const TestApp = (): ReactElement => {
         const targetCues = [] as CueDto[];
         if (TIME_MATCH_TESTING) {
             targetCues.push({
+                id: "cue-trg-1000001",
                 vttCue: new VTTCue(0, 3, "text"),
                 cueCategory: "DIALOGUE",
                 editDisabled: !inChunkRange(0, 3)
             });
             targetCues.push({
+                id: "cue-trg-1000002",
                 vttCue: new VTTCue(3, 4, "text"),
                 cueCategory: "DIALOGUE",
                 editDisabled: !inChunkRange(3, 4)
             });
             targetCues.push({
+                id: "cue-trg-1000003",
                 vttCue: new VTTCue(4, 5, "text"),
                 cueCategory: "DIALOGUE",
                 editDisabled: !inChunkRange(4, 5)
             });
             targetCues.push({
+                id: "cue-trg-1000004",
                 vttCue: new VTTCue(5, 6, "text"),
                 cueCategory: "DIALOGUE",
                 editDisabled: !inChunkRange(5, 6)
             });
 
             targetCues.push({
+                id: "cue-trg-1000005",
                 vttCue: new VTTCue(7.087, 10.048, "text"),
                 cueCategory: "DIALOGUE",
                 editDisabled: !inChunkRange(7.087, 10.048)
             });
             targetCues.push({
+                id: "cue-trg-1000006",
                 vttCue: new VTTCue(10.411, 11.231, "text"),
                 cueCategory: "DIALOGUE",
                 editDisabled: !inChunkRange(10.411, 11.231)
             });
             targetCues.push({
+                id: "cue-trg-1000007",
                 vttCue: new VTTCue(11.240, 13.985, "text"),
                 cueCategory: "DIALOGUE",
                 editDisabled: !inChunkRange(11.240, 13.985)
             });
             targetCues.push({
+                id: "cue-trg-1000008",
                 vttCue: new VTTCue(14.380, 16.998, "text"),
                 cueCategory: "DIALOGUE",
                 editDisabled: !inChunkRange(14.380, 16.998)
             });
 
             targetCues.push({
+                id: "cue-trg-1000009",
                 vttCue: new VTTCue(20.140, 21.494, "text"),
                 cueCategory: "DIALOGUE",
                 editDisabled: !inChunkRange(20.140, 21.494)
             });
             targetCues.push({
+                id: "cue-trg-1000010",
                 vttCue: new VTTCue(21.979, 22.055, "text"),
                 cueCategory: "DIALOGUE",
                 editDisabled: !inChunkRange(21.979, 22.055)
             });
             targetCues.push({
+                id: "cue-trg-1000011",
                 vttCue: new VTTCue(22.414, 25.209, "text"),
                 cueCategory: "DIALOGUE",
                 editDisabled: !inChunkRange(22.414, 25.209)
             });
             targetCues.push({
+                id: "cue-trg-1000012",
                 vttCue: new VTTCue(26.198, 27.412, "text"),
                 cueCategory: "DIALOGUE",
                 editDisabled: !inChunkRange(26.198, 27.412)
@@ -241,7 +266,7 @@ const TestApp = (): ReactElement => {
                 });
             }
             targetCues.push({
-                id: "aa-bb" + idx,
+                id: `cue-trg-${idx}`,
                 vttCue: new VTTCue(randomStart, randomEnd, text),
                 cueCategory: "DIALOGUE",
                 editDisabled: !withinChunkRange,
@@ -342,7 +367,8 @@ const TestApp = (): ReactElement => {
                 return;
             }}
             onUpdateCue={(trackCue): Promise<CueDto> => {
-                const promiseMs = Math.floor(randomTime(5) * 1000);
+                console.log("in onUpdateCue: " + trackCue.cue.id);
+                const promiseMs = Math.floor(randomTime(.5) * 1000);
                 return new Promise((resolve) => setTimeout(() => resolve(trackCue.cue), promiseMs));
             }}
             onDeleteCue={(trackCue): Promise<string> => {
