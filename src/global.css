@@ -83,7 +83,7 @@
     }
 
     body {
-        @apply bg-blue-primary/5 text-left text-gray-700 font-sans font-normal;
+        @apply bg-blue-primary/5 text-left text-gray-800 font-sans font-normal;
     }
 
     html {
@@ -154,7 +154,7 @@
 }
 
 .sbte-btn.sbte-btn-light {
-    @apply border bg-gray-0 hover:bg-gray-100 text-gray-700 hover:shadow-md hover:shadow-gray-100/40;
+    @apply border bg-gray-0 hover:bg-gray-100 text-gray-800 hover:shadow-md hover:shadow-gray-100/40;
 }
 
 .sbte-btn.sbte-btn-light .fa-duotone {
@@ -166,7 +166,7 @@
 }
 
 .sbte-btn.sbte-btn-default {
-    @apply border bg-gray-100/60 hover:bg-gray-0 text-gray-700 hover:shadow-md hover:shadow-gray-100/40;
+    @apply border bg-gray-100/60 hover:bg-gray-0 text-gray-800 hover:shadow-md hover:shadow-gray-100/40;
 }
 
 .sbte-btn.sbte-btn-secondary {
@@ -343,7 +343,7 @@
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item,
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item > *,
 .p-menu:not(.sbte-position-button-list):not(.spellcheck-menu) .p-menuitem > * {
-    @apply font-normal flex w-full cursor-pointer sbte-transition text-gray-700 hover:text-blue-light whitespace-nowrap hover:bg-blue-primary/10 py-2 px-6;
+    @apply font-normal flex w-full cursor-pointer sbte-transition text-gray-800 hover:text-blue-light whitespace-nowrap hover:bg-blue-primary/10 py-2 px-6;
 }
 
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover {
@@ -378,7 +378,7 @@
 }
 
 .p-menu .p-menuitem-link .p-menuitem-text {
-    @apply text-gray-700 whitespace-nowrap sbte-transition leading-6;
+    @apply text-gray-800 whitespace-nowrap sbte-transition leading-6;
 }
 
 .p-menu .p-submenu-header {
@@ -543,7 +543,7 @@ label.sbte-form-control {
 /** Position Buttons **/
 
 .sbte-position-button-option {
-    @apply inline-flex items-center justify-center p-2 text-gray-700 rounded cursor-pointer hover:bg-blue-light/10 hover:text-blue-light;
+    @apply inline-flex items-center justify-center p-2 text-gray-800 rounded cursor-pointer hover:bg-blue-light/10 hover:text-blue-light;
     width: 38px;
 }
 
