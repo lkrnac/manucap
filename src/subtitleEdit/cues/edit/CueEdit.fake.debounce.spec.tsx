@@ -1469,6 +1469,50 @@ describe("CueEdit", () => {
             });
         });
 
+        it("doesn't highlight search term if find is empty when next cue is opened via ENTER", () => {
+            // GIVEN
+            const cues = [
+                { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Cue Search 2"), cueCategory: "DIALOGUE", editDisabled: false }
+            ] as CueDto[];
+            const sourceCues = [
+                { vttCue: new VTTCue(0, 1, "Source Cue 1"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(1, 2, "Source Cue 2"), cueCategory: "DIALOGUE" }
+            ] as CueDto[];
+            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            testingStore.dispatch(setCurrentPlayerTime(1) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("") as {} as AnyAction);
+            mount(
+                <Provider store={testingStore} >
+                    <CueEdit
+                        index={0}
+                        cue={cues[0]}
+                        nextCueLine={{ targetCues: [{ index: 1, cue: cues[1] }]}}
+                        matchedCuesIndex={0}
+                        setGlossaryTerm={jest.fn()}
+                    />
+                </Provider>
+            );
+
+            // WHEN
+            simulant.fire(document.documentElement, "keydown", { keyCode: Character.ENTER });
+
+            // THEN
+            expect(testingStore.getState().cues.length).toEqual(2);
+            expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 1,
+                sourceCueIndex: -1,
+                targetCueIndex: -1,
+                matchLength: 0,
+                offset: -1,
+                offsetIndex: 0
+            });
+        });
+
         it("closes cue editing mode when ESCAPE is pressed and search/replace is turned off", () => {
             // GIVEN
             const cue = { vttCue: new VTTCue(0, 1, "someText"), cueCategory: "DIALOGUE" } as CueDto;
