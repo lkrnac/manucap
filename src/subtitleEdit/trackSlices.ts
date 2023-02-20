@@ -19,11 +19,6 @@ export const editingTrackSlice = createSlice({
             const timecodesUnlocked = track.type === "TRANSLATION" ? currentTimecodesUnlocked : true;
             return { ...track, timecodesUnlocked };
         },
-        updateEditingTrackLockingVersion: (state, action: PayloadAction<number>): void => {
-            if (state) {
-                state.lockingVersion = action.payload;
-            }
-        },
         resetEditingTrack: (): Track | null => null
     }
 });
