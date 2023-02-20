@@ -1,17 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dispatch } from "react";
-import { CueDto, SubtitleEditAction, Track } from "../model";
-import { checkSaveStateAndSave, saveActionSlice, SaveState, setAutoSaveSuccess } from "./saveSlices";
+import {CueDto, DeleteTrackCueId, SubtitleEditAction} from "../model";
 import { debounce } from "lodash";
-import { AppThunk } from "../subtitleEditReducers";
-import { editingTrackSlice } from "../trackSlices";
 
 const DEBOUNCE_TIMEOUT = 2500;
-
-export interface DeleteTrackCueId {
-    editingTrack: Track;
-    cueId: string;
-}
 
 export interface SaveCueDelete {
     deleteCue: ((trackCues: DeleteTrackCueId) => Promise<string>) | null;
@@ -39,32 +31,19 @@ export const saveCueDeleteSlice = createSlice({
     }
 });
 
-const executeCueDeleteCallback = async (
-    dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
+const executeCueDeleteCallback = (
     getState: Function,
     cueIdsToDelete: string[]
-): Promise<boolean> => {
+): void => {
     const deleteCueCallback = getState().saveCueDelete.deleteCue;
-    let deleteCueError = false;
     for (const cueId of cueIdsToDelete) {
-        try {
-            const editingTrack = getState().editingTrack;
-            await deleteCueCallback({ editingTrack, cueId })
-                .then(() => {
-                    const lockingVersion = editingTrack.lockingVersion;
-                    if (lockingVersion) {
-                        dispatch(editingTrackSlice.actions.updateEditingTrackLockingVersion(lockingVersion + 1));
-                    }
-                });
-        } catch (e) {
-            deleteCueError = true;
-        }
+        const editingTrack = getState().editingTrack;
+        deleteCueCallback({ editingTrack, cueId });
     }
-    return deleteCueError;
 };
 
 const saveCueDeleteRequest = (
-    dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction | undefined>>,
     getState: Function
 ): void => {
     const cueIdsToDelete = [ ...getState().saveCueDelete.cueDeleteIds ];
@@ -72,26 +51,10 @@ const saveCueDeleteRequest = (
     if (cueIdsToDelete.length === 0) {
         return;
     }
-    dispatch(saveActionSlice.actions.setState(
-        { saveState: SaveState.REQUEST_SENT, multiCuesEdit: false }
-    ));
-    executeCueDeleteCallback(dispatch, getState, cueIdsToDelete)
-        .then((deleteCueError) => {
-            dispatch(setAutoSaveSuccess(!deleteCueError));
-        });
+    executeCueDeleteCallback(getState, cueIdsToDelete);
 };
 
-const saveCueDeleteCurrent = (
-    dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
-    getState: Function
-): void => {
-    const saveAction = getState().saveAction;
-    if (saveAction.saveState === SaveState.TRIGGERED) {
-        saveCueDeleteRequest(dispatch, getState);
-    }
-};
-
-const saveCueDeleteDebounced = debounce(saveCueDeleteCurrent, DEBOUNCE_TIMEOUT, { leading: false, trailing: true });
+const saveCueDeleteDebounced = debounce(saveCueDeleteRequest, DEBOUNCE_TIMEOUT, { leading: false, trailing: true });
 
 export const callSaveCueDelete = (
     dispatch: Dispatch<PayloadAction<SubtitleEditAction | undefined>>,
@@ -102,14 +65,5 @@ export const callSaveCueDelete = (
         return;
     }
     dispatch(saveCueDeleteSlice.actions.addCueIdForDelete(cueToDelete.id));
-    checkSaveStateAndSave(dispatch, getState, saveCueDeleteDebounced, false);
-};
-
-export const retrySaveCueDeleteIfNeeded = (
-    dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
-    getState: Function
-): void => {
-    if (getState().saveCueDelete.cueDeleteIds.size > 0) {
-        saveCueDeleteRequest(dispatch, getState);
-    }
+    saveCueDeleteDebounced(dispatch, getState);
 };

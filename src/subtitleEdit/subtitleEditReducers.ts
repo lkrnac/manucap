@@ -6,7 +6,7 @@ import { ThunkAction } from "redux-thunk";
 import { playVideoSectionSlice } from "./player/playbackSlices";
 import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { loadingIndicatorSlices } from "./loadingIndicatorSlices";
-import { saveActionSlice, saveTrackSlice } from "./cues/saveSlices";
+import { saveTrackSlice } from "./cues/saveSlices";
 import {
     currentPlayerTimeSlice,
     scrollPositionSlice,
@@ -37,7 +37,6 @@ export const Reducers = {
     saveTrack: saveTrackSlice.reducer,
     saveCueUpdate: saveCueUpdateSlice.reducer,
     saveCueDelete: saveCueDeleteSlice.reducer,
-    saveAction: saveActionSlice.reducer,
     spellCheckerSettings: spellcheckerSettingsSlice.reducer,
     searchReplace: searchReplaceSlice.reducer,
     searchReplaceVisible: searchReplaceVisibleSlice.reducer,

@@ -12,13 +12,22 @@ import CuesList from "./cues/cuesList/CuesList";
 import { setSaveTrack } from "./cues/saveSlices";
 import { resetEditingTrack } from "./trackSlices";
 import { changeScrollPosition, setCurrentPlayerTime } from "./cues/cuesList/cuesListScrollSlice";
-import { ScrollPosition, SaveActionParameters, TrackCues, Track, TrackCue, CueDto } from "./model";
+import {
+    DeleteTrackCueId,
+    ScrollPosition,
+    SaveActionParameters,
+    TrackCues,
+    Track,
+    TrackCue,
+    CueDto,
+    SaveStateValue
+} from "./model";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
 import { setSpellCheckDomain } from "./spellcheckerSettingsSlice";
 import CueErrorAlert from "./cues/CueErrorAlert";
 import MergeEditor from "./cues/merge/MergeEditor";
 import { saveCueUpdateSlice } from "./cues/saveCueUpdateSlices";
-import { DeleteTrackCueId, saveCueDeleteSlice } from "./cues/saveCueDeleteSlices";
+import { saveCueDeleteSlice } from "./cues/saveCueDeleteSlices";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -32,7 +41,7 @@ export interface SubtitleEditProps {
     onViewTrackHistory: () => void;
     onSave: (saveAction: SaveActionParameters) => void;
     onUpdateCue: (trackCue: TrackCue) => Promise<CueDto>;
-    onDeleteCue: (trackCues: DeleteTrackCueId) => Promise<string>;
+    onDeleteCue: (trackCue: DeleteTrackCueId) => Promise<string>;
     onComplete: (completeAction: TrackCues) => void;
     onExportFile: (trackVersionExport: Track | null) => void;
     onExportSourceFile: () => void;
@@ -40,6 +49,7 @@ export interface SubtitleEditProps {
     spellCheckerDomain?: string;
     commentAuthor?: string;
     editDisabled?: boolean;
+    saveState: SaveStateValue;
 }
 
 const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
@@ -128,6 +138,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 commentAuthor={props.commentAuthor}
                                 onViewTrackHistory={props.onViewTrackHistory}
                                 onComplete={props.onComplete}
+                                saveState={props.saveState}
                             />
                         </div>
                     </div>

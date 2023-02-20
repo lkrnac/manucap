@@ -96,7 +96,6 @@ export interface Track {
     title: string;
     trackId: string;
     name: string;
-    lockingVersion: number;
 }
 
 export interface SpellcheckerSettings {
@@ -192,9 +191,15 @@ export interface TrackCues {
     cues: CueDto[];
 }
 
-export interface TrackCue {
+export interface SaveTrackCue {
     editingTrack: Track;
     cue: CueDto;
+    onSaveSuccess: (cueDto: CueDto) => void;
+}
+
+export interface DeleteTrackCueId {
+    editingTrack: Track;
+    cueId: string;
 }
 
 export interface SaveActionParameters {
@@ -202,3 +207,13 @@ export interface SaveActionParameters {
     editingTrack: Track;
     shouldCreateNewVersion: boolean;
 }
+
+export const SaveState = {
+    NONE: 0,
+    TRIGGERED: 1,
+    SAVED: 2,
+    ERROR: 3
+} as const;
+
+type Keys = keyof typeof SaveState;
+export type SaveStateValue = typeof SaveState[Keys];

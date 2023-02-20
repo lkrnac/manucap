@@ -1,16 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { debounce } from "lodash";
 import { Dispatch } from "react";
-import { CueDto, SubtitleEditAction, TrackCue } from "../model";
-import { checkSaveStateAndSave, saveActionSlice, SaveState, setAutoSaveSuccess } from "./saveSlices";
+import { CueDto, SubtitleEditAction, SaveTrackCue } from "../model";
 import { AppThunk } from "../subtitleEditReducers";
 import { cuesSlice } from "./cuesList/cuesListSlices";
-import { editingTrackSlice } from "../trackSlices";
 
 const DEBOUNCE_TIMEOUT = 2500;
 
 export interface SaveCueUpdateCallback {
-    updateCue: ((trackCue: TrackCue) => Promise<CueDto>) | null;
+    updateCue: ((trackCue: SaveTrackCue) => Promise<CueDto>) | null;
     cueUpdateIds: Set<string>;
 }
 
@@ -23,7 +21,7 @@ export const saveCueUpdateSlice = createSlice({
     name: "saveCueUpdate",
     initialState: initSaveCueCallbacks,
     reducers: {
-        setUpdateCueCallback: (state, action: PayloadAction<(trackCue: TrackCue) => Promise<CueDto>>): void => {
+        setUpdateCueCallback: (state, action: PayloadAction<(trackCue: SaveTrackCue) => Promise<CueDto>>): void => {
             state.updateCue = action.payload;
         },
         addCueIdsForUpdate: (state, action: PayloadAction<string | undefined>): void => {
@@ -51,37 +49,28 @@ const updateAddedCueIdIfNeeded = (
     }
 };
 
-const executeCueUpdateCallback = async (
-    dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
+const executeCueUpdateCallback = (
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction | undefined>>,
     getState: Function,
     cueIdsToUpdate: string[]
-): Promise<boolean> => {
+): void => {
     const updateCueCallback = getState().saveCueUpdate.updateCue;
-    let updateCueError = false;
     for (const cueId of cueIdsToUpdate) {
         const cueToUpdate = getState().cues.find((aCue: CueDto) => aCue.id === cueId || aCue.addId === cueId);
         if (cueToUpdate) {
-            try {
-                const editingTrack = getState().editingTrack;
-                await updateCueCallback({ editingTrack, cue: cueToUpdate })
-                    .then((responseCueDto: CueDto) => {
-                        updateAddedCueIdIfNeeded(dispatch, getState, cueToUpdate.addId, responseCueDto);
-                        const lockingVersion = responseCueDto.trackVersionLockingVersion;
-                        if (lockingVersion) {
-                            dispatch(editingTrackSlice.actions.updateEditingTrackLockingVersion(lockingVersion));
-                        }
-                        return responseCueDto;
-                    });
-            } catch (e) {
-                updateCueError = true;
-            }
+            const editingTrack = getState().editingTrack;
+            const onSaveSuccess = (responseCueDto: CueDto) => {
+                console.log("vtmssubtitle updateCueCallback addid: " + responseCueDto.addId);
+                console.log("vtmssubtitle updateCueCallback id: " + responseCueDto.id);
+                updateAddedCueIdIfNeeded(dispatch, getState, cueToUpdate.addId, responseCueDto);
+            };
+            updateCueCallback({ editingTrack, cue: cueToUpdate, onSaveSuccess });
         }
     }
-    return updateCueError;
 };
 
 const saveCueUpdateRequest = (
-    dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
+    dispatch: Dispatch<PayloadAction<SubtitleEditAction | undefined>>,
     getState: Function
 ): void => {
     const cueIdsToUpdate: string[] = [ ...getState().saveCueUpdate.cueUpdateIds ];
@@ -89,26 +78,10 @@ const saveCueUpdateRequest = (
     if (cueIdsToUpdate.length === 0) {
         return;
     }
-    dispatch(saveActionSlice.actions.setState(
-        { saveState: SaveState.REQUEST_SENT, multiCuesEdit: false }
-    ));
-    executeCueUpdateCallback(dispatch, getState, cueIdsToUpdate)
-        .then((updateCueError) => {
-            dispatch(setAutoSaveSuccess(!updateCueError));
-        });
+    executeCueUpdateCallback(dispatch, getState, cueIdsToUpdate);
 };
 
-const saveCueUpdateCurrent = (
-    dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
-    getState: Function
-): void => {
-    const saveAction = getState().saveAction;
-    if (saveAction.saveState === SaveState.TRIGGERED) {
-        saveCueUpdateRequest(dispatch, getState);
-    }
-};
-
-const saveCueUpdateDebounced = debounce(saveCueUpdateCurrent, DEBOUNCE_TIMEOUT, { leading: false, trailing: true });
+const saveCueUpdateDebounced = debounce(saveCueUpdateRequest, DEBOUNCE_TIMEOUT, { leading: false, trailing: true });
 
 export const callSaveCueUpdate = (cueIndex: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | undefined> | void>, getState): void => {
@@ -116,15 +89,6 @@ export const callSaveCueUpdate = (cueIndex: number): AppThunk =>
     if (cue) {
         const cueId = cue.addId ? cue.addId : cue.id;
         dispatch(saveCueUpdateSlice.actions.addCueIdsForUpdate(cueId));
-        checkSaveStateAndSave(dispatch, getState, saveCueUpdateDebounced, false);
-    }
-};
-
-export const retrySaveCueUpdateIfNeeded = (
-    dispatch: Dispatch<AppThunk | PayloadAction<SubtitleEditAction | undefined>>,
-    getState: Function
-): void => {
-    if (getState().saveCueUpdate.cueUpdateIds.size > 0) {
-        saveCueUpdateRequest(dispatch, getState);
+        saveCueUpdateDebounced(dispatch, getState);
     }
 };
