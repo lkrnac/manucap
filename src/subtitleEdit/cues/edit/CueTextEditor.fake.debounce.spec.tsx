@@ -306,6 +306,8 @@ describe("CueTextEditor", () => {
         testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueMock));
+        // @ts-ignore we are mocking this function
+        fetchSpellCheck.mockReset();
         jest.clearAllMocks();
     });
 

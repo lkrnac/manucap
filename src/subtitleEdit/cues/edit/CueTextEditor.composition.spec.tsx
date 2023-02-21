@@ -17,7 +17,7 @@ import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { Replacement, SpellCheck } from "../spellCheck/model";
 import { act } from "react-dom/test-utils";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
-import {saveCueUpdateSlice} from "../saveCueUpdateSlices";
+import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
 
 jest.mock("lodash", () => ({
     debounce: (fn: MockedDebouncedFunction): Function => {
@@ -74,7 +74,7 @@ describe("CueTextEditor", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueMock));
-        jest.clearAllMocks();
+        jest.resetAllMocks();
     });
 
     it("doesn't re-render decorators during composition mode for diacritics", async () => {

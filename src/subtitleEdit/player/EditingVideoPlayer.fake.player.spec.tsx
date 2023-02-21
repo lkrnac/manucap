@@ -36,7 +36,7 @@ describe("EditingVideoPlayer", () => {
         testingStore = createTestingStore();
     });
     afterEach(() => {
-        jest.clearAllMocks();
+        jest.resetAllMocks();
     });
 
     it("passes down new video section to play", () => {

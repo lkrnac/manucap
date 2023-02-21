@@ -63,7 +63,7 @@ describe("ShiftTimesModal", () => {
         testingStore = createTestingStore();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
-        jest.clearAllMocks();
+        jest.resetAllMocks();
         document.body.innerHTML = "";
         cleanup();
     });

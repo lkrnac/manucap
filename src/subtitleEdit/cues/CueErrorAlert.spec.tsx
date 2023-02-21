@@ -15,7 +15,7 @@ jest.setTimeout(15000);
 
 describe("CueErrorAlert", () => {
     beforeEach(() => {
-        jest.clearAllMocks();
+        jest.resetAllMocks();
         testingStore = createTestingStore();
     });
 

@@ -16,6 +16,7 @@ import { updateEditingTrack } from "../../trackSlices";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import SplitCueLineButton from "../edit/SplitCueLineButton";
 import { saveCueDeleteSlice } from "../saveCueDeleteSlices";
+import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
 
 jest.mock("lodash", () => ({
     debounce: (callback: Function): Function => callback,
@@ -33,11 +34,13 @@ let testingStore = createTestingStore();
 
 describe("CueActionsPanel", () => {
     const saveTrack = jest.fn();
-
+    const updateCueMock = jest.fn();
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueMock));
         testingStore.dispatch(updateEditingTrack({ timecodesUnlocked: true } as Track) as {} as AnyAction);
+        jest.resetAllMocks();
     });
 
     it("renders for caption cue in edit mode", () => {
@@ -123,6 +126,7 @@ describe("CueActionsPanel", () => {
 
         // THEN
         expect(testingStore.getState().editingCueIndex).toEqual(2);
+        expect(updateCueMock).toHaveBeenCalledTimes(1);
     });
 
     it("deletes cue when delete button is clicked", () => {

@@ -13,7 +13,7 @@ import { updateCues, updateMatchedCues } from "../cuesList/cuesListActions";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import { replaceCurrentMatch } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
@@ -25,8 +25,8 @@ import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
 let testingStore = createTestingStore();
 
 const cues = [
-    { id: "c-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", editUuid: "1" } as CueDto,
-    { id: "c-2", vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE", editUuid: "2" } as CueDto
+    { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE", editUuid: "1" } as CueDto,
+    { id: "cue-2", vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE", editUuid: "2" } as CueDto
 ];
 const bindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
 const unbindCueViewModeKeyboardShortcutSpy = jest.fn() as () => void;
@@ -87,7 +87,7 @@ describe("CueTextEditor", () => {
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueMock));
-        jest.clearAllMocks();
+        jest.resetAllMocks();
     });
 
     it("updates cue in redux store with debounce", (done) => {
@@ -400,7 +400,7 @@ describe("CueTextEditor", () => {
         );
     });
 
-    it("triggers spellcheck only once immediately after clear text change", (done) => {
+    it("triggers spellcheck only once immediately after clear text change", async () => {
         // GIVEN
         const testingResponse = {
             matches: [
@@ -462,7 +462,7 @@ describe("CueTextEditor", () => {
         fireEvent.keyDown(editor, { keyCode: 8 });
 
         // THEN
-        setTimeout(
+        await waitFor(
             () => {
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledWith(
@@ -475,9 +475,9 @@ describe("CueTextEditor", () => {
                 );
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledTimes(2);
-                done();
+                expect(updateCueMock).toHaveBeenCalledTimes(1);
             },
-            6000
+            { timeout: 6000 }
         );
     });
 

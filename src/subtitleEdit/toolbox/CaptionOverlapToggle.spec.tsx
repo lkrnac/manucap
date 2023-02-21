@@ -26,6 +26,7 @@ describe("CaptionOverlapToggle", () => {
         // GIVEN
         saveTrack.mockReset();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+        jest.resetAllMocks();
     });
 
    it("renders", () => {
@@ -59,7 +60,6 @@ describe("CaptionOverlapToggle", () => {
             <button
                 type="button"
                 className="flex items-center justify-between outline-0 active"
-                disabled
             >
                 <span>
                     <i className="w-7 fa-duotone fa-arrow-down-square-triangle text-blue-primary" />
@@ -87,13 +87,13 @@ describe("CaptionOverlapToggle", () => {
             type: "CAPTION",
             language: { id: "en-US" },
             default: true,
-            overlapEnabled: true
+            overlapEnabled: false
         } as Track;
 
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
         const expectedNode = render(
-            <button type="button" className="flex items-center justify-between" disabled>
+            <button type="button" className="flex items-center justify-between">
                 <span>
                     <i className="w-7 fa-duotone fa-arrow-down-square-triangle text-blue-primary" />
                     <span>Overlapping</span>
@@ -156,40 +156,35 @@ describe("CaptionOverlapToggle", () => {
         expect(actualNode.container.querySelector("button") as Element).toBeDisabled();
     });
 
-    // TODO change saveState prop for test
-    // it("enables button after successful save", () => {
-    //     // GIVEN
-    //     const testingTrack = { type: "CAPTION", language: { id: "en-US" }, default: true } as Track;
-    //     testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-    //     const actualNode = render(
-    //         <Provider store={testingStore}>
-    //             <CaptionOverlapToggle onClick={jest.fn()} />
-    //         </Provider>
-    //     );
-    //
-    //     // WHEN
-    //     callSaveTrack(testingStore.dispatch, testingStore.getState);
-    //     testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
-    //
-    //     // THEN
-    //     expect(actualNode.container.querySelector("button") as Element).toBeEnabled();
-    // });
+    it("enables button after successful save", () => {
+        // GIVEN
+        const testingTrack = { type: "CAPTION", language: { id: "en-US" }, default: true } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
-    // it("enables button after failed save", () => {
-    //     // GIVEN
-    //     const testingTrack = { type: "CAPTION", language: { id: "en-US" }, default: true } as Track;
-    //     testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-    //     const actualNode = render(
-    //         <Provider store={testingStore}>
-    //             <CaptionOverlapToggle onClick={jest.fn()} />
-    //         </Provider>
-    //     );
-    //
-    //     // WHEN
-    //     callSaveTrack(testingStore.dispatch, testingStore.getState);
-    //     testingStore.dispatch(setAutoSaveSuccess(false) as {} as AnyAction);
-    //
-    //     // THEN
-    //     expect(actualNode.container.querySelector("button") as Element).toBeEnabled();
-    // });
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CaptionOverlapToggle onClick={jest.fn()} saveState="SAVED" />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.querySelector("button") as Element).toBeEnabled();
+    });
+
+    it("enables button after failed save", () => {
+        // GIVEN
+        const testingTrack = { type: "CAPTION", language: { id: "en-US" }, default: true } as Track;
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CaptionOverlapToggle onClick={jest.fn()} saveState="ERROR" />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.querySelector("button") as Element).toBeEnabled();
+    });
 });

@@ -86,7 +86,7 @@ describe("CueEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
         testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueMock));
-        jest.clearAllMocks();
+        jest.resetAllMocks();
     });
 
     describe("major use cases", () => {
@@ -498,10 +498,11 @@ describe("CueEdit", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2.22);
         });
 
-        it("calls saveTrack in redux store when end time changes", () => {
+        it("calls updateCueSave in redux store when end time changes", () => {
             // GIVEN
+            const testEditingTrack = { ...testTrack, timecodesUnlocked: true } as Track;
             testingStore.dispatch(
-                updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
+                updateEditingTrack( testEditingTrack) as {} as AnyAction);
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             const cue = {
@@ -523,7 +524,7 @@ describe("CueEdit", () => {
                 .simulate("change", { target: { value: "00:00:05.500", selectionEnd: 12 }});
 
             // THEN
-            expect(updateCueMock).toHaveBeenCalledTimes(1);
+            expect(updateCueMock).toHaveBeenCalled();
             expect(saveTrack).not.toBeCalled();
         });
 

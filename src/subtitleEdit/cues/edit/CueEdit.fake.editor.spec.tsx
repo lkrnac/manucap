@@ -64,7 +64,7 @@ describe("CueEdit", () => {
         testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
-        jest.clearAllMocks();
+        jest.resetAllMocks();
     });
 
     describe("focus", () => {
