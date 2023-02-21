@@ -18,9 +18,9 @@ import {
     SaveActionParameters,
     TrackCues,
     Track,
-    TrackCue,
     CueDto,
-    SaveStateValue
+    SaveTrackCue,
+    SaveState
 } from "./model";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
 import { setSpellCheckDomain } from "./spellcheckerSettingsSlice";
@@ -40,7 +40,7 @@ export interface SubtitleEditProps {
     waveform?: string;
     onViewTrackHistory: () => void;
     onSave: (saveAction: SaveActionParameters) => void;
-    onUpdateCue: (trackCue: TrackCue) => Promise<CueDto>;
+    onUpdateCue: (trackCue: SaveTrackCue) => Promise<CueDto>;
     onDeleteCue: (trackCue: DeleteTrackCueId) => Promise<string>;
     onComplete: (completeAction: TrackCues) => void;
     onExportFile: (trackVersionExport: Track | null) => void;
@@ -49,7 +49,7 @@ export interface SubtitleEditProps {
     spellCheckerDomain?: string;
     commentAuthor?: string;
     editDisabled?: boolean;
-    saveState: SaveStateValue;
+    saveState: SaveState;
 }
 
 const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
@@ -118,6 +118,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 handleExportSourceFile={props.onExportSourceFile}
                                 handleExportFile={props.onExportFile}
                                 handleImportFile={props.onImportFile}
+                                saveState={props.saveState}
                             />
                         </div>
                         <div

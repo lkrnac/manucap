@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dispatch } from "react";
-import {CueDto, DeleteTrackCueId, SubtitleEditAction} from "../model";
+import { CueDto, DeleteTrackCueId, SubtitleEditAction } from "../model";
 import { debounce } from "lodash";
 
 const DEBOUNCE_TIMEOUT = 2500;

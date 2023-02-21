@@ -13,7 +13,6 @@ import ReactDOM from "react-dom";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import testingStore from "./testUtils/testingStore";
-import { setAutoSaveSuccess } from "./subtitleEdit/cues/saveSlices";
 import "draft-js/dist/Draft.css";
 import { updateSourceCues } from "./subtitleEdit/cues/view/sourceCueSlices";
 
@@ -361,7 +360,8 @@ const TestApp = (): ReactElement => {
             onSave={(): void => {
                 setTimeout(
                     () => {
-                        dispatch(setAutoSaveSuccess(true));
+                        // TODO set savedState
+                        // dispatch(setAutoSaveSuccess(true));
                     }, 500
                 );
                 return;
@@ -380,6 +380,7 @@ const TestApp = (): ReactElement => {
             onImportFile={(): void => undefined}
             spellCheckerDomain="dev-spell-checker.videotms.com"
             commentAuthor="Linguist"
+            saveState={"NONE"}
         />
     );
 };

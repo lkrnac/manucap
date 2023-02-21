@@ -17,13 +17,14 @@ import SyncCuesButton from "./SyncCuesButton";
 import { Menu } from "primereact/menu";
 import KeyboardShortcutsModal from "./keyboardShortcuts/KeyboardShortcutsModal";
 import ShiftTimeModal from "./shift/ShiftTimeModal";
-import { Track } from "../model";
+import { SaveState, Track } from "../model";
 
 interface Props {
     handleExportFile: (trackVersionExport: Track | null) => void;
     handleExportSourceFile: () => void;
     handleImportFile: () => void;
     editDisabled?: boolean;
+    saveState: SaveState;
 }
 
 const Toolbox = (props: Props): ReactElement => {
@@ -87,7 +88,7 @@ const Toolbox = (props: Props): ReactElement => {
                     { template: () => <MergeCuesButton onClick={toggleMenu} /> },
                     { separator: true },
                     { template: () => <TimecodesLockToggle onClick={toggleMenu} /> },
-                    { template: () => <CaptionOverlapToggle onClick={toggleMenu} /> },
+                    { template: () => <CaptionOverlapToggle onClick={toggleMenu} saveState={props.saveState} /> },
                     { separator: true },
                     { template: () => <CueCommentsToggle onClick={toggleMenu} /> },
                     { template: () => <WaveformToggle onClick={toggleMenu} /> },

@@ -34,13 +34,12 @@ import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import * as cueEditorSlices from "../edit/cueEditorSlices";
 import { clearLastCueChange, lastCueChangeSlice, updateEditingCueIndex } from "../edit/cueEditorSlices";
-import { SaveState, setSaveTrack } from "../saveSlices";
+import { setSaveTrack } from "../saveSlices";
 import { cuesSlice, matchedCuesSlice, ShiftPosition } from "./cuesListSlices";
 import * as cuesListScrollSlice from "./cuesListScrollSlice";
 import { showSearchReplace } from "../searchReplace/searchReplaceSlices";
 import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
 import { saveCueDeleteSlice } from "../saveCueDeleteSlices";
-import { waitFor } from "@testing-library/react";
 
 const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
 const updateSearchMatchesSpy = jest.spyOn(cueEditorSlices, "updateSearchMatches");
@@ -170,8 +169,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
             expect(testingStore.getState().cues[1].vttCue === testingStore.getState().lastCueChange.vttCue)
                 .toBeTruthy();
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
             expect(updateCueMock).toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
@@ -298,8 +295,6 @@ describe("cueSlices", () => {
                     [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
                 expect(testingStore.getState().cues[2].vttCue.text).toEqual("Dummy Cue");
                 expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(updateCueMock).toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -328,8 +323,6 @@ describe("cueSlices", () => {
 
                 // THEN
                 expect(testingStore.getState().cues[2].errors).toEqual([]);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(updateCueMock).toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -370,8 +363,6 @@ describe("cueSlices", () => {
 
                 // THEN
                 expect(testingStore.getState().cues[2].errors).toEqual([CueError.SPELLCHECK_ERROR]);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(updateCueMock).toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -414,8 +405,6 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().cues[2].errors).toEqual(
                     [CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP, CueError.SPELLCHECK_ERROR]);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(updateCueMock).toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -1679,8 +1668,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().lastCueChange.changeType).toEqual("UPDATE_ALL");
                 expect(testingStore.getState().lastCueChange.index).toEqual(-1);
                 expect(testingStore.getState().lastCueChange.vttCue).toBeUndefined();
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
                 expect(testingStore.getState().editingCueIndex).toEqual(1);
                 expect(testingStore.getState().focusedInput).toEqual("START_TIME");
@@ -1713,8 +1700,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().lastCueChange.vttCue.text).toEqual("Dummy Cue");
                 expect(testingStore.getState().cues[2].vttCue === testingStore.getState().lastCueChange.vttCue)
                     .toBeTruthy();
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(3);
                 expect(testingStore.getState().editingCueIndex).toEqual(2);
                 expect(testingStore.getState().focusedInput).toEqual("EDITOR");
@@ -1749,8 +1734,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().lastCueChange.changeType).toEqual("UPDATE_ALL");
             expect(testingStore.getState().lastCueChange.index).toEqual(-1);
             expect(testingStore.getState().lastCueChange.vttCue).toBeUndefined();
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(4);
             expect(testingStore.getState().editingCueIndex).toEqual(1);
             expect(testingStore.getState().focusedInput).toEqual("START_TIME");
@@ -1781,16 +1764,11 @@ describe("cueSlices", () => {
             await testingStore.dispatch(validateVttCue(2) as {} as AnyAction);
 
             // THEN
-            await waitFor(
-                () => expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED),
-                { timeout: 3000 }
-            );
             expect(testingStore.getState().cues[0].errors).toBeUndefined();
             expect(testingStore.getState().cues[1].errors).toEqual([]);
             expect(testingStore.getState().cues[2].errors).toEqual(
                 [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP]);
             expect(testingStore.getState().cues[3].errors).toEqual([CueError.TIME_GAP_OVERLAP]);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(testingStore.getState().matchedCues.matchedCues["0"].targetCues["0"].cue.errors).toBeUndefined();
             expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors).toBeUndefined();
             expect(testingStore.getState().matchedCues.matchedCues["2"].targetCues["0"].cue.errors).toEqual(
@@ -1828,8 +1806,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -1862,8 +1838,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -1902,8 +1876,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].errors).toEqual(["Max Lines Per Caption Exceeded"]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -1933,8 +1905,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].errors).toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors)
                 .toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -1964,8 +1934,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].errors).toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors)
                 .toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -1997,8 +1965,6 @@ describe("cueSlices", () => {
                 [CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.CHARS_PER_SECOND_EXCEEDED]);
             expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors)
                 .toEqual([CueError.LINE_CHAR_LIMIT_EXCEEDED, CueError.CHARS_PER_SECOND_EXCEEDED]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2031,8 +1997,6 @@ describe("cueSlices", () => {
                 [CueError.LINE_COUNT_EXCEEDED, CueError.CHARS_PER_SECOND_EXCEEDED]);
             expect(testingStore.getState().matchedCues.matchedCues["1"].targetCues["0"].cue.errors)
                 .toEqual([CueError.LINE_COUNT_EXCEEDED, CueError.CHARS_PER_SECOND_EXCEEDED]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2061,8 +2025,6 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2088,8 +2050,6 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2115,8 +2075,6 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2142,8 +2100,6 @@ describe("cueSlices", () => {
             // THEN
             expect(testingStore.getState().cues[1].errors).not.toContain(CueError.CHARS_PER_SECOND_EXCEEDED);
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2176,8 +2132,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toBeUndefined();
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2210,8 +2164,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toBeUndefined();
             expect(testingStore.getState().matchedCues.matchedCues).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2225,7 +2177,6 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[3]).toBeUndefined();
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2240,8 +2191,6 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[1].cueCategory).toEqual("AUDIO_DESCRIPTION");
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2262,8 +2211,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].cueCategory).toEqual("ONSCREEN_TEXT");
             expect(testingStore.getState().cues[2].spellCheck)
                 .toEqual({ matches: [{ message: "some-spell-check-problem" }]});
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2285,8 +2232,6 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[1].comments).toEqual([newComment]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2315,8 +2260,6 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[0].comments).toEqual([existingComment, newComment]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2343,8 +2286,6 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues[0].comments).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2365,8 +2306,6 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().focusedCueIndex).toEqual(3);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2391,8 +2330,6 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(5);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).toHaveBeenCalled();
@@ -2414,8 +2351,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
                 expect(testingStore.getState().editingCueIndex).toEqual(0);
                 expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).toHaveBeenCalled();
@@ -2435,8 +2370,6 @@ describe("cueSlices", () => {
                 expect(lastCueChange.vttCue.text).toEqual("");
                 expect(lastCueChange.vttCue.startTime).toEqual(0);
                 expect(lastCueChange.vttCue.endTime).toEqual(3);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).toHaveBeenCalled();
@@ -2458,8 +2391,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[3].cueCategory).toEqual("ONSCREEN_TEXT");
                 expect(testingStore.getState().editingCueIndex).toEqual(3);
                 expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(updateCueMock).toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2481,8 +2412,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].cueCategory).toEqual("DIALOGUE");
                 expect(testingStore.getState().editingCueIndex).toEqual(1);
                 expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(updateCueMock).toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2503,7 +2432,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_OVERLAP);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2528,8 +2456,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(updateCueMock).toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2554,7 +2480,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_LIMIT_EXCEEDED);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2581,8 +2506,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(7);
                 expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(updateCueMock).toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2608,8 +2531,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
                 expect(testingStore.getState().editingCueIndex).toEqual(0);
                 expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).toHaveBeenCalled();
@@ -2642,8 +2563,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[3].cueCategory).toEqual("ONSCREEN_TEXT");
                 expect(testingStore.getState().editingCueIndex).toEqual(3);
                 expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(updateCueMock).toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2670,8 +2589,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].cueCategory).toEqual("DIALOGUE");
                 expect(testingStore.getState().editingCueIndex).toEqual(1);
                 expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(updateCueMock).toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2699,8 +2616,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].cueCategory).toEqual("DIALOGUE");
                 expect(testingStore.getState().editingCueIndex).toEqual(1);
                 expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(updateCueMock).toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2734,8 +2649,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(5);
                 expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(updateCueMock).toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2769,7 +2682,6 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().cues.length).toEqual(2);
                 expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_LIMIT_EXCEEDED);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2793,8 +2705,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
                 expect(testingStore.getState().editingCueIndex).toEqual(0);
                 expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).toHaveBeenCalled();
@@ -2827,7 +2737,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_LIMIT_EXCEEDED);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2862,8 +2771,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[3].cueCategory).toEqual("ONSCREEN_TEXT");
                 expect(testingStore.getState().editingCueIndex).toEqual(3);
                 expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(updateCueMock).toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2885,8 +2792,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().validationErrors).toEqual([]);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(updateCueMock).toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2912,7 +2817,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
                 expect(testingStore.getState().validationErrors).toContain(CueError.TIME_GAP_OVERLAP);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2937,8 +2841,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues.length).toEqual(4);
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(9);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(updateCueMock).toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2963,8 +2865,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues.length).toEqual(4);
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(8);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(updateCueMock).toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -2983,8 +2883,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues.length).toEqual(4);
                 expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(6);
                 expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(9);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
                 expect(updateCueMock).toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3010,8 +2908,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
             expect(testingStore.getState().lastCueChange.changeType).toEqual("REMOVE");
             expect(testingStore.getState().lastCueChange.index).toEqual(0);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3035,8 +2931,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
             expect(testingStore.getState().lastCueChange.changeType).toEqual("REMOVE");
             expect(testingStore.getState().lastCueChange.index).toEqual(1);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3056,8 +2950,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
             expect(testingStore.getState().lastCueChange.changeType).toEqual("REMOVE");
             expect(testingStore.getState().lastCueChange.index).toEqual(2);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3083,8 +2975,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.line).toEqual("auto");
             expect(testingStore.getState().cues[0].vttCue.position).toEqual("auto");
             expect(testingStore.getState().cues[0].vttCue.positionAlign).toEqual("auto");
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.RETRY);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3103,8 +2993,6 @@ describe("cueSlices", () => {
             expect(recordCueChangeSpy).toBeCalledWith(
                 { "changeType": "EDIT", "index": 0,
                     "vttCue": new VTTCue(0, 0, "") });
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3131,7 +3019,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].cueCategory).toEqual("ONSCREEN_TEXT");
             expect(testingStore.getState().cues[1].errors).toBeUndefined();
             expect(testingStore.getState().cues[1].editUuid).not.toBeNull();
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3153,7 +3040,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].errors).toEqual([]);
             expect(testingStore.getState().cues[0].editUuid).not.toBeNull();
             expect(testingStore.getState().lastCueChange.changeType).toEqual("UPDATE_ALL");
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3183,7 +3069,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[3].vttCue.startTime).toEqual(4);
             expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(6);
             expect(testingStore.getState().editingCueIndex).toEqual(1);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3213,7 +3098,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(6);
             expect(testingStore.getState().cues[3].vttCue.endTime).toEqual(6);
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3233,7 +3117,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
             expect(testingStore.getState().editingCueIndex).toEqual(0);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3257,8 +3140,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4.123);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4.123);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6.123);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).toHaveBeenCalled();
@@ -3276,8 +3157,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4.123);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6.123);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).toHaveBeenCalled();
@@ -3297,8 +3176,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(5.123);
             expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4);
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(6);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).toHaveBeenCalled();
@@ -3318,8 +3195,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
             expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(4.123);
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(6.123);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).toHaveBeenCalled();
@@ -3339,8 +3214,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(3.88);
             expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(4);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).toHaveBeenCalled();
@@ -3356,7 +3229,6 @@ describe("cueSlices", () => {
             };
             // THEN
             expect(error).toThrow("No editing cue selected to begin shifting");
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3372,7 +3244,6 @@ describe("cueSlices", () => {
             };
             // THEN
             expect(error).toThrow("No editing cue selected to begin shifting");
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3388,7 +3259,6 @@ describe("cueSlices", () => {
             };
             // THEN
             expect(error).toThrow("Cannot shift before first cue");
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3405,7 +3275,6 @@ describe("cueSlices", () => {
             };
             // THEN
             expect(error).toThrow("Invalid position provided, all, before or after expected");
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3422,7 +3291,6 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().cues.length).toEqual(0);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3437,7 +3305,6 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().sourceCues.length).toEqual(0);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3461,7 +3328,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3485,8 +3351,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(3);
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(3);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(5);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).toHaveBeenCalled();
@@ -3512,8 +3376,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(5);
             expect(testingStore.getState().cues[2].vttCue.startTime).toEqual(5);
             expect(testingStore.getState().cues[2].vttCue.endTime).toEqual(7);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).toHaveBeenCalled();
@@ -3561,8 +3423,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[2].errors).toEqual([]);
             expect(testingStore.getState().cues[3].errors).toEqual([]);
             expect(testingStore.getState().cues[4].errors).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
             expect(updateCueMock).toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3577,7 +3437,6 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().rowsToMerge).toEqual([{ index: 1 }]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3593,7 +3452,6 @@ describe("cueSlices", () => {
 
             // THEN
             expect(testingStore.getState().rowsToMerge).toEqual([]);
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3624,8 +3482,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).toHaveBeenCalled();
@@ -3654,7 +3510,6 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().validationErrors).toEqual([CueError.MERGE_ERROR]);
                 expect(testingStore.getState().cues.length).toEqual(3);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).not.toHaveBeenCalled();
@@ -3678,8 +3533,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(6);
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual(
                     "Caption Line 1\nCaption Line 2\nCaption Line 3");
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).toHaveBeenCalled();
@@ -3718,8 +3571,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(8);
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual(
                     "Caption Line 1\nCaption Line 2\nCaption Line 3\nCaption Line 4");
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).toHaveBeenCalled();
@@ -3738,8 +3589,6 @@ describe("cueSlices", () => {
                 // THEN
                 expect(testingStore.getState().editingCueIndex).toEqual(0);
                 expect(testingStore.getState().focusedCueIndex).toEqual(0);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).toHaveBeenCalled();
@@ -3766,8 +3615,6 @@ describe("cueSlices", () => {
                     [CueError.LINE_COUNT_EXCEEDED, CueError.LINE_CHAR_LIMIT_EXCEEDED]);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).toHaveBeenCalled();
@@ -3796,8 +3643,6 @@ describe("cueSlices", () => {
                     [{ source: "1", replacements: ["rep1"]}, { source: "2", replacements: ["rep2"]}]);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).toHaveBeenCalled();
@@ -3819,8 +3664,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");
                 expect(testingStore.getState().cues[0].comments).toEqual(testComments);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).toHaveBeenCalled();
@@ -3870,8 +3713,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual(
                     "Caption Line 1\nCaption Line 2\nCaption Line 3\nCaption Line 4");
                 expect(testingStore.getState().cues[0].comments).toEqual(testComments);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).toHaveBeenCalled();
@@ -3901,8 +3742,6 @@ describe("cueSlices", () => {
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
-                expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-                expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
                 expect(updateCueMock).not.toHaveBeenCalled();
                 expect(deleteCueMock).not.toHaveBeenCalled();
                 expect(saveTrackMock).toHaveBeenCalled();
@@ -3930,8 +3769,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).toHaveBeenCalled();
@@ -3955,8 +3792,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
             expect(testingStore.getState().cues[1].comments).toBeUndefined();
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).toHaveBeenCalled();
@@ -3983,7 +3818,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(4);
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption Line 2");
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
@@ -4008,8 +3842,6 @@ describe("cueSlices", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
             expect(updateCueMock).not.toHaveBeenCalled();
             expect(deleteCueMock).not.toHaveBeenCalled();
             expect(saveTrackMock).toHaveBeenCalled();

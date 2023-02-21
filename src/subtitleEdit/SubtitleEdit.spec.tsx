@@ -23,7 +23,7 @@ import VideoPlayer from "./player/VideoPlayer";
 import { createTestingStore } from "../testUtils/testingStore";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
-import { callSaveTrack, SaveState, setSaveTrack } from "./cues/saveSlices";
+import { callSaveTrack, setSaveTrack } from "./cues/saveSlices";
 import * as cuesListScrollSlice from "./cues/cuesList/cuesListScrollSlice";
 import { showSearchReplace } from "./cues/searchReplace/searchReplaceSlices";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
@@ -121,6 +121,7 @@ describe("SubtitleEdit", () => {
                                 handleImportFile={jest.fn()}
                                 handleExportSourceFile={jest.fn()}
                                 handleExportFile={jest.fn()}
+                                saveState="NONE"
                             />
                         </div>
                         <div
@@ -170,6 +171,7 @@ describe("SubtitleEdit", () => {
                                     editingTrack={testingTrack}
                                     onViewTrackHistory={jest.fn()}
                                     onComplete={jest.fn()}
+                                    saveState="NONE"
                                 />
                             </div>
                         </div>
@@ -192,6 +194,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -239,6 +242,7 @@ describe("SubtitleEdit", () => {
                                 handleImportFile={jest.fn()}
                                 handleExportSourceFile={jest.fn()}
                                 handleExportFile={jest.fn()}
+                                saveState="NONE"
                             />
                         </div>
                         <div
@@ -270,6 +274,7 @@ describe("SubtitleEdit", () => {
                                     editingTrack={testingTrack}
                                     onViewTrackHistory={jest.fn()}
                                     onComplete={jest.fn()}
+                                    saveState="NONE"
                                 />
                             </div>
                         </div>
@@ -292,6 +297,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -350,6 +356,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -408,6 +415,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -455,6 +463,7 @@ describe("SubtitleEdit", () => {
                                 handleImportFile={jest.fn()}
                                 handleExportSourceFile={jest.fn()}
                                 handleExportFile={jest.fn()}
+                                saveState="NONE"
                             />
                         </div>
                         <div
@@ -505,6 +514,7 @@ describe("SubtitleEdit", () => {
                                     editingTrack={testingTrack}
                                     onViewTrackHistory={jest.fn()}
                                     onComplete={jest.fn()}
+                                    saveState="NONE"
                                 />
                             </div>
                         </div>
@@ -527,6 +537,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -576,6 +587,7 @@ describe("SubtitleEdit", () => {
                                 handleImportFile={jest.fn()}
                                 handleExportSourceFile={jest.fn()}
                                 handleExportFile={jest.fn()}
+                                saveState="NONE"
                             />
                         </div>
                         <div
@@ -626,6 +638,7 @@ describe("SubtitleEdit", () => {
                                     editingTrack={testingTrack}
                                     onViewTrackHistory={jest.fn()}
                                     onComplete={jest.fn()}
+                                    saveState="NONE"
                                 />
                             </div>
                         </div>
@@ -648,6 +661,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -698,6 +712,7 @@ describe("SubtitleEdit", () => {
                                 handleImportFile={jest.fn()}
                                 handleExportSourceFile={jest.fn()}
                                 handleExportFile={jest.fn()}
+                                saveState="NONE"
                             />
                         </div>
                         <div
@@ -750,6 +765,7 @@ describe("SubtitleEdit", () => {
                                     onViewTrackHistory={jest.fn()}
                                     onComplete={jest.fn()}
                                     editDisabled
+                                    saveState="NONE"
                                 />
                             </div>
                         </div>
@@ -773,6 +789,7 @@ describe("SubtitleEdit", () => {
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                     editDisabled
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -832,6 +849,7 @@ describe("SubtitleEdit", () => {
                                 handleImportFile={jest.fn()}
                                 handleExportSourceFile={jest.fn()}
                                 handleExportFile={jest.fn()}
+                                saveState="NONE"
                             />
                         </div>
                         <div
@@ -881,6 +899,7 @@ describe("SubtitleEdit", () => {
                                     editingTrack={testingTrack}
                                     onViewTrackHistory={jest.fn()}
                                     onComplete={jest.fn()}
+                                    saveState="NONE"
                                 />
                             </div>
                         </div>
@@ -904,6 +923,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -940,6 +960,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -974,6 +995,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1009,6 +1031,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={mockOnExportFile}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1043,6 +1066,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={mockOnExportSourceFile}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1077,6 +1101,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={mockOnImportFile}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1119,6 +1144,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1161,6 +1187,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1196,6 +1223,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1236,6 +1264,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1266,6 +1295,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1302,6 +1332,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1339,6 +1370,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1382,6 +1414,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1418,6 +1451,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1469,6 +1503,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1538,6 +1573,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1571,6 +1607,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1586,10 +1623,6 @@ describe("SubtitleEdit", () => {
             expect(testingStore.getState().cues).toEqual([]);
             expect(testingStore.getState().sourceCues).toEqual([]);
             expect(testingStore.getState().saveTrack).toBeNull();
-            expect(testingStore.getState().autoSaveSuccess).toBeFalsy();
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
-            expect(testingStore.getState().pendingSave).toBeFalsy();
             expect(testingStore.getState().lastCueChange).toEqual(null);
         });
     });
@@ -1609,6 +1642,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1635,6 +1669,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1661,6 +1696,7 @@ describe("SubtitleEdit", () => {
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1685,6 +1721,7 @@ describe("SubtitleEdit", () => {
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                     spellCheckerDomain="testing-domain"
+                    saveState="NONE"
                 />
             </Provider>
         );

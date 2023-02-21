@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { debounce } from "lodash";
 import { AppThunk } from "../subtitleEditReducers";
 import { Dispatch } from "react";
-import { CueDto, SaveState, SubtitleEditAction, Track } from "../model";
+import { CueDto, SubtitleEditAction, Track } from "../model";
 import { editingTrackSlice } from "../trackSlices";
 
 const DEBOUNCE_TIMEOUT = 2500;
@@ -11,14 +11,6 @@ interface SaveActionWithPayload extends SubtitleEditAction {
     editingTrack: Track | null;
     shouldCreateNewVersion: boolean;
 }
-
-export interface SaveAction {
-    saveState: SaveState;
-    multiCuesEdit: boolean;
-}
-
-export const isPendingSaveState = (saveState: SaveState): boolean =>
-    saveState === SaveState.TRIGGERED;
 
 export const saveTrackSlice = createSlice({
     name: "callSaveTrack",
@@ -43,7 +35,7 @@ export const setSaveTrack = (saveTrack: Function): AppThunk =>
     };
 
 const sendSaveTrackRequest = (
-    dispatch: Dispatch<PayloadAction<boolean | SaveActionWithPayload | SaveAction>>,
+    dispatch: Dispatch<PayloadAction<boolean | SaveActionWithPayload>>,
     getState: Function
 ): void => {
     const cues = getState().cues;

@@ -105,6 +105,7 @@ describe("CuesList", () => {
                             editingTrack={testingTranslationTrack}
                             onViewTrackHistory={jest.fn()}
                             onComplete={jest.fn()}
+                            saveState="NONE"
                         />
                     </div>
                 </Provider>
@@ -118,6 +119,7 @@ describe("CuesList", () => {
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
                         onViewTrackHistory={jest.fn()}
+                        saveState="NONE"
                     />
                 </Provider>
             );
@@ -203,6 +205,7 @@ describe("CuesList", () => {
                             editingTrack={testingTranslationTrack}
                             onViewTrackHistory={jest.fn()}
                             onComplete={jest.fn()}
+                            saveState="NONE"
                         />
                     </div>
                 </Provider>
@@ -215,6 +218,7 @@ describe("CuesList", () => {
                         editingTrack={testingTranslationTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -271,6 +275,7 @@ describe("CuesList", () => {
                             editingTrack={testingTranslationTrack}
                             onViewTrackHistory={jest.fn()}
                             onComplete={jest.fn()}
+                            saveState="NONE"
                         />
                     </div>
                 </Provider>
@@ -283,6 +288,7 @@ describe("CuesList", () => {
                         editingTrack={testingTranslationTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -346,6 +352,7 @@ describe("CuesList", () => {
                             editingTrack={testingTranslationTrack}
                             onViewTrackHistory={jest.fn()}
                             onComplete={jest.fn()}
+                            saveState="NONE"
                         />
                     </div>
                 </Provider>
@@ -358,6 +365,7 @@ describe("CuesList", () => {
                         editingTrack={testingTranslationTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -415,6 +423,7 @@ describe("CuesList", () => {
                             editingTrack={testingTranslationTrack}
                             onViewTrackHistory={jest.fn()}
                             onComplete={jest.fn()}
+                            saveState="NONE"
                         />
                     </div>
                 </Provider>
@@ -427,6 +436,7 @@ describe("CuesList", () => {
                         editingTrack={testingTranslationTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -451,6 +461,7 @@ describe("CuesList", () => {
                         editingTrack={testingTranslationTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -474,6 +485,7 @@ describe("CuesList", () => {
                         editingTrack={testingTranslationTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -505,6 +517,7 @@ describe("CuesList", () => {
                         editingTrack={testingTranslationTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -528,6 +541,7 @@ describe("CuesList", () => {
                         editingTrack={testingTranslationTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -574,6 +588,7 @@ describe("CuesList", () => {
                         editingTrack={testingTranslationTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -612,6 +627,7 @@ describe("CuesList", () => {
                         editingTrack={testingTranslationTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -641,6 +657,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider >
@@ -668,6 +685,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider >
@@ -695,6 +713,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider >
@@ -722,6 +741,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider >
@@ -751,6 +771,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider >
@@ -778,6 +799,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider >
@@ -805,6 +827,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider >
@@ -832,6 +855,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider >
@@ -864,6 +888,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -897,6 +922,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -930,6 +956,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -969,6 +996,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -1010,6 +1038,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -1063,6 +1092,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -1090,6 +1120,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -1130,6 +1161,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -1162,6 +1194,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -1210,6 +1243,7 @@ describe("CuesList", () => {
                         editingTrack={testingCaptionTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>
@@ -1242,6 +1276,7 @@ describe("CuesList", () => {
                         editingTrack={testingTranslationTrack}
                         commentAuthor="Linguist"
                         onComplete={jest.fn()}
+                        saveState="NONE"
                         onViewTrackHistory={jest.fn()}
                     />
                 </Provider>

@@ -1,7 +1,7 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import { createTestingStore } from "../../testUtils/testingStore";
 import deepFreeze from "deep-freeze";
-import { callSaveTrack, SaveState, setAutoSaveSuccess, setSaveTrack } from "./saveSlices";
+import { callSaveTrack, setSaveTrack } from "./saveSlices";
 import { updateEditingTrack } from "../trackSlices";
 import { CueDto, Track } from "../model";
 import { updateCues } from "./cuesList/cuesListActions";
@@ -43,7 +43,6 @@ describe("saveSlices", () => {
             expect(saveTrack).toBeCalledWith(
                 { cues: testingCues, editingTrack: testingTrack, shouldCreateNewVersion: true }
             );
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
         });
 
         it("calls saveTrack and update version", () => {
@@ -61,50 +60,7 @@ describe("saveSlices", () => {
             expect(saveTrack).toBeCalledWith(
                 { cues: testingCues, editingTrack: testingTrack, shouldCreateNewVersion: true }
             );
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.REQUEST_SENT);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
         });
     });
 
-    describe("setAutoSaveSuccess", () => {
-        it("saves track without updating version", () => {
-            // GIVEN
-            const testingCues = [
-                { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", errors: []}
-            ] as CueDto[];
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-
-            // WHEN
-            testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
-
-            // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(1);
-            expect(saveTrack).toBeCalledWith(
-                { cues: testingCues, editingTrack: testingTrack, shouldCreateNewVersion: true }
-            );
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
-        });
-
-        it("saves track and create new version", () => {
-            // GIVEN
-            const testingCues = [
-                { vttCue: new VTTCue(0, 1, "testing-cue"), cueCategory: "LYRICS", errors: []}
-            ] as CueDto[];
-            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-
-            // WHEN
-            testingStore.dispatch(setAutoSaveSuccess(true) as {} as AnyAction);
-
-            // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(1);
-            expect(saveTrack).toBeCalledWith(
-                { cues: testingCues, editingTrack: testingTrack, shouldCreateNewVersion: true }
-            );
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.SAVED);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
-        });
-    });
 });

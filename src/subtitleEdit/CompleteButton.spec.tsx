@@ -5,9 +5,9 @@ import { createTestingStore } from "../testUtils/testingStore";
 import { Provider } from "react-redux";
 import { updateEditingTrack } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
-import { CueDto, Track } from "./model";
+import { CueDto, SaveState, Track } from "./model";
 import { updateCues } from "./cues/cuesList/cuesListActions";
-import { SaveState, saveActionSlice, setSaveTrack } from "./cues/saveSlices";
+import { setSaveTrack } from "./cues/saveSlices";
 import each from "jest-each";
 
 const testingTrack = {
@@ -55,7 +55,7 @@ describe("CompleteButton", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CompleteButton onComplete={jest.fn()} />
+                <CompleteButton onComplete={jest.fn()} saveState={"NONE"} />
             </Provider>
         );
 
@@ -87,7 +87,7 @@ describe("CompleteButton", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CompleteButton onComplete={jest.fn()} disabled />
+                <CompleteButton onComplete={jest.fn()} disabled saveState={"NONE"} />
             </Provider>
         );
 
@@ -96,15 +96,10 @@ describe("CompleteButton", () => {
     });
 
     each([
-        [ SaveState.TRIGGERED ],
-        [ SaveState.REQUEST_SENT ],
-        [ SaveState.RETRY ],
+        [ "TRIGGERED" ]
     ])
         .it("renders save pending for save state '%s'", (testingState: SaveState) => {
             // GIVEN
-            testingStore.dispatch(saveActionSlice.actions.setState(
-                { saveState: testingState, multiCuesEdit: false }
-            ) as {} as AnyAction);
             const expectedNode = mount(
                 <Provider store={testingStore}>
                     <div className="space-x-4 flex items-center">
@@ -128,7 +123,7 @@ describe("CompleteButton", () => {
             // WHEN
             const actualNode = mount(
                 <Provider store={testingStore}>
-                    <CompleteButton onComplete={jest.fn()} />
+                    <CompleteButton onComplete={jest.fn()} saveState={testingState} />
                 </Provider>
             );
 
@@ -138,9 +133,6 @@ describe("CompleteButton", () => {
 
     it("renders save succeeded for save state SAVED", () => {
         // GIVEN
-        testingStore.dispatch(saveActionSlice.actions.setState(
-            { saveState: SaveState.SAVED, multiCuesEdit: false }
-        ) as {} as AnyAction);
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div className="space-x-4 flex items-center">
@@ -160,7 +152,7 @@ describe("CompleteButton", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CompleteButton onComplete={jest.fn()} />
+                <CompleteButton onComplete={jest.fn()} saveState={"SAVED"} />
             </Provider>
         );
 
@@ -170,9 +162,6 @@ describe("CompleteButton", () => {
 
     it("renders save succeeded for save state ERROR", () => {
         // GIVEN
-        testingStore.dispatch(saveActionSlice.actions.setState(
-            { saveState: SaveState.ERROR, multiCuesEdit: false }
-        ) as {} as AnyAction);
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div className="space-x-4 flex items-center">
@@ -192,7 +181,7 @@ describe("CompleteButton", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CompleteButton onComplete={jest.fn()} />
+                <CompleteButton onComplete={jest.fn()} saveState={"ERROR"} />
             </Provider>
         );
 
@@ -207,7 +196,7 @@ describe("CompleteButton", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <CompleteButton onComplete={mockOnComplete} />
+                <CompleteButton onComplete={mockOnComplete} saveState={"NONE"} />
             </Provider>
         );
 

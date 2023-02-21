@@ -208,12 +208,4 @@ export interface SaveActionParameters {
     shouldCreateNewVersion: boolean;
 }
 
-export const SaveState = {
-    NONE: 0,
-    TRIGGERED: 1,
-    SAVED: 2,
-    ERROR: 3
-} as const;
-
-type Keys = keyof typeof SaveState;
-export type SaveStateValue = typeof SaveState[Keys];
+export type SaveState = "NONE" | "TRIGGERED" | "SAVED" | "ERROR";
