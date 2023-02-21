@@ -37,24 +37,6 @@ describe("saveSlices", () => {
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         });
 
-        it("saves track after timeout when various cues changes were made", (done) => {
-            // WHEN
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-
-            // THEN
-            setTimeout(
-                () => {
-                    expect(saveTrack).toHaveBeenCalledTimes(1);
-                    expect(saveTrack).toBeCalledWith(
-                        { cues: testingCues, editingTrack: testingTrack, shouldCreateNewVersion: true });
-                    done();
-                },
-                60
-            );
-        });
-
         it("sends latest version of track from Redux to server", (done) => {
             // GIVEN
             const expectedTestingCues = [
@@ -77,7 +59,6 @@ describe("saveSlices", () => {
             );
 
             // THEN
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeTruthy();
             setTimeout(
                 () => {
                     expect(saveTrack).toHaveBeenCalledTimes(1);
@@ -102,86 +83,6 @@ describe("saveSlices", () => {
                     done();
                 },
                 60
-            );
-        });
-
-        it("turns on multi cues text flag if first action is does multi cues action", (done) => {
-            // WHEN
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-
-            // THEN
-            setTimeout(
-                () => {
-                    expect(saveTrack).toHaveBeenCalledTimes(1);
-                    expect(saveTrack).toBeCalledWith(
-                        { cues: testingCues, editingTrack: testingTrack, shouldCreateNewVersion: true }
-                    );
-                    done();
-                },
-                60
-            );
-        });
-
-        it("turns on multi cues text flag if middle action is does multi cues action", (done) => {
-            // WHEN
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-
-            // THEN
-            setTimeout(
-                () => {
-                    expect(saveTrack).toHaveBeenCalledTimes(1);
-                    expect(saveTrack).toBeCalledWith(
-                        { cues: testingCues, editingTrack: testingTrack, shouldCreateNewVersion: true }
-                    );
-                    done();
-                },
-                60
-            );
-        });
-
-        it("turns on multi cues text flag if last action is does multi cues action", (done) => {
-            // WHEN
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-
-            // THEN
-            setTimeout(
-                () => {
-                    expect(saveTrack).toHaveBeenCalledTimes(1);
-                    expect(saveTrack).toBeCalledWith(
-                        { cues: testingCues, editingTrack: testingTrack, shouldCreateNewVersion: true }
-                    );
-                    done();
-                },
-                60
-            );
-        });
-
-        it("turns on multi cues edit flag while request is still ongoing", (done) => {
-            // GIVEN
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-            callSaveTrack(testingStore.dispatch, testingStore.getState);
-            setTimeout(() => saveTrack.mockReset(), 60);
-
-            // WHEN
-            setTimeout(
-                () => callSaveTrack(testingStore.dispatch, testingStore.getState),
-                70
-            );
-
-            // THEN
-            setTimeout(
-                () => {
-                    expect(saveTrack).not.toBeCalled();
-                    done();
-                },
-                80
             );
         });
     });

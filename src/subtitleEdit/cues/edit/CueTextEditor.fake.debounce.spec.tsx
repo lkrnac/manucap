@@ -297,14 +297,16 @@ const testForContentState = (
 
 const testTrack = { mediaTitle: "testingTrack", language: { id: "en-US", name: "English", direction: "LTR" }};
 
+const updateCueMock = jest.fn();
+
 describe("CueTextEditor", () => {
     beforeEach(() => {
         document.getElementsByTagName("html")[0].innerHTML = "";
         testingStore = createTestingStore();
         testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
-        // @ts-ignore we are mocking this function
-        fetchSpellCheck.mockReset();
+        testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueMock));
+        jest.clearAllMocks();
     });
 
     describe("rendering", () => {
@@ -352,17 +354,16 @@ describe("CueTextEditor", () => {
         it("triggers autosave and when changed", () => {
             // GIVEN
             const saveTrack = jest.fn();
-            const updateCueCallback = jest.fn();
             const editingTrack = { language: { id: "en-US" }, timecodesUnlocked: true } as Track;
             const testCue = { ...testingStore.getState().cues[0] };
             testCue.errors = [];
             testCue.vttCue.text = "someText Paste text to end";
             const expectedCueUpdate = {
                 editingTrack,
-                cue: testCue
+                cue: testCue,
+                onSaveSuccess: expect.any(Function)
             };
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
             testingStore.dispatch(updateEditingTrack(editingTrack) as {} as AnyAction);
 
             const editor = mountEditorNode();
@@ -378,16 +379,14 @@ describe("CueTextEditor", () => {
             // THEN
             // needs to be updated because it is updated by editor on edit
             testCue.editUuid = testingStore.getState().cues[0].editUuid;
-            expect(updateCueCallback).toHaveBeenCalledWith(expectedCueUpdate);
+            expect(updateCueMock).toHaveBeenCalledWith(expectedCueUpdate);
             expect(saveTrack).not.toBeCalled();
         });
 
         it("doesn't trigger autosave when user selects text", () => {
             // GIVEN
             const saveTrack = jest.fn();
-            const updateCueCallback = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
             const vttCue = new VTTCue(0, 1, "some text");
             const actualNode = mount(
                 <Provider store={testingStore}>
@@ -410,7 +409,7 @@ describe("CueTextEditor", () => {
             actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
 
             // THEN
-            expect(updateCueCallback).toHaveBeenCalledTimes(0);
+            expect(updateCueMock).toHaveBeenCalledTimes(0);
             expect(saveTrack).not.toBeCalled();
         });
 

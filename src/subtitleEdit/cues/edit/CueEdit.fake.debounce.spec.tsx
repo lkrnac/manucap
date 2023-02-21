@@ -68,6 +68,8 @@ const testTranslationTrack = {
     timecodesUnlocked: false
 } as Track;
 
+const updateCueMock = jest.fn();
+
 describe("CueEdit", () => {
     beforeEach(() => {
         document.getElementsByTagName("html")[0].innerHTML = "";
@@ -83,6 +85,8 @@ describe("CueEdit", () => {
         testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
+        testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueMock));
+        jest.clearAllMocks();
     });
 
     describe("major use cases", () => {
@@ -450,9 +454,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(
                 updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const saveTrack = jest.fn();
-            const updateCueCallback = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
             const cue = {
                 id: "cue-1",
                 vttCue: new VTTCue(0, 2, "Caption Line 1"),
@@ -472,7 +474,7 @@ describe("CueEdit", () => {
                 .simulate("change", { target: { value: "00:00:03.000", selectionEnd: 12 }});
 
             // THEN
-            expect(updateCueCallback).toHaveBeenCalledTimes(1);
+            expect(updateCueMock).toHaveBeenCalledTimes(1);
             expect(saveTrack).not.toBeCalled();
         });
 
@@ -501,9 +503,7 @@ describe("CueEdit", () => {
             testingStore.dispatch(
                 updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
             const saveTrack = jest.fn();
-            const updateCueCallback = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
             const cue = {
                 id: "cue-1",
                 vttCue: new VTTCue(3, 7, "Caption Line 2"),
@@ -523,7 +523,7 @@ describe("CueEdit", () => {
                 .simulate("change", { target: { value: "00:00:05.500", selectionEnd: 12 }});
 
             // THEN
-            expect(updateCueCallback).toHaveBeenCalledTimes(1);
+            expect(updateCueMock).toHaveBeenCalledTimes(1);
             expect(saveTrack).not.toBeCalled();
         });
 
@@ -611,9 +611,7 @@ describe("CueEdit", () => {
         it("calls saveTrack in redux store when cue position changes", () => {
             // GIVEN
             const saveTrack = jest.fn();
-            const updateCueCallback = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
 
             const vttCue = new VTTCue(0, 1, "someText");
             const cue = {
@@ -633,7 +631,7 @@ describe("CueEdit", () => {
             actualNode.find(PositionButton).props().changePosition(Position.Row2Column5);
 
             // THEN
-            expect(updateCueCallback).toHaveBeenCalledTimes(1);
+            expect(updateCueMock).toHaveBeenCalledTimes(1);
             expect(saveTrack).not.toBeCalled();
         });
 
@@ -659,9 +657,7 @@ describe("CueEdit", () => {
         it("calls saveTrack in redux store when line category changes", () => {
             // GIVEN
             const saveTrack = jest.fn();
-            const updateCueCallback = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
 
             const vttCue = new VTTCue(0, 1, "someText");
             const cue = { id: "cue-1", vttCue, cueCategory: "DIALOGUE" } as CueDto;
@@ -677,7 +673,7 @@ describe("CueEdit", () => {
             actualNode.find("#cueCategoryMenu span").at(1).simulate("click");
 
             // THEN
-            expect(updateCueCallback).toHaveBeenCalledTimes(1);
+            expect(updateCueMock).toHaveBeenCalledTimes(1);
             expect(saveTrack).not.toBeCalled();
         });
 

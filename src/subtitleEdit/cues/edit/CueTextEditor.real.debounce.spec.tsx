@@ -77,6 +77,8 @@ const ReduxTestWrapper = (props: ReduxTestWrapperProps): ReactElement => (
     </Provider>
 );
 
+const updateCueMock = jest.fn();
+
 describe("CueTextEditor", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
@@ -84,7 +86,8 @@ describe("CueTextEditor", () => {
         testingStore.dispatch(updateEditingCueIndex(-1) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        jest.resetAllMocks();
+        testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueMock));
+        jest.clearAllMocks();
     });
 
     it("updates cue in redux store with debounce", (done) => {
@@ -303,9 +306,7 @@ describe("CueTextEditor", () => {
     it("triggers autosave only once immediately after text change", (done) => {
         // GIVEN
         const saveTrack = jest.fn();
-        const updateCueCallback = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
         const editor = createEditorNode();
 
         // WHEN
@@ -319,7 +320,7 @@ describe("CueTextEditor", () => {
         // THEN
         setTimeout(
             () => {
-                expect(updateCueCallback).toBeCalledTimes(1);
+                expect(updateCueMock).toBeCalledTimes(1);
                 expect(saveTrack).not.toBeCalled();
                 done();
             },
@@ -491,6 +492,7 @@ describe("CueTextEditor", () => {
         // THEN
         setTimeout(
             () => {
+                expect(updateCueMock).not.toBeCalled();
                 expect(saveTrack).not.toBeCalled();
                 done();
             },
@@ -502,9 +504,7 @@ describe("CueTextEditor", () => {
         // GIVEN
         const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
         const saveTrack = jest.fn();
-        const updateCueCallback = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
         const testingTrack = {
             type: "CAPTION",
             language: { id: "en-US", name: "English (US)" } as Language,
@@ -578,7 +578,7 @@ describe("CueTextEditor", () => {
 
         setTimeout(
             () => {
-                expect(updateCueCallback).toBeCalled();
+                expect(updateCueMock).toBeCalled();
                 expect(saveTrack).not.toBeCalled();
                 done();
             },
