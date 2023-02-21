@@ -917,7 +917,7 @@ describe("SearchReplaceEditor", () => {
         // THEN
         await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
-        expect(testingStore.getState().searchReplace.replacement).toEqual("New Line 5");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption New Line 5");
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption New Line 5");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
@@ -989,7 +989,7 @@ describe("SearchReplaceEditor", () => {
         // THEN
         await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
-        expect(testingStore.getState().searchReplace.replacement).toEqual("New Line 2");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption <b>New Line 2</b> and <i>New Line 2</i>");
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption <b>New Line 2</b> and New Line 2");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
@@ -1035,7 +1035,7 @@ describe("SearchReplaceEditor", () => {
         // THEN
         await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
-        expect(testingStore.getState().searchReplace.replacement).toEqual("test");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption <b>test</b> and <i>test</i>");
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption <b>test</b> and test");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
@@ -1128,7 +1128,7 @@ describe("SearchReplaceEditor", () => {
         // THEN
         await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("[Line 2]");
-        expect(testingStore.getState().searchReplace.replacement).toEqual("[LINE 2]");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption <b>[LINE 2]</b> and <i>{Line 2}</i>");
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption <b>[LINE 2]</b> and {Line 2}");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
@@ -1191,7 +1191,7 @@ describe("SearchReplaceEditor", () => {
         // THEN
         await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("Caption Line");
-        expect(testingStore.getState().searchReplace.replacement).toEqual("New Text Update");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("New Text Update 2");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("New Text Update 3");

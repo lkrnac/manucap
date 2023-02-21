@@ -69,6 +69,7 @@ const searchReplaceAll = (
         }
     }
     dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: -1 }));
+    dispatch(setReplacement(""));
 };
 
 const SearchReplaceEditor = (): ReactElement | null => {
