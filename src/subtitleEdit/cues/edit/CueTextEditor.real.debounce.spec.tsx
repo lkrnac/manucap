@@ -90,7 +90,7 @@ describe("CueTextEditor", () => {
         jest.resetAllMocks();
     });
 
-    it("updates cue in redux store with debounce", (done) => {
+    it("updates cue in redux store with debounce", async () => {
         // GIVEN
         const editor = createEditorNode();
 
@@ -103,12 +103,11 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        setTimeout(
+        await waitFor(
             () => {
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("someText Paste text to end");
-                done();
             },
-            250
+            { timeout: 250 }
         );
     });
 
@@ -224,13 +223,11 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(2);
     });
 
-    it("updates cue in redux for single match/replace when unmounted for next match - single", (done) => {
+    it("updates cue in redux for single match/replace when unmounted for next match - single", async () => {
         // GIVEN
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
         const saveTrack = jest.fn();
-        const updateCueCallback = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
         const searchReplaceMatches = {
             offsets: [10],
             offsetIndex: 0,
@@ -263,18 +260,17 @@ describe("CueTextEditor", () => {
         actualNode.unmount();
 
         // THEN
-        setTimeout(
+        await waitFor(
             () => {
-                expect(updateCueCallback).toHaveBeenCalledTimes(1);
+                expect(updateCueMock).toHaveBeenCalledTimes(1);
                 expect(saveTrack).not.toBeCalled();
                 expect(testingStore.getState().cues[0].vttCue.text)
                     .toEqual("some <i>HTML</i> <b>abcd efg</b> sample");
                 expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.vttCue.text)
                     .toEqual("some <i>HTML</i> <b>abcd efg</b> sample");
                 expect(testingStore.getState().matchedCues.matchedCues).toHaveLength(2);
-                done();
             },
-            3000
+            { timeout: 3000 }
         );
     });
 
@@ -303,7 +299,7 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
     });
 
-    it("triggers autosave only once immediately after text change", (done) => {
+    it("triggers autosave only once immediately after text change", async () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
@@ -318,17 +314,16 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        setTimeout(
+        await waitFor(
             () => {
                 expect(updateCueMock).toBeCalledTimes(1);
                 expect(saveTrack).not.toBeCalled();
-                done();
             },
-            6000
+            { timeout: 6000 }
         );
     });
 
-    it("triggers spellcheck only once immediately after text change", (done) => {
+    it("triggers spellcheck only once immediately after text change", async () => {
         // GIVEN
         const testingResponse = {
             matches: [
@@ -381,7 +376,7 @@ describe("CueTextEditor", () => {
         });
 
         // THEN
-        setTimeout(
+        await waitFor(
             () => {
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledWith(
@@ -394,9 +389,8 @@ describe("CueTextEditor", () => {
                 );
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledTimes(2);
-                done();
             },
-            6000
+            { timeout: 6000 }
         );
     });
 
@@ -481,7 +475,7 @@ describe("CueTextEditor", () => {
         );
     });
 
-    it("doesn't trigger autosave when cue editor is rendered", (done) => {
+    it("doesn't trigger autosave when cue editor is rendered", async() => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
@@ -490,17 +484,16 @@ describe("CueTextEditor", () => {
         createEditorNode();
 
         // THEN
-        setTimeout(
+        await waitFor(
             () => {
                 expect(updateCueMock).not.toBeCalled();
                 expect(saveTrack).not.toBeCalled();
-                done();
             },
-            6000
+            { timeout: 6000 }
         );
     });
 
-    it("updates matched cues during ignores all action", (done) => {
+    it("updates matched cues during ignores all action", async () => {
         // GIVEN
         const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
         const saveTrack = jest.fn();
@@ -576,13 +569,12 @@ describe("CueTextEditor", () => {
         expect(testingStore.getState().matchedCues.matchedCues[1].targetCues[0].cue.errors).toEqual([]);
         expect(testingStore.getState().matchedCues.matchedCues[2].targetCues[0].cue.errors).toEqual([]);
 
-        setTimeout(
+        await waitFor(
             () => {
                 expect(updateCueMock).toBeCalled();
                 expect(saveTrack).not.toBeCalled();
-                done();
             },
-            6000
+            { timeout: 6000 }
         );
     });
 });
