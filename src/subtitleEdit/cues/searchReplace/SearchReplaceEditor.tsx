@@ -12,7 +12,7 @@ import {
     showSearchReplace
 } from "./searchReplaceSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
-import { saveTrack, updateVttCue } from "../cuesList/cuesListActions";
+import { saveTrack, updateVttCueTextOnly } from "../cuesList/cuesListActions";
 import { CueDto, SubtitleEditAction } from "../../model";
 import { replaceVttCueContent } from "../edit/editUtils";
 import ToggleButton from "../../toolbox/ToggleButton";
