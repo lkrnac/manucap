@@ -21,7 +21,6 @@ import {
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { CueDto, CueError, Language, Track } from "../../model";
-import { SearchReplaceMatches } from "../searchReplace/model";
 import * as cueListActions from "../cuesList/cuesListActions";
 import CueTextEditor, { CueTextEditorProps, editorStateFOR_TESTING, setEditorStateFOR_TESTING } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
@@ -29,7 +28,12 @@ import { updateEditingTrack } from "../../trackSlices";
 import { convertVttToHtml } from "./cueTextConverter";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { Replacement, SpellCheck } from "../spellCheck/model";
-import { replaceCurrentMatch, setFind, showSearchReplace } from "../searchReplace/searchReplaceSlices";
+import {
+    replaceCurrentMatch,
+    searchReplaceSlice,
+    setFind,
+    showSearchReplace
+} from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
@@ -46,7 +50,9 @@ jest.mock("lodash", () => (
         findIndex: jest.requireActual("lodash/findIndex"),
         findLastIndex: jest.requireActual("lodash/findLastIndex"),
         sortBy: jest.requireActual("lodash/sortBy"),
-        unescape: jest.requireActual("lodash/unescape")
+        unescape: jest.requireActual("lodash/unescape"),
+        clone: jest.requireActual("lodash/clone"),
+        isEqual: jest.requireActual("lodash/isEqual")
     }));
 jest.mock("../spellCheck/spellCheckFetch");
 
@@ -1449,11 +1455,15 @@ describe("CueTextEditor", () => {
     describe("search and replace", () => {
         it("renders with html and search and replace results", () => {
             // GIVEN
-            const searchReplaceMatches = {
-                offsets: [10],
+            const searchReplaceIndices = {
+                matchedCueIndex: 0,
+                sourceCueIndex: 9007199254740991,
+                targetCueIndex: 0,
+                offset: 10,
                 offsetIndex: 0,
                 matchLength: 4
-            } as SearchReplaceMatches;
+            };
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices(searchReplaceIndices));
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
             const expectedContent =
@@ -1470,7 +1480,6 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                        searchReplaceMatches={searchReplaceMatches}
                         setGlossaryTerm={jest.fn()}
                         autoFocus
                     />
@@ -1483,11 +1492,15 @@ describe("CueTextEditor", () => {
 
         it("renders with html and search and replace results only first one with many offsets", () => {
             // GIVEN
-            const searchReplaceMatches = {
-                offsets: [10, 22],
+            const searchReplaceIndices = {
+                matchedCueIndex: 0,
+                sourceCueIndex: 9007199254740991,
+                targetCueIndex: 0,
+                offset: 10,
                 offsetIndex: 0,
                 matchLength: 4
-            } as SearchReplaceMatches;
+            };
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices(searchReplaceIndices));
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text");
             const editUuid = testingStore.getState().cues[0].editUuid;
             const expectedContent =
@@ -1508,7 +1521,6 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                        searchReplaceMatches={searchReplaceMatches}
                         setGlossaryTerm={jest.fn()}
                         autoFocus
                     />
@@ -1522,11 +1534,15 @@ describe("CueTextEditor", () => {
 
         it("renders with html and search and replace results only second one with many offsets", () => {
             // GIVEN
-            const searchReplaceMatches = {
-                offsets: [10, 22],
+            const searchReplaceIndices = {
+                matchedCueIndex: 0,
+                sourceCueIndex: 9007199254740991,
+                targetCueIndex: 0,
+                offset: 22,
                 offsetIndex: 1,
                 matchLength: 4
-            } as SearchReplaceMatches;
+            };
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices(searchReplaceIndices));
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text");
             const editUuid = testingStore.getState().cues[0].editUuid;
             const expectedContent =
@@ -1547,7 +1563,6 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                        searchReplaceMatches={searchReplaceMatches}
                         setGlossaryTerm={jest.fn()}
                         autoFocus
                     />
@@ -1566,16 +1581,19 @@ describe("CueTextEditor", () => {
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
             testingStore.dispatch(setFind("text") as {} as AnyAction);
-            const searchReplaceMatches = {
-                offsets: [10, 22, 31],
+            const searchReplaceIndices = {
+                matchedCueIndex: 0,
+                sourceCueIndex: 9007199254740991,
+                targetCueIndex: 0,
+                offset: 10,
                 offsetIndex: 0,
                 matchLength: 4
-            } as SearchReplaceMatches;
+            };
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices(searchReplaceIndices));
             const cues = [
                 {
                     id: "cue-1", vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>Text</b> sample Text and Text"),
-                    cueCategory: "DIALOGUE",
-                    searchReplaceMatches
+                    cueCategory: "DIALOGUE"
                 } as CueDto,
                 { id: "cue-2", vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
             ];
@@ -1592,7 +1610,6 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                        searchReplaceMatches={searchReplaceMatches}
                         setGlossaryTerm={jest.fn()}
                         autoFocus
                     />
@@ -1610,8 +1627,14 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().cues[0].vttCue.text)
                 .toEqual("some <i>HTML</i> <b>abcd efg</b> sample Text and Text");
             expect(testingStore.getState().editingCueIndex).toEqual(0);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([26, 35]);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(0);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 0,
+                sourceCueIndex: 9007199254740991,
+                targetCueIndex: 0,
+                matchLength: 4,
+                offset: 26,
+                offsetIndex: 0
+            });
             expect(testingStore.getState().searchReplace.replacement).toEqual("");
         });
 
@@ -1623,22 +1646,25 @@ describe("CueTextEditor", () => {
             testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
             testingStore.dispatch(setFind("Text") as {} as AnyAction);
             testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
-            const searchReplaceMatches = {
-                offsets: [10, 22, 31],
-                offsetIndex: 1,
-                matchLength: 4
-            } as SearchReplaceMatches;
             const cues = [
                 {
                     id: "cue-1", vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>Text</b> sample Text and Text"),
-                    cueCategory: "DIALOGUE",
-                    searchReplaceMatches
+                    cueCategory: "DIALOGUE"
                 } as CueDto,
                 { id: "cue-2", vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
             ];
-            const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text and Text");
             testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            const searchReplaceIndices = {
+                matchedCueIndex: 0,
+                sourceCueIndex: 9007199254740991,
+                targetCueIndex: 0,
+                offset: 22,
+                offsetIndex: 1,
+                matchLength: 4
+            };
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices(searchReplaceIndices));
+            const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text and Text");
             const editUuid = testingStore.getState().cues[0].editUuid;
             render(
                 <Provider store={testingStore}>
@@ -1648,7 +1674,6 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                        searchReplaceMatches={searchReplaceMatches}
                         setGlossaryTerm={jest.fn()}
                         autoFocus
                     />
@@ -1666,8 +1691,14 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().cues[0].vttCue.text)
                 .toEqual("some <i>HTML</i> <b>Text</b> sample abcd efg and Text");
             expect(testingStore.getState().editingCueIndex).toEqual(0);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([10, 35]);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(1);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 0,
+                sourceCueIndex: 9007199254740991,
+                targetCueIndex: 0,
+                matchLength: 4,
+                offset: 35,
+                offsetIndex: 1
+            });
             expect(testingStore.getState().searchReplace.replacement).toEqual("");
         });
 
@@ -1679,22 +1710,25 @@ describe("CueTextEditor", () => {
             testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
             testingStore.dispatch(setFind("Text") as {} as AnyAction);
             testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
-            const searchReplaceMatches = {
-                offsets: [10, 22, 31],
+            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            const searchReplaceIndices = {
+                matchedCueIndex: 0,
+                sourceCueIndex: 9007199254740991,
+                targetCueIndex: 0,
+                offset: 31,
                 offsetIndex: 2,
                 matchLength: 4
-            } as SearchReplaceMatches;
+            };
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices(searchReplaceIndices));
             const cues = [
                 {
                     id: "cue-1", vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>Text</b> sample Text and Text"),
-                    cueCategory: "DIALOGUE",
-                    searchReplaceMatches
+                    cueCategory: "DIALOGUE"
                 } as CueDto,
-                { id: "cue-2", vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+                { id: "cue-2", vttCue: new VTTCue(3, 7, "Caption Line Text 2"), cueCategory: "DIALOGUE" } as CueDto
             ];
-            const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text and Text");
             testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
-            testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text and Text");
             const editUuid = testingStore.getState().cues[0].editUuid;
             render(
                 <Provider store={testingStore}>
@@ -1704,7 +1738,6 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                        searchReplaceMatches={searchReplaceMatches}
                         setGlossaryTerm={jest.fn()}
                         autoFocus
                     />
@@ -1721,9 +1754,15 @@ describe("CueTextEditor", () => {
             expect(saveTrack).not.toBeCalled();
             expect(testingStore.getState().cues[0].vttCue.text)
                 .toEqual("some <i>HTML</i> <b>Text</b> sample Text and abcd efg");
-            expect(testingStore.getState().editingCueIndex).toEqual(-1);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([10, 22]);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(1);
+            expect(testingStore.getState().editingCueIndex).toEqual(1);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 1,
+                sourceCueIndex: 9007199254740991,
+                targetCueIndex: 0,
+                matchLength: 4,
+                offset: 13,
+                offsetIndex: 0
+            });
             expect(testingStore.getState().searchReplace.replacement).toEqual("");
         });
 
@@ -1738,22 +1777,25 @@ describe("CueTextEditor", () => {
             testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
             testingStore.dispatch(setFind("[Text]") as {} as AnyAction);
             testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
-            const searchReplaceMatches = {
-                offsets: [10],
-                offsetIndex: 0,
-                matchLength: 6
-            } as SearchReplaceMatches;
             const cues = [
                 {
                     id: "cue-1", vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>[Text]</b>"),
-                    cueCategory: "DIALOGUE",
-                    searchReplaceMatches
+                    cueCategory: "DIALOGUE"
                 } as CueDto,
                 { id: "cue-2", vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
             ];
-            const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>[Text]</b>");
             testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
+            const searchReplaceIndices = {
+                matchedCueIndex: 0,
+                sourceCueIndex: 9007199254740991,
+                targetCueIndex: 0,
+                offset: 10,
+                offsetIndex: 0,
+                matchLength: 6
+            };
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices(searchReplaceIndices));
+            const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>[Text]</b>");
             const editUuid = testingStore.getState().cues[0].editUuid;
             render(
                 <Provider store={testingStore}>
@@ -1763,7 +1805,6 @@ describe("CueTextEditor", () => {
                         editUuid={editUuid}
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                         unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                        searchReplaceMatches={searchReplaceMatches}
                         setGlossaryTerm={jest.fn()}
                         autoFocus
                     />
@@ -1781,8 +1822,14 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().cues[0].vttCue.text)
                 .toEqual("some <i>HTML</i> <b>[TEXT TEST]</b>");
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([]);
-            expect(testingStore.getState().cues[0].searchReplaceMatches.offsetIndex).toEqual(-1);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: -1,
+                sourceCueIndex: -1,
+                targetCueIndex: -1,
+                matchLength: 0,
+                offset: -1,
+                offsetIndex: 0
+            });
             expect(testingStore.getState().searchReplace.replacement).toEqual("");
         });
     });

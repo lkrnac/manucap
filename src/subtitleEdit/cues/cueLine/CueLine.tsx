@@ -173,11 +173,13 @@ const CueLine = (props: CueLineProps): ReactElement => {
             >
                 {
                     props.data.sourceCues && props.data.sourceCues.length > 0
-                        ? props.data.sourceCues.map(sourceCue => {
+                        ? props.data.sourceCues.map((sourceCue, sourceCueIndex) => {
                             return (
                                 <CueView
                                     key={`sourceCueView-${sourceCue.index}`}
+                                    rowIndex={props.rowIndex}
                                     isTargetCue={false}
+                                    matchedNestedIndex={sourceCueIndex}
                                     targetCueIndex={firstTargetCueIndex}
                                     cue={sourceCue.cue}
                                     targetCuesLength={props.rowProps.targetCuesLength}
@@ -212,8 +214,8 @@ const CueLine = (props: CueLineProps): ReactElement => {
                 {hasMultipleCues ? <div className={dividerClass} /> : null}
                 {
                     props.data.targetCues && props.data.targetCues.length > 0
-                        ? props.data.targetCues.map(targetCue => {
-                            return editingCueIndex === targetCue.index
+                        ? props.data.targetCues.map((targetCue, targetCueIndex) => {
+                            return editingCueIndex === targetCue.index && !cueLineEditDisabled
                                 ? (
                                     <>
                                         <CueEdit
@@ -221,6 +223,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                             index={targetCue.index}
                                             cue={targetCue.cue}
                                             nextCueLine={props.rowProps.matchedCues[props.rowIndex + 1]}
+                                            matchedCuesIndex={props.rowIndex}
                                             glossaryTerm={glossaryTerm}
                                             setGlossaryTerm={setGlossaryTerm}
                                         />
@@ -240,8 +243,10 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                 : (
                                     <>
                                         <CueView
+                                            rowIndex={props.rowIndex}
                                             key={`targetCueView-${targetCue.index}`}
                                             isTargetCue
+                                            matchedNestedIndex={targetCueIndex}
                                             targetCueIndex={targetCue.index}
                                             cue={targetCue.cue}
                                             targetCuesLength={props.rowProps.targetCuesLength}

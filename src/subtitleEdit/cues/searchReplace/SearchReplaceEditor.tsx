@@ -3,19 +3,21 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     replaceCurrentMatch,
+    searchCueText,
     searchNextCues,
     searchPreviousCues,
     setFind,
-    setMatchCase, setReplacement,
+    setMatchCase,
+    setReplacement,
     showSearchReplace
 } from "./searchReplaceSlices";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
-import { saveTrack, updateMatchedCues, updateVttCueTextOnly } from "../cuesList/cuesListActions";
-import { CueDto } from "../../model";
+import { saveTrack, updateVttCue } from "../cuesList/cuesListActions";
+import { CueDto, SubtitleEditAction } from "../../model";
 import { replaceVttCueContent } from "../edit/editUtils";
 import ToggleButton from "../../toolbox/ToggleButton";
 import { SearchReplace } from "./model";
-import { searchCueText } from "../edit/cueEditorSlices";
+import { editingCueIndexSlice } from "../edit/cueEditorSlices";
 
 const replaceAllInVttCue = (
     vttCue: VTTCue,
@@ -43,7 +45,7 @@ const replaceAllInVttCue = (
 };
 
 const searchReplaceAll = (
-    dispatch: Dispatch<AppThunk>,
+    dispatch: Dispatch<SubtitleEditAction>,
     cues: Array<CueDto>,
     searchReplace: SearchReplace,
     replacement: string
@@ -66,7 +68,8 @@ const searchReplaceAll = (
             dispatch(updateVttCueTextOnly(cueIndex, newVTTCue, cue.editUuid));
         }
     }
-    dispatch(updateMatchedCues());
+    dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: -1 }));
+    dispatch(setReplacement(""));
     dispatch(saveTrack());
 };
 
@@ -103,7 +106,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 style={{ marginLeft: "5px" }}
                 data-testid="sbte-search-next"
                 onClick={(): void => {
-                    dispatch(searchNextCues(false));
+                    dispatch(searchNextCues());
                 }}
             >
                 <i className="fa-duotone fa-arrow-down" />

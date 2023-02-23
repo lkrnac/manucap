@@ -116,6 +116,7 @@ describe("CueLine", () => {
                                 cue={targetCues[0]}
                                 nextCueLine={matchedCuesCaptioning[1]}
                                 setGlossaryTerm={jest.fn()}
+                                matchedCuesIndex={0}
                             />
                         </div>
                     </div>
@@ -185,6 +186,7 @@ describe("CueLine", () => {
                                 cue={corruptedCue}
                                 nextCueLine={matchedCuesCaptioning[1]}
                                 setGlossaryTerm={jest.fn()}
+                                matchedCuesIndex={0}
                             />
                         </div>
                     </div>
@@ -252,6 +254,7 @@ describe("CueLine", () => {
                                 cue={corruptedCue}
                                 nextCueLine={matchedCuesCaptioning[1]}
                                 setGlossaryTerm={jest.fn()}
+                                matchedCuesIndex={0}
                             />
                             <div className="sbte-cues-errors">• Max Characters Per Line Exceeded<br /></div>
                         </div>
@@ -318,6 +321,7 @@ describe("CueLine", () => {
                                 cue={corruptedCue}
                                 nextCueLine={matchedCuesCaptioning[1]}
                                 setGlossaryTerm={jest.fn()}
+                                matchedCuesIndex={0}
                             />
                             <div className="sbte-cues-errors">
                                 {/*eslint-disable-next-line react/jsx-child-element-spacing */}
@@ -382,7 +386,9 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={targetCuesWithIndexes[0].cue}
                                 targetCuesLength={3}
@@ -455,7 +461,9 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={matchedCuesCaptioningEditDisabled[0].targetCues[0].cue}
                                 targetCuesLength={3}
@@ -525,7 +533,9 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={1}
                                 isTargetCue={false}
+                                matchedNestedIndex={0}
                                 targetCueIndex={1}
                                 cue={sourceCues[1]}
                                 targetCuesLength={3}
@@ -541,6 +551,7 @@ describe("CueLine", () => {
                                 cue={targetCues[1]}
                                 nextCueLine={matchedCuesTranslation[2]}
                                 setGlossaryTerm={jest.fn()}
+                                matchedCuesIndex={1}
                             />
                         </div>
                     </div>
@@ -600,7 +611,9 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={2}
                                 isTargetCue={false}
+                                matchedNestedIndex={0}
                                 targetCueIndex={2}
                                 cue={sourceCues[2]}
                                 targetCuesLength={3}
@@ -611,7 +624,7 @@ describe("CueLine", () => {
                                 nextTargetCueIndex={2}
                                 editDisabled={false}
                             />
-                            <CueEdit index={2} cue={targetCues[2]} setGlossaryTerm={jest.fn()} />
+                            <CueEdit index={2} cue={targetCues[2]} setGlossaryTerm={jest.fn()} matchedCuesIndex={2} />
                         </div>
                     </div>
                 </Provider>
@@ -674,7 +687,9 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
@@ -686,7 +701,9 @@ describe("CueLine", () => {
                                 editDisabled
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={disabledTargetCue}
                                 targetCuesLength={1}
@@ -754,7 +771,9 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
+                                matchedNestedIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
                                 className="bg-gray-0 sbte-source-cue"
@@ -848,7 +867,9 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
+                                matchedNestedIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
                                 className="bg-gray-0 sbte-source-cue"
@@ -931,7 +952,9 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
+                                matchedNestedIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={0}
                                 className="bg-gray-0 sbte-source-cue"
@@ -1027,7 +1050,9 @@ describe("CueLine", () => {
                                 <div style={{ width: "100%", minHeight: "78px" }} />
                             </div>
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={1}
@@ -1096,7 +1121,9 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
@@ -1108,7 +1135,9 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
+                                matchedNestedIndex={1}
                                 targetCueIndex={0}
                                 cue={sourceCues[1]}
                                 targetCuesLength={1}
@@ -1120,7 +1149,9 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
+                                matchedNestedIndex={2}
                                 targetCueIndex={0}
                                 cue={sourceCues[2]}
                                 targetCuesLength={1}
@@ -1133,7 +1164,9 @@ describe("CueLine", () => {
                             />
                             <div className="sbte-cue-divider-good" />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={1}
@@ -1206,7 +1239,9 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
@@ -1219,7 +1254,9 @@ describe("CueLine", () => {
                             />
                             <div className="sbte-cue-divider-good" />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
@@ -1231,7 +1268,9 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={1}
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
                                 targetCuesLength={3}
@@ -1243,7 +1282,9 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={2}
                                 targetCueIndex={2}
                                 cue={targetCues[2]}
                                 targetCuesLength={3}
@@ -1312,7 +1353,9 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
@@ -1324,7 +1367,9 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
+                                matchedNestedIndex={1}
                                 targetCueIndex={0}
                                 cue={sourceCues[1]}
                                 targetCuesLength={1}
@@ -1336,7 +1381,9 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
+                                matchedNestedIndex={2}
                                 targetCueIndex={0}
                                 cue={sourceCues[2]}
                                 targetCuesLength={1}
@@ -1348,7 +1395,7 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <div className="sbte-cue-divider-good" />
-                            <CueEdit index={0} cue={targetCues[0]} setGlossaryTerm={jest.fn()} />
+                            <CueEdit index={0} cue={targetCues[0]} setGlossaryTerm={jest.fn()} matchedCuesIndex={0} />
                         </div>
                     </div>
                 </Provider>
@@ -1411,7 +1458,9 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
@@ -1424,7 +1473,9 @@ describe("CueLine", () => {
                             />
                             <div className="sbte-cue-divider-good" />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
@@ -1435,9 +1486,11 @@ describe("CueLine", () => {
                                 nextTargetCueIndex={0}
                                 editDisabled={false}
                             />
-                            <CueEdit index={1} cue={targetCues[1]} setGlossaryTerm={jest.fn()} />
+                            <CueEdit index={1} cue={targetCues[1]} setGlossaryTerm={jest.fn()} matchedCuesIndex={0} />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={2}
                                 targetCueIndex={2}
                                 cue={targetCues[2]}
                                 targetCuesLength={3}
@@ -1524,7 +1577,9 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
@@ -1537,7 +1592,9 @@ describe("CueLine", () => {
                             />
                             <div className="sbte-cue-divider-error" />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
@@ -1549,7 +1606,9 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={1}
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
                                 targetCuesLength={3}
@@ -1561,7 +1620,9 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={2}
                                 targetCueIndex={2}
                                 cue={corruptedTargetCueWithIndex.cue}
                                 targetCuesLength={3}
@@ -1648,7 +1709,9 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
@@ -1661,7 +1724,9 @@ describe("CueLine", () => {
                             />
                             <div className="sbte-cue-divider-error" />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
@@ -1673,7 +1738,9 @@ describe("CueLine", () => {
                                 editDisabled={false}
                             />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={1}
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
                                 targetCuesLength={3}
@@ -1688,6 +1755,7 @@ describe("CueLine", () => {
                                 index={2}
                                 cue={corruptedTargetCueWithIndex.cue}
                                 setGlossaryTerm={jest.fn()}
+                                matchedCuesIndex={0}
                             />
                             <div className="sbte-cues-errors">• Max Characters Per Line Exceeded<br /></div>
                         </div>
@@ -1981,6 +2049,7 @@ describe("CueLine", () => {
                                 cue={targetCuesWithComments[0]}
                                 nextCueLine={matchedCuesWithCommentsCaptioning[1]}
                                 setGlossaryTerm={jest.fn()}
+                                matchedCuesIndex={0}
                             />
                             <CueComments index={0} cue={targetCuesWithComments[0]} commentAuthor="Linguist" />
                         </div>
@@ -2043,7 +2112,9 @@ describe("CueLine", () => {
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
+                                rowIndex={0}
                                 isTargetCue={false}
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
@@ -2056,7 +2127,9 @@ describe("CueLine", () => {
                             />
                             <div className="sbte-cue-divider-good" />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={0}
                                 targetCueIndex={0}
                                 cue={targetCuesWithComments[0]}
                                 targetCuesLength={3}
@@ -2069,7 +2142,9 @@ describe("CueLine", () => {
                             />
                             <CueComments index={0} cue={targetCuesWithComments[0]} commentAuthor="Linguist" />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={1}
                                 targetCueIndex={1}
                                 cue={targetCuesWithComments[1]}
                                 targetCuesLength={3}
@@ -2082,7 +2157,9 @@ describe("CueLine", () => {
                             />
                             <CueComments index={1} cue={targetCuesWithComments[1]} commentAuthor="Linguist" />
                             <CueView
+                                rowIndex={0}
                                 isTargetCue
+                                matchedNestedIndex={2}
                                 targetCueIndex={2}
                                 cue={targetCuesWithComments[2]}
                                 targetCuesLength={3}

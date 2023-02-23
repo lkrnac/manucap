@@ -14,6 +14,7 @@ import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import { updateCues } from "../cuesList/cuesListActions";
 import { SubtitleSpecification } from "../../toolbox/model";
 import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
+import { searchReplaceSlice, setFind, showSearchReplace } from "../searchReplace/searchReplaceSlices";
 
 let testingStore = createTestingStore();
 
@@ -78,6 +79,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue={false}
                     targetCueIndex={1}
                     cue={cue}
@@ -152,6 +154,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue={false}
                     targetCueIndex={1}
                     cue={cue}
@@ -227,6 +230,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -281,6 +285,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -324,6 +329,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -369,6 +375,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -414,6 +421,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -459,6 +467,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -502,6 +511,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -540,6 +550,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -577,7 +588,8 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <CueView
                     isTargetCue
-                    targetCueIndex={0}
+                    rowIndex={0}
+                    targetCueIndex={1}
                     cue={cue}
                     showGlossaryTerms
                     targetCuesLength={0}
@@ -611,6 +623,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -645,6 +658,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -677,6 +691,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -712,6 +727,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -751,6 +767,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -788,6 +805,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -829,6 +847,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -870,6 +889,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -877,6 +897,135 @@ describe("CueView", () => {
                     targetCuesLength={0}
                     sourceCuesIndexes={[]}
                     nextTargetCueIndex={-1}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+            .toEqual(expectedSourceCueContent);
+    });
+
+    it("renders source cue with first match highlighted", () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text Line"),
+            cueCategory: "DIALOGUE",
+        } as CueDto;
+
+        const expectedSourceCueContent = "<i>Source <b><span style=\"background-color:#D9E9FF\"" +
+            " data-reactroot=\"\">Line</span></b></i> <br>Wrapped text Line";
+
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        testingStore.dispatch(setFind("Line") as {} as AnyAction);
+        testingStore.dispatch(searchReplaceSlice.actions.setIndices({
+            matchedCueIndex: 5,
+            sourceCueIndex: 1,
+            targetCueIndex: -1,
+            matchLength: 4,
+            offset: 7,
+            offsetIndex: 0
+        }));
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView
+                    rowIndex={5}
+                    isTargetCue={false}
+                    targetCueIndex={1}
+                    cue={cue}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                    matchedNestedIndex={1}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+            .toEqual(expectedSourceCueContent);
+    });
+
+    it("renders target cue with first match highlighted", () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text Line"),
+            cueCategory: "DIALOGUE",
+        } as CueDto;
+
+        const expectedSourceCueContent = "<i>Source <b><span style=\"background-color:#D9E9FF\"" +
+            " data-reactroot=\"\">Line</span></b></i> <br>Wrapped text Line";
+
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        testingStore.dispatch(setFind("Line") as {} as AnyAction);
+        testingStore.dispatch(searchReplaceSlice.actions.setIndices({
+            matchedCueIndex: 5,
+            sourceCueIndex: -1,
+            targetCueIndex: 1,
+            matchLength: 4,
+            offset: 7,
+            offsetIndex: 0
+        }));
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView
+                    rowIndex={5}
+                    isTargetCue
+                    targetCueIndex={1}
+                    cue={cue}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                    matchedNestedIndex={1}
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+            .toEqual(expectedSourceCueContent);
+    });
+
+    it("renders source cue with second match highlighted", () => {
+        // GIVEN
+        const cue = {
+            vttCue: new VTTCue(1, 2, "<i>Source <b>Line</b></i> \nWrapped text Line"),
+            cueCategory: "DIALOGUE",
+        } as CueDto;
+
+        const expectedSourceCueContent = "<i>Source <b>Line</b></i> <br>Wrapped text " +
+            "<span style=\"background-color:#D9E9FF\" data-reactroot=\"\">Line</span>";
+
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+        testingStore.dispatch(setFind("Line") as {} as AnyAction);
+        testingStore.dispatch(searchReplaceSlice.actions.setIndices({
+            matchedCueIndex: 5,
+            sourceCueIndex: 1,
+            targetCueIndex: -1,
+            matchLength: 4,
+            offset: 26,
+            offsetIndex: 1
+        }));
+
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CueView
+                    rowIndex={5}
+                    isTargetCue={false}
+                    targetCueIndex={1}
+                    cue={cue}
+                    showGlossaryTerms
+                    targetCuesLength={0}
+                    sourceCuesIndexes={[]}
+                    nextTargetCueIndex={-1}
+                    matchedNestedIndex={1}
                 />
             </Provider>
         );
@@ -897,6 +1046,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -926,6 +1076,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -970,6 +1121,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -1014,6 +1166,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue
                     targetCueIndex={0}
                     cue={cue}
@@ -1058,6 +1211,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue={false}
                     targetCueIndex={0}
                     cue={cue}
@@ -1100,6 +1254,7 @@ describe("CueView", () => {
         const actualNode = render(
             <Provider store={testingStore}>
                 <CueView
+                    rowIndex={0}
                     isTargetCue={false}
                     targetCueIndex={0}
                     cue={cue}

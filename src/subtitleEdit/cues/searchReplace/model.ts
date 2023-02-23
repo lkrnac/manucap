@@ -6,10 +6,14 @@ export interface SearchReplace {
     replacement: string;
     matchCase: boolean;
     direction: SearchDirection;
+    indices: SearchReplaceIndices;
 }
 
-export interface SearchReplaceMatches {
-    offsets: number[];
-    matchLength: number;
+export interface SearchReplaceIndices {
+    matchedCueIndex: number;
+    sourceCueIndex: number;
+    targetCueIndex: number;
+    offset: number;
     offsetIndex: number;
+    matchLength: number;
 }

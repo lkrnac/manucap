@@ -18,6 +18,7 @@ import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import AddCueLineButton from "../edit/AddCueLineButton";
 import { matchedCuesSlice } from "./cuesListSlices";
 import CueListToolbar from "../../CueListToolbar";
+import { createTestingMatchedCues, createTestingSourceCues, createTestingTargetCues } from "./cuesListTestUtils";
 
 const scrollIntoViewCallsTracker = jest.fn();
 
@@ -49,39 +50,15 @@ const testingTranslationTrack = {
 
 let testingStore = createTestingStore();
 
-const matchedCues = Array.from({ length: 220 }, (_element, index) => (
-    {
-        sourceCues: [
-            {
-                index,
-                cue: {
-                    vttCue: new VTTCue(index, index + 1, "Source Line " + index),
-                    cueCategory: "DIALOGUE"
-                } as CueDto
-            }
-        ],
-        targetCues: [
-            {
-                index,
-                cue: {
-                    vttCue: new VTTCue(index, index + 1, "Target Line " + index),
-                    cueCategory: "DIALOGUE"
-                } as CueDto
-            }
-        ],
-    }
-));
-
-const targetCues = matchedCues.map(matchedCue => matchedCue.targetCues)
-    .flat()
-    .map(cueWithIndex => cueWithIndex.cue);
-const sourceCues = matchedCues.map(matchedCue => matchedCue.sourceCues)
-    .flat()
-    .map(cueWithIndex => cueWithIndex.cue);
+const testingMatchedCues = createTestingMatchedCues(1);
+let testingSourceCues = createTestingSourceCues(testingMatchedCues);
+let testingTargetCues = createTestingTargetCues(testingMatchedCues);
 
 describe("CuesList", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
+        testingSourceCues = createTestingSourceCues(testingMatchedCues);
+        testingTargetCues = createTestingTargetCues(testingMatchedCues);
         jest.resetAllMocks();
     });
 
@@ -232,8 +209,8 @@ describe("CuesList", () => {
 
         it("first page", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
-            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(testingSourceCues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(2) as {} as AnyAction);
 
             const expectedNode = render(
@@ -252,12 +229,12 @@ describe("CuesList", () => {
                                 Array.from({ length: 105 }, (_element, index) => (
                                     <CueLine
                                         key={index}
-                                        data={matchedCues[index]}
+                                        data={testingMatchedCues[index]}
                                         rowIndex={index}
                                         rowProps={{
                                             targetCuesLength: 120,
                                             withoutSourceCues: false,
-                                            matchedCues,
+                                            matchedCues: testingMatchedCues,
                                             commentAuthor: "Linguist"
                                         }}
                                         rowRef={createRef()}
@@ -302,8 +279,8 @@ describe("CuesList", () => {
 
         it("middle page", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
-            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(testingSourceCues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(102) as {} as AnyAction);
 
             const expectedNode = render(
@@ -329,12 +306,12 @@ describe("CuesList", () => {
                                 Array.from({ length: 110 }, (_element, index) => (
                                     <CueLine
                                         key={index + 95}
-                                        data={matchedCues[index + 95]}
+                                        data={testingMatchedCues[index + 95]}
                                         rowIndex={index + 95}
                                         rowProps={{
                                             targetCuesLength: 120,
                                             withoutSourceCues: false,
-                                            matchedCues,
+                                            matchedCues: testingMatchedCues,
                                             commentAuthor: "Linguist"
                                         }}
                                         rowRef={createRef()}
@@ -379,8 +356,8 @@ describe("CuesList", () => {
 
         it("last page", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
-            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(testingSourceCues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(202) as {} as AnyAction);
 
             const expectedNode = render(
@@ -406,12 +383,12 @@ describe("CuesList", () => {
                                 Array.from({ length: 25 }, (_element, index) => (
                                     <CueLine
                                         key={index + 195}
-                                        data={matchedCues[index + 195]}
+                                        data={testingMatchedCues[index + 195]}
                                         rowIndex={index + 195}
                                         rowProps={{
                                             targetCuesLength: 120,
                                             withoutSourceCues: false,
-                                            matchedCues,
+                                            matchedCues: testingMatchedCues,
                                             commentAuthor: "Linguist"
                                         }}
                                         rowRef={createRef()}
@@ -452,8 +429,8 @@ describe("CuesList", () => {
     describe("pagination button", () => {
         it("'Load previous Cues' scrolls to previous page", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
-            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(testingSourceCues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(102) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
@@ -476,8 +453,8 @@ describe("CuesList", () => {
 
         it("'Load Previous Cues' scrolls to previous page if focusedCueIndex is null", async () => {
             // GIVEN
-            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
-            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(testingSourceCues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(202) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
@@ -508,8 +485,8 @@ describe("CuesList", () => {
 
         it("'Load Next Cues' scrolls to next page", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
-            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(testingSourceCues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(52) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
@@ -532,8 +509,8 @@ describe("CuesList", () => {
 
         it("'Load Next Cues' scrolls to next page is focused cue index is null", async () => {
             // GIVEN
-            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
-            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(testingSourceCues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(52) as {} as AnyAction);
             const actualNode = render(
                 <Provider store={testingStore}>
@@ -645,8 +622,8 @@ describe("CuesList", () => {
     describe("pagination based on editing cue index", () => {
         it("renders first page and editing cue 0", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
-            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(testingSourceCues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
 
             // WHEN
@@ -666,15 +643,15 @@ describe("CuesList", () => {
             // THEN
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
-            expect(scrolledElement.outerHTML).toContain("Target Line 0");
-            expect(actualNode.container.outerHTML).toContain("Target Line 0");
-            expect(actualNode.container.outerHTML).toContain("Target Line 49");
+            expect(scrolledElement.outerHTML).toContain("TrgLine0-0TrgLine0-0TrgLine0-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine0-0TrgLine0-0TrgLine0-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine49-0TrgLine49-0TrgLine49-0");
         });
 
         it("renders first page and editing cue 49", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
-            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(testingSourceCues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(49) as {} as AnyAction);
 
             // WHEN
@@ -694,15 +671,15 @@ describe("CuesList", () => {
             // THEN
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
-            expect(scrolledElement.outerHTML).toContain("Target Line 49");
-            expect(actualNode.container.outerHTML).toContain("Target Line 0");
-            expect(actualNode.container.outerHTML).toContain("Target Line 49");
+            expect(scrolledElement.outerHTML).toContain("TrgLine49-0TrgLine49-0TrgLine49-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine0-0TrgLine0-0TrgLine0-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine49-0TrgLine49-0TrgLine49-0");
         });
 
         it("renders second page and editing cue 50", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
-            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(testingSourceCues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(50) as {} as AnyAction);
 
             // WHEN
@@ -722,15 +699,15 @@ describe("CuesList", () => {
             // THEN
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
-            expect(scrolledElement.outerHTML).toContain("Target Line 50");
-            expect(actualNode.container.outerHTML).toContain("Target Line 50");
-            expect(actualNode.container.outerHTML).toContain("Target Line 99");
+            expect(scrolledElement.outerHTML).toContain("TrgLine50-0TrgLine50-0TrgLine50-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine50-0TrgLine50-0TrgLine50-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine99-0TrgLine99-0TrgLine99-0");
         });
 
         it("renders third page and editing cue 111", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
-            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(testingSourceCues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(111) as {} as AnyAction);
 
             // WHEN
@@ -750,17 +727,17 @@ describe("CuesList", () => {
             // THEN
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
-            expect(scrolledElement.outerHTML).toContain("Target Line 111");
-            expect(actualNode.container.outerHTML).toContain("Target Line 100");
-            expect(actualNode.container.outerHTML).toContain("Target Line 119");
+            expect(scrolledElement.outerHTML).toContain("TrgLine111-0TrgLine111-0TrgLine111-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine100-0TrgLine100-0TrgLine100-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine129-0TrgLine129-0TrgLine129-0");
         });
     });
 
     describe("pagination based on focused cue index", () => {
         it("renders first page and focused cue 0", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
-            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(testingSourceCues) as {} as AnyAction);
             testingStore.dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(0) as {} as AnyAction);
 
             // WHEN
@@ -780,15 +757,15 @@ describe("CuesList", () => {
             // THEN
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
-            expect(scrolledElement.outerHTML).toContain("Target Line 0");
-            expect(actualNode.container.outerHTML).toContain("Target Line 0");
-            expect(actualNode.container.outerHTML).toContain("Target Line 49");
+            expect(scrolledElement.outerHTML).toContain("TrgLine0-0TrgLine0-0TrgLine0-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine0-0TrgLine0-0TrgLine0-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine49-0TrgLine49-0TrgLine49-0");
         });
 
         it("renders first page and focused cue 49", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
-            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(testingSourceCues) as {} as AnyAction);
             testingStore.dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(49) as {} as AnyAction);
 
             // WHEN
@@ -808,15 +785,15 @@ describe("CuesList", () => {
             // THEN
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
-            expect(scrolledElement.outerHTML).toContain("Target Line 49");
-            expect(actualNode.container.outerHTML).toContain("Target Line 0");
-            expect(actualNode.container.outerHTML).toContain("Target Line 49");
+            expect(scrolledElement.outerHTML).toContain("TrgLine49-0TrgLine49-0TrgLine49-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine0-0TrgLine0-0TrgLine0-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine49-0TrgLine49-0TrgLine49-0");
         });
 
         it("renders second page and focused cue 50", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
-            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(testingSourceCues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(50) as {} as AnyAction);
 
             // WHEN
@@ -836,15 +813,15 @@ describe("CuesList", () => {
             // THEN
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
-            expect(scrolledElement.outerHTML).toContain("Target Line 50");
-            expect(actualNode.container.outerHTML).toContain("Target Line 50");
-            expect(actualNode.container.outerHTML).toContain("Target Line 99");
+            expect(scrolledElement.outerHTML).toContain("TrgLine50-0TrgLine50-0TrgLine50-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine50-0TrgLine50-0TrgLine50-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine99-0TrgLine99-0TrgLine99-0");
         });
 
         it("renders third page and focused cue 111", () => {
             // GIVEN
-            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
-            testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(testingSourceCues) as {} as AnyAction);
             testingStore.dispatch(scrollPositionSlice.actions.changeFocusedCueIndex(111) as {} as AnyAction);
 
             // WHEN
@@ -864,9 +841,9 @@ describe("CuesList", () => {
             // THEN
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
-            expect(scrolledElement.outerHTML).toContain("Target Line 111");
-            expect(actualNode.container.outerHTML).toContain("Target Line 100");
-            expect(actualNode.container.outerHTML).toContain("Target Line 119");
+            expect(scrolledElement.outerHTML).toContain("TrgLine111-0TrgLine111-0TrgLine111-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine100-0TrgLine100-0TrgLine100-0");
+            expect(actualNode.container.outerHTML).toContain("TrgLine119-0TrgLine119-0TrgLine119-0");
         });
     });
 
@@ -1283,7 +1260,7 @@ describe("CuesList", () => {
             );
 
             // WHEN
-            testingStore.dispatch(updateCues(targetCues) as {} as AnyAction);
+            testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(50) as {} as AnyAction);
             await act(async () => {
                 actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
@@ -1295,7 +1272,7 @@ describe("CuesList", () => {
             // THEN
             expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
             const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
-            expect(scrolledElement.outerHTML).toContain("Target Line 50");
+            expect(scrolledElement.outerHTML).toContain("TrgLine50-0TrgLine50-0TrgLine50-0");
         });
     });
 });

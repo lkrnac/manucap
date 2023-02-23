@@ -3,16 +3,17 @@ import { ReactElement } from "react";
 import SearchReplaceEditor from "./SearchReplaceEditor";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { Provider } from "react-redux";
-import { setFind, setReplacement, showSearchReplace } from "./searchReplaceSlices";
+import { searchReplaceSlice, setFind, setReplacement, showSearchReplace } from "./searchReplaceSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { CueDto, Track } from "../../model";
-import { updateCues } from "../cuesList/cuesListActions";
+import { updateCues, updateMatchedCues } from "../cuesList/cuesListActions";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import ToggleButton from "../../toolbox/ToggleButton";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { matchedCuesSlice } from "../cuesList/cuesListSlices";
+import { createTestingMatchedCues } from "../cuesList/cuesListTestUtils";
 
 let testingStore = createTestingStore();
 
@@ -46,11 +47,13 @@ const testingCuesWithEditDisabled = [
     },
 ] as CueDto[];
 
+let testingMatchedCues = createTestingMatchedCues(3);
 
 describe("SearchReplaceEditor", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        testingMatchedCues = createTestingMatchedCues(3);
     });
 
     it("renders", () => {
@@ -215,80 +218,653 @@ describe("SearchReplaceEditor", () => {
         expect(testingStore.getState().searchReplace.matchCase).toBeTruthy();
     });
 
-    it("searches for next match when Next button is clicked", () => {
-        // GIVEN
-        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
-        testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
-        const { getByTestId } = render(
-            <Provider store={testingStore}>
-                <SearchReplaceEditor />
-            </Provider>
-        );
-        const nextButton = getByTestId("sbte-search-next");
+    describe("search next", () => {
+        it("doesn't find match", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("no-match") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const nextButton = getByTestId("sbte-search-next");
 
-        // WHEN
-        fireEvent.click(nextButton);
+            // WHEN
+            fireEvent.click(nextButton);
 
-        // THEN
-        expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
-        expect(testingStore.getState().editingCueIndex).toEqual(0);
-        expect(testingStore.getState().focusedCueIndex).toEqual(0);
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("no-match");
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(null);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: -1,
+                sourceCueIndex: -1,
+                targetCueIndex: -1,
+                matchLength: 0,
+                offset: -1,
+                offsetIndex: 0
+            });
+        });
+
+        it("finds match in next source line", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("Line") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const nextButton = getByTestId("sbte-search-next");
+
+            // WHEN
+            fireEvent.click(nextButton);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("Line");
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(0);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 0,
+                sourceCueIndex: 0,
+                targetCueIndex: 9007199254740991,
+                matchLength: 4,
+                offset: 3,
+                offsetIndex: 0
+            });
+        });
+
+        it("finds match in next target line", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("TrgLine") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const nextButton = getByTestId("sbte-search-next");
+
+            // WHEN
+            fireEvent.click(nextButton);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("TrgLine");
+            expect(testingStore.getState().editingCueIndex).toEqual(0);
+            expect(testingStore.getState().focusedCueIndex).toEqual(0);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 0,
+                sourceCueIndex: 9007199254740991,
+                targetCueIndex: 0,
+                matchLength: 7,
+                offset: 0,
+                offsetIndex: 0
+            });
+        });
+
+        it("finds next match in multi matched source cue", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("SrcLine10-2") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const nextButton = getByTestId("sbte-search-next");
+
+            // WHEN
+            fireEvent.click(nextButton);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("SrcLine10-2");
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(10);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 10,
+                sourceCueIndex: 2,
+                targetCueIndex: 9007199254740991,
+                matchLength: 11,
+                offset: 0,
+                offsetIndex: 0
+            });
+        });
+
+        it("finds next third match in multi matched source cue", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("SrcLine10-2") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const nextButton = getByTestId("sbte-search-next");
+            fireEvent.click(nextButton);
+            fireEvent.click(nextButton);
+
+            // WHEN
+            fireEvent.click(nextButton);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("SrcLine10-2");
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(10);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 10,
+                sourceCueIndex: 2,
+                targetCueIndex: 9007199254740991,
+                matchLength: 11,
+                offset: 22,
+                offsetIndex: 2
+            });
+        });
+
+        it("finds next match in multi matched target cue", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("TrgLine10-2") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const nextButton = getByTestId("sbte-search-next");
+
+            // WHEN
+            fireEvent.click(nextButton);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("TrgLine10-2");
+            expect(testingStore.getState().editingCueIndex).toEqual(10);
+            expect(testingStore.getState().focusedCueIndex).toEqual(10);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 10,
+                sourceCueIndex: 9007199254740991,
+                targetCueIndex: 2,
+                matchLength: 11,
+                offset: 0,
+                offsetIndex: 0
+            });
+        });
+
+        it("finds next third match in multi matched target cue", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("TrgLine10-2") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const nextButton = getByTestId("sbte-search-next");
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices({
+                matchedCueIndex: 10,
+                sourceCueIndex: 9007199254740991,
+                targetCueIndex: 2,
+                matchLength: 11,
+                offset: 11,
+                offsetIndex: 1
+            }));
+
+            // WHEN
+            fireEvent.click(nextButton);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("TrgLine10-2");
+            expect(testingStore.getState().editingCueIndex).toEqual(10);
+            expect(testingStore.getState().focusedCueIndex).toEqual(10);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 10,
+                sourceCueIndex: 9007199254740991,
+                targetCueIndex: 2,
+                matchLength: 11,
+                offset: 22,
+                offsetIndex: 2
+            });
+        });
+
+        it("finds match in target cue after changing search direction", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("SrcLine10-2") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const nextButton = getByTestId("sbte-search-next");
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices({
+                matchedCueIndex: 10,
+                sourceCueIndex: 2,
+                targetCueIndex: -1,
+                matchLength: 11,
+                offset: 11,
+                offsetIndex: 1
+            }));
+
+            // WHEN
+            fireEvent.click(nextButton);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("SrcLine10-2");
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(10);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 10,
+                sourceCueIndex: 2,
+                targetCueIndex: 9007199254740991,
+                matchLength: 11,
+                offset: 22,
+                offsetIndex: 2
+            });
+        });
+
+        it("finds match in target cue after changing search direction", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("TrgLine10-2") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const nextButton = getByTestId("sbte-search-next");
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices({
+                matchedCueIndex: 10,
+                sourceCueIndex: -1,
+                targetCueIndex: 2,
+                matchLength: 11,
+                offset: 11,
+                offsetIndex: 1
+            }));
+
+            // WHEN
+            fireEvent.click(nextButton);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("TrgLine10-2");
+            expect(testingStore.getState().editingCueIndex).toEqual(10);
+            expect(testingStore.getState().focusedCueIndex).toEqual(10);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 10,
+                sourceCueIndex: 9007199254740991,
+                targetCueIndex: 2,
+                matchLength: 11,
+                offset: 22,
+                offsetIndex: 2
+            });
+        });
+
+        it("searches for next match with regex special chars when Next button is clicked", () => {
+            // GIVEN
+            const testingCues = [
+                { vttCue: new VTTCue(0, 2, "Caption [Line 2]"), cueCategory: "DIALOGUE" },
+                { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
+                {
+                    vttCue: new VTTCue(4, 6, "Caption Line 3"),
+                    cueCategory: "ONSCREEN_TEXT",
+                    spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
+                },
+                {
+                    vttCue: new VTTCue(6, 8, "Caption [Line 2]"),
+                    cueCategory: "ONSCREEN_TEXT"
+                },
+            ] as CueDto[];
+            testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("[Line 2]") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const nextButton = getByTestId("sbte-search-next");
+
+            // WHEN
+            fireEvent.click(nextButton);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("[Line 2]");
+            expect(testingStore.getState().editingCueIndex).toEqual(0);
+            expect(testingStore.getState().searchReplace.indices.offset).toEqual(8);
+            expect(testingStore.getState().focusedCueIndex).toEqual(0);
+        });
     });
 
-    it("searches for previous match when Previous button is clicked", () => {
-        // GIVEN
-        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
-        testingStore.dispatch(updateEditingCueIndex(3) as {} as AnyAction);
-        testingStore.dispatch(setFind("Line 2") as {} as AnyAction);
-        const { getByTestId } = render(
-            <Provider store={testingStore}>
-                <SearchReplaceEditor />
-            </Provider>
-        );
-        const prevButton = getByTestId("sbte-search-prev");
+    describe("search previous", () => {
+        it("doesn't find match", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("no-match") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const prevButton = getByTestId("sbte-search-prev");
 
-        // WHEN
-        fireEvent.click(prevButton);
+            // WHEN
+            fireEvent.click(prevButton);
 
-        // THEN
-        expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
-        expect(testingStore.getState().editingCueIndex).toEqual(1);
-        expect(testingStore.getState().focusedCueIndex).toEqual(1);
-    });
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("no-match");
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(null);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: -1,
+                sourceCueIndex: -1,
+                targetCueIndex: -1,
+                matchLength: 0,
+                offset: -1,
+                offsetIndex: 0
+            });
+        });
 
-    it("searches for next match with regex special chars when Next button is clicked", () => {
-        // GIVEN
-        const testingCues = [
-            { vttCue: new VTTCue(0, 2, "Caption [Line 2]"), cueCategory: "DIALOGUE" },
-            { vttCue: new VTTCue(2, 4, "Caption Line 2"), cueCategory: "ONSCREEN_TEXT" },
-            {
-                vttCue: new VTTCue(4, 6, "Caption Line 3"),
-                cueCategory: "ONSCREEN_TEXT",
-                spellCheck: { matches: [{ message: "some-spell-check-problem" }]}
-            },
-            {
-                vttCue: new VTTCue(6, 8, "Caption [Line 2]"),
-                cueCategory: "ONSCREEN_TEXT"
-            },
-        ] as CueDto[];
-        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
-        testingStore.dispatch(setFind("[Line 2]") as {} as AnyAction);
-        const { getByTestId } = render(
-            <Provider store={testingStore}>
-                <SearchReplaceEditor />
-            </Provider>
-        );
-        const nextButton = getByTestId("sbte-search-next");
+        it("finds match in previous source line", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("SrcLine") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const prevButton = getByTestId("sbte-search-prev");
 
-        // WHEN
-        fireEvent.click(nextButton);
+            // WHEN
+            fireEvent.click(prevButton);
 
-        // THEN
-        expect(testingStore.getState().searchReplace.find).toEqual("[Line 2]");
-        expect(testingStore.getState().editingCueIndex).toEqual(0);
-        expect(testingStore.getState().cues[0].searchReplaceMatches.offsets).toEqual([8]);
-        expect(testingStore.getState().focusedCueIndex).toEqual(0);
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("SrcLine");
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(219);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 219,
+                sourceCueIndex: 2,
+                targetCueIndex: -1,
+                matchLength: 7,
+                offset: 24,
+                offsetIndex: 2
+            });
+        });
+
+        it("finds match in previous target line", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("TrgLine") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const prevButton = getByTestId("sbte-search-prev");
+
+            // WHEN
+            fireEvent.click(prevButton);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("TrgLine");
+            expect(testingStore.getState().editingCueIndex).toEqual(219);
+            expect(testingStore.getState().focusedCueIndex).toEqual(219);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 219,
+                sourceCueIndex: -1,
+                targetCueIndex: 2,
+                matchLength: 7,
+                offset: 24,
+                offsetIndex: 2
+            });
+        });
+
+        it("finds last previous match in multi matched source cue", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("SrcLine10-0") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const prevButton = getByTestId("sbte-search-prev");
+
+            // WHEN
+            fireEvent.click(prevButton);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("SrcLine10-0");
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(10);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 10,
+                sourceCueIndex: 0,
+                targetCueIndex: -1,
+                matchLength: 11,
+                offset: 22,
+                offsetIndex: 2
+            });
+        });
+
+        it("finds previous first match in multi matched source cue", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("SrcLine10-0") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const prevButton = getByTestId("sbte-search-prev");
+            fireEvent.click(prevButton);
+            fireEvent.click(prevButton);
+
+            // WHEN
+            fireEvent.click(prevButton);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("SrcLine10-0");
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(10);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 10,
+                sourceCueIndex: 0,
+                targetCueIndex: -1,
+                matchLength: 11,
+                offset: 0,
+                offsetIndex: 0
+            });
+        });
+
+        it("finds last previous match in multi matched target cue", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("TrgLine10-0") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const prevButton = getByTestId("sbte-search-prev");
+
+            // WHEN
+            fireEvent.click(prevButton);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("TrgLine10-0");
+            expect(testingStore.getState().editingCueIndex).toEqual(10);
+            expect(testingStore.getState().focusedCueIndex).toEqual(10);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 10,
+                sourceCueIndex: -1,
+                targetCueIndex: 0,
+                matchLength: 11,
+                offset: 22,
+                offsetIndex: 2
+            });
+        });
+
+        it("finds previous first match in multi matched target cue", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("TrgLine10-0") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const prevButton = getByTestId("sbte-search-prev");
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices({
+                matchedCueIndex: 10,
+                sourceCueIndex: -1,
+                targetCueIndex: 0,
+                matchLength: 11,
+                offset: 11,
+                offsetIndex: 1
+            }));
+
+            // WHEN
+            fireEvent.click(prevButton);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("TrgLine10-0");
+            expect(testingStore.getState().editingCueIndex).toEqual(10);
+            expect(testingStore.getState().focusedCueIndex).toEqual(10);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 10,
+                sourceCueIndex: -1,
+                targetCueIndex: 0,
+                matchLength: 11,
+                offset: 0,
+                offsetIndex: 0
+            });
+        });
+
+        it("finds match in source cue after changing search direction", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("SrcLine10-0") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const prevButton = getByTestId("sbte-search-prev");
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices({
+                matchedCueIndex: 10,
+                sourceCueIndex: 0,
+                targetCueIndex: 9007199254740991,
+                matchLength: 11,
+                offset: 11,
+                offsetIndex: 1
+            }));
+
+            // WHEN
+            fireEvent.click(prevButton);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("SrcLine10-0");
+            expect(testingStore.getState().editingCueIndex).toEqual(-1);
+            expect(testingStore.getState().focusedCueIndex).toEqual(10);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 10,
+                sourceCueIndex: 0,
+                targetCueIndex: -1,
+                matchLength: 11,
+                offset: 0,
+                offsetIndex: 0
+            });
+        });
+
+        it("finds match in target cue after changing search direction", () => {
+            // GIVEN
+            testingStore.dispatch(
+                matchedCuesSlice.actions.setMatchCuesForTesting(testingMatchedCues) as {} as AnyAction
+            );
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("TrgLine10-0") as {} as AnyAction);
+            const { getByTestId } = render(
+                <Provider store={testingStore}>
+                    <SearchReplaceEditor />
+                </Provider>
+            );
+            const prevButton = getByTestId("sbte-search-prev");
+            testingStore.dispatch(searchReplaceSlice.actions.setIndices({
+                matchedCueIndex: 10,
+                sourceCueIndex: 9007199254740991,
+                targetCueIndex: 0,
+                matchLength: 11,
+                offset: 11,
+                offsetIndex: 1
+            }));
+
+            // WHEN
+            fireEvent.click(prevButton);
+
+            // THEN
+            expect(testingStore.getState().searchReplace.find).toEqual("TrgLine10-0");
+            expect(testingStore.getState().editingCueIndex).toEqual(10);
+            expect(testingStore.getState().focusedCueIndex).toEqual(10);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 10,
+                sourceCueIndex: -1,
+                targetCueIndex: 0,
+                matchLength: 11,
+                offset: 0,
+                offsetIndex: 0
+            });
+        });
     });
 
     it("invokes replace current match when Replace button is clicked", () => {
@@ -341,7 +917,7 @@ describe("SearchReplaceEditor", () => {
         // THEN
         await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
-        expect(testingStore.getState().searchReplace.replacement).toEqual("New Line 5");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption New Line 5");
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption New Line 5");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
@@ -363,9 +939,7 @@ describe("SearchReplaceEditor", () => {
         );
         const replaceAllButton = getByText("Replace All");
         const replaceInput = getByPlaceholderText("Replace");
-        testingStore.dispatch(matchedCuesSlice.actions
-            .matchCuesByTime({ cues: [], sourceCues: [], editingCueIndex: 0 })
-        );
+        testingStore.dispatch(updateMatchedCues() as {} as AnyAction);
 
         // WHEN
         fireEvent.change(replaceInput, { target: { value: "New Line 5" }});
@@ -414,7 +988,7 @@ describe("SearchReplaceEditor", () => {
         // THEN
         await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
-        expect(testingStore.getState().searchReplace.replacement).toEqual("New Line 2");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption <b>New Line 2</b> and <i>New Line 2</i>");
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption <b>New Line 2</b> and New Line 2");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
@@ -460,7 +1034,7 @@ describe("SearchReplaceEditor", () => {
         // THEN
         await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("Line 2");
-        expect(testingStore.getState().searchReplace.replacement).toEqual("test");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption <b>test</b> and <i>test</i>");
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption <b>test</b> and test");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
@@ -553,7 +1127,7 @@ describe("SearchReplaceEditor", () => {
         // THEN
         await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("[Line 2]");
-        expect(testingStore.getState().searchReplace.replacement).toEqual("[LINE 2]");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption <b>[LINE 2]</b> and <i>{Line 2}</i>");
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("Caption <b>[LINE 2]</b> and {Line 2}");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("Caption Line 3");
@@ -616,7 +1190,7 @@ describe("SearchReplaceEditor", () => {
         // THEN
         await waitFor(() => expect(saveTrack).toHaveBeenCalledTimes(1), { timeout: 3000 });
         expect(testingStore.getState().searchReplace.find).toEqual("Caption Line");
-        expect(testingStore.getState().searchReplace.replacement).toEqual("New Text Update");
+        expect(testingStore.getState().searchReplace.replacement).toEqual("");
         expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1");
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("New Text Update 2");
         expect(testingStore.getState().cues[2].vttCue.text).toEqual("New Text Update 3");

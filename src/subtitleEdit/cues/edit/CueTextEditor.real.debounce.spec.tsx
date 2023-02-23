@@ -8,13 +8,12 @@ import { mount, ReactWrapper } from "enzyme";
 
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { CueDto, CueError, Language, Track } from "../../model";
-import { SearchReplaceMatches } from "../searchReplace/model";
 import { updateCues, updateMatchedCues } from "../cuesList/cuesListActions";
 import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { fireEvent, render, waitFor } from "@testing-library/react";
-import { replaceCurrentMatch } from "../searchReplace/searchReplaceSlices";
+import { replaceCurrentMatch, searchReplaceSlice } from "../searchReplace/searchReplaceSlices";
 import { act } from "react-dom/test-utils";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateEditingCueIndex } from "./cueEditorSlices";
@@ -229,10 +228,14 @@ describe("CueTextEditor", () => {
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         const searchReplaceMatches = {
-            offsets: [10],
+            matchedCueIndex: 0,
+            sourceCueIndex: 9007199254740991,
+            targetCueIndex: 0,
+            offset: 10,
             offsetIndex: 0,
             matchLength: 4
-        } as SearchReplaceMatches;
+        };
+        testingStore.dispatch(searchReplaceSlice.actions.setIndices(searchReplaceMatches));
         const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
         const editUuid = testingStore.getState().cues[0].editUuid;
         const actualNode = render(
@@ -243,7 +246,6 @@ describe("CueTextEditor", () => {
                     editUuid={editUuid}
                     bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
                     unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
-                    searchReplaceMatches={searchReplaceMatches}
                     setGlossaryTerm={jest.fn()}
                     autoFocus
                 />

@@ -11,10 +11,17 @@ import { updateEditingTrack } from "../../trackSlices";
 import { updateSourceCues } from "./sourceCueSlices";
 import { updateCues } from "../cuesList/cuesListActions";
 import ClickCueWrapper from "./ClickCueWrapper";
+import { setFind, showSearchReplace } from "../searchReplace/searchReplaceSlices";
+import {
+    createTestingMatchedCues,
+    createTestingSourceCues,
+    createTestingTargetCues
+} from "../cuesList/cuesListTestUtils";
 
 let testingStore = createTestingStore();
 const testTrack = { mediaTitle: "testingTrack", language: { id: "en-US", name: "English", direction: "LTR" }};
 
+// TODO: I am missing here test cases with child components
 describe("ClickCueWrapper", () => {
     beforeEach(()=> {
        testingStore = createTestingStore();
@@ -42,6 +49,45 @@ describe("ClickCueWrapper", () => {
 
             // THEN
             expect(testingStore.getState().editingCueIndex).toEqual(6);
+        });
+
+        it("searches for match in editing cue", async () => {
+            // GIVEN
+            testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
+            testingStore.dispatch(setFind("TrgLine6-0") as {} as AnyAction);
+            const testingMatchedCues = createTestingMatchedCues(1);
+            testingStore.dispatch(updateCues(createTestingTargetCues(testingMatchedCues)) as {} as AnyAction);
+            testingStore.dispatch(updateSourceCues(createTestingSourceCues(testingMatchedCues)) as {} as AnyAction);
+
+            const actualNode = render(
+                <Provider store={testingStore}>
+                    <ClickCueWrapper
+                        targetCueIndex={6}
+                        targetCuesLength={8}
+                        sourceCuesIndexes={[]}
+                        nextTargetCueIndex={-1}
+                        matchedCueIndex={6}
+                    />
+                </Provider>
+            );
+
+            // WHEN
+            await act(async () => {
+                fireEvent.click(actualNode.container.querySelector("div") as Element);
+            });
+
+            // THEN
+            expect(testingStore.getState().editingCueIndex).toEqual(6);
+            expect(testingStore.getState().focusedCueIndex).toEqual(6);
+            expect(testingStore.getState().searchReplace.indices).toEqual({
+                matchedCueIndex: 6,
+                sourceCueIndex: -1,
+                targetCueIndex: 0,
+                matchLength: 10,
+                offset: 0,
+                offsetIndex: 0
+            });
+
         });
 
         it("doesn't open cue if task disables editing", async () => {
