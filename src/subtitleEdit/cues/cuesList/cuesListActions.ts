@@ -36,7 +36,6 @@ import {
     editingCueIndexSlice,
     focusedInputSlice,
     lastCueChangeSlice,
-    updateSearchMatches,
     validationErrorSlice
 } from "../edit/cueEditorSlices";
 import _ from "lodash";
@@ -312,9 +311,19 @@ export const updateVttCue = (
             if (vttCue.startTime !== originalCue.vttCue.startTime) {
                 reorderCuesIfNeeded(dispatch, getState());
             }
-            if (getState().searchReplaceVisible) {
-                updateSearchMatches(dispatch, getState, idx);
-            }
+
+            // TODO: This is not possible to support searching of newly edited term, because of this discussion:
+            //  https://dotsub.slack.com/archives/C02P5HLGC/p1675253139271659
+            //  If we would want to enable this we would do something like in cueEditorSlices.updateEditingCueIndex
+            //  But with current structure of this method + cues + matchedCues interaction,
+            //  there would be endless recursion.
+            //  Refactoring as suggested in function signature could help with this
+            //  BTW, for effectively supporting this use case, we need to know current matchedCueIndex,
+            //  which is not easy as we don't have it in hand
+            // if (getState().searchReplaceVisible) {
+            // ...
+            // }
+
             validateCue(dispatch, idx, true, textOnly);
             if (!textOnly) {
                 dispatch(updateMatchedCues());

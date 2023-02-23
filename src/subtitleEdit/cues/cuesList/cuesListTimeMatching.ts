@@ -4,7 +4,7 @@ const OVERLAP_RATIO = 0.65;
 
 export interface MatchedCuesWithEditingFocus {
     matchedCues: CueLineDto[];
-    editingFocusIndex: number;
+    matchedCuesFocusIndex: number;
 }
 
 interface Times {
@@ -150,5 +150,5 @@ export const matchCuesByTime = (
         }
     }
     const matchedCues = Array.from(cuesMap.values());
-    return { matchedCues, editingFocusIndex: indexes.editingFocus };
+    return { matchedCues, matchedCuesFocusIndex: indexes.editingFocus };
 };

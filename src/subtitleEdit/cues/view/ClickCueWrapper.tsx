@@ -11,6 +11,7 @@ export interface CueViewProps {
     className?: string;
     children?: ReactElement;
     editDisabled?: boolean;
+    matchedCueIndex?: number;
 }
 
 const ClickCueWrapper = (props: CueViewProps): ReactElement => {
@@ -26,7 +27,10 @@ const ClickCueWrapper = (props: CueViewProps): ReactElement => {
                     if (props.targetCueIndex >= props.targetCuesLength) {
                         dispatch(addCue(props.targetCuesLength, props.sourceCuesIndexes));
                     } else if (!props.editDisabled) {
-                        dispatch(updateEditingCueIndex(props.targetCueIndex));
+                        dispatch(updateEditingCueIndex(
+                            props.targetCueIndex,
+                            props.matchedCueIndex !== undefined ? props.matchedCueIndex : -1
+                        ));
                     }
                 } else {
                     const finalTargetIndex = props.nextTargetCueIndex >= 0
