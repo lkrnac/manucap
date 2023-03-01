@@ -44,8 +44,6 @@ const executeCueUpdateCallback = (
     const updateCueCallback = getState().saveCueUpdate.updateCue;
     const editingTrack = getState().editingTrack;
     const onSaveSuccess = (responseCueDto: CueDto) => {
-        console.log("vtmssubtitle updateCueCallback addid: " + responseCueDto.addId);
-        console.log("vtmssubtitle updateCueCallback id: " + responseCueDto.id);
         updateAddedCueIdIfNeeded(dispatch, getState, cueToUpdate.addId, responseCueDto);
     };
     updateCueCallback({ editingTrack, cue: cueToUpdate, onSaveSuccess });
@@ -54,5 +52,7 @@ const executeCueUpdateCallback = (
 export const callSaveCueUpdate = (cueIndex: number): AppThunk =>
     (dispatch: Dispatch<PayloadAction<SubtitleEditAction | undefined> | void>, getState): void => {
     const cue = getState().cues[cueIndex];
-    executeCueUpdateCallback(dispatch, getState, cue);
+    if (cue) {
+        executeCueUpdateCallback(dispatch, getState, cue);
+    }
 };

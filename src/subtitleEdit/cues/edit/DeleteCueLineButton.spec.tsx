@@ -11,18 +11,15 @@ import { updateEditingTrack } from "../../trackSlices";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { saveCueDeleteSlice } from "../saveCueDeleteSlices";
 
-jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback,
-    sortBy: jest.requireActual("lodash/sortBy"),
-    findIndex: jest.requireActual("lodash/findIndex")
-}));
-
 let testingStore = createTestingStore();
+
+const deleteCueMock = jest.fn();
 
 describe("DeleteCueLineButton", () => {
 
     beforeEach(() => {
         testingStore = createTestingStore();
+        testingStore.dispatch(saveCueDeleteSlice.actions.setDeleteCueCallback(deleteCueMock));
     });
 
     it("renders", () => {
@@ -79,9 +76,7 @@ describe("DeleteCueLineButton", () => {
     it("calls deleteCueCallback in redux store when delete button is clicked", () => {
         // GIVEN
         const saveTrack = jest.fn();
-        const deleteCueCallback = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-        testingStore.dispatch(saveCueDeleteSlice.actions.setDeleteCueCallback(deleteCueCallback));
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
         const cues = [
@@ -99,8 +94,8 @@ describe("DeleteCueLineButton", () => {
         actualNode.find(".sbte-delete-cue-button").simulate("click");
 
         // THEN
-        expect(deleteCueCallback).toHaveBeenCalledWith(
-            { "cueId": "test-cue-1", "editingTrack": { "timecodesUnlocked": true }}
+        expect(deleteCueMock).toHaveBeenCalledWith(
+            { "cue": cues[0], "editingTrack": { "timecodesUnlocked": true }}
         );
         expect(saveTrack).not.toBeCalled();
     });

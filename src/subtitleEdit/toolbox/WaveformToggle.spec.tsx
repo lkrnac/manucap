@@ -4,10 +4,6 @@ import { fireEvent, render } from "@testing-library/react";
 import { createTestingStore } from "../../testUtils/testingStore";
 import WaveformToggle from "./WaveformToggle";
 
-jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback
-}));
-
 let testingStore = createTestingStore();
 
 describe("WaveformToggle", () => {

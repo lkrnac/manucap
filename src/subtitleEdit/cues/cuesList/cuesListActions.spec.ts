@@ -126,7 +126,7 @@ updateCueMock.mockImplementation(() => Promise.resolve({}));
 const deleteCueMock = jest.fn();
 const saveTrackMock = jest.fn();
 
-describe("cueSlices", () => {
+describe("cueListActions", () => {
     beforeEach(() => {
         localStorage.clear();
         testingStore = createTestingStore();

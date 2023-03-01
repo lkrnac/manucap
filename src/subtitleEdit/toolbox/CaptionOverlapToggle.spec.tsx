@@ -9,12 +9,6 @@ import { createTestingStore } from "../../testUtils/testingStore";
 import { updateEditingTrack } from "../trackSlices";
 import { setSaveTrack } from "../cues/saveSlices";
 
-jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback,
-    sortBy: jest.requireActual("lodash/sortBy"),
-    findIndex: jest.requireActual("lodash/findIndex")
-}));
-
 let testingStore = createTestingStore();
 
 describe("CaptionOverlapToggle", () => {

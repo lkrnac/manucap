@@ -19,6 +19,8 @@ import AddCueLineButton from "../edit/AddCueLineButton";
 import { matchedCuesSlice } from "./cuesListSlices";
 import CueListToolbar from "../../CueListToolbar";
 import { createTestingMatchedCues, createTestingSourceCues, createTestingTargetCues } from "./cuesListTestUtils";
+import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
+import { saveCueDeleteSlice } from "../saveCueDeleteSlices";
 
 const scrollIntoViewCallsTracker = jest.fn();
 
@@ -54,11 +56,16 @@ const testingMatchedCues = createTestingMatchedCues(1);
 let testingSourceCues = createTestingSourceCues(testingMatchedCues);
 let testingTargetCues = createTestingTargetCues(testingMatchedCues);
 
+const updateCueMock = jest.fn();
+const deleteCueMock = jest.fn();
+
 describe("CuesList", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
         testingSourceCues = createTestingSourceCues(testingMatchedCues);
         testingTargetCues = createTestingTargetCues(testingMatchedCues);
+        testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueMock));
+        testingStore.dispatch(saveCueDeleteSlice.actions.setDeleteCueCallback(deleteCueMock));
         jest.resetAllMocks();
     });
 

@@ -18,13 +18,6 @@ import SplitCueLineButton from "../edit/SplitCueLineButton";
 import { saveCueDeleteSlice } from "../saveCueDeleteSlices";
 import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
 
-jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback,
-    sortBy: jest.requireActual("lodash/sortBy"),
-    findIndex: jest.requireActual("lodash/findIndex"),
-    findLastIndex: jest.requireActual("lodash/findLastIndex")
-}));
-
 const cues = [
     { vttCue: new VTTCue(0, 0, "Editing Line 1"), cueCategory: "DIALOGUE" } as CueDto,
     { vttCue: new VTTCue(1, 2, "Editing Line 2"), cueCategory: "DIALOGUE" } as CueDto
@@ -32,13 +25,16 @@ const cues = [
 
 let testingStore = createTestingStore();
 
+const saveTrack = jest.fn();
+const updateCueMock = jest.fn();
+const deleteCueMock = jest.fn();
+
 describe("CueActionsPanel", () => {
-    const saveTrack = jest.fn();
-    const updateCueMock = jest.fn();
     beforeEach(() => {
         testingStore = createTestingStore();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueMock));
+        testingStore.dispatch(saveCueDeleteSlice.actions.setDeleteCueCallback(deleteCueMock));
         testingStore.dispatch(updateEditingTrack({ timecodesUnlocked: true } as Track) as {} as AnyAction);
         jest.resetAllMocks();
     });
@@ -175,7 +171,7 @@ describe("CueActionsPanel", () => {
 
         // THEN
         expect(deleteCueCallback).toHaveBeenCalledWith(
-            { "cueId": "test-cue-2", "editingTrack": { "timecodesUnlocked": true }}
+            { "cue": cues[1], "editingTrack": { "timecodesUnlocked": true }}
         );
         expect(saveTrack).not.toBeCalled();
     });

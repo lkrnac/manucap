@@ -9,6 +9,7 @@ import { updateCues } from "../cuesList/cuesListActions";
 import { userSlice } from "../../userSlices";
 import { Character } from "../../utils/shortcutConstants";
 import DateTime from "../../common/DateTime";
+import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
 
 const testComments = [
     {
@@ -40,7 +41,14 @@ const testingUser = {
     userId: "test"
 } as User;
 
+const updateCueMock = jest.fn();
+
 describe("CueComments", () => {
+    beforeEach(() => {
+        testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueMock));
+        jest.clearAllMocks();
+    });
+
     it("renders", () => {
         // GIVEN
         testingStore.dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: testingUser }) as {} as AnyAction);

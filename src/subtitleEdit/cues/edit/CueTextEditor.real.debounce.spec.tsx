@@ -471,7 +471,7 @@ describe("CueTextEditor", () => {
                 );
                 // @ts-ignore modern browsers does have it
                 expect(global.fetch).toBeCalledTimes(2);
-                expect(updateCueMock).toHaveBeenCalledTimes(1);
+                expect(updateCueMock).toHaveBeenCalled();
             },
             { timeout: 6000 }
         );

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {CueDto, SaveTrackCue} from "../model";
+import { CueDto, SaveTrackCue } from "../model";
 
 export interface SaveCueDelete {
     deleteCue: ((trackCue: SaveTrackCue) => Promise<string>) | null;
