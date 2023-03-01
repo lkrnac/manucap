@@ -369,7 +369,7 @@ describe("CueTextEditor", () => {
             const expectedCueUpdate = {
                 editingTrack,
                 cue: testCue,
-                onSaveSuccess: expect.any(Function)
+                onAddCueSaveSuccess: expect.any(Function)
             };
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             testingStore.dispatch(updateEditingTrack(editingTrack) as {} as AnyAction);
