@@ -525,7 +525,7 @@ export const deleteCue = (idx: number): AppThunk =>
             }
             ));
         dispatch(updateMatchedCues());
-        callSaveCueDelete(dispatch, getState, cueToDelete);
+        callSaveCueDelete(getState, cueToDelete);
     };
 
 export const updateCues = (cues: CueDto[]): AppThunk =>

@@ -120,15 +120,6 @@ const ignoredKeyword = "falsex";
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
 
-jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback,
-    sortBy: jest.requireActual("lodash/sortBy"),
-    findIndex: jest.requireActual("lodash/findIndex"),
-    findLastIndex: jest.requireActual("lodash/findLastIndex"),
-    remove: jest.requireActual("lodash/remove"),
-    get: jest.requireActual("lodash/get")
-}));
-
 const updateCueMock = jest.fn();
 updateCueMock.mockImplementation(() => Promise.resolve({}));
 

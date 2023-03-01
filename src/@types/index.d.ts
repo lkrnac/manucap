@@ -41,7 +41,6 @@ declare module "@dotsub/vtms-subtitle-edit-ui/models" {
         TrackCues,
         TrackType,
         SaveTrackCue,
-        DeleteTrackCueId,
         SaveState
     } from "../subtitleEdit/model";
 
@@ -58,7 +57,6 @@ declare module "@dotsub/vtms-subtitle-edit-ui/models" {
         SaveActionParameters,
         TrackCues,
         SaveTrackCue,
-        DeleteTrackCueId,
         SaveState
     };
 }

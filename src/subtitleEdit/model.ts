@@ -195,11 +195,6 @@ export interface SaveTrackCue {
     onSaveSuccess: (cueDto: CueDto) => void;
 }
 
-export interface DeleteTrackCueId {
-    editingTrack: Track;
-    cueId: string;
-}
-
 export interface SaveActionParameters {
     cues: CueDto[];
     editingTrack: Track;

@@ -9,12 +9,6 @@ import { updateCues } from "./cuesList/cuesListActions";
 let testingStore = createTestingStore();
 deepFreeze(testingStore.getState());
 
-jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback,
-    sortBy: jest.requireActual("lodash/sortBy"),
-    findIndex: jest.requireActual("lodash/findIndex")
-}));
-
 describe("saveSlices", () => {
     beforeEach(() => testingStore = createTestingStore());
     const saveTrack = jest.fn();

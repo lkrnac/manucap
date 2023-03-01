@@ -13,7 +13,6 @@ import { setSaveTrack } from "./cues/saveSlices";
 import { resetEditingTrack } from "./trackSlices";
 import { changeScrollPosition, setCurrentPlayerTime } from "./cues/cuesList/cuesListScrollSlice";
 import {
-    DeleteTrackCueId,
     ScrollPosition,
     SaveActionParameters,
     TrackCues,
@@ -41,7 +40,7 @@ export interface SubtitleEditProps {
     onViewTrackHistory: () => void;
     onSave: (saveAction: SaveActionParameters) => void;
     onUpdateCue: (trackCue: SaveTrackCue) => Promise<CueDto>;
-    onDeleteCue: (trackCue: DeleteTrackCueId) => Promise<string>;
+    onDeleteCue: (trackCue: SaveTrackCue) => Promise<string>;
     onComplete: (completeAction: TrackCues) => void;
     onExportFile: (trackVersionExport: Track | null) => void;
     onExportSourceFile: () => void;
