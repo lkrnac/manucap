@@ -192,7 +192,7 @@ export interface TrackCues {
 export interface SaveTrackCue {
     editingTrack: Track;
     cue: CueDto;
-    onSaveSuccess: (cueDto: CueDto) => void;
+    onAddCueSaveSuccess: (cueDto: CueDto) => void;
 }
 
 export interface SaveActionParameters {

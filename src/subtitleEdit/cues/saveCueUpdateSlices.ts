@@ -43,10 +43,10 @@ const executeCueUpdateCallback = (
 ): void => {
     const updateCueCallback = getState().saveCueUpdate.updateCue;
     const editingTrack = getState().editingTrack;
-    const onSaveSuccess = (responseCueDto: CueDto) => {
+    const onAddCueSaveSuccess = (responseCueDto: CueDto) => {
         updateAddedCueIdIfNeeded(dispatch, getState, cueToUpdate.addId, responseCueDto);
     };
-    updateCueCallback({ editingTrack, cue: cueToUpdate, onSaveSuccess });
+    updateCueCallback({ editingTrack, cue: cueToUpdate, onAddCueSaveSuccess });
 };
 
 export const callSaveCueUpdate = (cueIndex: number): AppThunk =>
