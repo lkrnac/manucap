@@ -108,7 +108,7 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: targetCues[0] }]}
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueEdit
@@ -178,7 +178,7 @@ describe("CueLine", () => {
                             showErrors
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueEdit
@@ -246,7 +246,7 @@ describe("CueLine", () => {
                             showErrors
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueEdit
@@ -313,7 +313,7 @@ describe("CueLine", () => {
                             showErrors
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueEdit
@@ -382,7 +382,7 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: targetCues[0] }]}
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -457,7 +457,7 @@ describe("CueLine", () => {
                             editDisabled
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r sbte-edit-disabled"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r sbte-edit-disabled"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -529,7 +529,7 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: targetCues[1] }]}
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -607,7 +607,7 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: targetCues[2] }]}
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -683,7 +683,7 @@ describe("CueLine", () => {
                             editDisabled
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r sbte-edit-disabled"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r sbte-edit-disabled"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -767,7 +767,7 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: sourceCues[0] }]}
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -785,7 +785,7 @@ describe("CueLine", () => {
                             />
                             <div
                                 style={{ display: "flex" }}
-                                className="bg-gray-0 border-b border-blue-light/20
+                                className="bg-gray-0 border-b border-blue-light/mostly-transparent
                                     sbte-click-cue-wrapper"
                             >
                                 <div
@@ -863,7 +863,7 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: sourceCues[0] }]}
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -881,7 +881,7 @@ describe("CueLine", () => {
                             />
                             <div
                                 style={{ display: "flex" }}
-                                className="bg-gray-0 border-b border-blue-light/20
+                                className="bg-gray-0 border-b border-blue-light/mostly-transparent
                                     sbte-click-cue-wrapper"
                             >
                                 <div
@@ -948,7 +948,7 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: sourceCues[0] }]}
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -965,7 +965,7 @@ describe("CueLine", () => {
                             />
                             <div
                                 style={{ display: "flex" }}
-                                className="bg-gray-0 border-b border-blue-light/20
+                                className="bg-gray-0 border-b border-blue-light/mostly-transparent
                                     sbte-click-cue-wrapper"
                             >
                                 <div
@@ -1039,12 +1039,12 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: targetCues[0] }]}
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <div
                                 style={{ display: "flex" }}
-                                className="bg-gray-0 border-b border-blue-light/20
+                                className="bg-gray-0 border-b border-blue-light/mostly-transparent
                                     sbte-click-cue-wrapper"
                             >
                                 <div style={{ width: "100%", minHeight: "78px" }} />
@@ -1117,7 +1117,7 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: targetCues[0] }]}
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -1235,7 +1235,7 @@ describe("CueLine", () => {
                             ]}
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -1349,7 +1349,7 @@ describe("CueLine", () => {
                             cues={[{ index: 0, cue: targetCues[0] }]}
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -1454,7 +1454,7 @@ describe("CueLine", () => {
                             ]}
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -1573,7 +1573,7 @@ describe("CueLine", () => {
                             showErrors
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -1705,7 +1705,7 @@ describe("CueLine", () => {
                             showErrors
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -2041,7 +2041,7 @@ describe("CueLine", () => {
                             cueCommentsCount={3}
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueEdit
@@ -2108,7 +2108,7 @@ describe("CueLine", () => {
                             cueCommentsCount={6}
                         />
                         <div
-                            className="border-t border-r border-blue-light/20 rounded-r"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView

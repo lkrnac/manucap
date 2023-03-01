@@ -24,6 +24,7 @@ module.exports = {
                 dark: withOpacityValue("--red-dark")
             },
             blue: {
+                lighter: withOpacityValue("--blue-lighter"),
                 light: withOpacityValue("--blue-light"),
                 primary: withOpacityValue("--blue-primary"),
                 dark: withOpacityValue("--blue-dark"),
@@ -56,6 +57,16 @@ module.exports = {
             slate: {
                 0: withOpacityValue("--slate-0")
             }
+        },
+        opacity: {
+            "full": 1,
+            "quasi-opaque": 0.9,
+            "mostly-opaque": 0.8,
+            "semi-opaque": 0.6,
+            "semi-transparent": 0.4,
+            "mostly-transparent": 0.2,
+            "quasi-transparent": 0.1,
+            "none": 0
         },
         extend: {
             width: {

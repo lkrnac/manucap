@@ -167,7 +167,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                 cueCommentsCount={cueCommentsCount}
             />
             <div
-                className={"border-t border-r border-blue-light/20 rounded-r" +
+                className={"border-t border-r border-blue-light/mostly-transparent rounded-r" +
                     (cueLineEditDisabled ? " sbte-edit-disabled" : "")}
                 style={{ display: "grid", width: "100%" }}
             >
