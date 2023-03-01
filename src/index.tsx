@@ -367,12 +367,11 @@ const TestApp = (): ReactElement => {
                 return;
             }}
             onUpdateCue={(trackCue): Promise<CueDto> => {
-                console.log("in onUpdateCue: " + trackCue.cue.id);
                 const promiseMs = Math.floor(randomTime(.5) * 1000);
                 return new Promise((resolve) => setTimeout(() => resolve(trackCue.cue), promiseMs));
             }}
-            onDeleteCue={(trackCue): Promise<string> => {
-                return new Promise((resolve) => setTimeout(() => resolve(trackCue.cueId), 1000));
+            onDeleteCue={(_trackCue): Promise<string> => {
+                return new Promise((resolve) => setTimeout(() => resolve("done"), 1000));
             }}
             onComplete={(): void => undefined}
             onExportSourceFile={(): void => undefined}
