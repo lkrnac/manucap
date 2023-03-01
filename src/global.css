@@ -219,7 +219,7 @@
 }
 
 .sbte-badge.sbte-badge-success {
-    @apply bg-green-primary border border-green-dark/mostly-transparent;
+    @apply bg-green-primary border border-green-dark/mostly-opaque;
 }
 
 .sbte-badge.sbte-badge-secondary {
@@ -471,7 +471,7 @@
 /** Forms **/
 
 .sbte-form-control {
-    @apply block w-full border-blue-light/mostly-transparent focus:border-blue-light/mostly-transparent rounded bg-white py-2 px-4 text-base text-gray-800 border transition-all duration-200;
+    @apply block w-full border-blue-light/mostly-transparent focus:border-blue-light/mostly-opaque rounded bg-white py-2 px-4 text-base text-gray-800 border transition-all duration-200;
     height: 38px;
 }
 
@@ -498,15 +498,15 @@ label.sbte-form-control {
 }
 
 .sbte-cue-line-flap {
-    @apply rounded-l-lg bg-blue-primary/quasi-opaque border border-blue-dark/mostly-transparent;
+    @apply rounded-l-lg bg-blue-primary/mostly-opaque border border-blue-dark/mostly-opaque;
 }
 
 .sbte-cue-line-flap-error {
-    @apply rounded-l-lg border border-red-dark/mostly-transparent bg-red-primary/quasi-opaque;
+    @apply rounded-l-lg border border-red-dark/mostly-opaque bg-red-primary/quasi-opaque;
 }
 
 .sbte-cue-line-flap-good {
-    @apply rounded-l-lg border border-green-dark/mostly-transparent bg-green-primary/quasi-opaque;
+    @apply rounded-l-lg border border-green-dark/mostly-opaque bg-green-primary/quasi-opaque;
 }
 
 .sbte-cue-line-flap-checkbox {
@@ -514,11 +514,11 @@ label.sbte-form-control {
 }
 
 .sbte-cue-divider-error {
-    @apply border-none bg-red-dark/mostly-transparent h-px -mt-px;
+    @apply border-none bg-red-dark/mostly-opaque h-px -mt-px;
 }
 
 .sbte-cue-divider-good {
-    @apply border-none bg-green-dark/mostly-transparent h-px -mt-px;
+    @apply border-none bg-green-dark/mostly-opaque h-px -mt-px;
 }
 
 .sbte-cue-divider {
@@ -633,8 +633,9 @@ region.wavesurfer-region:before {
     }
 }
 
-/* Waveform */
+/** Waveform **/
+
 region.wavesurfer-region:before {
     content: attr(data-region-label);
-    @apply text-gray-900/mostly-transparent
+    @apply text-gray-900/mostly-opaque
 }
