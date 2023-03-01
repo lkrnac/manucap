@@ -370,8 +370,10 @@ const TestApp = (): ReactElement => {
                 const promiseMs = Math.floor(randomTime(.5) * 1000);
                 return new Promise((resolve) => setTimeout(() => resolve(trackCue.cue), promiseMs));
             }}
-            onDeleteCue={(_trackCue): Promise<string> => {
-                return new Promise((resolve) => setTimeout(() => resolve("done"), 1000));
+            onDeleteCue={(trackCue): Promise<string> => {
+                return new Promise((resolve) =>
+                    setTimeout(() => resolve(trackCue.cue.id || "slug"), 1000)
+                );
             }}
             onComplete={(): void => undefined}
             onExportSourceFile={(): void => undefined}
