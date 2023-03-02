@@ -457,7 +457,8 @@ describe("CueLine", () => {
                             editDisabled
                         />
                         <div
-                            className="border-t border-r border-blue-light/mostly-transparent rounded-r sbte-edit-disabled"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r
+                                sbte-edit-disabled"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -683,7 +684,8 @@ describe("CueLine", () => {
                             editDisabled
                         />
                         <div
-                            className="border-t border-r border-blue-light/mostly-transparent rounded-r sbte-edit-disabled"
+                            className="border-t border-r border-blue-light/mostly-transparent rounded-r
+                                sbte-edit-disabled"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
