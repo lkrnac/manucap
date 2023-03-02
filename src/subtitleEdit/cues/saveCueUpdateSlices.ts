@@ -5,7 +5,7 @@ import { AppThunk } from "../subtitleEditReducers";
 import { cuesSlice } from "./cuesList/cuesListSlices";
 
 export interface SaveCueUpdateCallback {
-    updateCue: ((trackCue: SaveTrackCue) => Promise<CueDto>) | null;
+    updateCue: ((trackCue: SaveTrackCue) => void) | null;
 }
 
 const initSaveCueCallbacks = {
@@ -16,7 +16,7 @@ export const saveCueUpdateSlice = createSlice({
     name: "saveCueUpdate",
     initialState: initSaveCueCallbacks,
     reducers: {
-        setUpdateCueCallback: (state, action: PayloadAction<(trackCue: SaveTrackCue) => Promise<CueDto>>): void => {
+        setUpdateCueCallback: (state, action: PayloadAction<(trackCue: SaveTrackCue) => void>): void => {
             state.updateCue = action.payload;
         }
     }

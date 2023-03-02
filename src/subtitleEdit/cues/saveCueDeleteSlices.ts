@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CueDto, SaveTrackCue } from "../model";
 
 export interface SaveCueDelete {
-    deleteCue: ((trackCue: SaveTrackCue) => Promise<string>) | null;
+    deleteCue: ((trackCue: SaveTrackCue) => void) | null;
 }
 
 const initSaveCueDelete = {
@@ -13,7 +13,7 @@ export const saveCueDeleteSlice = createSlice({
     name: "saveCueDelete",
     initialState: initSaveCueDelete,
     reducers: {
-        setDeleteCueCallback: (state, action: PayloadAction<(trackCue: SaveTrackCue) => Promise<string>>): void => {
+        setDeleteCueCallback: (state, action: PayloadAction<(trackCue: SaveTrackCue) => void>): void => {
             state.deleteCue = action.payload;
         }
     }

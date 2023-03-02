@@ -4,11 +4,11 @@ import "primeicons/primeicons.css";
 import "primereact/resources/primereact.min.css";
 import "primereact/resources/themes/bootstrap4-light-blue/theme.css";
 import { Provider, useDispatch } from "react-redux";
-import { ReactElement, useEffect } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { updateCues } from "./subtitleEdit/cues/cuesList/cuesListActions";
 import { updateEditingTrack } from "./subtitleEdit/trackSlices";
 import { updateSubtitleUser } from "./subtitleEdit/userSlices";
-import { CueDto, Language, Track, User } from "./subtitleEdit/model";
+import { CueDto, Language, SaveState, Track, User } from "./subtitleEdit/model";
 import ReactDOM from "react-dom";
 import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
 import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecifications/subtitleSpecificationSlice";
@@ -51,6 +51,7 @@ const inChunkRange = (start: number, end: number): boolean => {
 
 const TestApp = (): ReactElement => {
     const dispatch = useDispatch();
+    const [ saveState, setSaveState ] = useState<SaveState>("NONE");
 
     // ################################## Source Cues ###########################################
     useEffect(() => {
@@ -159,7 +160,7 @@ const TestApp = (): ReactElement => {
                 500
             );
         }
-    });
+    }, [dispatch]);
 
     // ################################## Target Cues ###########################################
     useEffect(() => {
@@ -278,7 +279,7 @@ const TestApp = (): ReactElement => {
             () => dispatch(updateCues(targetCues)),
             500
         );
-    });
+    }, [dispatch]);
 
     // ################################## Track ###########################################
     useEffect(() => {
@@ -305,7 +306,7 @@ const TestApp = (): ReactElement => {
             } as Track)),
             500
         );
-    });
+    }, [dispatch]);
 
     // ################################## User ###########################################
     useEffect(() => {
@@ -321,7 +322,7 @@ const TestApp = (): ReactElement => {
             () => dispatch(updateSubtitleUser(subtitleUser)),
             500
         );
-    });
+    }, [dispatch]);
 
     // ################################## Subtitle Specs ###########################################
     useEffect(() => {
@@ -345,7 +346,7 @@ const TestApp = (): ReactElement => {
             })),
             500
         );
-    });
+    }, [dispatch]);
 
     const video = `https://dotsub-media-encoded.s3.amazonaws.com/sample/${LONG_VIDEO_TESTING
         ? "my-long-movie"
@@ -358,22 +359,16 @@ const TestApp = (): ReactElement => {
             waveform={`${video}.json`}
             onViewTrackHistory={(): void => undefined}
             onSave={(): void => {
-                setTimeout(
-                    () => {
-                        // TODO set savedState
-                        // dispatch(setAutoSaveSuccess(true));
-                    }, 500
-                );
-                return;
+                setTimeout(() => setSaveState("TRIGGERED"), 1);
+                setTimeout(() => setSaveState("SAVED"), 500);
             }}
-            onUpdateCue={(trackCue): Promise<CueDto> => {
-                const promiseMs = Math.floor(randomTime(.5) * 1000);
-                return new Promise((resolve) => setTimeout(() => resolve(trackCue.cue), promiseMs));
+            onUpdateCue={(): void => {
+                setTimeout(() => setSaveState("TRIGGERED"), 1);
+                setTimeout(() => setSaveState("SAVED"), 500);
             }}
-            onDeleteCue={(trackCue): Promise<string> => {
-                return new Promise((resolve) =>
-                    setTimeout(() => resolve(trackCue.cue.id || "slug"), 1000)
-                );
+            onDeleteCue={(): void => {
+                setTimeout(() => setSaveState("TRIGGERED"), 1);
+                setTimeout(() => setSaveState("SAVED"), 500);
             }}
             onComplete={(): void => undefined}
             onExportSourceFile={(): void => undefined}
@@ -381,7 +376,7 @@ const TestApp = (): ReactElement => {
             onImportFile={(): void => undefined}
             spellCheckerDomain="dev-spell-checker.videotms.com"
             commentAuthor="Linguist"
-            saveState={"NONE"}
+            saveState={saveState}
         />
     );
 };

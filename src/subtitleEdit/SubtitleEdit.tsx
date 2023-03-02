@@ -17,7 +17,6 @@ import {
     SaveActionParameters,
     TrackCues,
     Track,
-    CueDto,
     SaveTrackCue,
     SaveState
 } from "./model";
@@ -39,8 +38,8 @@ export interface SubtitleEditProps {
     waveform?: string;
     onViewTrackHistory: () => void;
     onSave: (saveAction: SaveActionParameters) => void;
-    onUpdateCue: (trackCue: SaveTrackCue) => Promise<CueDto>;
-    onDeleteCue: (trackCue: SaveTrackCue) => Promise<string>;
+    onUpdateCue: (trackCue: SaveTrackCue) => void;
+    onDeleteCue: (trackCue: SaveTrackCue) => void;
     onComplete: (completeAction: TrackCues) => void;
     onExportFile: (trackVersionExport: Track | null) => void;
     onExportSourceFile: () => void;
