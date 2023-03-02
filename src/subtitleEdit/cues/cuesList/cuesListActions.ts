@@ -462,14 +462,13 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
         if (validCueDuration) {
             dispatch(cuesSlice.actions.addCue({ idx, cue }));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "ADD", index: idx, vttCue: cue.vttCue }));
+            if (cues.length === 0) {
+                callSaveTrack(dispatch, getState);
+                return;
+            }
             dispatch(updateMatchedCues());
             dispatch(changeScrollPosition(ScrollPosition.CURRENT));
-            if (cues.length > 0) {
-                dispatch(callSaveCueUpdate(idx));
-            } else {
-                callSaveTrack(dispatch, getState);
-            }
-
+            dispatch(callSaveCueUpdate(idx));
         } else {
             const error = overlapStartPrevented || overlapEndPrevented
                 ? CueError.TIME_GAP_OVERLAP
