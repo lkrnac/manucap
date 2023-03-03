@@ -3395,6 +3395,7 @@ describe("cueListActions", () => {
             const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 10000 };
             testingStore.dispatch(updateEditingTrack(chunkTrack as Track) as {} as AnyAction);
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+            jest.clearAllMocks();
         });
         describe("without source cues", () => {
             it("merges 2 single cue lines", () => {
@@ -3674,9 +3675,9 @@ describe("cueListActions", () => {
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
-                expect(updateCueMock).not.toHaveBeenCalled();
-                expect(deleteCueMock).not.toHaveBeenCalled();
-                expect(saveTrackMock).toHaveBeenCalled();
+                expect(updateCueMock).toHaveBeenCalledTimes(1);
+                expect(deleteCueMock).toHaveBeenCalledTimes(2);
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
         });
     });
