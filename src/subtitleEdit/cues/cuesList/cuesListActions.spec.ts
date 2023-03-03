@@ -3410,6 +3410,7 @@ describe("cueListActions", () => {
 
                 // THEN
                 expect(testingStore.getState().cues.length).toEqual(2);
+                expect(testingStore.getState().cues[0].addId).toBeDefined();
                 expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(0);
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");

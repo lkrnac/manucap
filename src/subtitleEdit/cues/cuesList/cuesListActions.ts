@@ -606,6 +606,7 @@ export const mergeCues = (): AppThunk =>
                 const mergedVttCue = new VTTCue(rowStartTime, rowEndTime, mergedContent);
                 copyNonConstructorProperties(mergedVttCue, firstCue.cue.vttCue);
                 const mergedCue = {
+                    addId: uuidv4(),
                     vttCue: mergedVttCue,
                     errors: mergedErrors,
                     glossaryMatches: mergedGlossaryMatches,
