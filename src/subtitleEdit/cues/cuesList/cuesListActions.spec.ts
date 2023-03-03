@@ -3414,9 +3414,9 @@ describe("cueListActions", () => {
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
-                expect(updateCueMock).not.toHaveBeenCalled();
-                expect(deleteCueMock).not.toHaveBeenCalled();
-                expect(saveTrackMock).toHaveBeenCalled();
+                expect(updateCueMock).toHaveBeenCalledTimes(1);
+                expect(deleteCueMock).toHaveBeenCalledTimes(2);
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("doesn't merge 2 single cue lines if merged cue is too long", () => {
@@ -3465,9 +3465,9 @@ describe("cueListActions", () => {
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(6);
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual(
                     "Caption Line 1\nCaption Line 2\nCaption Line 3");
-                expect(updateCueMock).not.toHaveBeenCalled();
-                expect(deleteCueMock).not.toHaveBeenCalled();
-                expect(saveTrackMock).toHaveBeenCalled();
+                expect(updateCueMock).toHaveBeenCalledTimes(1);
+                expect(deleteCueMock).toHaveBeenCalledTimes(3);
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("merges 2 multiple cue lines", () => {
@@ -3503,9 +3503,9 @@ describe("cueListActions", () => {
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(8);
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual(
                     "Caption Line 1\nCaption Line 2\nCaption Line 3\nCaption Line 4");
-                expect(updateCueMock).not.toHaveBeenCalled();
-                expect(deleteCueMock).not.toHaveBeenCalled();
-                expect(saveTrackMock).toHaveBeenCalled();
+                expect(updateCueMock).toHaveBeenCalledTimes(1);
+                expect(deleteCueMock).toHaveBeenCalledTimes(2);
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("scrolls to merged cue on edit mode on merge", () => {
@@ -3521,9 +3521,9 @@ describe("cueListActions", () => {
                 // THEN
                 expect(testingStore.getState().editingCueIndex).toEqual(0);
                 expect(testingStore.getState().focusedCueIndex).toEqual(0);
-                expect(updateCueMock).not.toHaveBeenCalled();
-                expect(deleteCueMock).not.toHaveBeenCalled();
-                expect(saveTrackMock).toHaveBeenCalled();
+                expect(updateCueMock).toHaveBeenCalledTimes(1);
+                expect(deleteCueMock).toHaveBeenCalledTimes(2);
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("merges 2 single cue lines with errors", () => {
@@ -3547,9 +3547,9 @@ describe("cueListActions", () => {
                     [CueError.LINE_COUNT_EXCEEDED, CueError.LINE_CHAR_LIMIT_EXCEEDED]);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
-                expect(updateCueMock).not.toHaveBeenCalled();
-                expect(deleteCueMock).not.toHaveBeenCalled();
-                expect(saveTrackMock).toHaveBeenCalled();
+                expect(updateCueMock).toHaveBeenCalledTimes(1);
+                expect(deleteCueMock).toHaveBeenCalledTimes(2);
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("merges 2 single cue lines with errors", () => {
@@ -3575,9 +3575,9 @@ describe("cueListActions", () => {
                     [{ source: "1", replacements: ["rep1"]}, { source: "2", replacements: ["rep2"]}]);
                 expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(4);
                 expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(6);
-                expect(updateCueMock).not.toHaveBeenCalled();
-                expect(deleteCueMock).not.toHaveBeenCalled();
-                expect(saveTrackMock).toHaveBeenCalled();
+                expect(updateCueMock).toHaveBeenCalledTimes(1);
+                expect(deleteCueMock).toHaveBeenCalledTimes(2);
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("merges 2 single cue lines with comments", () => {
@@ -3596,9 +3596,9 @@ describe("cueListActions", () => {
                 expect(testingStore.getState().cues[0].vttCue.endTime).toEqual(4);
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual("Caption Line 1\nCaption Line 2");
                 expect(testingStore.getState().cues[0].comments).toEqual(testComments);
-                expect(updateCueMock).not.toHaveBeenCalled();
-                expect(deleteCueMock).not.toHaveBeenCalled();
-                expect(saveTrackMock).toHaveBeenCalled();
+                expect(updateCueMock).toHaveBeenCalledTimes(1);
+                expect(deleteCueMock).toHaveBeenCalledTimes(2);
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
             it("merges 2 multiple cue lines with comments", () => {
@@ -3645,9 +3645,9 @@ describe("cueListActions", () => {
                 expect(testingStore.getState().cues[0].vttCue.text).toEqual(
                     "Caption Line 1\nCaption Line 2\nCaption Line 3\nCaption Line 4");
                 expect(testingStore.getState().cues[0].comments).toEqual(testComments);
-                expect(updateCueMock).not.toHaveBeenCalled();
-                expect(deleteCueMock).not.toHaveBeenCalled();
-                expect(saveTrackMock).toHaveBeenCalled();
+                expect(updateCueMock).toHaveBeenCalledTimes(1);
+                expect(deleteCueMock).toHaveBeenCalledTimes(2);
+                expect(saveTrackMock).not.toHaveBeenCalled();
             });
         });
 
@@ -3701,9 +3701,9 @@ describe("cueListActions", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
-            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(updateCueMock).toHaveBeenCalledTimes(2);
             expect(deleteCueMock).not.toHaveBeenCalled();
-            expect(saveTrackMock).toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("splits cue with comments", async () => {
@@ -3724,9 +3724,9 @@ describe("cueListActions", () => {
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
             expect(testingStore.getState().cues[1].comments).toBeUndefined();
-            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(updateCueMock).toHaveBeenCalledTimes(2);
             expect(deleteCueMock).not.toHaveBeenCalled();
-            expect(saveTrackMock).toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
         it("doesn't split too short cue", async () => {
@@ -3774,9 +3774,9 @@ describe("cueListActions", () => {
             expect(testingStore.getState().cues[1].vttCue.startTime).toEqual(1);
             expect(testingStore.getState().cues[1].vttCue.endTime).toEqual(2);
             expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
-            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(updateCueMock).toHaveBeenCalledTimes(2);
             expect(deleteCueMock).not.toHaveBeenCalled();
-            expect(saveTrackMock).toHaveBeenCalled();
+            expect(saveTrackMock).not.toHaveBeenCalled();
         });
     });
 });

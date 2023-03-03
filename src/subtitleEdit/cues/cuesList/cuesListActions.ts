@@ -505,7 +505,8 @@ export const splitCue = (idx: number): AppThunk =>
             dispatch(updateMatchedCues());
             dispatch(lastCueChangeSlice.actions.recordCueChange(
                 { changeType: "ADD" , index: (idx + 1), vttCue: splitCue.vttCue }));
-            callSaveTrack(dispatch, getState);
+            dispatch(callSaveCueUpdate(idx));
+            dispatch(callSaveCueUpdate(idx + 1));
         } else {
             dispatch(validationErrorSlice.actions.setValidationErrors([CueError.SPLIT_ERROR]));
         }
@@ -622,6 +623,8 @@ export const mergeCues = (): AppThunk =>
 
                 if (validCueDuration) {
                     dispatch(focusedInputSlice.actions.updateFocusedInput("EDITOR"));
+                    const cuesState = [ ...getState().cues ];
+                    const cuesToDelete = cuesState.splice(firstCue.index, (lastCue.index + 1) - firstCue.index);
                     dispatch(cuesSlice.actions.mergeCues(
                         { mergedCue, startIndex: firstCue.index, endIndex: lastCue.index }));
                     dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: firstCue.index }));
@@ -629,7 +632,8 @@ export const mergeCues = (): AppThunk =>
                     dispatch(lastCueChangeSlice.actions.recordCueChange(
                         { changeType: "MERGE", index: firstCue.index, vttCue: mergedVttCue }));
                     dispatch(updateMatchedCues());
-                    callSaveTrack(dispatch, getState);
+                    dispatch(callSaveCueUpdate(firstCue.index));
+                    cuesToDelete.forEach((cueDto: CueDto) => callSaveCueDelete(getState, cueDto));
                     mergeSuccess = true;
                 }
             }
