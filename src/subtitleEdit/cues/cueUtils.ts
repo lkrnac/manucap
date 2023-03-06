@@ -19,10 +19,20 @@ export const copyNonConstructorProperties = (newCue: VTTCue, oldCue: VTTCue): vo
     // NOTE: It is not possible to test case where oldCue.positionAlign/lineAlign is undefined,
     // because VTTCue constructor from video.js work correctly,
     // thus it is not possible to simulate failure case in node, it happens in browsers.
+
     newCue.lineAlign = oldCue.lineAlign ? oldCue.lineAlign : "center";
     newCue.positionAlign = oldCue.positionAlign ? oldCue.positionAlign : "auto";
 
-    newCue.line = (isSafari() && oldCue.line === "auto") ? -1 : oldCue.line;
+    if (isSafari() && oldCue.line === "auto") {
+        newCue.line = -1;
+    } else if (typeof oldCue.line === "string" && oldCue.line !== "auto") {
+        // Due to some type mismatches between VideoJS impl of VTTCue and our API, we have to make a conversion
+        // for when a string is return with a numeric value in it. We must convert this to a real number. Otherwise,
+        // all cues won't show up. (https://dotsub.atlassian.net/browse/VTMS-4366)
+        newCue.line = Number.parseInt(oldCue.line);
+    } else {
+        newCue.line = oldCue.line;
+    }
 
     newCue.region = oldCue.region;
     newCue.snapToLines = oldCue.snapToLines === undefined ? true : oldCue.snapToLines;

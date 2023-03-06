@@ -104,6 +104,19 @@ describe("cueUtils", () => {
             // THEN
             expect(newVttCue.line).toEqual(-1);
         });
+
+        it("handles when cue.line value is a string with numeric value", () => {
+            // GIVEN
+            const newVttCue = new VTTCue(0, 1, "new text");
+            const oldVttCue = new VTTCue(1, 2, "old text");
+
+            // WHEN
+            // @ts-ignore We are trying to test a typing mismatch case.
+            copyNonConstructorProperties(newVttCue, { ...oldVttCue, line: "0" });
+
+            // THEN
+            expect(newVttCue.line).toEqual(0);
+        });
     });
 
     describe("positionStyles", () => {
