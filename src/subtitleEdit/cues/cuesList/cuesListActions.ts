@@ -223,39 +223,55 @@ export const validateCue = (
     dispatch(checkErrors({ index, shouldSpellCheck: shouldSpellCheck }));
 };
 
-const findNewEditingCueIndexForReorder = (
-    sortedCues: CueDto[],
-    editUuid: string | undefined | null,
-    editingCueIndex: number,
-    cuesToUpdate?: CueDto[]
-): number => {
-    const newEditingCueIndex = _.findIndex(sortedCues, [ "editUuid", editUuid ]);
-    const isFirstCueAddUpdateCues = newEditingCueIndex === -1 && cuesToUpdate && !editUuid && editingCueIndex === 0
-        && sortedCues.length === 1;
-    return isFirstCueAddUpdateCues ? editingCueIndex : newEditingCueIndex;
-};
-
-const reorderCuesIfNeeded = (
+const reorderCues = (
     dispatch: Dispatch<SubtitleEditAction>,
     state: SubtitleEditState,
     cuesToUpdate?: CueDto[]
-): void => {
+): CueDto | null | undefined => {
     const newCues = cuesToUpdate ? cuesToUpdate : state.cues;
     const editingCueIndex = state.editingCueIndex;
-    let editUuid = null;
+    let editingCue = null;
     if (editingCueIndex > -1
         && newCues.length > editingCueIndex // This can happen when user closes one track and opens shorter track
     ) {
-        editUuid = newCues[editingCueIndex].editUuid;
+        editingCue = newCues[editingCueIndex];
     }
     const sortedCues = _.sortBy(newCues, (cue: CueDto) => cue.vttCue.startTime);
-    const newEditingCueIndex = findNewEditingCueIndexForReorder(sortedCues, editUuid, editingCueIndex, cuesToUpdate);
     dispatch(cuesSlice.actions.updateCues({ cues: sortedCues }));
+    return editingCue;
+};
+
+const resetEditingIndexIfNeeded = (
+    dispatch: Dispatch<SubtitleEditAction>,
+    state: SubtitleEditState,
+    newEditingCueIndex: number
+): void => {
+    const editingCueIndex = state.editingCueIndex;
     if (editingCueIndex != newEditingCueIndex) {
         dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "UPDATE_ALL", index: -1 }));
         dispatch(focusedInputSlice.actions.updateFocusedInput("START_TIME"));
         dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx: newEditingCueIndex }));
     }
+};
+
+const resetEditingIndexTimeChangeIfNeeded = (
+    dispatch: Dispatch<SubtitleEditAction>,
+    state: SubtitleEditState,
+    editUuid: string | null | undefined
+): void => {
+    const newEditingCueIndex = _.findIndex(state.cues, [ "editUuid", editUuid ]);
+    resetEditingIndexIfNeeded(dispatch, state, newEditingCueIndex);
+};
+
+const resetEditingIndexAllCuesChangesIfNeeded = (
+    dispatch: Dispatch<SubtitleEditAction>,
+    state: SubtitleEditState,
+    editingCue: CueDto | null | undefined
+): void => {
+    const newEditingCueIndex = _.findIndex(state.cues,
+        (cue) => cue.vttCue.startTime === editingCue?.vttCue.startTime
+            && cue.vttCue.endTime === editingCue?.vttCue.endTime);
+    resetEditingIndexIfNeeded(dispatch, state, newEditingCueIndex);
 };
 
 // TODO: Consider separate actions for:
@@ -324,7 +340,8 @@ export const updateVttCue = (
             dispatch(cuesSlice.actions.updateVttCue(newCue));
             dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "EDIT", index: idx, vttCue: newVttCue }));
             if (vttCue.startTime !== originalCue.vttCue.startTime) {
-                reorderCuesIfNeeded(dispatch, getState());
+                const editingCue = reorderCues(dispatch, getState());
+                resetEditingIndexTimeChangeIfNeeded(dispatch, getState(), editingCue?.editUuid);
             }
 
             // TODO: This is not possible to support searching of newly edited term, because of this discussion:
@@ -530,7 +547,8 @@ export const deleteCue = (idx: number): AppThunk =>
 
 export const updateCues = (cues: CueDto[]): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
-        reorderCuesIfNeeded(dispatch, getState(), cues);
+        const editingCue = reorderCues(dispatch, getState(), cues);
+        resetEditingIndexAllCuesChangesIfNeeded(dispatch, getState(), editingCue);
         dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "UPDATE_ALL", index: -1 }));
         dispatch(updateMatchedCues());
     };
@@ -542,7 +560,8 @@ export const applyShiftTimeByPosition = (shiftPosition: ShiftPosition, cueIndex:
         validateShiftWithinChunkRange(shiftTime, editingTrack, getState().cues);
         dispatch(cuesSlice.actions.applyShiftTimeByPosition({ cueIndex, shiftTime, shiftPosition }));
         if (cueIndex > 0) {
-            reorderCuesIfNeeded(dispatch, getState());
+            const editingCue = reorderCues(dispatch, getState());
+            resetEditingIndexTimeChangeIfNeeded(dispatch, getState(), editingCue?.editUuid);
         }
         dispatch(updateMatchedCues());
         callSaveTrack(dispatch, getState);
