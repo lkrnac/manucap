@@ -95,6 +95,39 @@ describe("CompleteButton", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
+    it("renders with disabled property and save state TRIGGERED", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <Provider store={testingStore}>
+                <div className="space-x-4 flex items-center">
+                    <div className="font-medium">
+                        <span className="flex items-center ">
+                            <span className="leading-none">Saving changes</span>
+                            <i className="ml-2 fa-duotone fa-sync fa-spin" />
+                        </span>
+                    </div>
+                    <button
+                        type="button"
+                        className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn"
+                        disabled
+                    >
+                        Complete
+                    </button>
+                </div>
+            </Provider>
+        );
+
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CompleteButton onComplete={jest.fn()} disabled saveState={"TRIGGERED"} />
+            </Provider>
+        );
+
+        // THEN
+        expect(actualNode.html()).toEqual(expectedNode.html());
+    });
+
     each([
         [ "TRIGGERED" ]
     ])

@@ -41,7 +41,7 @@ const CompleteButton = (props: Props): ReactElement => {
         <div className="space-x-4 flex items-center">
             <div className="font-medium">
                 {
-                    props.disabled ?
+                    props.disabled && props.saveState !== "TRIGGERED" ?
                         <span className="text-green-primary">{TASK_COMPLETE_MSG}</span> :
                         <span
                             hidden={props.saveState === "NONE"}
