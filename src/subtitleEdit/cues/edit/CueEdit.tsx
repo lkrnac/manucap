@@ -1,7 +1,7 @@
 import { CueCategory, CueDto, CueDtoWithIndex, CueLineDto } from "../../model";
 import { copyNonConstructorProperties, Position, positionStyles } from "../cueUtils";
 import { Dispatch, ReactElement, useEffect } from "react";
-import { addCue, updateCueCategory, updateVttCue } from "../cuesList/cuesListActions";
+import {addCue, saveTrack, updateCueCategory, updateVttCue} from "../cuesList/cuesListActions";
 import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
 import CueCategoryButton from "./CueCategoryButton";
 import CueTextEditor from "./CueTextEditor";
@@ -111,6 +111,13 @@ const CueEdit = (props: CueEditProps): ReactElement => {
     const isTranslation = editingTrack?.type === "TRANSLATION";
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     const cueLineId = `cueEditLine-${props.index}`;
+
+    useEffect(() => {
+        const isChunkSlugTrack = editingTrack?.mediaChunkStart !== undefined && !editingTrack.id;
+        if (isChunkSlugTrack) {
+            dispatch(saveTrack())
+        }
+    }, [ dispatch, editingTrack?.id ]);
 
     return (
         <div style={{ display: "flex" }} className="border-b border-blue-light/20 bg-white z-10">

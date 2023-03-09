@@ -452,7 +452,32 @@ describe("CueEdit", () => {
             expect(testingStore.getState().cues[0].vttCue.startTime).toEqual(.865);
         });
 
-        it("calls saveTrack in redux store when start time changes", () => {
+        it("calls saveTrack if editing track is media chunk slug track", () => {
+            // GIVEN
+            testingStore.dispatch(
+                updateEditingTrack( { ...testTrack, mediaChunkStart: 0 } as Track) as {} as AnyAction);
+            const saveTrack = jest.fn();
+            testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            const cue = {
+                vttCue: new VTTCue(0, 2, ""),
+                cueCategory: "DIALOGUE",
+                editUuid: testingStore.getState().cues[0].editUuid
+            } as CueDto;
+            testingStore.dispatch(setCurrentPlayerTime(0) as {} as AnyAction);
+
+            // WHEN
+            mount(
+                <Provider store={testingStore}>
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} matchedCuesIndex={0} />
+                </Provider>
+            );
+
+            // THEN
+            expect(saveTrack).toHaveBeenCalledTimes(1);
+            expect(updateCueMock).not.toHaveBeenCalled();
+        });
+
+        it("calls updateCue in redux store when start time changes", () => {
             // GIVEN
             testingStore.dispatch(
                 updateEditingTrack( { ...testTrack, timecodesUnlocked: true } as Track) as {} as AnyAction);
