@@ -1,11 +1,4 @@
-function withOpacityValue(variable) {
-    return ({ opacityValue }) => {
-        if (opacityValue === undefined) {
-            return `rgb(var(${variable}))`
-        }
-        return `rgba(var(${variable}), ${opacityValue})`
-    }
-}
+/** @type {import("tailwindcss").Config} **/
 
 module.exports = {
     content: [
@@ -15,47 +8,80 @@ module.exports = {
         colors: {
             transparent: "transparent",
             current: "currentColor",
-            white: withOpacityValue("--white"),
-            black: withOpacityValue("--black"),
+            white: "rgb(var(--white))",
+            black: "rgb(var(--black))",
             red: {
-                lighter: withOpacityValue("--red-lighter"),
-                light: withOpacityValue("--red-light"),
-                primary: withOpacityValue("--red-primary"),
-                dark: withOpacityValue("--red-dark")
+                "lighter": "rgb(var(--red-lighter))",
+                "light": "rgb(var(--red-light))",
+                "light-semi-transparent": `rgba(var(--red-light), 0.4)`,
+                "light-mostly-transparent": `rgba(var(--red-light), 0.2)`,
+                "primary": "rgb(var(--red-primary))",
+                "primary-quasi-opaque": `rgba(var(--red-primary), 0.9)`,
+                "primary-semi-transparent": `rgba(var(--red-primary), 0.4)`,
+                "primary-mostly-transparent": `rgba(var(--red-primary), 0.2)`,
+                "primary-quasi-transparent": `rgba(var(--red-primary), 0.1)`,
+                "dark": "rgb(var(--red-dark))",
+                "dark-mostly-opaque": `rgba(var(--red-dark), 0.8)`,
+                "dark-quasi-transparent": `rgba(var(--red-dark), 0.1)`,
             },
             blue: {
-                lighter: withOpacityValue("--blue-lighter"),
-                light: withOpacityValue("--blue-light"),
-                primary: withOpacityValue("--blue-primary"),
-                dark: withOpacityValue("--blue-dark"),
-                darker: withOpacityValue("--blue-darker"),
+                "lighter": "rgb(var(--blue-lighter))",
+                "light": "rgb(var(--blue-light))",
+                "light-mostly-opaque": `rgba(var(--blue-light), 0.8)`,
+                "light-semi-opaque": `rgba(var(--blue-light), 0.6)`,
+                "light-semi-transparent": `rgba(var(--blue-light), 0.4)`,
+                "light-mostly-transparent": `rgba(var(--blue-light), 0.2)`,
+                "light-quasi-transparent": `rgba(var(--blue-light), 0.1)`,
+                "primary": "rgb(var(--blue-primary))",
+                "primary-mostly-opaque": `rgba(var(--blue-primary), 0.8)`,
+                "primary-semi-transparent": `rgba(var(--blue-primary), 0.4)`,
+                "primary-mostly-transparent": `rgba(var(--blue-primary), 0.2)`,
+                "primary-quasi-transparent": `rgba(var(--blue-primary), 0.1)`,
+                "dark": "rgb(var(--blue-dark))",
+                "dark-mostly-opaque": `rgba(var(--blue-dark), 0.8)`,
+                "darker": "rgb(var(--blue-darker))",
             },
             green: {
-                lighter: withOpacityValue("--green-lighter"),
-                light: withOpacityValue("--green-light"),
-                primary: withOpacityValue("--green-primary"),
-                dark: withOpacityValue("--green-dark")
+                "lighter": "rgb(var(--green-lighter))",
+                "light": "rgb(var(--green-light))",
+                "light-semi-transparent": `rgba(var(--green-light), 0.4)`,
+                "light-mostly-transparent": `rgba(var(--green-light), 0.2)`,
+                "primary": "rgb(var(--green-primary))",
+                "primary-quasi-opaque": `rgba(var(--green-primary), 0.9)`,
+                "primary-semi-transparent": `rgba(var(--green-primary), 0.4)`,
+                "primary-quasi-transparent": `rgba(var(--green-primary), 0.1)`,
+                "dark": "rgb(var(--green-dark))",
+                "dark-mostly-opaque": `rgba(var(--green-dark), 0.8)`,
             },
             yellow: {
-                lighter: withOpacityValue("--yellow-lighter"),
-                light: withOpacityValue("--yellow-light"),
-                primary: withOpacityValue("--yellow-primary"),
-                dark: withOpacityValue("--yellow-dark")
+                "lighter": "rgb(var(--yellow-lighter))",
+                "light": "rgb(var(--yellow-light))",
+                "light-semi-transparent": `rgba(var(--yellow-light), 0.4)`,
+                "light-mostly-transparent": `rgba(var(--yellow-light), 0.2)`,
+                "primary": "rgb(var(--yellow-primary))",
+                "primary-semi-transparent": `rgba(var(--yellow-primary), 0.4)`,
+                "primary-quasi-transparent": `rgba(var(--yellow-primary), 0.1)`,
+                "dark": "rgb(var(--yellow-dark))"
             },
             gray: {
-                0: withOpacityValue("--gray-0"),
-                100: withOpacityValue("--gray-1"),
-                200: withOpacityValue("--gray-2"),
-                300: withOpacityValue("--gray-3"),
-                400: withOpacityValue("--gray-4"),
-                500: withOpacityValue("--gray-5"),
-                600: withOpacityValue("--gray-6"),
-                700: withOpacityValue("--gray-7"),
-                800: withOpacityValue("--gray-8"),
-                900: withOpacityValue("--gray-9"),
+                "0": `rgb(var(--gray-0))`,
+                "100": `rgb(var(--gray-1))`,
+                "100-semi-transparent": `rgba(var(--gray-1), 0.4)`,
+                "100-semi-opaque": `rgba(var(--gray-1), 0.6)`,
+                "200": `rgb(var(--gray-2))`,
+                "300": `rgb(var(--gray-3))`,
+                "400": `rgb(var(--gray-4))`,
+                "500": `rgb(var(--gray-5))`,
+                "600": `rgb(var(--gray-6))`,
+                "700": `rgb(var(--gray-7))`,
+                "700-quasi-opaque": `rgb(var(--gray-7), 0.9)`,
+                "800": `rgb(var(--gray-8))`,
+                "900": `rgb(var(--gray-8))`,
+                "900-semi-opaque": `rgb(var(--gray-9), 0.6)`,
+                "900-mostly-opaque": `rgb(var(--gray-9), 0.8)`,
             },
             slate: {
-                0: withOpacityValue("--slate-0")
+                "0": `rgb(var(--slate-0))`,
             }
         },
         opacity: {

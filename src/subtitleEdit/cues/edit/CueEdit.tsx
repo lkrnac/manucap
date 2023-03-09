@@ -113,7 +113,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
     const cueLineId = `cueEditLine-${props.index}`;
 
     return (
-        <div style={{ display: "flex" }} className="border-b border-blue-light/mostly-transparent bg-white z-10">
+        <div style={{ display: "flex" }} className="border-b border-blue-light-mostly-transparent bg-white z-10">
             <div
                 style={{
                     flex: "1 1 300px",
@@ -131,7 +131,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                                 <>
                                     <div
                                         id={`${cueLineId}-startTime`}
-                                        className="sbte-form-control text-center !border-blue-light/mostly-transparent
+                                        className="sbte-form-control text-center !border-blue-light-mostly-transparent
                                             !text-gray-700 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
@@ -141,7 +141,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                                     </div>
                                     <div
                                         id={`${cueLineId}-endTime`}
-                                        className="sbte-form-control text-center !border-blue-light/mostly-transparent
+                                        className="sbte-form-control text-center !border-blue-light-mostly-transparent
                                             !text-gray-700 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
@@ -204,7 +204,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                 </div>
             </div>
             <div
-                className="border-l border-blue-light/mostly-transparent flex items-center"
+                className="border-l border-blue-light-mostly-transparent flex items-center"
                 data-testid="sbte-cue-editor-container"
                 style={{ flex: "1 1 70%" }}
             >

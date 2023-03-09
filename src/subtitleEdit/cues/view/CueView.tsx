@@ -173,7 +173,7 @@ const CueView = (props: CueViewProps): ReactElement => {
                     </div>
                 </div>
                 <div
-                    className="border-l border-blue-light/mostly-transparent flex items-stretch"
+                    className="border-l border-blue-light-mostly-transparent flex items-stretch"
                     style={{ flex: "1 1 70%" }}
                 >
                     <div
