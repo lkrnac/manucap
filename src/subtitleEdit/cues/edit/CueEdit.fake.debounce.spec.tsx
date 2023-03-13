@@ -97,7 +97,7 @@ describe("CueEdit", () => {
                 <Provider store={testingStore}>
                     <div
                         style={{ display: "flex" }}
-                        className="border-b border-blue-light/20 bg-white z-10"
+                        className="border-b border-blue-light-mostly-transparent bg-white z-10"
                     >
                         <div
                             style={{
@@ -148,7 +148,7 @@ describe("CueEdit", () => {
                             </div>
                         </div>
                         <div
-                            className="border-l border-blue-light/20 flex items-center"
+                            className="border-l border-blue-light-mostly-transparent flex items-center"
                             data-testid="sbte-cue-editor-container"
                             style={{ flex: "1 1 70%" }}
                         >
@@ -193,7 +193,7 @@ describe("CueEdit", () => {
                 <Provider store={testingStore}>
                     <div
                         style={{ display: "flex" }}
-                        className="border-b border-blue-light/20 bg-white z-10"
+                        className="border-b border-blue-light-mostly-transparent bg-white z-10"
                     >
                         <div
                             style={{
@@ -214,7 +214,7 @@ describe("CueEdit", () => {
                                 <div className="sbte-time-editors">
                                     <div
                                         id="cueEditLine-0-startTime"
-                                        className="sbte-form-control text-center !border-blue-light/20
+                                        className="sbte-form-control text-center !border-blue-light-mostly-transparent
                                             !text-gray-700 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
@@ -224,7 +224,7 @@ describe("CueEdit", () => {
                                     </div>
                                     <div
                                         id="cueEditLine-0-endTime"
-                                        className="sbte-form-control text-center !border-blue-light/20
+                                        className="sbte-form-control text-center !border-blue-light-mostly-transparent
                                             !text-gray-700 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
@@ -253,7 +253,7 @@ describe("CueEdit", () => {
                             </div>
                         </div>
                         <div
-                            className="border-l border-blue-light/20 flex items-center"
+                            className="border-l border-blue-light-mostly-transparent flex items-center"
                             data-testid="sbte-cue-editor-container"
                             style={{ flex: "1 1 70%" }}
                         >
@@ -302,7 +302,7 @@ describe("CueEdit", () => {
                 <Provider store={testingStore}>
                     <div
                         style={{ display: "flex" }}
-                        className="border-b border-blue-light/20 bg-white z-10"
+                        className="border-b border-blue-light-mostly-transparent bg-white z-10"
                     >
                         <div
                             style={{
@@ -354,7 +354,7 @@ describe("CueEdit", () => {
                             </div>
                         </div>
                         <div
-                            className="border-l border-blue-light/20 flex items-center"
+                            className="border-l border-blue-light-mostly-transparent flex items-center"
                             data-testid="sbte-cue-editor-container"
                             style={{ flex: "1 1 70%" }}
                         >

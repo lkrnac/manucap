@@ -30,7 +30,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <div
                     style={{ display: "flex" }}
-                    className="testingClassName border-b border-blue-light/20 sbte-click-cue-wrapper"
+                    className="testingClassName border-b border-blue-light-mostly-transparent sbte-click-cue-wrapper"
                 >
                     <div
                         className="sbte-cue-line-left-section"
@@ -53,7 +53,7 @@ describe("CueView", () => {
                         </div>
                     </div>
                     <div
-                        className="border-l border-blue-light/20 flex items-stretch"
+                        className="border-l border-blue-light-mostly-transparent flex items-stretch"
                         style={{ flex: "1 1 70%" }}
                     >
                         <div
@@ -105,7 +105,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <div
                     style={{ display: "flex" }}
-                    className="border-b border-blue-light/20 sbte-click-cue-wrapper"
+                    className="border-b border-blue-light-mostly-transparent sbte-click-cue-wrapper"
                 >
                     <div
                         className="sbte-cue-line-left-section"
@@ -128,7 +128,7 @@ describe("CueView", () => {
                         </div>
                     </div>
                     <div
-                        className="border-l border-blue-light/20 flex items-stretch"
+                        className="border-l border-blue-light-mostly-transparent flex items-stretch"
                         style={{ flex: "1 1 70%" }}
                     >
                         <div
@@ -180,7 +180,7 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <div
                     style={{ display: "flex" }}
-                    className="border-b border-blue-light/20 sbte-click-cue-wrapper"
+                    className="border-b border-blue-light-mostly-transparent sbte-click-cue-wrapper"
                 >
                     <div
                         className="sbte-cue-line-left-section"
@@ -203,7 +203,7 @@ describe("CueView", () => {
                         </div>
                     </div>
                     <div
-                        className="border-l border-blue-light/20 flex items-stretch"
+                        className="border-l border-blue-light-mostly-transparent flex items-stretch"
                         style={{ flex: "1 1 70%" }}
                     >
                         <div

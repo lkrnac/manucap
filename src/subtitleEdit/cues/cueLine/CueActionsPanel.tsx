@@ -22,7 +22,7 @@ export const CueActionsPanel = (props: Props): ReactElement => {
                 flexDirection: "column",
                 flex: "0 0 50px"
         }}
-            className={"sbte-actions-panel border-l border-blue-light/20" +
+            className={"sbte-actions-panel border-l border-blue-light-mostly-transparent" +
                 (props.isEdit ? " bg-white": " bg-gray-0")}
             onClick={(event: React.MouseEvent<HTMLElement>): void => event.stopPropagation()}
         >

@@ -412,7 +412,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
     return (
         <div style={{ display: "flex", flexDirection: "column", height: "100%", flex: "1 1 auto" }}>
             <div
-                className="border-b border-blue-light/20"
+                className="border-b border-blue-light-mostly-transparent"
                 style={{
                     flexBasis: "25%",
                     display: "flex",
@@ -423,7 +423,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 <CueLineCounts cueIndex={props.index} vttCue={props.vttCue} editorState={decoratedEditorState} />
             </div>
             <div
-                className="sbte-sbte-form-control border-b border-blue-light/20"
+                className="sbte-sbte-form-control border-b border-blue-light-mostly-transparent"
                 style={{
                     display: "flex",
                     flexDirection: "row",

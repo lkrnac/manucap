@@ -7,6 +7,7 @@
 ::after {
     --white: 255, 255, 255;
     --black: 0, 0, 0;
+    --blue-lighter: 243, 244, 251;
     --blue-light: 68, 92, 192;
     --blue-primary: 29, 58, 178;
     --blue-dark: 15, 38, 133;
