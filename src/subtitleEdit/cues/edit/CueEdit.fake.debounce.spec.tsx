@@ -392,6 +392,31 @@ describe("CueEdit", () => {
             expect(actual).toEqual(expected);
         });
 
+        it("should rerender cue text editor when cue ID changes because of reload", () => {
+            // GIVEN
+            const vttCue = new VTTCue(0, 2, "someText");
+            const editUuid = testingStore.getState().cues[0].editUuid;
+            const cue = { id: "cue-test-id", vttCue, cueCategory: "ONSCREEN_TEXT", editUuid } as CueDto;
+            const { container, rerender } = render(
+                <Provider store={testingStore} >
+                    <CueEdit index={0} cue={cue} setGlossaryTerm={jest.fn()} matchedCuesIndex={0} />
+                </Provider>
+            );
+            const newCue = { ...cue, id: "cue-test-id-2" };
+            newCue.vttCue.text = "some change in the cue text";
+
+            // WHEN
+            rerender(
+                <Provider store={testingStore} >
+                    <CueEdit index={0} cue={newCue} setGlossaryTerm={jest.fn()} matchedCuesIndex={0} />
+                </Provider>
+            );
+
+            // THEN
+            const editor = container.querySelector(".public-DraftEditor-content") as Element;
+            expect(editor.outerHTML).toContain("some change in the cue text");
+        });
+
         it("updates cue in redux store when start time minutes changed", () => {
             // GIVEN
             testingStore.dispatch(
@@ -637,7 +662,7 @@ describe("CueEdit", () => {
             expect(testingStore.getState().cues[0].vttCue.position).toEqual(65);
         });
 
-        it("calls saveTrack in redux store when cue position changes", () => {
+        it("calls updateCue in redux store when cue position changes", () => {
             // GIVEN
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
@@ -683,7 +708,7 @@ describe("CueEdit", () => {
             expect(testingStore.getState().cues[0].cueCategory).toEqual("ONSCREEN_TEXT");
         });
 
-        it("calls saveTrack in redux store when line category changes", () => {
+        it("calls updateCue in redux store when line category changes", () => {
             // GIVEN
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);

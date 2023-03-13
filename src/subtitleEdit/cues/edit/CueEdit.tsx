@@ -218,7 +218,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                 style={{ flex: "1 1 70%" }}
             >
                 <CueTextEditor
-                    key={props.index}
+                    key={props.cue.id || props.index}
                     index={props.index}
                     vttCue={props.cue.vttCue}
                     editUuid={props.cue.editUuid}
