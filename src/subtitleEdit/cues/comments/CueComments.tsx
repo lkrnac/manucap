@@ -108,7 +108,7 @@ const CueComments = (props: Props): ReactElement => {
                     : null
             }
             <hr
-                className="border-t border-blue-light/20"
+                className="border-t border-blue-light-mostly-transparent"
                 style={{
                     width: "100%",
                     height: "0px",

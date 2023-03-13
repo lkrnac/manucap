@@ -120,7 +120,7 @@ describe("CueComments", () => {
                     </div>
                 </div>
                 <hr
-                    className="border-t border-blue-light/20"
+                    className="border-t border-blue-light-mostly-transparent"
                     style={{
                         width: "100%",
                         height: "0px",
@@ -185,7 +185,7 @@ describe("CueComments", () => {
             >
                 <div style={{ marginBottom: "8px" }}>No comments</div>
                 <hr
-                    className="border-t border-blue-light/20"
+                    className="border-t border-blue-light-mostly-transparent"
                     style={{
                         width: "100%",
                         height: "0px",
