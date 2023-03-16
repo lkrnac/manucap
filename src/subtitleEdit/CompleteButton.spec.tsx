@@ -5,10 +5,9 @@ import { createTestingStore } from "../testUtils/testingStore";
 import { Provider } from "react-redux";
 import { updateEditingTrack } from "./trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
-import { CueDto, SaveState, Track } from "./model";
+import { CueDto, Track } from "./model";
 import { updateCues } from "./cues/cuesList/cuesListActions";
 import { setSaveTrack } from "./cues/saveSlices";
-import each from "jest-each";
 
 const testingTrack = {
     type: "CAPTION",
@@ -128,41 +127,38 @@ describe("CompleteButton", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
-    each([
-        [ "TRIGGERED" ]
-    ])
-        .it("renders save pending for save state '%s'", (testingState: SaveState) => {
-            // GIVEN
-            const expectedNode = mount(
-                <Provider store={testingStore}>
-                    <div className="space-x-4 flex items-center">
-                        <div className="font-medium">
-                            <span className="flex items-center ">
-                                <span className="leading-none">Saving changes</span>
-                                <i className="ml-2 fa-duotone fa-sync fa-spin" />
-                            </span>
-                        </div>
-                        <button
-                            type="button"
-                            className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn"
-                            disabled
-                        >
-                            Complete
-                        </button>
+    it("renders save pending for save state TRIGGERED", () => {
+        // GIVEN
+        const expectedNode = mount(
+            <Provider store={testingStore}>
+                <div className="space-x-4 flex items-center">
+                    <div className="font-medium">
+                        <span className="flex items-center ">
+                            <span className="leading-none">Saving changes</span>
+                            <i className="ml-2 fa-duotone fa-sync fa-spin" />
+                        </span>
                     </div>
-                </Provider>
-            );
+                    <button
+                        type="button"
+                        className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn"
+                        disabled
+                    >
+                        Complete
+                    </button>
+                </div>
+            </Provider>
+        );
 
-            // WHEN
-            const actualNode = mount(
-                <Provider store={testingStore}>
-                    <CompleteButton onComplete={jest.fn()} saveState={testingState} />
-                </Provider>
-            );
+        // WHEN
+        const actualNode = mount(
+            <Provider store={testingStore}>
+                <CompleteButton onComplete={jest.fn()} saveState={"TRIGGERED"} />
+            </Provider>
+        );
 
-            // THEN
-            expect(actualNode.html()).toEqual(expectedNode.html());
-        });
+        // THEN
+        expect(actualNode.html()).toEqual(expectedNode.html());
+    });
 
     it("renders save succeeded for save state SAVED", () => {
         // GIVEN
