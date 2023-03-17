@@ -120,7 +120,6 @@ export const cuesSlice = createSlice({
         updateAddedCue: (state, action: PayloadAction<CueAction>): void => {
             state[action.payload.idx].id = action.payload.cue.id;
             state[action.payload.idx].addId = undefined;
-            state[action.payload.idx].trackVersionId = action.payload.cue.trackVersionId;
         },
         updateCues: (_state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues,
         applyShiftTimeByPosition: (state, action: PayloadAction<ShiftAction>): CueDto[] => {

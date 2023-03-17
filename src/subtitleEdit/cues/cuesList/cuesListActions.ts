@@ -87,7 +87,6 @@ const createAndAddCue = (previousCue: CueDto, startTime: number, endTime: number
         vttCue: newCue,
         cueCategory: previousCue.cueCategory,
         editUuid: uuidv4(),
-        trackVersionId: previousCue.trackVersionId,
         addId: uuidv4()
     };
 };

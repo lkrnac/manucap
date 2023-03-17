@@ -57,13 +57,18 @@ describe("saveCueUpdateSlices", () => {
             id: "testing-cue-id",
             trackVersionId: "testing-track-version-id"
         };
+        const expectedCueDto = {
+            ...testingCues[0],
+            addId: undefined,
+            id: "testing-cue-id"
+        };
         testingStore.dispatch(callSaveCueUpdate(0) as {} as AnyAction);
 
         // WHEN
         updateCueMock.mock.calls[0][0].onAddCueSaveSuccess(responseCueDto);
 
         // THEN
-        expect(testingStore.getState().cues).toEqual([responseCueDto]);
+        expect(testingStore.getState().cues).toEqual([expectedCueDto]);
     });
 
     it("doesn't call updateCue function when callSaveCueUpdate is invoked with invalid index", () => {
