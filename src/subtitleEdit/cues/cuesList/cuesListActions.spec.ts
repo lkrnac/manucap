@@ -2897,6 +2897,7 @@ describe("cueListActions", () => {
             testingStore.dispatch(deleteCue(0) as {} as AnyAction);
 
             // THEN
+            expect(testingStore.getState().cues[0].addId).toBeDefined();
             expect(testingStore.getState().cues[0].cueCategory).toEqual("DIALOGUE");
             expect(testingStore.getState().cues.length).toEqual(1);
 
