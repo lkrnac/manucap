@@ -2908,7 +2908,7 @@ describe("cueListActions", () => {
             expect(testingStore.getState().cues[0].vttCue.line).toEqual("auto");
             expect(testingStore.getState().cues[0].vttCue.position).toEqual("auto");
             expect(testingStore.getState().cues[0].vttCue.positionAlign).toEqual("auto");
-            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(updateCueMock).toHaveBeenCalled();
             expect(deleteCueMock).toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
         });
@@ -2926,7 +2926,7 @@ describe("cueListActions", () => {
             expect(recordCueChangeSpy).toBeCalledWith(
                 { "changeType": "EDIT", "index": 0,
                     "vttCue": new VTTCue(0, 0, "") });
-            expect(updateCueMock).not.toHaveBeenCalled();
+            expect(updateCueMock).toHaveBeenCalled();
             expect(deleteCueMock).toHaveBeenCalled();
             expect(saveTrackMock).not.toHaveBeenCalled();
         });

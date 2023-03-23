@@ -528,6 +528,19 @@ export const splitCue = (idx: number): AppThunk =>
         }
     };
 
+const saveDeleteStubCueIfNeeded = (
+    cuesLength: number,
+    dispatch: Dispatch<SubtitleEditAction | null>,
+    getState: Function
+) => {
+    if (cuesLength === 1) {
+        const stubCue = getState().cues[0];
+        if (stubCue.addId) {
+            dispatch(callSaveCueUpdate(0));
+        }
+    }
+};
+
 export const deleteCue = (idx: number): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction | null>, getState): void => {
         const cueToDelete = getState().cues[idx];
@@ -542,6 +555,7 @@ export const deleteCue = (idx: number): AppThunk =>
             ));
         dispatch(updateMatchedCues());
         callSaveCueDelete(getState, cueToDelete);
+        saveDeleteStubCueIfNeeded(cuesLength, dispatch, getState);
     };
 
 export const updateCues = (cues: CueDto[]): AppThunk =>
