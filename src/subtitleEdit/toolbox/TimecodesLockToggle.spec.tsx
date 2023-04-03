@@ -7,10 +7,6 @@ import { Track } from "../model";
 import { updateEditingTrack } from "../trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 
-jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback
-}));
-
 let testingStore = createTestingStore();
 
 describe("TimecodesLockToggle", () => {

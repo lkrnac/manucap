@@ -38,6 +38,7 @@ import { act } from "react-dom/test-utils";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateEditingCueIndex } from "./cueEditorSlices";
+import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
 
 jest.mock("lodash", () => (
     {
@@ -61,8 +62,8 @@ fetchSpellCheck.mockImplementation(() => jest.fn());
 let testingStore = createTestingStore();
 
 const cues = [
-    { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
-    { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+    { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" } as CueDto,
+    { id: "cue-2", vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
 ];
 
 interface ReduxTestWrapperProps {
@@ -302,14 +303,18 @@ const testForContentState = (
 
 const testTrack = { mediaTitle: "testingTrack", language: { id: "en-US", name: "English", direction: "LTR" }};
 
+const updateCueMock = jest.fn();
+
 describe("CueTextEditor", () => {
     beforeEach(() => {
         document.getElementsByTagName("html")[0].innerHTML = "";
         testingStore = createTestingStore();
         testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
+        testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueMock));
         // @ts-ignore we are mocking this function
         fetchSpellCheck.mockReset();
+        jest.clearAllMocks();
     });
 
     describe("rendering", () => {
@@ -357,8 +362,17 @@ describe("CueTextEditor", () => {
         it("triggers autosave and when changed", () => {
             // GIVEN
             const saveTrack = jest.fn();
+            const editingTrack = { language: { id: "en-US" }, timecodesUnlocked: true } as Track;
+            const testCue = { ...testingStore.getState().cues[0] };
+            testCue.errors = [];
+            testCue.vttCue.text = "someText Paste text to end";
+            const expectedCueUpdate = {
+                editingTrack,
+                cue: testCue,
+                onAddCueSaveSuccess: expect.any(Function)
+            };
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-            testingStore.dispatch(updateEditingTrack({ language: { id: "en-US" }} as Track) as {} as AnyAction);
+            testingStore.dispatch(updateEditingTrack(editingTrack) as {} as AnyAction);
 
             const editor = mountEditorNode();
 
@@ -371,14 +385,16 @@ describe("CueTextEditor", () => {
             });
 
             // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(1);
+            // needs to be updated because it is updated by editor on edit
+            testCue.editUuid = testingStore.getState().cues[0].editUuid;
+            expect(updateCueMock).toHaveBeenCalledWith(expectedCueUpdate);
+            expect(saveTrack).not.toBeCalled();
         });
 
         it("doesn't trigger autosave when user selects text", () => {
             // GIVEN
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
             const vttCue = new VTTCue(0, 1, "some text");
             const actualNode = mount(
                 <Provider store={testingStore}>
@@ -401,7 +417,8 @@ describe("CueTextEditor", () => {
             actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
 
             // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(0);
+            expect(updateCueMock).toHaveBeenCalledTimes(0);
+            expect(saveTrack).not.toBeCalled();
         });
 
         it("checks errors and autosave when errors count is different", () => {
@@ -1084,8 +1101,9 @@ describe("CueTextEditor", () => {
         it("replaces incorrectly spelled text with replacement when user picks one", async () => {
             // GIVEN
             const saveTrack = jest.fn();
+            const updateCueCallback = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
-
+            testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
             const spellCheck = {
                 matches: [
@@ -1119,7 +1137,8 @@ describe("CueTextEditor", () => {
             actualNode.findWhere(spellCheckOptionPredicate(2)).at(0).simulate("click");
 
             // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(1);
+            expect(updateCueCallback).toHaveBeenCalledTimes(1);
+            expect(saveTrack).not.toBeCalled();
             expect(testingStore.getState().cues[0].vttCue.text).toEqual("some <u><i>HTML</i></u> <b>Text</b> sample");
         });
 
@@ -1275,7 +1294,9 @@ describe("CueTextEditor", () => {
             // GIVEN
             const trackId = "0fd7af04-6c87-4793-8d66-fdb19b5fd04d";
             const saveTrack = jest.fn();
+            const updateCueCallback = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
             const testingTrack = {
                 type: "CAPTION",
                 language: { id: "en-US", name: "English (US)" } as Language,
@@ -1296,13 +1317,13 @@ describe("CueTextEditor", () => {
             } as SpellCheck;
 
             const cues = [
-                { vttCue: new VTTCue(0, 2, "Caption Linex 1"),
+                { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Linex 1"),
                     cueCategory: "DIALOGUE", spellCheck: spellCheck,
                     errors: [CueError.SPELLCHECK_ERROR]},
-                { vttCue: new VTTCue(2, 4, "Caption Linex 2"),
+                { id: "cue-2", vttCue: new VTTCue(2, 4, "Caption Linex 2"),
                     cueCategory: "DIALOGUE", spellCheck: spellCheck,
                     errors: [CueError.SPELLCHECK_ERROR]},
-                { vttCue: new VTTCue(4, 6, "Caption Linex 2"),
+                { id: "cue-3", vttCue: new VTTCue(4, 6, "Caption Linex 2"),
                     cueCategory: "DIALOGUE", errors: [CueError.SPELLCHECK_ERROR]}
             ] as CueDto[];
             testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
@@ -1346,7 +1367,8 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.errors).toEqual([]);
             expect(testingStore.getState().matchedCues.matchedCues[1].targetCues[0].cue.errors).toEqual([]);
             expect(testingStore.getState().matchedCues.matchedCues[2].targetCues[0].cue.errors).toEqual([]);
-            expect(saveTrack).toBeCalled();
+            expect(updateCueCallback).toBeCalled();
+            expect(saveTrack).not.toBeCalled();
         });
 
         it("ignores all spell check matches and revalidate corrupted when clicking ignore all option with all cue" +
@@ -1555,7 +1577,9 @@ describe("CueTextEditor", () => {
         it("replace first occurrence for 3 matches per cue", () => {
             // GIVEN
             const saveTrack = jest.fn();
+            const updateCueCallback = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
             testingStore.dispatch(setFind("text") as {} as AnyAction);
             const searchReplaceIndices = {
                 matchedCueIndex: 0,
@@ -1568,10 +1592,10 @@ describe("CueTextEditor", () => {
             testingStore.dispatch(searchReplaceSlice.actions.setIndices(searchReplaceIndices));
             const cues = [
                 {
-                    vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>Text</b> sample Text and Text"),
+                    id: "cue-1", vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>Text</b> sample Text and Text"),
                     cueCategory: "DIALOGUE"
                 } as CueDto,
-                { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+                { id: "cue-2", vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
             ];
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text and Text");
             testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
@@ -1598,7 +1622,8 @@ describe("CueTextEditor", () => {
             });
 
             // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(1);
+            expect(updateCueCallback).toHaveBeenCalledTimes(1);
+            expect(saveTrack).not.toBeCalled();
             expect(testingStore.getState().cues[0].vttCue.text)
                 .toEqual("some <i>HTML</i> <b>abcd efg</b> sample Text and Text");
             expect(testingStore.getState().editingCueIndex).toEqual(0);
@@ -1616,15 +1641,17 @@ describe("CueTextEditor", () => {
         it("replace second occurrence for 3 matches per cue", () => {
             // GIVEN
             const saveTrack = jest.fn();
+            const updateCueCallback = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
             testingStore.dispatch(setFind("Text") as {} as AnyAction);
             testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
             const cues = [
                 {
-                    vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>Text</b> sample Text and Text"),
+                    id: "cue-1", vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>Text</b> sample Text and Text"),
                     cueCategory: "DIALOGUE"
                 } as CueDto,
-                { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+                { id: "cue-2", vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
             ];
             testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
@@ -1659,7 +1686,8 @@ describe("CueTextEditor", () => {
             });
 
             // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(1);
+            expect(updateCueCallback).toHaveBeenCalledTimes(1);
+            expect(saveTrack).not.toBeCalled();
             expect(testingStore.getState().cues[0].vttCue.text)
                 .toEqual("some <i>HTML</i> <b>Text</b> sample abcd efg and Text");
             expect(testingStore.getState().editingCueIndex).toEqual(0);
@@ -1677,7 +1705,9 @@ describe("CueTextEditor", () => {
         it("replace third occurrence for 3 matches per cue", () => {
             // GIVEN
             const saveTrack = jest.fn();
+            const updateCueCallback = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
             testingStore.dispatch(setFind("Text") as {} as AnyAction);
             testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
@@ -1692,10 +1722,10 @@ describe("CueTextEditor", () => {
             testingStore.dispatch(searchReplaceSlice.actions.setIndices(searchReplaceIndices));
             const cues = [
                 {
-                    vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>Text</b> sample Text and Text"),
+                    id: "cue-1", vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>Text</b> sample Text and Text"),
                     cueCategory: "DIALOGUE"
                 } as CueDto,
-                { vttCue: new VTTCue(3, 7, "Caption Line Text 2"), cueCategory: "DIALOGUE" } as CueDto
+                { id: "cue-2", vttCue: new VTTCue(3, 7, "Caption Line Text 2"), cueCategory: "DIALOGUE" } as CueDto
             ];
             testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample Text and Text");
@@ -1720,7 +1750,8 @@ describe("CueTextEditor", () => {
             });
 
             // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(1);
+            expect(updateCueCallback).toHaveBeenCalledTimes(1);
+            expect(saveTrack).not.toBeCalled();
             expect(testingStore.getState().cues[0].vttCue.text)
                 .toEqual("some <i>HTML</i> <b>Text</b> sample Text and abcd efg");
             expect(testingStore.getState().editingCueIndex).toEqual(1);
@@ -1738,7 +1769,9 @@ describe("CueTextEditor", () => {
         it("replace match with regex special chars", () => {
             // GIVEN
             const saveTrack = jest.fn();
+            const updateCueCallback = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
+            testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueCallback));
             const testTrack = { mediaTitle: "testingTrack",
                 language: { id: "1", name: "English", direction: "LTR" }};
             testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
@@ -1746,10 +1779,10 @@ describe("CueTextEditor", () => {
             testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
             const cues = [
                 {
-                    vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>[Text]</b>"),
+                    id: "cue-1", vttCue: new VTTCue(0, 2, "some <i>HTML</i> <b>[Text]</b>"),
                     cueCategory: "DIALOGUE"
                 } as CueDto,
-                { vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
+                { id: "cue-2", vttCue: new VTTCue(3, 7, "Caption Line 2"), cueCategory: "DIALOGUE" } as CueDto
             ];
             testingStore.dispatch(cueListActions.updateCues(cues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
@@ -1784,7 +1817,8 @@ describe("CueTextEditor", () => {
             });
 
             // THEN
-            expect(saveTrack).toHaveBeenCalledTimes(1);
+            expect(updateCueCallback).toHaveBeenCalledTimes(1);
+            expect(saveTrack).not.toBeCalled();
             expect(testingStore.getState().cues[0].vttCue.text)
                 .toEqual("some <i>HTML</i> <b>[TEXT TEST]</b>");
             expect(testingStore.getState().editingCueIndex).toEqual(-1);

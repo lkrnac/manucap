@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { SubtitleEditState } from "../subtitleEditReducers";
 import ToggleButton from "./ToggleButton";
 import { updateEditingTrack } from "../trackSlices";
-import { Track } from "../model";
+import { SaveState, Track } from "../model";
 import { saveTrack, updateCues } from "../cues/cuesList/cuesListActions";
-import { isPendingSaveState } from "../cues/saveSlices";
 
 interface Props {
     onClick: (event: MouseEvent<HTMLElement>) => void
+    saveState: SaveState;
 }
 
 export const CaptionOverlapToggle = (props: Props): ReactElement => {
@@ -16,11 +16,10 @@ export const CaptionOverlapToggle = (props: Props): ReactElement => {
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
     const cues = useSelector((state: SubtitleEditState) => state.cues);
     const overlapEnabled = editingTrack?.overlapEnabled;
-    const saveState = useSelector((state: SubtitleEditState) => state.saveAction.saveState);
     return (
         <ToggleButton
             className="flex items-center justify-between"
-            disabled={isPendingSaveState(saveState)}
+            disabled={props.saveState === "TRIGGERED"}
             toggled={overlapEnabled}
             onClick={(event): void => {
                 const track = {

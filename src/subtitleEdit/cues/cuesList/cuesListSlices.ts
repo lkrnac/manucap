@@ -6,6 +6,7 @@ import { editingTrackSlice } from "../../trackSlices";
 import { Match, SpellCheck } from "../spellCheck/model";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 import { matchCuesByTime, MatchedCuesWithEditingFocus } from "./cuesListTimeMatching";
+import { v4 as uuidv4 } from "uuid";
 
 export interface CueIndexAction extends SubtitleEditAction {
     idx: number;
@@ -113,9 +114,14 @@ export const cuesSlice = createSlice({
                 copyNonConstructorProperties(newVttCue, newVttCue);
                 state[0] = {
                     vttCue: newVttCue,
-                    cueCategory: "DIALOGUE"
+                    cueCategory: "DIALOGUE",
+                    addId: uuidv4()
                 };
             }
+        },
+        updateAddedCue: (state, action: PayloadAction<CueAction>): void => {
+            state[action.payload.idx].id = action.payload.cue.id;
+            state[action.payload.idx].addId = undefined;
         },
         updateCues: (_state, action: PayloadAction<CuesAction>): CueDto[] => action.payload.cues,
         applyShiftTimeByPosition: (state, action: PayloadAction<ShiftAction>): CueDto[] => {

@@ -12,11 +12,20 @@ import CuesList from "./cues/cuesList/CuesList";
 import { setSaveTrack } from "./cues/saveSlices";
 import { resetEditingTrack } from "./trackSlices";
 import { changeScrollPosition, setCurrentPlayerTime } from "./cues/cuesList/cuesListScrollSlice";
-import { ScrollPosition, SaveActionParameters, TrackCues, Track } from "./model";
+import {
+    ScrollPosition,
+    SaveActionParameters,
+    TrackCues,
+    Track,
+    SaveTrackCue,
+    SaveState
+} from "./model";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
 import { setSpellCheckDomain } from "./spellcheckerSettingsSlice";
 import CueErrorAlert from "./cues/CueErrorAlert";
 import MergeEditor from "./cues/merge/MergeEditor";
+import { saveCueUpdateSlice } from "./cues/saveCueUpdateSlices";
+import { saveCueDeleteSlice } from "./cues/saveCueDeleteSlices";
 
 // TODO: enableMapSet is needed to workaround draft-js type issue.
 //  https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43426
@@ -29,6 +38,8 @@ export interface SubtitleEditProps {
     waveform?: string;
     onViewTrackHistory: () => void;
     onSave: (saveAction: SaveActionParameters) => void;
+    onUpdateCue: (trackCue: SaveTrackCue) => void;
+    onDeleteCue: (trackCue: SaveTrackCue) => void;
     onComplete: (completeAction: TrackCues) => void;
     onExportFile: (trackVersionExport: Track | null) => void;
     onExportSourceFile: () => void;
@@ -36,6 +47,7 @@ export interface SubtitleEditProps {
     spellCheckerDomain?: string;
     commentAuthor?: string;
     editDisabled?: boolean;
+    saveState: SaveState;
 }
 
 const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
@@ -55,6 +67,8 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     useEffect(
         (): void => {
             dispatch(setSaveTrack(props.onSave));
+            dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(props.onUpdateCue));
+            dispatch(saveCueDeleteSlice.actions.setDeleteCueCallback(props.onDeleteCue));
             dispatch(setSpellCheckDomain(props.spellCheckerDomain));
             dispatch(changeScrollPosition(ScrollPosition.FIRST));
         },
@@ -102,6 +116,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 handleExportSourceFile={props.onExportSourceFile}
                                 handleExportFile={props.onExportFile}
                                 handleImportFile={props.onImportFile}
+                                saveState={props.saveState}
                             />
                         </div>
                         <div
@@ -122,6 +137,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                                 commentAuthor={props.commentAuthor}
                                 onViewTrackHistory={props.onViewTrackHistory}
                                 onComplete={props.onComplete}
+                                saveState={props.saveState}
                             />
                         </div>
                     </div>

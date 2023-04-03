@@ -9,7 +9,6 @@ declare module "@dotsub/vtms-subtitle-edit-ui" {
         updateEditingTrack: (track: Track) => AppThunk;
         updateCues: (cues: CueDto[]) => AppThunk;
         updateSourceCues: (cues: CueDto[]) => AppThunk;
-        setAutoSaveSuccess: (success: boolean) => AppThunk;
         updateSubtitleUser: (user: User) => AppThunk;
     };
 
@@ -40,7 +39,9 @@ declare module "@dotsub/vtms-subtitle-edit-ui/models" {
         User,
         SaveActionParameters,
         TrackCues,
-        TrackType
+        TrackType,
+        SaveTrackCue,
+        SaveState
     } from "../subtitleEdit/model";
 
     export {
@@ -54,6 +55,8 @@ declare module "@dotsub/vtms-subtitle-edit-ui/models" {
         CueError,
         User,
         SaveActionParameters,
-        TrackCues
+        TrackCues,
+        SaveTrackCue,
+        SaveState
     };
 }

@@ -14,12 +14,9 @@ export const addSpellCheck = (
     spellCheck: SpellCheck,
     trackId?: string
 ): void => {
-    if (spellCheck.matches != null) {
-        spellCheck = {
-            matches: spellCheck.matches.filter(match => !hasIgnoredKeyword(match, trackId))
-        };
-    }
-    dispatch(cuesSlice.actions.addSpellCheck({ idx: index, spellCheck }));
+    const filteredMatches = spellCheck.matches?.filter(match => !hasIgnoredKeyword(match, trackId));
+    const spellCheckMatchesOnly: SpellCheck = { matches: filteredMatches };
+    dispatch(cuesSlice.actions.addSpellCheck({ idx: index, spellCheck: spellCheckMatchesOnly }));
     dispatch(checkSpelling({ index }));
 };
 

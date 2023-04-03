@@ -5,7 +5,6 @@ describe("indexLibrary", () => {
         // WHEN import of indexLibrary
 
         // THEN
-        expect(indexLibrary.Actions.setAutoSaveSuccess).toBeDefined();
         expect(indexLibrary.Actions.updateCues).toBeDefined();
         expect(indexLibrary.Actions.updateSourceCues).toBeDefined();
         expect(indexLibrary.Actions.updateEditingTrack).toBeDefined();

@@ -35,6 +35,7 @@ export const CUE_LINE_STATE_CLASSES = new Map ([
 ]);
 
 export interface CueDto {
+    id?: string;
     readonly vttCue: VTTCue;
     readonly cueCategory: CueCategory;
     editUuid?: string;
@@ -43,6 +44,9 @@ export interface CueDto {
     glossaryMatches?: GlossaryMatchDto[];
     errors?: CueError[] | null;
     comments?: CueComment[];
+    trackVersionId?: string;
+    trackVersionLockingVersion?: number;
+    addId?: string;
 }
 
 export interface CueDtoWithIndex {
@@ -185,8 +189,16 @@ export interface TrackCues {
     cues: CueDto[];
 }
 
+export interface SaveTrackCue {
+    editingTrack: Track;
+    cue: CueDto;
+    onAddCueSaveSuccess: (cueDto: CueDto) => void;
+}
+
 export interface SaveActionParameters {
     cues: CueDto[];
     editingTrack: Track;
     shouldCreateNewVersion: boolean;
 }
+
+export type SaveState = "NONE" | "TRIGGERED" | "SAVED" | "ERROR";

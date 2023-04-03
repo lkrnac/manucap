@@ -14,13 +14,6 @@ import { act } from "react-dom/test-utils";
 import { removeIds, renderWithPortal } from "../../../testUtils/testUtils";
 import { updateEditingCueIndex } from "../../cues/edit/cueEditorSlices";
 
-jest.mock("lodash", () => ({
-    debounce: (callback: Function): Function => callback,
-    sortBy: jest.requireActual("lodash/sortBy"),
-    findIndex: jest.requireActual("lodash/findIndex"),
-    findLastIndex: jest.requireActual("lodash/findLastIndex")
-}));
-
 const testCuesForNegativeShifting = [
     { vttCue: new VTTCue(1, 3, "Caption Line 1"), cueCategory: "DIALOGUE" },
     { vttCue: new VTTCue(3, 5, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -63,7 +56,7 @@ describe("ShiftTimesModal", () => {
         testingStore = createTestingStore();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
-        jest.clearAllMocks();
+        jest.resetAllMocks();
         document.body.innerHTML = "";
         cleanup();
     });

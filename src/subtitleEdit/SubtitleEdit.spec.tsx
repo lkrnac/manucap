@@ -23,7 +23,7 @@ import VideoPlayer from "./player/VideoPlayer";
 import { createTestingStore } from "../testUtils/testingStore";
 import { readSubtitleSpecification } from "./toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
-import { callSaveTrack, SaveState, setSaveTrack } from "./cues/saveSlices";
+import { callSaveTrack, setSaveTrack } from "./cues/saveSlices";
 import * as cuesListScrollSlice from "./cues/cuesList/cuesListScrollSlice";
 import { showSearchReplace } from "./cues/searchReplace/searchReplaceSlices";
 import SearchReplaceEditor from "./cues/searchReplace/SearchReplaceEditor";
@@ -121,6 +121,7 @@ describe("SubtitleEdit", () => {
                                 handleImportFile={jest.fn()}
                                 handleExportSourceFile={jest.fn()}
                                 handleExportFile={jest.fn()}
+                                saveState="NONE"
                             />
                         </div>
                         <div
@@ -170,6 +171,7 @@ describe("SubtitleEdit", () => {
                                     editingTrack={testingTrack}
                                     onViewTrackHistory={jest.fn()}
                                     onComplete={jest.fn()}
+                                    saveState="NONE"
                                 />
                             </div>
                         </div>
@@ -186,10 +188,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -237,6 +242,7 @@ describe("SubtitleEdit", () => {
                                 handleImportFile={jest.fn()}
                                 handleExportSourceFile={jest.fn()}
                                 handleExportFile={jest.fn()}
+                                saveState="NONE"
                             />
                         </div>
                         <div
@@ -268,6 +274,7 @@ describe("SubtitleEdit", () => {
                                     editingTrack={testingTrack}
                                     onViewTrackHistory={jest.fn()}
                                     onComplete={jest.fn()}
+                                    saveState="NONE"
                                 />
                             </div>
                         </div>
@@ -284,10 +291,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -340,10 +350,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -396,10 +409,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -447,6 +463,7 @@ describe("SubtitleEdit", () => {
                                 handleImportFile={jest.fn()}
                                 handleExportSourceFile={jest.fn()}
                                 handleExportFile={jest.fn()}
+                                saveState="NONE"
                             />
                         </div>
                         <div
@@ -497,6 +514,7 @@ describe("SubtitleEdit", () => {
                                     editingTrack={testingTrack}
                                     onViewTrackHistory={jest.fn()}
                                     onComplete={jest.fn()}
+                                    saveState="NONE"
                                 />
                             </div>
                         </div>
@@ -513,10 +531,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -566,6 +587,7 @@ describe("SubtitleEdit", () => {
                                 handleImportFile={jest.fn()}
                                 handleExportSourceFile={jest.fn()}
                                 handleExportFile={jest.fn()}
+                                saveState="NONE"
                             />
                         </div>
                         <div
@@ -616,6 +638,7 @@ describe("SubtitleEdit", () => {
                                     editingTrack={testingTrack}
                                     onViewTrackHistory={jest.fn()}
                                     onComplete={jest.fn()}
+                                    saveState="NONE"
                                 />
                             </div>
                         </div>
@@ -632,10 +655,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -686,6 +712,7 @@ describe("SubtitleEdit", () => {
                                 handleImportFile={jest.fn()}
                                 handleExportSourceFile={jest.fn()}
                                 handleExportFile={jest.fn()}
+                                saveState="NONE"
                             />
                         </div>
                         <div
@@ -738,6 +765,7 @@ describe("SubtitleEdit", () => {
                                     onViewTrackHistory={jest.fn()}
                                     onComplete={jest.fn()}
                                     editDisabled
+                                    saveState="NONE"
                                 />
                             </div>
                         </div>
@@ -754,11 +782,14 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                     editDisabled
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -818,6 +849,7 @@ describe("SubtitleEdit", () => {
                                 handleImportFile={jest.fn()}
                                 handleExportSourceFile={jest.fn()}
                                 handleExportFile={jest.fn()}
+                                saveState="NONE"
                             />
                         </div>
                         <div
@@ -867,6 +899,7 @@ describe("SubtitleEdit", () => {
                                     editingTrack={testingTrack}
                                     onViewTrackHistory={jest.fn()}
                                     onComplete={jest.fn()}
+                                    saveState="NONE"
                                 />
                             </div>
                         </div>
@@ -884,10 +917,13 @@ describe("SubtitleEdit", () => {
                     waveform="dummyWaveform"
                     onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -918,10 +954,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onViewTrackHistory={mockonViewTrackHistory}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -950,10 +989,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onComplete={mockOnComplete}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -983,10 +1025,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={mockOnExportFile}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1015,10 +1060,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={mockOnExportSourceFile}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1047,10 +1095,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={mockOnImportFile}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1087,10 +1138,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1127,10 +1181,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1160,10 +1217,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1198,10 +1258,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1226,10 +1289,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1260,10 +1326,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1295,10 +1364,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1336,10 +1408,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1370,10 +1445,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1419,10 +1497,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onViewTrackHistory={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1486,10 +1567,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
                     onSave={saveTrack}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1517,10 +1601,13 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
                     onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
@@ -1536,10 +1623,6 @@ describe("SubtitleEdit", () => {
             expect(testingStore.getState().cues).toEqual([]);
             expect(testingStore.getState().sourceCues).toEqual([]);
             expect(testingStore.getState().saveTrack).toBeNull();
-            expect(testingStore.getState().autoSaveSuccess).toBeFalsy();
-            expect(testingStore.getState().saveAction.saveState).toEqual(SaveState.NONE);
-            expect(testingStore.getState().saveAction.multiCuesEdit).toBeFalsy();
-            expect(testingStore.getState().pendingSave).toBeFalsy();
             expect(testingStore.getState().lastCueChange).toEqual(null);
         });
     });
@@ -1553,16 +1636,73 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
                     onSave={jest.fn()}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
+                    saveState="NONE"
                 />
             </Provider>
         );
 
         // THEN
         expect(testingStore.getState().saveTrack).toBeDefined();
+    });
+
+    it("sets saveCueUpdate.updateCue when mounted", () => {
+        // GIVEN
+        const onUpdateCueCallback = jest.fn();
+
+        // WHEN
+        mount(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewTrackHistory={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onUpdateCue={onUpdateCueCallback}
+                    onDeleteCue={jest.fn()}
+                    onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                    saveState="NONE"
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(testingStore.getState().saveCueUpdate.updateCue).toEqual(onUpdateCueCallback);
+    });
+
+    it("sets saveCueDelete.deleteCue when mounted", () => {
+        // GIVEN
+        const onDeleteCueCallback = jest.fn();
+
+        // WHEN
+        mount(
+            <Provider store={testingStore}>
+                <SubtitleEdit
+                    mp4="dummyMp4"
+                    poster="dummyPoster"
+                    onViewTrackHistory={(): void => undefined}
+                    onSave={(): void => undefined}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={onDeleteCueCallback}
+                    onComplete={(): void => undefined}
+                    onExportSourceFile={(): void => undefined}
+                    onExportFile={(): void => undefined}
+                    onImportFile={(): void => undefined}
+                    saveState="NONE"
+                />
+            </Provider>
+        );
+
+        // THEN
+        expect(testingStore.getState().saveCueDelete.deleteCue).toEqual(onDeleteCueCallback);
     });
 
     it("sets spell checker domain when mounted", () => {
@@ -1574,11 +1714,14 @@ describe("SubtitleEdit", () => {
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
                     onSave={jest.fn()}
+                    onUpdateCue={jest.fn()}
+                    onDeleteCue={jest.fn()}
                     onComplete={(): void => undefined}
                     onExportSourceFile={(): void => undefined}
                     onExportFile={(): void => undefined}
                     onImportFile={(): void => undefined}
                     spellCheckerDomain="testing-domain"
+                    saveState="NONE"
                 />
             </Provider>
         );
