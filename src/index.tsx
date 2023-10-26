@@ -1,3 +1,4 @@
+// TODO Figure out what was using FA PRO? + remove it
 // import "@fortawesome/fontawesome-pro/css/fontawesome.min.css";
 // import "@fortawesome/fontawesome-pro/css/duotone.min.css";
 import "primeicons/primeicons.css";
