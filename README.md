@@ -11,10 +11,10 @@ npm install --save manucap
 ```tsx
 import * as React from 'react'
 
-import SubtitleEdit from "manucap";
+import ManuCap from "manucap";
 
 const Example = props => (
-    <SubtitleEdit.VideoPlayer
+    <ManuCap.VideoPlayer
         id="testvpid"
         poster="http://media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
         mp4="http://media-encoded.s3.amazonaws.com/1/14/14.mp4"

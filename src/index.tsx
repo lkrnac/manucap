@@ -10,7 +10,7 @@ import { updateEditingTrack } from "./manucap/trackSlices";
 import { updateSubtitleUser } from "./manucap/userSlices";
 import { CueDto, Language, SaveState, Track, User } from "./manucap/model";
 import ReactDOM from "react-dom";
-import SubtitleEdit from "./manucap/SubtitleEdit";
+import ManuCap from "./manucap/ManuCap";
 import { readSubtitleSpecification } from "./manucap/toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import testingStore from "./testUtils/testingStore";
 import "draft-js/dist/Draft.css";
@@ -353,7 +353,7 @@ const TestApp = (): ReactElement => {
         : "CHANGE ME AFTER REBRANDING"}`;
 
     return (
-        <SubtitleEdit
+        <ManuCap
             poster={`${video}.jpeg`}
             mp4={`${video}.mp4`}
             waveform={`${video}.json`}

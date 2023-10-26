@@ -50,7 +50,7 @@ export interface SubtitleEditProps {
     saveState: SaveState;
 }
 
-const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
+const ManuCap = (props: SubtitleEditProps): ReactElement => {
     const dispatch = useDispatch();
     const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
     const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
@@ -146,4 +146,4 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
     );
 };
 
-export default SubtitleEdit;
+export default ManuCap;

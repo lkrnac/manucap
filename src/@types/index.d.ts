@@ -1,6 +1,6 @@
 declare module "manucap" {
 
-    import SubtitleEdit from "../manucap/SubtitleEdit";
+    import ManuCap from "../manucap/ManuCap";
     import { AppThunk, Reducers } from "../manucap/subtitleEditReducers";
     import VideoPlayer, { Props as VideoPlayerProps } from "../manucap/player/VideoPlayer";
     import { CueDto, Track, User } from "../manucap/model";
@@ -19,7 +19,7 @@ declare module "manucap" {
     export {
         VideoPlayer,
         VideoPlayerProps,
-        SubtitleEdit,
+        ManuCap,
         Reducers,
         Actions,
         Hooks

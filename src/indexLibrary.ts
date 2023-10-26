@@ -1,7 +1,7 @@
 import { updateCues } from "./manucap/cues/cuesList/cuesListActions";
 import { updateEditingTrack } from "./manucap/trackSlices";
 import { Reducers } from "./manucap/subtitleEditReducers";
-import SubtitleEdit from "./manucap/SubtitleEdit";
+import ManuCap from "./manucap/ManuCap";
 import VideoPlayer from "./manucap/player/VideoPlayer";
 import useMatchedCuesAsCsv from "./manucap/cues/cuesList/useMatchedCuesAsCsv";
 import { updateSourceCues } from "./manucap/cues/view/sourceCueSlices";
@@ -21,7 +21,7 @@ const Hooks = ({
 export {
     VideoPlayer,
     Reducers,
-    SubtitleEdit,
+    ManuCap,
     Actions,
     Hooks
 };

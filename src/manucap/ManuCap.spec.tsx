@@ -16,7 +16,7 @@ import {
 import { updateCues } from "./cues/cuesList/cuesListActions";
 import { updateEditingTrack } from "./trackSlices";
 import CueLine from "./cues/cueLine/CueLine";
-import SubtitleEdit from "./SubtitleEdit";
+import ManuCap from "./ManuCap";
 import { SubtitleSpecification } from "./toolbox/model";
 import Toolbox from "./toolbox/Toolbox";
 import VideoPlayer from "./player/VideoPlayer";
@@ -183,7 +183,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
@@ -286,7 +286,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
@@ -345,7 +345,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
@@ -404,7 +404,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
@@ -526,7 +526,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
@@ -650,7 +650,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
@@ -777,7 +777,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
@@ -911,7 +911,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     waveform="dummyWaveform"
@@ -949,7 +949,7 @@ describe("SubtitleEdit", () => {
         const mockonViewTrackHistory = jest.fn();
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={mockonViewTrackHistory}
@@ -984,7 +984,7 @@ describe("SubtitleEdit", () => {
         const mockOnComplete = jest.fn();
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
@@ -1020,7 +1020,7 @@ describe("SubtitleEdit", () => {
         const mockOnExportFile = jest.fn();
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
@@ -1055,7 +1055,7 @@ describe("SubtitleEdit", () => {
         const mockOnExportSourceFile = jest.fn();
         const actualNode = render(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
@@ -1090,7 +1090,7 @@ describe("SubtitleEdit", () => {
         const mockOnImportFile = jest.fn();
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
@@ -1133,7 +1133,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
@@ -1176,7 +1176,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
@@ -1212,7 +1212,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
@@ -1253,7 +1253,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         mount(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
@@ -1284,7 +1284,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
@@ -1321,7 +1321,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
@@ -1359,7 +1359,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
@@ -1403,7 +1403,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
@@ -1440,7 +1440,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
@@ -1492,7 +1492,7 @@ describe("SubtitleEdit", () => {
 
         const actualNode = render(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onComplete={(): void => undefined}
@@ -1562,7 +1562,7 @@ describe("SubtitleEdit", () => {
 
         mount(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
@@ -1596,7 +1596,7 @@ describe("SubtitleEdit", () => {
 
         const { container } = render(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
@@ -1631,7 +1631,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         mount(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
@@ -1658,7 +1658,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         mount(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
@@ -1685,7 +1685,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         mount(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
@@ -1709,7 +1709,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         mount(
             <Provider store={testingStore}>
-                <SubtitleEdit
+                <ManuCap
                     mp4="dummyMp4"
                     poster="dummyPoster"
                     onViewTrackHistory={(): void => undefined}
