@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { SubtitleEditState } from "../../manuCapReducers";
 import { CueDtoWithIndex, CueLineDto } from "../../model";
 import { getTimeString } from "../../utils/timeUtils";
-import { isDirectTranslationTrack } from "../../utils/subtitleEditUtils";
+import { isDirectTranslationTrack } from "../../utils/manuCapUtils";
 
 const CSV_HEADER_SOURCE_ONLY = "Start,End,Text\r\n";
 const CSV_HEADER_SOURCE_AND_TARGET = "Source Start,Source End,Source Text,Target Start,Target End,Target Text\r\n";

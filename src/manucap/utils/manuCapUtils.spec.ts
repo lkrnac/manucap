@@ -1,6 +1,6 @@
 import {
     hasDataLoaded, isDirectTranslationTrack
-} from "./subtitleEditUtils";
+} from "./manuCapUtils";
 
 import { Language, LoadingIndicator, Track } from "../model";
 

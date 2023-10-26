@@ -7,7 +7,7 @@ import EditingVideoPlayer from "./player/EditingVideoPlayer";
 import { AppThunk, SubtitleEditState } from "./manuCapReducers";
 import Toolbox from "./toolbox/Toolbox";
 import { enableMapSet } from "immer";
-import { hasDataLoaded } from "./utils/subtitleEditUtils";
+import { hasDataLoaded } from "./utils/manuCapUtils";
 import CuesList from "./cues/cuesList/CuesList";
 import { setSaveTrack } from "./cues/saveSlices";
 import { resetEditingTrack } from "./trackSlices";

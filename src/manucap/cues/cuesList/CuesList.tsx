@@ -1,7 +1,7 @@
 import { createRef, ReactElement, RefObject, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { isDirectTranslationTrack } from "../../utils/subtitleEditUtils";
+import { isDirectTranslationTrack } from "../../utils/manuCapUtils";
 import AddCueLineButton from "../edit/AddCueLineButton";
 import { TrackCues, CueLineDto, ScrollPosition, Track, SaveState } from "../../model";
 import CueLine from "../cueLine/CueLine";
