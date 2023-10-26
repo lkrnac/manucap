@@ -66,7 +66,7 @@ const matchedCues = [
 ];
 
 const testingTrack = {
-    type: "CAPTION1",
+    type: "CAPTION",
     language: { id: "en-US", name: "English (US)" } as Language,
     default: true,
     mediaTitle: "This is the video title",
