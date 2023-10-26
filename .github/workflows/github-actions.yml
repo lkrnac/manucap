@@ -11,4 +11,8 @@ jobs:
                   node-version: 18
                   cache: 'npm'
             - run: npm i --legacy-peer-deps
+#            - run:   run build
+            - run: run compile-with-tests
             - run: npm test
+            - run: react-scripts build # tests if local development browser build is working
+            - run: npm run lint
