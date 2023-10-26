@@ -162,7 +162,7 @@ describe("SubtitleEdit", () => {
                                             targetCuesLength: 2,
                                             withoutSourceCues: true,
                                             matchedCues,
-                                            commentAuthor: "Linguist"
+                                            commentAuthor: "Linguist1"
                                         }}
                                         rowRef={createRef()}
                                     />
