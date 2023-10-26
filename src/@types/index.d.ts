@@ -1,4 +1,4 @@
-declare module "@dotsub/manucap" {
+declare module "manucap" {
 
     import SubtitleEdit from "../manucap/SubtitleEdit";
     import { AppThunk, Reducers } from "../manucap/subtitleEditReducers";
@@ -26,7 +26,7 @@ declare module "@dotsub/manucap" {
     };
 }
 
-declare module "@dotsub/manucap/models" {
+declare module "manucap/models" {
 
     import {
         CueDto,
