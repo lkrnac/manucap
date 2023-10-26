@@ -41,7 +41,3 @@ When code is changed, all tests are rerun
 ```bash
 npm test
 ```
-
-## License
-
- © [Dotsub](https://github.com/dotsub)
