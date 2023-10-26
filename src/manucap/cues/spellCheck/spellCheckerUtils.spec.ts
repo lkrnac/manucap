@@ -142,7 +142,7 @@ describe("spellCheckerUtils", () => {
 
     });
 
-    describe("vtms language tool language code mapper", () => {
+    describe("manucap language tool language code mapper", () => {
         test.each([
             ["ar-SA", "ar"], ["ca", "ca-ES"], ["nl-NL", "nl"],
             ["en-IE", "en"], ["fr-FR", "fr"], ["fr-CA", "fr"], ["it-IT", "it"], ["no-NO", "no"],
