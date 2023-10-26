@@ -2,9 +2,12 @@ name: manucap CI/CD
 run-name: ${{ github.actor }} manucap CI/CD
 on: [push]
 jobs:
-    unit-tests-regression:
+    test:
         runs-on: ubuntu-latest
         steps:
-            - run: cd ${{ github.workspace }}
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
             - run: npm i
             - run: npm test
