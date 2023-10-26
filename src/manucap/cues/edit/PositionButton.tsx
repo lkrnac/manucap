@@ -18,7 +18,7 @@ const PositionButton = (props: Props): ReactElement => {
     const menuModel = positionIcons.map(icon => ({
         template: () => (
             <span
-                className="sbte-position-button-option"
+                className="mc-position-button-option"
                 onClick={(event): void => {
                     props.changePosition(icon.position);
                     toggleMenu(event);
@@ -32,7 +32,7 @@ const PositionButton = (props: Props): ReactElement => {
     return (
         <>
             <button
-                className="sbte-position-toggle-button sbte-dropdown-toggle sbte-btn sbte-btn-light"
+                className="mc-position-toggle-button mc-dropdown-toggle mc-btn mc-btn-light"
                 aria-controls="positionButtonMenu"
                 aria-haspopup
                 onClick={toggleMenu}
@@ -42,7 +42,7 @@ const PositionButton = (props: Props): ReactElement => {
             </button>
             <Menu
                 id="positionButtonMenu"
-                className="sbte-position-button-list"
+                className="mc-position-button-list"
                 ref={menu}
                 popup
                 model={menuModel}

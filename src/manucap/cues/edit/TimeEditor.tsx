@@ -20,7 +20,7 @@ const TimeEditor = (props: Props): ReactElement => {
 
     return (
         <TimeField
-            className="sbte-form-control mousetrap block text-center"
+            className="mc-form-control mousetrap block text-center"
             value={getTimeString(props.time || 0)}
             onChange={handleChange}
             showSeconds

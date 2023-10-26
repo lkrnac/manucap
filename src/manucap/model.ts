@@ -29,9 +29,9 @@ export enum CueLineState {
 }
 
 export const CUE_LINE_STATE_CLASSES = new Map ([
-    [CueLineState.NONE, { dividerClass: "sbte-cue-divider", flapClass: "sbte-cue-line-flap" }],
-    [CueLineState.GOOD, { dividerClass: "sbte-cue-divider-good", flapClass: "sbte-cue-line-flap-good" }],
-    [CueLineState.ERROR, { dividerClass: "sbte-cue-divider-error", flapClass: "sbte-cue-line-flap-error" }],
+    [CueLineState.NONE, { dividerClass: "mc-cue-divider", flapClass: "mc-cue-line-flap" }],
+    [CueLineState.GOOD, { dividerClass: "mc-cue-divider-good", flapClass: "mc-cue-line-flap-good" }],
+    [CueLineState.ERROR, { dividerClass: "mc-cue-divider-error", flapClass: "mc-cue-line-flap-error" }],
 ]);
 
 export interface CueDto {

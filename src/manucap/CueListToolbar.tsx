@@ -19,7 +19,7 @@ const CueListToolbar = (props: Props): ReactElement => {
     return (
         <div className="space-x-2 flex items-center mt-1.5">
             <button
-                className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
+                className="mc-btn mc-btn-primary mc-view-all-tracks-mc-btn"
                 type="button"
                 onClick={(): void => props.onViewTrackHistory()}
             >
@@ -27,7 +27,7 @@ const CueListToolbar = (props: Props): ReactElement => {
             </button>
             <button
                 id="jumpToFirstButton"
-                className="sbte-btn sbte-btn-light sbte-jump-to-first-button"
+                className="mc-btn mc-btn-light mc-jump-to-first-button"
                 type="button"
                 onClick={(): void => {
                 dispatch(changeScrollPosition(ScrollPosition.FIRST));
@@ -44,7 +44,7 @@ const CueListToolbar = (props: Props): ReactElement => {
             />
             <button
                 id="jumpToLastButton"
-                className="sbte-btn sbte-btn-light sbte-jump-to-last-button"
+                className="mc-btn mc-btn-light mc-jump-to-last-button"
                 type="button"
                 onClick={(): void => {
                 dispatch(changeScrollPosition(ScrollPosition.LAST));
@@ -61,8 +61,8 @@ const CueListToolbar = (props: Props): ReactElement => {
             />
             <button
                 id="editCueButton"
-                data-testid="sbte-jump-to-edit-cue-button"
-                className="sbte-btn sbte-btn-light"
+                data-testid="mc-jump-to-edit-cue-button"
+                className="mc-btn mc-btn-light"
                 type="button"
                 onClick={(): void => {
                 dispatch(changeScrollPosition(ScrollPosition.CURRENT));
@@ -79,8 +79,8 @@ const CueListToolbar = (props: Props): ReactElement => {
             />
             <button
                 id="playbackCueButton"
-                data-testid="sbte-jump-to-playback-cue-button"
-                className="sbte-btn sbte-btn-light"
+                data-testid="mc-jump-to-playback-cue-button"
+                className="mc-btn mc-btn-light"
                 type="button"
                 onClick={(): void => {
                 dispatch(changeScrollPosition(ScrollPosition.PLAYBACK));
@@ -98,8 +98,8 @@ const CueListToolbar = (props: Props): ReactElement => {
             <button
                 hidden={props.editingTrack?.type !== "TRANSLATION"}
                 id="translatedCueButton"
-                data-testid="sbte-jump-to-last-translated-cue-button"
-                className="sbte-btn sbte-btn-light"
+                data-testid="mc-jump-to-last-translated-cue-button"
+                className="mc-btn mc-btn-light"
                 type="button"
                 onClick={(): void => {
                 dispatch(changeScrollPosition(ScrollPosition.LAST_TRANSLATED));
@@ -116,8 +116,8 @@ const CueListToolbar = (props: Props): ReactElement => {
             />
             <button
                 id="cueErrorButton"
-                data-testid="sbte-jump-error-cue-button"
-                className="sbte-btn sbte-btn-light"
+                data-testid="mc-jump-error-cue-button"
+                className="mc-btn mc-btn-light"
                 type="button"
                 onClick={(): void => {
                 dispatch(changeScrollPosition(ScrollPosition.ERROR));

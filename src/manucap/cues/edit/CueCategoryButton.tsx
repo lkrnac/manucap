@@ -33,7 +33,7 @@ const CueCategoryButton = (props: Props): ReactElement => {
     return (
         <>
             <button
-                className="sbte-dropdown-toggle sbte-btn sbte-btn-light !font-normal"
+                className="mc-dropdown-toggle mc-btn mc-btn-light !font-normal"
                 aria-controls="cueCategoryMenu"
                 aria-haspopup
                 onClick={toggleMenu}

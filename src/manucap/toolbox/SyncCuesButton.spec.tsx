@@ -29,7 +29,7 @@ describe("SyncCuesButton", () => {
     it("renders", () => {
         // GIVEN
         const expectedNode = shallow(
-            <button className="sbte-sync-cues-button flex items-center">
+            <button className="mc-sync-cues-button flex items-center">
                 <i className="w-7 fa-duotone fa-rotate text-blue-primary" />
                 <span>Sync Cues</span>
             </button>
@@ -51,7 +51,7 @@ describe("SyncCuesButton", () => {
         testingStore.dispatch(
             updateEditingTrack( { ...testTranslationTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
         const expectedNode = shallow(
-            <button className="sbte-sync-cues-button flex items-center" disabled>
+            <button className="mc-sync-cues-button flex items-center" disabled>
                 <i className="w-7 fa-duotone fa-rotate text-blue-primary" />
                 <span>Sync Cues</span>
             </button>
@@ -82,7 +82,7 @@ describe("SyncCuesButton", () => {
         );
 
         // WHEN
-        actualNode.find(".sbte-sync-cues-button").simulate("click");
+        actualNode.find(".mc-sync-cues-button").simulate("click");
 
         // THEN
         expect(saveTrack).toHaveBeenCalledTimes(1);
@@ -97,7 +97,7 @@ describe("SyncCuesButton", () => {
         );
 
         // WHEN
-        actualNode.find(".sbte-sync-cues-button").simulate("click");
+        actualNode.find(".mc-sync-cues-button").simulate("click");
 
         // THEN
         expect(testingStore.getState().editingTrack.id).not.toBeDefined();

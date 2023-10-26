@@ -27,7 +27,7 @@ export const CueCommentsToggle = (props: Props): ReactElement => {
                                 <i className="w-7 fa-duotone fa-comments text-blue-primary" />
                                 <span>Comments</span>
                             </span>
-                            <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-success">SHOWN</span>
+                            <span className="mc-badge font-medium mc-badge-sm mc-badge-success">SHOWN</span>
                         </>
                     )
                     : (
@@ -36,7 +36,7 @@ export const CueCommentsToggle = (props: Props): ReactElement => {
                                 <i className="w-7 fa-duotone fa-comments text-blue-primary" />
                                 <span>Comments</span>
                             </span>
-                            <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-secondary">HIDDEN</span>
+                            <span className="mc-badge font-medium mc-badge-sm mc-badge-secondary">HIDDEN</span>
                         </>
                     )
             )}

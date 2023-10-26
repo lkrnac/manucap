@@ -36,7 +36,7 @@ describe("MergeCuesButton", () => {
         // GIVEN
         const expectedNode = render(
             <button
-                className="sbte-merge-cues-button flex items-center"
+                className="mc-merge-cues-button flex items-center"
                 title="Unlock timecodes to enable"
             >
                 <i className="w-7 fa-duotone fa-merge text-blue-primary" />
@@ -59,7 +59,7 @@ describe("MergeCuesButton", () => {
         // GIVEN
         const expectedNode = render(
             <button
-                className="sbte-merge-cues-button flex items-center"
+                className="mc-merge-cues-button flex items-center"
                 title="Unlock timecodes to enable"
             >
                 <i className="w-7 fa-duotone fa-merge text-blue-primary" />
@@ -84,7 +84,7 @@ describe("MergeCuesButton", () => {
             updateEditingTrack( { ...testTranslationTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
         const expectedNode = render(
             <button
-                className="sbte-merge-cues-button flex items-center"
+                className="mc-merge-cues-button flex items-center"
                 disabled
                 title="Unlock timecodes to enable"
             >
@@ -128,7 +128,7 @@ describe("MergeCuesButton", () => {
                 <MergeCuesButton onClick={jest.fn()} />
             </Provider>
         );
-        const searchButton = container.querySelector(".sbte-search-replace-button") as Element;
+        const searchButton = container.querySelector(".mc-search-replace-button") as Element;
         const mergeButton = getByText("Merge Cues");
 
         // WHEN

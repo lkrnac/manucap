@@ -15,7 +15,7 @@ const SyncCuesButton = (props: Props): ReactElement => {
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     return (
         <button
-            className="sbte-sync-cues-button flex items-center"
+            className="mc-sync-cues-button flex items-center"
             disabled={!timecodesUnlocked}
             onClick={(event): void => {
                 dispatch(syncCues());

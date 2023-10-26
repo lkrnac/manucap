@@ -10,7 +10,7 @@ const SearchReplaceButton = (): ReactElement => {
         <>
             <button
                 id="searchReplaceBtn"
-                className="sbte-search-replace-button sbte-btn sbte-btn-light"
+                className="mc-search-replace-button mc-btn mc-btn-light"
                 onClick={(): void => {
                     dispatch(showMerge(false));
                     dispatch(showSearchReplace(true));

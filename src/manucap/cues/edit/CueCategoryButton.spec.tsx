@@ -9,7 +9,7 @@ describe("CueCategoryButton", () => {
         // GIVEN
         const expectedNode = mount(
             <button
-                className="sbte-dropdown-toggle sbte-btn sbte-btn-light !font-normal"
+                className="mc-dropdown-toggle mc-btn mc-btn-light !font-normal"
                 aria-controls="cueCategoryMenu"
                 aria-haspopup="true"
             >
@@ -30,7 +30,7 @@ describe("CueCategoryButton", () => {
         // GIVEN
         const expectedNode = mount(
             <button
-                className="sbte-dropdown-toggle sbte-btn sbte-btn-light !font-normal"
+                className="mc-dropdown-toggle mc-btn mc-btn-light !font-normal"
                 aria-controls="cueCategoryMenu"
                 aria-haspopup="true"
             >
@@ -52,7 +52,7 @@ describe("CueCategoryButton", () => {
         const expectedNode = render((
             <>
                 <button
-                    className="sbte-dropdown-toggle sbte-btn sbte-btn-light"
+                    className="mc-dropdown-toggle mc-btn mc-btn-light"
                     aria-controls="cueCategoryMenu"
                     aria-haspopup="true"
                 >

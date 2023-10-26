@@ -116,7 +116,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                     source={props.subTitleSpecifications.comments}
                     disallowedTypes={["html"]}
                     plugins={[remarkGfm]}
-                    className="sbte-subspec-freeform-text sbte-subspec-comments"
+                    className="mc-subspec-freeform-text mc-subspec-comments"
                 />
             </>
         ) : null}
@@ -127,7 +127,7 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
                 source={props.subTitleSpecifications.mediaNotes ? props.subTitleSpecifications.mediaNotes : ""}
                 disallowedTypes={["html"]}
                 plugins={[remarkGfm]}
-                className="sbte-subspec-freeform-text sbte-media-notes"
+                className="mc-subspec-freeform-text mc-media-notes"
             />
         </div>
     </>

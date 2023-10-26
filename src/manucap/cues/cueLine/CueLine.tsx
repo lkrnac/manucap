@@ -100,7 +100,7 @@ const CueErrorsList = (props: CueErrorsListProps): ReactElement | null => {
     const filteredCueErrors = props.cue.errors?.filter(error => error !== CueError.SPELLCHECK_ERROR);
     return filteredCueErrors && filteredCueErrors.length > 0
         ? (
-            <div className="sbte-cues-errors">
+            <div className="mc-cues-errors">
                 {
                     filteredCueErrors
                         .map((cueError: CueError, index: number): ReactElement => (
@@ -153,7 +153,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
 
     return (
         <div
-            className="sbte-cue-line"
+            className="mc-cue-line"
             ref={props.rowRef}
             style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
         >
@@ -168,7 +168,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
             />
             <div
                 className={"border-t border-r border-blue-light-mostly-transparent rounded-r" +
-                    (cueLineEditDisabled ? " sbte-edit-disabled" : "")}
+                    (cueLineEditDisabled ? " mc-edit-disabled" : "")}
                 style={{ display: "grid", width: "100%" }}
             >
                 {
@@ -183,7 +183,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                     targetCueIndex={firstTargetCueIndex}
                                     cue={sourceCue.cue}
                                     targetCuesLength={props.rowProps.targetCuesLength}
-                                    className={`${captionClassName} sbte-source-cue`}
+                                    className={`${captionClassName} mc-source-cue`}
                                     showGlossaryTerms={showGlossaryTermsAndErrors}
                                     languageDirection={editingTrack?.sourceLanguage?.direction}
                                     sourceCuesIndexes={sourceCuesIndexes}
@@ -250,7 +250,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
                                             targetCueIndex={targetCue.index}
                                             cue={targetCue.cue}
                                             targetCuesLength={props.rowProps.targetCuesLength}
-                                            className={`${captionClassName} sbte-target-cue`}
+                                            className={`${captionClassName} mc-target-cue`}
                                             showGlossaryTerms={false}
                                             languageDirection={editingTrack?.language.direction}
                                             sourceCuesIndexes={sourceCuesIndexes}

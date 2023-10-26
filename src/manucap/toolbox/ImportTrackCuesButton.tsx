@@ -12,7 +12,7 @@ const ImportTrackCuesButton = (props: Props): ReactElement => {
             <button
                 id="importFileBtn"
                 disabled={props.disabled}
-                className="sbte-import-button sbte-btn sbte-btn-light"
+                className="mc-import-button mc-btn mc-btn-light"
                 onClick={(): void => props.handleImport()}
                 data-pr-tooltip="Import File"
                 data-pr-position="top"

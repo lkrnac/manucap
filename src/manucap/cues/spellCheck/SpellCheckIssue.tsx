@@ -169,7 +169,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
     return (
         <>
             <span
-                className="sbte-text-with-error"
+                className="mc-text-with-error"
                 onClick={(event): void => {
                     props.setSpellCheckerMatchingOffset(
                         props.spellCheckerMatchingOffset === props.start ? null : props.start
@@ -186,7 +186,7 @@ export const SpellCheckIssue = (props: Props): ReactElement | null => {
                 ref={menu}
                 popup
                 id={spellcheckId}
-                className="spellcheck-menu sbte-big-menu p-0 shadow-md"
+                className="spellcheck-menu mc-big-menu p-0 shadow-md"
                 model={[
                     {
                         template: () => (

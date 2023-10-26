@@ -45,7 +45,7 @@ const replaceForInsensitiveMatches = (
                 sanitizedHtml = sanitizedHtml.replace(
                     caseInsensitiveMatch,
                     `<span onClick="pickSetGlossaryTerm('${compositeValue}')" ` +
-                    `class="sbte-glossary-match">${caseInsensitiveMatch}</span>`
+                    `class="mc-glossary-match">${caseInsensitiveMatch}</span>`
                 );
             }
         }
@@ -151,7 +151,7 @@ const CueView = (props: CueViewProps): ReactElement => {
         >
             <>
                 <div
-                    className="sbte-cue-line-left-section"
+                    className="mc-cue-line-left-section"
                     style={{
                         flex: "1 1 300px",
                         display: "flex",
@@ -177,7 +177,7 @@ const CueView = (props: CueViewProps): ReactElement => {
                     style={{ flex: "1 1 70%" }}
                 >
                     <div
-                        className="sbte-cue-editor"
+                        className="mc-cue-editor"
                         style={{
                             flexBasis: "auto",
                             paddingLeft: "10px",

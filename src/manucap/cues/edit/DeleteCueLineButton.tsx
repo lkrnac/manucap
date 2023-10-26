@@ -16,7 +16,7 @@ const DeleteCueLineButton = (props: Props): ReactElement => {
             <button
                 id={buttonId}
                 style={{ maxHeight: "38px" }}
-                className="sbte-btn sbte-btn-primary sbte-btn-sm sbte-delete-cue-button w-full"
+                className="mc-btn mc-btn-primary mc-btn-sm mc-delete-cue-button w-full"
                 onClick={(): AppThunk => dispatch(deleteCue(props.cueIndex))}
                 data-pr-tooltip="Delete this subtitle"
                 data-pr-position="left"

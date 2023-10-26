@@ -74,7 +74,7 @@ const CueLineFlap = (props: Props): ReactElement => {
                     mergeVisible
                         ? <input
                                 type="checkbox"
-                                className="sbte-cue-line-flap-checkbox"
+                                className="mc-cue-line-flap-checkbox"
                                 disabled={props.editDisabled || !isContiguousToSelected()}
                                 checked={checked}
                                 onChange={(): void => {

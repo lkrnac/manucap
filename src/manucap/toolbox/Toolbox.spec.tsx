@@ -27,14 +27,14 @@ describe("Toolbox", () => {
             <Provider store={testingStore}>
                 <div
                     className="mt-6 space-x-2 flex items-stretch z-100
-                        justify-center sbte-button-toolbar"
+                        justify-center mc-button-toolbar"
                 >
                     <SubtitleSpecificationsButton />
                     <SearchReplaceButton />
                     <ImportTrackCuesButton handleImport={jest.fn()} />
                     <ExportTrackCuesButton handleExport={jest.fn()} />
                     <button
-                        className="select-none sbte-dropdown-toggle sbte-btn sbte-btn-light flex
+                        className="select-none mc-dropdown-toggle mc-btn mc-btn-light flex
                                 items-center justify-center"
                         aria-controls="toolboxMenu"
                         aria-haspopup="true"
@@ -79,7 +79,7 @@ describe("Toolbox", () => {
             <Provider store={testingStore}>
                 <div
                     className="mt-6 space-x-2 flex items-stretch
-                        z-100 justify-center sbte-button-toolbar"
+                        z-100 justify-center mc-button-toolbar"
                 >
                     <SubtitleSpecificationsButton />
                     <SearchReplaceButton />
@@ -87,7 +87,7 @@ describe("Toolbox", () => {
                     <ExportSourceTrackCuesButton handleExport={jest.fn()} />
                     <ExportTrackCuesButton handleExport={jest.fn()} />
                     <button
-                        className="select-none sbte-dropdown-toggle sbte-btn sbte-btn-light flex
+                        className="select-none mc-dropdown-toggle mc-btn mc-btn-light flex
                                 items-center justify-center"
                         aria-controls="toolboxMenu"
                         aria-haspopup="true"
@@ -129,7 +129,7 @@ describe("Toolbox", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".sbte-export-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-export-button") as Element);
 
         // THEN
         expect(mockExportFile).toHaveBeenCalled();
@@ -150,7 +150,7 @@ describe("Toolbox", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".sbte-import-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-import-button") as Element);
 
         // THEN
         expect(mockImportFile).toHaveBeenCalled();
@@ -171,7 +171,7 @@ describe("Toolbox", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".sbte-export-source-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-export-source-button") as Element);
 
         // THEN
         expect(mockExportSourceFile).toHaveBeenCalled();
@@ -192,7 +192,7 @@ describe("Toolbox", () => {
 
         // WHEN
         fireEvent.click(
-            actualNode.container.querySelector(".sbte-button-toolbar .sbte-dropdown-toggle") as Element);
+            actualNode.container.querySelector(".mc-button-toolbar .mc-dropdown-toggle") as Element);
 
         // THEN
         await waitFor(() => {
@@ -216,13 +216,13 @@ describe("Toolbox", () => {
         // WHEN
         // Opening Toolbox Menu.
         fireEvent.click(
-            actualNode.container.querySelector(".sbte-button-toolbar .sbte-dropdown-toggle") as Element);
+            actualNode.container.querySelector(".mc-button-toolbar .mc-dropdown-toggle") as Element);
         // Clicking on "Unlock Time Code Button".
         fireEvent.click(
             actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(7) button") as Element);
         // Opening Toolbox Menu.
         fireEvent.click(
-            actualNode.container.querySelector(".sbte-button-toolbar .sbte-dropdown-toggle") as Element);
+            actualNode.container.querySelector(".mc-button-toolbar .mc-dropdown-toggle") as Element);
         // Clicking on "Shift Track Time".
         fireEvent.click(
             actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(3) button") as Element);
@@ -251,7 +251,7 @@ describe("Toolbox", () => {
 
         // WHEN
         fireEvent.click(
-            actualNode.container.querySelector(".sbte-button-toolbar .sbte-dropdown-toggle") as Element);
+            actualNode.container.querySelector(".mc-button-toolbar .mc-dropdown-toggle") as Element);
         fireEvent.click(
             actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(1) button") as Element);
 
@@ -278,11 +278,11 @@ describe("Toolbox", () => {
 
         // WHEN
         fireEvent.click(
-            actualNode.container.querySelector(".sbte-button-toolbar .sbte-dropdown-toggle") as Element);
+            actualNode.container.querySelector(".mc-button-toolbar .mc-dropdown-toggle") as Element);
         fireEvent.click(
             actualNode.container.querySelector("#toolboxMenu .p-menuitem:nth-child(1) button") as Element);
         fireEvent.click(
-            actualNode.container.querySelector(".p-dialog .sbte-btn-primary") as Element);
+            actualNode.container.querySelector(".p-dialog .mc-btn-primary") as Element);
 
         // THEN
         await waitFor(() => {

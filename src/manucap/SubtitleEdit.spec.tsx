@@ -96,7 +96,7 @@ describe("SubtitleEdit", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    className="sbte-subtitle-edit"
+                    className="mc-subtitle-edit"
                     style={{
                         display: "flex",
                         flexFlow: "column",
@@ -143,7 +143,7 @@ describe("SubtitleEdit", () => {
                                     justifyContent: "space-between"
                                 }}
                             >
-                                <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                                <div style={{ overflow: "auto" }} className="mc-cue-list">
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -217,7 +217,7 @@ describe("SubtitleEdit", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div
-                    className="sbte-subtitle-edit"
+                    className="mc-subtitle-edit"
                     style={{
                         display: "flex",
                         flexFlow: "column",
@@ -269,7 +269,7 @@ describe("SubtitleEdit", () => {
                                     cueIndex={-1}
                                     sourceCueIndexes={[]}
                                 />
-                                <div style={{ overflow: "auto" }} className="sbte-cue-list" />
+                                <div style={{ overflow: "auto" }} className="mc-cue-list" />
                                 <CueListToolbar
                                     editingTrack={testingTrack}
                                     onViewTrackHistory={jest.fn()}
@@ -320,7 +320,7 @@ describe("SubtitleEdit", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div
-                    className="sbte-subtitle-edit"
+                    className="mc-subtitle-edit"
                     style={{
                         display: "flex",
                         flexFlow: "column",
@@ -332,7 +332,7 @@ describe("SubtitleEdit", () => {
                     <div>CueErrorAlert</div>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
                         <div className="text-center space-y-4">
-                            <div className="sbte-spinner-icon" />
+                            <div className="mc-spinner-icon" />
                             <p className="font-medium text-blue-light m-0">
                                 Hang in there, we&apos;re loading the track...
                             </p>
@@ -379,7 +379,7 @@ describe("SubtitleEdit", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div
-                    className="sbte-subtitle-edit"
+                    className="mc-subtitle-edit"
                     style={{
                         display: "flex",
                         flexFlow: "column",
@@ -391,7 +391,7 @@ describe("SubtitleEdit", () => {
                     <div>CueErrorAlert</div>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
                         <div className="text-center space-y-4">
-                            <div className="sbte-spinner-icon" />
+                            <div className="mc-spinner-icon" />
                             <p className="font-medium text-blue-light m-0">
                                 Hang in there, we&apos;re loading the track...
                             </p>
@@ -438,7 +438,7 @@ describe("SubtitleEdit", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    className="sbte-subtitle-edit"
+                    className="mc-subtitle-edit"
                     style={{
                         display: "flex",
                         flexFlow: "column",
@@ -486,7 +486,7 @@ describe("SubtitleEdit", () => {
                                     justifyContent: "space-between"
                                 }}
                             >
-                                <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                                <div style={{ overflow: "auto" }} className="mc-cue-list">
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -562,7 +562,7 @@ describe("SubtitleEdit", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    className="sbte-subtitle-edit"
+                    className="mc-subtitle-edit"
                     style={{
                         display: "flex",
                         flexFlow: "column",
@@ -610,7 +610,7 @@ describe("SubtitleEdit", () => {
                                     justifyContent: "space-between"
                                 }}
                             >
-                                <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                                <div style={{ overflow: "auto" }} className="mc-cue-list">
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -686,7 +686,7 @@ describe("SubtitleEdit", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div
-                    className="sbte-subtitle-edit"
+                    className="mc-subtitle-edit"
                     style={{
                         display: "flex",
                         flexFlow: "column",
@@ -734,7 +734,7 @@ describe("SubtitleEdit", () => {
                                     justifyContent: "space-between"
                                 }}
                             >
-                                <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                                <div style={{ overflow: "auto" }} className="mc-cue-list">
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -818,7 +818,7 @@ describe("SubtitleEdit", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    className="sbte-subtitle-edit"
+                    className="mc-subtitle-edit"
                     style={{
                         display: "flex",
                         flexFlow: "column",
@@ -871,7 +871,7 @@ describe("SubtitleEdit", () => {
                                     justifyContent: "space-between"
                                 }}
                             >
-                                <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                                <div style={{ overflow: "auto" }} className="mc-cue-list">
                                     <CueLine
                                         data={{ targetCues: [cuesWithIndexes[0]]}}
                                         rowIndex={0}
@@ -973,7 +973,7 @@ describe("SubtitleEdit", () => {
         actualNode.update();
 
         // WHEN
-        actualNode.find("button.sbte-view-all-tracks-sbte-btn").simulate("click");
+        actualNode.find("button.mc-view-all-tracks-mc-btn").simulate("click");
 
         // THEN
         expect(mockonViewTrackHistory.mock.calls.length).toBe(1);
@@ -1008,7 +1008,7 @@ describe("SubtitleEdit", () => {
         actualNode.update();
 
         // WHEN
-        actualNode.find("button.sbte-complete-subtitle-sbte-btn").simulate("click");
+        actualNode.find("button.mc-complete-subtitle-mc-btn").simulate("click");
 
         // THEN
         expect(mockOnComplete).toHaveBeenCalledWith(
@@ -1044,7 +1044,7 @@ describe("SubtitleEdit", () => {
         actualNode.update();
 
         // WHE
-        actualNode.find(".sbte-export-button").simulate("click");
+        actualNode.find(".mc-export-button").simulate("click");
 
         // THEN
         expect(mockOnExportFile).toHaveBeenCalled();
@@ -1079,7 +1079,7 @@ describe("SubtitleEdit", () => {
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".sbte-export-source-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-export-source-button") as Element);
 
         // THEN
         expect(mockOnExportSourceFile).toHaveBeenCalled();
@@ -1114,7 +1114,7 @@ describe("SubtitleEdit", () => {
         actualNode.update();
 
         // WHEN
-        actualNode.find(".sbte-import-button").simulate("click");
+        actualNode.find(".mc-import-button").simulate("click");
 
         // THEN
         expect(mockOnImportFile).toHaveBeenCalled();
@@ -1152,7 +1152,7 @@ describe("SubtitleEdit", () => {
         changeScrollPositionSpy.mockClear();
 
         // WHEN
-        actualNode.find(".sbte-jump-to-last-button").simulate("click");
+        actualNode.find(".mc-jump-to-last-button").simulate("click");
 
         // THEN
         expect(changeScrollPositionSpy).toBeCalledTimes(1);
@@ -1195,7 +1195,7 @@ describe("SubtitleEdit", () => {
         changeScrollPositionSpy.mockClear();
 
         // WHEN
-        actualNode.find(".sbte-jump-to-last-button").simulate("click");
+        actualNode.find(".mc-jump-to-last-button").simulate("click");
 
         // THEN
         expect(changeScrollPositionSpy).toBeCalledTimes(1);
@@ -1227,12 +1227,12 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
-        actualNode.find(".sbte-jump-to-last-button").simulate("click");
+        actualNode.find(".mc-jump-to-last-button").simulate("click");
         const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
         changeScrollPositionSpy.mockClear();
 
         // WHEN
-        actualNode.find(".sbte-jump-to-first-button").simulate("click");
+        actualNode.find(".mc-jump-to-first-button").simulate("click");
 
         // THEN
         expect(changeScrollPositionSpy).toBeCalledTimes(1);
@@ -1299,12 +1299,12 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
-        fireEvent.click(actualNode.container.querySelector(".sbte-jump-to-last-button") as HTMLElement);
+        fireEvent.click(actualNode.container.querySelector(".mc-jump-to-last-button") as HTMLElement);
         const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
         changeScrollPositionSpy.mockClear();
 
         // WHEN
-        fireEvent.click(actualNode.getByTestId("sbte-jump-to-edit-cue-button"));
+        fireEvent.click(actualNode.getByTestId("mc-jump-to-edit-cue-button"));
 
         // THEN
         expect(changeScrollPositionSpy).toBeCalledTimes(1);
@@ -1336,11 +1336,11 @@ describe("SubtitleEdit", () => {
                 />
             </Provider>
         );
-        fireEvent.click(actualNode.container.querySelector(".sbte-jump-to-last-button") as HTMLElement);
+        fireEvent.click(actualNode.container.querySelector(".mc-jump-to-last-button") as HTMLElement);
         const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
         changeScrollPositionSpy.mockClear();
 
-        fireEvent.click(actualNode.getByTestId("sbte-jump-to-playback-cue-button"));
+        fireEvent.click(actualNode.getByTestId("mc-jump-to-playback-cue-button"));
 
         // THEN
         expect(changeScrollPositionSpy).toBeCalledTimes(1);
@@ -1379,7 +1379,7 @@ describe("SubtitleEdit", () => {
 
         //WHEN
         await act(async () => {
-            fireEvent.click(actualNode.getByTestId("sbte-jump-to-last-translated-cue-button"));
+            fireEvent.click(actualNode.getByTestId("mc-jump-to-last-translated-cue-button"));
         });
 
         expect(actualNode.container.outerHTML).toContain(`Editing Line ${cueSize}`);
@@ -1423,7 +1423,7 @@ describe("SubtitleEdit", () => {
 
         //WHEN
         await act(async () => {
-            fireEvent.click(actualNode.getByTestId("sbte-jump-to-last-translated-cue-button"));
+            fireEvent.click(actualNode.getByTestId("mc-jump-to-last-translated-cue-button"));
         });
 
         expect(actualNode.container.outerHTML).toContain("Editing Line 15");
@@ -1460,7 +1460,7 @@ describe("SubtitleEdit", () => {
 
         //WHEN
         await act(async () => {
-            fireEvent.click(actualNode.getByTestId("sbte-jump-error-cue-button"));
+            fireEvent.click(actualNode.getByTestId("mc-jump-error-cue-button"));
         });
 
         // THEN
@@ -1511,7 +1511,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         await act(async () => {
-            fireEvent.click(actualNode.getByTestId("sbte-jump-error-cue-button"));
+            fireEvent.click(actualNode.getByTestId("mc-jump-error-cue-button"));
         });
 
         // THEN
@@ -1520,7 +1520,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         await act(async () => {
-            fireEvent.click(actualNode.getByTestId("sbte-jump-error-cue-button"));
+            fireEvent.click(actualNode.getByTestId("mc-jump-error-cue-button"));
         });
 
         // THEN
@@ -1529,7 +1529,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         await act(async () => {
-            fireEvent.click(actualNode.getByTestId("sbte-jump-error-cue-button"));
+            fireEvent.click(actualNode.getByTestId("mc-jump-error-cue-button"));
         });
 
         // THEN
@@ -1538,7 +1538,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         await act(async () => {
-            fireEvent.click(actualNode.getByTestId("sbte-jump-error-cue-button"));
+            fireEvent.click(actualNode.getByTestId("mc-jump-error-cue-button"));
         });
 
         // THEN
@@ -1547,7 +1547,7 @@ describe("SubtitleEdit", () => {
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         await act(async () => {
-            fireEvent.click(actualNode.getByTestId("sbte-jump-error-cue-button"));
+            fireEvent.click(actualNode.getByTestId("mc-jump-error-cue-button"));
         });
 
         // THEN

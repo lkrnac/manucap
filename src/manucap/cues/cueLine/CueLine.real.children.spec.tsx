@@ -70,7 +70,7 @@ describe("CueLine", () => {
             );
 
             // WHEN
-            fireEvent.click(actualNode.container.querySelectorAll(".sbte-glossary-match")[0]);
+            fireEvent.click(actualNode.container.querySelectorAll(".mc-glossary-match")[0]);
 
             // THEN
             expect(actualNode.container.outerHTML).toContain("Editing Line 1lineReplacement1");
@@ -123,7 +123,7 @@ describe("CueLine", () => {
             );
 
             // WHEN
-            fireEvent.click(actualNode.container.querySelectorAll(".sbte-glossary-match")[1]);
+            fireEvent.click(actualNode.container.querySelectorAll(".mc-glossary-match")[1]);
 
             // THEN
             expect(actualNode.container.outerHTML).toContain("Editing Line 1text replacement1/text replacement2/repl3");
@@ -181,7 +181,7 @@ describe("CueLine", () => {
             const newSelectionState = selectionState.set("anchorOffset", 5).set("focusOffset", 5) as SelectionState;
             setEditorStateFOR_TESTING(EditorState.forceSelection(editorStateFOR_TESTING, newSelectionState));
 
-            fireEvent.click(actualNode.container.querySelectorAll(".sbte-glossary-match")[0]);
+            fireEvent.click(actualNode.container.querySelectorAll(".mc-glossary-match")[0]);
 
             // THEN
             expect(actualNode.container.outerHTML).toContain("Editi#lineReplacement1#ng Line 1");

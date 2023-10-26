@@ -30,10 +30,10 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <div
                     style={{ display: "flex" }}
-                    className="testingClassName border-b border-blue-light-mostly-transparent sbte-click-cue-wrapper"
+                    className="testingClassName border-b border-blue-light-mostly-transparent mc-click-cue-wrapper"
                 >
                     <div
-                        className="sbte-cue-line-left-section"
+                        className="mc-cue-line-left-section"
                         style={{
                             flex: "1 1 300px",
                             display: "flex",
@@ -57,7 +57,7 @@ describe("CueView", () => {
                         style={{ flex: "1 1 70%" }}
                     >
                         <div
-                            className="sbte-cue-editor"
+                            className="mc-cue-editor"
                             style={{
                                 flexBasis: "auto",
                                 paddingLeft: "10px",
@@ -105,10 +105,10 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <div
                     style={{ display: "flex" }}
-                    className="border-b border-blue-light-mostly-transparent sbte-click-cue-wrapper"
+                    className="border-b border-blue-light-mostly-transparent mc-click-cue-wrapper"
                 >
                     <div
-                        className="sbte-cue-line-left-section"
+                        className="mc-cue-line-left-section"
                         style={{
                             flex: "1 1 300px",
                             display: "flex",
@@ -132,7 +132,7 @@ describe("CueView", () => {
                         style={{ flex: "1 1 70%" }}
                     >
                         <div
-                            className="sbte-cue-editor"
+                            className="mc-cue-editor"
                             style={{
                                 flexBasis: "auto",
                                 paddingLeft: "10px",
@@ -180,10 +180,10 @@ describe("CueView", () => {
             <Provider store={testingStore}>
                 <div
                     style={{ display: "flex" }}
-                    className="border-b border-blue-light-mostly-transparent sbte-click-cue-wrapper"
+                    className="border-b border-blue-light-mostly-transparent mc-click-cue-wrapper"
                 >
                     <div
-                        className="sbte-cue-line-left-section"
+                        className="mc-cue-line-left-section"
                         style={{
                             flex: "1 1 300px",
                             display: "flex",
@@ -207,7 +207,7 @@ describe("CueView", () => {
                         style={{ flex: "1 1 70%" }}
                     >
                         <div
-                            className="sbte-cue-editor"
+                            className="mc-cue-editor"
                             style={{
                                 flexBasis: "auto",
                                 paddingLeft: "10px",
@@ -265,7 +265,7 @@ describe("CueView", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedText = render(
             <div
-                className="sbte-cue-editor"
+                className="mc-cue-editor"
                 style={{
                     flexBasis: "auto",
                     paddingLeft: "10px",
@@ -299,7 +299,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.outerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.outerHTML)
             .toEqual(expectedText.container.innerHTML);
     });
 
@@ -310,7 +310,7 @@ describe("CueView", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedText = render(
             <div
-                className="sbte-cue-editor"
+                className="mc-cue-editor"
                 style={{
                     flexBasis: "auto",
                     paddingLeft: "10px",
@@ -342,7 +342,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.outerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.outerHTML)
             .toEqual(expectedText.container.innerHTML);
     });
 
@@ -356,7 +356,7 @@ describe("CueView", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedText = render(
             <div
-                className="sbte-cue-editor"
+                className="mc-cue-editor"
                 style={{
                     flexBasis: "auto",
                     paddingLeft: "10px",
@@ -388,7 +388,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.outerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.outerHTML)
             .toEqual(expectedText.container.innerHTML);
     });
 
@@ -402,7 +402,7 @@ describe("CueView", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedText = render(
             <div
-                className="sbte-cue-editor"
+                className="mc-cue-editor"
                 style={{
                     flexBasis: "auto",
                     paddingLeft: "10px",
@@ -434,7 +434,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.outerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.outerHTML)
             .toEqual(expectedText.container.innerHTML);
     });
 
@@ -448,7 +448,7 @@ describe("CueView", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedText = render(
             <div
-                className="sbte-cue-editor"
+                className="mc-cue-editor"
                 style={{
                     flexBasis: "auto",
                     paddingLeft: "10px",
@@ -480,7 +480,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.outerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.outerHTML)
             .toEqual(expectedText.container.innerHTML);
     });
 
@@ -494,7 +494,7 @@ describe("CueView", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedText = render(
             <div
-                className="sbte-cue-editor"
+                className="mc-cue-editor"
                 style={{
                     flexBasis: "auto",
                     paddingLeft: "10px",
@@ -525,7 +525,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.outerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.outerHTML)
             .toEqual(expectedText.container.innerHTML);
     });
 
@@ -542,9 +542,9 @@ describe("CueView", () => {
         const cues = [ cue ] as CueDto[];
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedSourceCueContent = "<i>Source <b><span onclick=\"pickSetGlossaryTerm('lineReplacement1')\" " +
-            "class=\"sbte-glossary-match\">Line</span></b></i> <br>Wrapped " +
+            "class=\"mc-glossary-match\">Line</span></b></i> <br>Wrapped " +
             "<span onclick=\"pickSetGlossaryTerm('text replacement1/text replacement2')\" " +
-            "class=\"sbte-glossary-match\">text</span>";
+            "class=\"mc-glossary-match\">text</span>";
 
         // WHEN
         const actualNode = render(
@@ -563,7 +563,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.innerHTML)
             .toEqual(expectedSourceCueContent);
     });
 
@@ -600,7 +600,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.innerHTML)
             .toEqual(expectedSourceCueContent);
     });
 
@@ -617,7 +617,7 @@ describe("CueView", () => {
         const cues = [ cue ] as CueDto[];
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedSourceCueContent = "This is <span onclick=\"pickSetGlossaryTerm('qualche')\" " +
-            "class=\"sbte-glossary-match\">some</span> sample text";
+            "class=\"mc-glossary-match\">some</span> sample text";
 
         // WHEN
         const actualNode = render(
@@ -636,7 +636,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.innerHTML)
             .toEqual(expectedSourceCueContent);
     });
 
@@ -671,7 +671,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.innerHTML)
             .toEqual(expectedSourceCueContent);
     });
 
@@ -759,9 +759,9 @@ describe("CueView", () => {
         const cues = [ cue ] as CueDto[];
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedSourceCueContent = "<i>Source <b><span onclick=\"pickSetGlossaryTerm('replacement')\" " +
-            "class=\"sbte-glossary-match\">Line</span></b></i> <br>Wrapped text " +
+            "class=\"mc-glossary-match\">Line</span></b></i> <br>Wrapped text " +
             "<span onclick=\"pickSetGlossaryTerm('replacement')\" " +
-            "class=\"sbte-glossary-match\">LINE</span>";
+            "class=\"mc-glossary-match\">LINE</span>";
 
         // WHEN
         const actualNode = render(
@@ -780,7 +780,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.innerHTML)
             .toEqual(expectedSourceCueContent);
     });
 
@@ -797,9 +797,9 @@ describe("CueView", () => {
         const cues = [ cue ] as CueDto[];
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedSourceCueContent = "<i><span onclick=\"pickSetGlossaryTerm('lineReplacement1')\" " +
-            "class=\"sbte-glossary-match\">Source Line</span></i> <br>" +
+            "class=\"mc-glossary-match\">Source Line</span></i> <br>" +
             "<span onclick=\"pickSetGlossaryTerm('text replacement1/text replacement2')\" " +
-            "class=\"sbte-glossary-match\">Wrapped text</span>";
+            "class=\"mc-glossary-match\">Wrapped text</span>";
 
         // WHEN
         const actualNode = render(
@@ -818,7 +818,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.innerHTML)
             .toEqual(expectedSourceCueContent);
     });
 
@@ -839,9 +839,9 @@ describe("CueView", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedSourceCueContent =
             "<span onclick=\"pickSetGlossaryTerm('connection;connecting')\" " +
-            "class=\"sbte-glossary-match\">Networking</span> and " +
+            "class=\"mc-glossary-match\">Networking</span> and " +
             "<span onclick=\"pickSetGlossaryTerm('extra different moretext')\" " +
-            "class=\"sbte-glossary-match\">Advanced Security Extra</span> Business Group";
+            "class=\"mc-glossary-match\">Advanced Security Extra</span> Business Group";
 
         // WHEN
         const actualNode = render(
@@ -860,7 +860,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.innerHTML)
             .toEqual(expectedSourceCueContent);
     });
 
@@ -881,9 +881,9 @@ describe("CueView", () => {
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const expectedSourceCueContent =
             "<span onclick=\"pickSetGlossaryTerm('connection;connecting')\" " +
-            "class=\"sbte-glossary-match\">Networking</span> and " +
+            "class=\"mc-glossary-match\">Networking</span> and " +
             "<span onclick=\"pickSetGlossaryTerm('extra different moretext')\" " +
-            "class=\"sbte-glossary-match\">Advanced Security Extra</span> Business Group";
+            "class=\"mc-glossary-match\">Advanced Security Extra</span> Business Group";
 
         // WHEN
         const actualNode = render(
@@ -902,7 +902,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.innerHTML)
             .toEqual(expectedSourceCueContent);
     });
 
@@ -945,7 +945,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.innerHTML)
             .toEqual(expectedSourceCueContent);
     });
 
@@ -988,7 +988,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.innerHTML)
             .toEqual(expectedSourceCueContent);
     });
 
@@ -1031,7 +1031,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.innerHTML)
             .toEqual(expectedSourceCueContent);
     });
 
@@ -1090,7 +1090,7 @@ describe("CueView", () => {
 
         // WHEN
         await act(async() => {
-            fireEvent.click(actualNode.container.querySelector(".sbte-actions-panel") as Element);
+            fireEvent.click(actualNode.container.querySelector(".mc-actions-panel") as Element);
         });
 
         // THEN
@@ -1134,7 +1134,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.innerHTML)
             .toEqual(expectedSourceCueContent);
         expect(testingStore.getState().cues[0].errors).toEqual(
             [CueError.LINE_COUNT_EXCEEDED, CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP]);
@@ -1179,7 +1179,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.innerHTML)
             .toEqual(expectedSourceCueContent);
         expect(testingStore.getState().cues[0].errors).toEqual(
             [CueError.LINE_COUNT_EXCEEDED, CueError.TIME_GAP_LIMIT_EXCEEDED, CueError.TIME_GAP_OVERLAP]);
@@ -1224,7 +1224,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.innerHTML)
             .toEqual(expectedSourceCueContent);
         expect(testingStore.getState().cues[0].errors).toBeUndefined();
         expect(testingStore.getState().cues[1].errors).toBeUndefined();
@@ -1267,7 +1267,7 @@ describe("CueView", () => {
         );
 
         // THEN
-        expect(actualNode.container.querySelector(".sbte-cue-editor")?.innerHTML)
+        expect(actualNode.container.querySelector(".mc-cue-editor")?.innerHTML)
             .toEqual(expectedSourceCueContent);
         expect(testingStore.getState().cues[0].errors).toEqual([]);
         expect(testingStore.getState().cues[1].errors).toEqual([]);

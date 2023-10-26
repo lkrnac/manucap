@@ -34,7 +34,7 @@ describe("SubtitleSpecificationsForm", () => {
                 <hr className="my-4" />
                 <div style={{ marginTop: "10px" }}>
                     <label><strong>Media Notes:&nbsp;</strong></label>
-                    <div className="sbte-subspec-freeform-text sbte-media-notes" />
+                    <div className="mc-subspec-freeform-text mc-media-notes" />
                 </div>
             </Provider>
         );
@@ -77,7 +77,7 @@ describe("SubtitleSpecificationsForm", () => {
                 <hr className="my-4" />
                 <div style={{ marginTop: "10px" }}>
                     <label><strong>Media Notes:&nbsp;</strong></label>
-                    <div className="sbte-subspec-freeform-text sbte-media-notes"><p>test notes</p></div>
+                    <div className="mc-subspec-freeform-text mc-media-notes"><p>test notes</p></div>
                 </div>
             </Provider>
         );
@@ -166,12 +166,12 @@ describe("SubtitleSpecificationsForm", () => {
                 </div>
                 <hr className="my-4" />
                 <label><strong>Comments:&nbsp;</strong></label>
-                <div className="sbte-subspec-freeform-text sbte-subspec-comments">
+                <div className="mc-subspec-freeform-text mc-subspec-comments">
                     <p>sample <strong>comment</strong> <del>test</del></p>
                 </div>
                 <div style={{ marginTop: "10px" }}>
                     <label><strong>Media Notes:&nbsp;</strong></label>
-                    <div className="sbte-subspec-freeform-text sbte-media-notes">
+                    <div className="mc-subspec-freeform-text mc-media-notes">
                         <p>media <strong>notes</strong> <del>test</del></p>
                     </div>
                 </div>
@@ -263,12 +263,12 @@ describe("SubtitleSpecificationsForm", () => {
                 </div>
                 <hr className="my-4" />
                 <label><strong>Comments:&nbsp;</strong></label>
-                <div className="sbte-subspec-freeform-text sbte-subspec-comments">
+                <div className="mc-subspec-freeform-text mc-subspec-comments">
                     <p>sample <strong>comment</strong> <del>test</del></p>
                 </div>
                 <div style={{ marginTop: "10px" }}>
                     <label><strong>Media Notes:&nbsp;</strong></label>
-                    <div className="sbte-subspec-freeform-text sbte-media-notes">
+                    <div className="mc-subspec-freeform-text mc-media-notes">
                         <p>media <strong>notes</strong> <del>test</del></p>
                     </div>
                 </div>
@@ -322,7 +322,7 @@ describe("SubtitleSpecificationsForm", () => {
 
             // THEN
 
-            expect(actualNode.container.querySelector(".sbte-media-notes a")?.outerHTML).toEqual(expectedMediaNotes);
+            expect(actualNode.container.querySelector(".mc-media-notes a")?.outerHTML).toEqual(expectedMediaNotes);
         });
 
         it("enforce link references to open in a new tab", () => {
@@ -342,7 +342,7 @@ describe("SubtitleSpecificationsForm", () => {
 
             // THEN
 
-            expect(actualNode.container.querySelector(".sbte-media-notes a")?.outerHTML).toEqual(expectedMediaNotes);
+            expect(actualNode.container.querySelector(".mc-media-notes a")?.outerHTML).toEqual(expectedMediaNotes);
         });
 
         it("enforce img links to open in a new tab", () => {
@@ -363,7 +363,7 @@ describe("SubtitleSpecificationsForm", () => {
 
             // THEN
 
-            expect(actualNode.container.querySelector(".sbte-media-notes a")?.outerHTML).toEqual(expectedMediaNotes);
+            expect(actualNode.container.querySelector(".mc-media-notes a")?.outerHTML).toEqual(expectedMediaNotes);
         });
     });
 
@@ -402,7 +402,7 @@ describe("SubtitleSpecificationsForm", () => {
 
             // THEN
 
-            expect(actualNode.container.querySelector(".sbte-subspec-comments a")?.outerHTML)
+            expect(actualNode.container.querySelector(".mc-subspec-comments a")?.outerHTML)
                 .toEqual(expectedMediaNotes);
         });
 
@@ -423,7 +423,7 @@ describe("SubtitleSpecificationsForm", () => {
 
             // THEN
 
-            expect(actualNode.container.querySelector(".sbte-subspec-comments a")?.outerHTML)
+            expect(actualNode.container.querySelector(".mc-subspec-comments a")?.outerHTML)
                 .toEqual(expectedMediaNotes);
         });
 
@@ -445,7 +445,7 @@ describe("SubtitleSpecificationsForm", () => {
 
             // THEN
 
-            expect(actualNode.container.querySelector(".sbte-subspec-comments a")?.outerHTML)
+            expect(actualNode.container.querySelector(".mc-subspec-comments a")?.outerHTML)
                 .toEqual(expectedMediaNotes);
         });
     });

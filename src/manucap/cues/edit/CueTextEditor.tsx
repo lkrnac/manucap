@@ -423,7 +423,7 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 <CueLineCounts cueIndex={props.index} vttCue={props.vttCue} editorState={decoratedEditorState} />
             </div>
             <div
-                className="sbte-sbte-form-control border-b border-blue-light-mostly-transparent"
+                className="mc-mc-form-control border-b border-blue-light-mostly-transparent"
                 style={{
                     display: "flex",
                     flexDirection: "row",
@@ -468,12 +468,12 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 </div>
                 <div style={{ flex: 0 }}>
                     { charCountPerLine.map((count: number, index: number) => (
-                        <div key={index}><span className="sbte-count-tag">{count} ch</span><br /></div>
+                        <div key={index}><span className="mc-count-tag">{count} ch</span><br /></div>
                     )) }
                 </div>
                 <div style={{ flex: 0, paddingRight: "5px" }}>
                     { wordCountPerLine.map((count: number, index: number) => (
-                        <div key={index}><span className="sbte-count-tag">{count} w</span><br /></div>
+                        <div key={index}><span className="mc-count-tag">{count} w</span><br /></div>
                     )) }
                 </div>
             </div>

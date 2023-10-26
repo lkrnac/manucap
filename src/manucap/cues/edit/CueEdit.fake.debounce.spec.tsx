@@ -114,16 +114,16 @@ describe("CueEdit", () => {
                                 paddingBottom: "15px"
                             }}
                             >
-                                <div className="sbte-time-editors">
+                                <div className="mc-time-editors">
                                     <input
                                         type="text"
-                                        className="sbte-form-control mousetrap block text-center"
+                                        className="mc-form-control mousetrap block text-center"
                                         value="00:00:00.000"
                                         onChange={(): void => undefined}
                                     />
                                     <input
                                         type="text"
-                                        className="sbte-form-control mousetrap block text-center"
+                                        className="mc-form-control mousetrap block text-center"
                                         value="00:00:02.000"
                                         onChange={(): void => undefined}
                                     />
@@ -131,15 +131,15 @@ describe("CueEdit", () => {
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
                                 <button
-                                    className="sbte-dropdown-toggle sbte-btn sbte-btn-light !font-normal"
+                                    className="mc-dropdown-toggle mc-btn mc-btn-light !font-normal"
                                     aria-controls="cueCategoryMenu"
                                     aria-haspopup
                                 >
                                     Dialogue
                                 </button>
                                 <button
-                                    className="sbte-position-toggle-button
-                                        sbte-dropdown-toggle sbte-btn sbte-btn-light"
+                                    className="mc-position-toggle-button
+                                        mc-dropdown-toggle mc-btn mc-btn-light"
                                     aria-controls="positionButtonMenu"
                                     aria-haspopup
                                 >
@@ -149,7 +149,7 @@ describe("CueEdit", () => {
                         </div>
                         <div
                             className="border-l border-blue-light-mostly-transparent flex items-center"
-                            data-testid="sbte-cue-editor-container"
+                            data-testid="mc-cue-editor-container"
                             style={{ flex: "1 1 70%" }}
                         >
                             <CueTextEditor
@@ -211,10 +211,10 @@ describe("CueEdit", () => {
                                     paddingBottom: "15px"
                                 }}
                             >
-                                <div className="sbte-time-editors">
+                                <div className="mc-time-editors">
                                     <div
                                         id="cueEditLine-0-startTime"
-                                        className="sbte-form-control text-center !border-blue-light-mostly-transparent
+                                        className="mc-form-control text-center !border-blue-light-mostly-transparent
                                             !text-gray-700 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
@@ -224,7 +224,7 @@ describe("CueEdit", () => {
                                     </div>
                                     <div
                                         id="cueEditLine-0-endTime"
-                                        className="sbte-form-control text-center !border-blue-light-mostly-transparent
+                                        className="mc-form-control text-center !border-blue-light-mostly-transparent
                                             !text-gray-700 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
@@ -236,15 +236,15 @@ describe("CueEdit", () => {
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
                                 <button
-                                    className="sbte-dropdown-toggle sbte-btn sbte-btn-light !font-normal"
+                                    className="mc-dropdown-toggle mc-btn mc-btn-light !font-normal"
                                     aria-controls="cueCategoryMenu"
                                     aria-haspopup
                                 >
                                     Dialogue
                                 </button>
                                 <button
-                                    className="sbte-position-toggle-button
-                                        sbte-dropdown-toggle sbte-btn sbte-btn-light"
+                                    className="mc-position-toggle-button
+                                        mc-dropdown-toggle mc-btn mc-btn-light"
                                     aria-controls="positionButtonMenu"
                                     aria-haspopup
                                 >
@@ -254,7 +254,7 @@ describe("CueEdit", () => {
                         </div>
                         <div
                             className="border-l border-blue-light-mostly-transparent flex items-center"
-                            data-testid="sbte-cue-editor-container"
+                            data-testid="mc-cue-editor-container"
                             style={{ flex: "1 1 70%" }}
                         >
                             <CueTextEditor
@@ -320,16 +320,16 @@ describe("CueEdit", () => {
                                     paddingBottom: "15px"
                                 }}
                             >
-                                <div className="sbte-time-editors">
+                                <div className="mc-time-editors">
                                     <input
                                         type="text"
-                                        className="sbte-form-control mousetrap block text-center"
+                                        className="mc-form-control mousetrap block text-center"
                                         value="00:00:00.000"
                                         onChange={(): void => undefined}
                                     />
                                     <input
                                         type="text"
-                                        className="sbte-form-control mousetrap block text-center"
+                                        className="mc-form-control mousetrap block text-center"
                                         value="00:00:02.000"
                                         onChange={(): void => undefined}
                                     />
@@ -337,15 +337,15 @@ describe("CueEdit", () => {
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }} >
                                 <button
-                                    className="sbte-dropdown-toggle sbte-btn sbte-btn-light !font-normal"
+                                    className="mc-dropdown-toggle mc-btn mc-btn-light !font-normal"
                                     aria-controls="cueCategoryMenu"
                                     aria-haspopup
                                 >
                                     Dialogue
                                 </button>
                                 <button
-                                    className="sbte-position-toggle-button
-                                        sbte-dropdown-toggle sbte-btn sbte-btn-light"
+                                    className="mc-position-toggle-button
+                                        mc-dropdown-toggle mc-btn mc-btn-light"
                                     aria-controls="positionButtonMenu"
                                     aria-haspopup
                                 >
@@ -355,7 +355,7 @@ describe("CueEdit", () => {
                         </div>
                         <div
                             className="border-l border-blue-light-mostly-transparent flex items-center"
-                            data-testid="sbte-cue-editor-container"
+                            data-testid="mc-cue-editor-container"
                             style={{ flex: "1 1 70%" }}
                         >
                             <CueTextEditor
@@ -1665,7 +1665,7 @@ describe("CueEdit", () => {
 
             // WHEN
             await act(async () => {
-                fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+                fireEvent.click(actualNode.container.querySelector(".mc-add-cue-button") as Element);
             });
 
             // THEN
@@ -1956,7 +1956,7 @@ describe("CueEdit", () => {
                 </Provider>
             );
 
-            const errorSpan = container.querySelectorAll(".sbte-text-with-error")[0] as Element;
+            const errorSpan = container.querySelectorAll(".mc-text-with-error")[0] as Element;
             fireEvent(errorSpan,
                 new MouseEvent("click", {
                     bubbles: true,
@@ -1986,7 +1986,7 @@ describe("CueEdit", () => {
                 </Provider>
             );
 
-            const errorSpan = container.querySelectorAll(".sbte-text-with-error")[0] as Element;
+            const errorSpan = container.querySelectorAll(".mc-text-with-error")[0] as Element;
             fireEvent(errorSpan,
                 new MouseEvent("click", {
                     bubbles: true,

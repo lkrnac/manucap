@@ -51,7 +51,7 @@ const Toolbox = (props: Props): ReactElement => {
     return (
         <div
             className="mt-6 space-x-2 flex items-stretch
-                z-100 justify-center sbte-button-toolbar"
+                z-100 justify-center mc-button-toolbar"
         >
             <SubtitleSpecificationsButton />
             <SearchReplaceButton />
@@ -66,7 +66,7 @@ const Toolbox = (props: Props): ReactElement => {
                 handleExport={props.handleExportFile}
             />
             <button
-                className="select-none sbte-dropdown-toggle sbte-btn sbte-btn-light flex
+                className="select-none mc-dropdown-toggle mc-btn mc-btn-light flex
                     items-center justify-center"
                 onClick={toggleMenu}
                 aria-controls="toolboxMenu"
@@ -76,7 +76,7 @@ const Toolbox = (props: Props): ReactElement => {
             </button>
             <Menu
                 id="toolboxMenu"
-                className="sbte-big-menu"
+                className="mc-big-menu"
                 appendTo={document.body.querySelector("#prime-react-dialogs") as HTMLDivElement}
                 ref={menu}
                 popup

@@ -17,7 +17,7 @@ describe("ExportSourceTrackCuesButton", () => {
            <button
                id="exportSourceFileBtn"
                type="button"
-               className="sbte-export-source-button sbte-btn sbte-btn-light"
+               className="mc-export-source-button mc-btn mc-btn-light"
                data-pr-tooltip="Export Source File"
                data-pr-position="top"
                data-pr-at="center+2 top-2"
@@ -47,7 +47,7 @@ describe("ExportSourceTrackCuesButton", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".sbte-export-source-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-export-source-button") as Element);
 
         // THEN
         expect(mockHandleExport).toHaveBeenCalled();

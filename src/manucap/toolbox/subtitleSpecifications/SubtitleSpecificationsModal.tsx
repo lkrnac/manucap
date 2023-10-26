@@ -24,7 +24,7 @@ const SubtitleSpecificationsModal = (props: Props): ReactElement => {
             dismissableMask
             resizable={false}
             footer={() => (
-                <button className="sbte-btn sbte-btn-primary" onClick={props.onClose}>
+                <button className="mc-btn mc-btn-primary" onClick={props.onClose}>
                     Close
                 </button>
             )}

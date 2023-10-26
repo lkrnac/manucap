@@ -123,13 +123,13 @@ const CuesList = (props: Props): ReactElement => {
                     ? <AddCueLineButton text="Start Captioning" cueIndex={-1} sourceCueIndexes={[]} />
                     : null
             }
-            <div ref={scrollRef} style={{ overflow: "auto" }} className="sbte-cue-list">
+            <div ref={scrollRef} style={{ overflow: "auto" }} className="mc-cue-list">
                 {
                     startIndex > 0
                         ? (
                             <button
                                 style={{ marginBottom: 5 }}
-                                className="sbte-btn sbte-btn-primary sbte-previous-button w-full"
+                                className="mc-btn mc-btn-primary mc-previous-button w-full"
                                 onClick={(): void => {
                                     dispatch(changeScrollPosition(
                                         ScrollPosition.PREVIOUS_PAGE,
@@ -166,7 +166,7 @@ const CuesList = (props: Props): ReactElement => {
                     endIndex < matchedCues.matchedCues.length
                         ? (
                             <button
-                                className="sbte-btn sbte-btn-primary sbte-next-button w-full"
+                                className="mc-btn mc-btn-primary mc-next-button w-full"
                                 onClick={(): void => {
                                     dispatch(changeScrollPosition(
                                         ScrollPosition.NEXT_PAGE,

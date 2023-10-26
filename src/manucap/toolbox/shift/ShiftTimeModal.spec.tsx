@@ -90,7 +90,7 @@ describe("ShiftTimesModal", () => {
                             <input
                                 name="shiftTime"
                                 type="number"
-                                className="sbte-form-control dotsub-track-line-shift mt-2"
+                                className="mc-form-control dotsub-track-line-shift mt-2"
                                 style={{ width: "120px" }}
                                 placeholder="0.000"
                                 step="0.100"
@@ -131,13 +131,13 @@ describe("ShiftTimesModal", () => {
                 <div className="p-dialog-footer">
                     <button
                         type="submit"
-                        className="dotsub-shift-modal-apply-button sbte-btn sbte-btn-primary"
+                        className="dotsub-shift-modal-apply-button mc-btn mc-btn-primary"
                     >
                         Apply
                     </button>
                     <button
                         type="button"
-                        className="dotsub-shift-modal-close-button sbte-btn sbte-btn-light"
+                        className="dotsub-shift-modal-close-button mc-btn mc-btn-light"
                     >
                         Close
                     </button>
@@ -193,7 +193,7 @@ describe("ShiftTimesModal", () => {
                                 <input
                                     name="shiftTime"
                                     type="number"
-                                    className="sbte-form-control dotsub-track-line-shift mt-2"
+                                    className="mc-form-control dotsub-track-line-shift mt-2"
                                     style={{ width: "120px" }}
                                     placeholder="0.000"
                                     step="0.100"
@@ -234,12 +234,12 @@ describe("ShiftTimesModal", () => {
                     <div className="p-dialog-footer">
                         <button
                             type="submit"
-                            className="dotsub-shift-modal-apply-button sbte-btn sbte-btn-primary"
+                            className="dotsub-shift-modal-apply-button mc-btn mc-btn-primary"
                         >Apply
                         </button>
                         <button
                             type="button"
-                            className="dotsub-shift-modal-close-button sbte-btn sbte-btn-light"
+                            className="dotsub-shift-modal-close-button mc-btn mc-btn-light"
                         >Close
                         </button>
                     </div>
@@ -398,7 +398,7 @@ describe("ShiftTimesModal", () => {
         );
 
         // WHEN
-        const closeBtn = container.querySelectorAll(".sbte-btn.sbte-btn-light")[0];
+        const closeBtn = container.querySelectorAll(".mc-btn.mc-btn-light")[0];
         fireEvent.click(closeBtn);
 
         // THEN

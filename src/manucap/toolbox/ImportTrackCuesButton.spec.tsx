@@ -15,7 +15,7 @@ describe("ImportTrackCuesButton", () => {
        const expectedNode = render(
            <button
                id="importFileBtn"
-               className="sbte-import-button sbte-btn sbte-btn-light"
+               className="mc-import-button mc-btn mc-btn-light"
                data-pr-tooltip="Import File"
                data-pr-position="top"
                data-pr-at="center+2 top-2"
@@ -41,7 +41,7 @@ describe("ImportTrackCuesButton", () => {
             <button
                 id="importFileBtn"
                 disabled
-                className="sbte-import-button sbte-btn sbte-btn-light"
+                className="mc-import-button mc-btn mc-btn-light"
                 data-pr-tooltip="Import File"
                 data-pr-position="top"
                 data-pr-at="center+2 top-2"
@@ -71,7 +71,7 @@ describe("ImportTrackCuesButton", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".sbte-import-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-import-button") as Element);
 
         // THEN
         expect(mockHandleImport).toHaveBeenCalled();

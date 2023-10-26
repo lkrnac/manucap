@@ -54,7 +54,7 @@ const CompleteButton = (props: Props): ReactElement => {
             </div>
             <button
                 type="button"
-                className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn"
+                className="mc-btn mc-btn-primary mc-complete-subtitle-mc-btn"
                 onClick={(): void => props.onComplete({ editingTrack, cues })}
                 disabled={props.disabled || props.saveState === "TRIGGERED"}
             >

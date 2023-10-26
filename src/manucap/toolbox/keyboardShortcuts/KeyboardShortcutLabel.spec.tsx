@@ -14,7 +14,7 @@ describe("KeyboardShortcutLabel", () => {
             <div style={{ display: "flex", alignItems: "center" }}>
                 <div className="flex items-center justify-center">
                     <h4 className="m-0">
-                        <span className="sbte-keyboard-label">
+                        <span className="mc-keyboard-label">
                             {commandKey}
                         </span>
                     </h4>
@@ -22,7 +22,7 @@ describe("KeyboardShortcutLabel", () => {
                 </div>
                 <div className="flex items-center justify-center">
                     <h4 className="m-0">
-                        <span className="sbte-keyboard-label">
+                        <span className="mc-keyboard-label">
                             Shift
                         </span>
                     </h4>
@@ -30,7 +30,7 @@ describe("KeyboardShortcutLabel", () => {
                 </div>
                 <div className="flex items-center justify-center">
                     <h4 className="m-0">
-                        <span className="sbte-keyboard-label">
+                        <span className="mc-keyboard-label">
                             o
                         </span>
                     </h4>
@@ -39,7 +39,7 @@ describe("KeyboardShortcutLabel", () => {
                     <span>&#160;&#160;&#160;or&#160;&#160;&#160;</span>
                     <div className="flex items-center justify-center">
                         <h4 className="m-0">
-                            <span className="sbte-keyboard-label">
+                            <span className="mc-keyboard-label">
                                 Alt
                             </span>
                         </h4>
@@ -47,7 +47,7 @@ describe("KeyboardShortcutLabel", () => {
                     </div>
                     <div className="flex items-center justify-center">
                         <h4 className="m-0">
-                            <span className="sbte-keyboard-label">
+                            <span className="mc-keyboard-label">
                                 Shift
                             </span>
                         </h4>
@@ -55,7 +55,7 @@ describe("KeyboardShortcutLabel", () => {
                     </div>
                     <div className="flex items-center justify-center">
                         <h4 className="m-0">
-                            <span className="sbte-keyboard-label">
+                            <span className="mc-keyboard-label">
                                 o
                             </span>
                         </h4>
@@ -87,7 +87,7 @@ describe("KeyboardShortcutLabel", () => {
             <div style={{ display: "flex", alignItems: "center" }}>
                 <div className="hidden items-center justify-center">
                     <h4 className="m-0">
-                        <span className="sbte-keyboard-label">
+                        <span className="mc-keyboard-label">
                             {commandKey}
                         </span>
                     </h4>
@@ -95,7 +95,7 @@ describe("KeyboardShortcutLabel", () => {
                 </div>
                 <div className="hidden items-center justify-center">
                     <h4 className="m-0">
-                        <span className="sbte-keyboard-label">
+                        <span className="mc-keyboard-label">
                             Shift
                         </span>
                     </h4>
@@ -103,7 +103,7 @@ describe("KeyboardShortcutLabel", () => {
                 </div>
                 <div className="flex items-center justify-center">
                     <h4 className="m-0">
-                        <span className="sbte-keyboard-label">
+                        <span className="mc-keyboard-label">
                             o
                         </span>
                     </h4>
@@ -112,7 +112,7 @@ describe("KeyboardShortcutLabel", () => {
                     <span>&#160;&#160;&#160;or&#160;&#160;&#160;</span>
                     <div className="hidden items-center justify-center">
                         <h4 className="m-0">
-                            <span className="sbte-keyboard-label">
+                            <span className="mc-keyboard-label">
                                 Alt
                             </span>
                         </h4>
@@ -120,7 +120,7 @@ describe("KeyboardShortcutLabel", () => {
                     </div>
                     <div className="hidden items-center justify-center">
                         <h4 className="m-0">
-                            <span className="sbte-keyboard-label">
+                            <span className="mc-keyboard-label">
                                 Shift
                             </span>
                         </h4>
@@ -128,7 +128,7 @@ describe("KeyboardShortcutLabel", () => {
                     </div>
                     <div className="flex items-center justify-center">
                         <h4 className="m-0">
-                            <span className="sbte-keyboard-label">
+                            <span className="mc-keyboard-label">
                                 o
                             </span>
                         </h4>

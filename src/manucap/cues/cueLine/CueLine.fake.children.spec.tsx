@@ -99,7 +99,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -167,7 +167,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -235,7 +235,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -256,7 +256,7 @@ describe("CueLine", () => {
                                 setGlossaryTerm={jest.fn()}
                                 matchedCuesIndex={0}
                             />
-                            <div className="sbte-cues-errors">• Max Characters Per Line Exceeded<br /></div>
+                            <div className="mc-cues-errors">• Max Characters Per Line Exceeded<br /></div>
                         </div>
                     </div>
                 </Provider>
@@ -304,7 +304,7 @@ describe("CueLine", () => {
 
             const expectedNode = render(
                 <Provider store={testingStore}>
-                    <div className="sbte-cue-line" style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
+                    <div className="mc-cue-line" style={{ display: "flex", paddingBottom: "5px", width: "100%" }}>
                         <CueLineFlap
                             rowIndex={0}
                             cueLineState={CueLineState.GOOD}
@@ -323,7 +323,7 @@ describe("CueLine", () => {
                                 setGlossaryTerm={jest.fn()}
                                 matchedCuesIndex={0}
                             />
-                            <div className="sbte-cues-errors">
+                            <div className="mc-cues-errors">
                                 {/*eslint-disable-next-line react/jsx-child-element-spacing */}
                                 • Invalid End Time<br />
                                 {/*eslint-disable-next-line react/jsx-child-element-spacing */}
@@ -373,7 +373,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -392,7 +392,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCuesWithIndexes[0].cue}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[]}
@@ -447,7 +447,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -458,7 +458,7 @@ describe("CueLine", () => {
                         />
                         <div
                             className="border-t border-r border-blue-light-mostly-transparent rounded-r
-                                sbte-edit-disabled"
+                                mc-edit-disabled"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -468,7 +468,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={matchedCuesCaptioningEditDisabled[0].targetCues[0].cue}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[]}
@@ -521,7 +521,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -540,7 +540,7 @@ describe("CueLine", () => {
                                 targetCueIndex={1}
                                 cue={sourceCues[1]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 mc-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[1]}
@@ -599,7 +599,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -618,7 +618,7 @@ describe("CueLine", () => {
                                 targetCueIndex={2}
                                 cue={sourceCues[2]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 mc-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[2]}
@@ -674,7 +674,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -685,7 +685,7 @@ describe("CueLine", () => {
                         />
                         <div
                             className="border-t border-r border-blue-light-mostly-transparent rounded-r
-                                sbte-edit-disabled"
+                                mc-edit-disabled"
                             style={{ display: "grid", width: "100%" }}
                         >
                             <CueView
@@ -695,7 +695,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
-                                className="bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 mc-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -709,7 +709,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={disabledTargetCue}
                                 targetCuesLength={1}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -760,7 +760,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -778,7 +778,7 @@ describe("CueLine", () => {
                                 matchedNestedIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 mc-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -788,7 +788,7 @@ describe("CueLine", () => {
                             <div
                                 style={{ display: "flex" }}
                                 className="bg-gray-0 border-b border-blue-light-mostly-transparent
-                                    sbte-click-cue-wrapper"
+                                    mc-click-cue-wrapper"
                             >
                                 <div
                                     style={{
@@ -801,7 +801,7 @@ describe("CueLine", () => {
                                 >
                                     <button
                                         style={{ maxHeight: "38px", margin: "5px", width: "300px" }}
-                                        className="sbte-btn sbte-btn-primary sbte-add-cue-button"
+                                        className="mc-btn mc-btn-primary mc-add-cue-button"
                                     >
                                         Insert cue
                                     </button>
@@ -856,7 +856,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -874,7 +874,7 @@ describe("CueLine", () => {
                                 matchedNestedIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 mc-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
@@ -884,7 +884,7 @@ describe("CueLine", () => {
                             <div
                                 style={{ display: "flex" }}
                                 className="bg-gray-0 border-b border-blue-light-mostly-transparent
-                                    sbte-click-cue-wrapper"
+                                    mc-click-cue-wrapper"
                             >
                                 <div
                                     style={{
@@ -897,7 +897,7 @@ describe("CueLine", () => {
                                 >
                                     <button
                                         style={{ maxHeight: "38px", margin: "5px", width: "300px" }}
-                                        className="sbte-btn sbte-btn-primary sbte-add-cue-button"
+                                        className="mc-btn mc-btn-primary mc-add-cue-button"
                                     >
                                         Insert cue
                                     </button>
@@ -941,7 +941,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -959,7 +959,7 @@ describe("CueLine", () => {
                                 matchedNestedIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={0}
-                                className="bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 mc-source-cue"
                                 showGlossaryTerms={false}
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={-1}
@@ -968,7 +968,7 @@ describe("CueLine", () => {
                             <div
                                 style={{ display: "flex" }}
                                 className="bg-gray-0 border-b border-blue-light-mostly-transparent
-                                    sbte-click-cue-wrapper"
+                                    mc-click-cue-wrapper"
                             >
                                 <div
                                     style={{
@@ -981,7 +981,7 @@ describe("CueLine", () => {
                                 >
                                     <button
                                         style={{ maxHeight: "38px", margin: "5px", width: "300px" }}
-                                        className="sbte-btn sbte-btn-primary sbte-add-cue-button"
+                                        className="mc-btn mc-btn-primary mc-add-cue-button"
                                     >
                                         Insert cue
                                     </button>
@@ -1032,7 +1032,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -1047,7 +1047,7 @@ describe("CueLine", () => {
                             <div
                                 style={{ display: "flex" }}
                                 className="bg-gray-0 border-b border-blue-light-mostly-transparent
-                                    sbte-click-cue-wrapper"
+                                    mc-click-cue-wrapper"
                             >
                                 <div style={{ width: "100%", minHeight: "78px" }} />
                             </div>
@@ -1058,7 +1058,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={1}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[]}
@@ -1110,7 +1110,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -1129,7 +1129,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
-                                className="bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 mc-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1143,7 +1143,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[1]}
                                 targetCuesLength={1}
-                                className="bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 mc-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1157,14 +1157,14 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[2]}
                                 targetCuesLength={1}
-                                className="bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 mc-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
                                 nextTargetCueIndex={0}
                                 editDisabled={false}
                             />
-                            <div className="sbte-cue-divider-good" />
+                            <div className="mc-cue-divider-good" />
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
@@ -1172,7 +1172,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={1}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1224,7 +1224,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -1247,14 +1247,14 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 mc-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                                 editDisabled={false}
                             />
-                            <div className="sbte-cue-divider-good" />
+                            <div className="mc-cue-divider-good" />
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
@@ -1262,7 +1262,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1276,7 +1276,7 @@ describe("CueLine", () => {
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1290,7 +1290,7 @@ describe("CueLine", () => {
                                 targetCueIndex={2}
                                 cue={targetCues[2]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1342,7 +1342,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -1361,7 +1361,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={1}
-                                className="bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 mc-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1375,7 +1375,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[1]}
                                 targetCuesLength={1}
-                                className="bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 mc-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
@@ -1389,14 +1389,14 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[2]}
                                 targetCuesLength={1}
-                                className="bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 mc-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0, 1, 2]}
                                 nextTargetCueIndex={0}
                                 editDisabled={false}
                             />
-                            <div className="sbte-cue-divider-good" />
+                            <div className="mc-cue-divider-good" />
                             <CueEdit index={0} cue={targetCues[0]} setGlossaryTerm={jest.fn()} matchedCuesIndex={0} />
                         </div>
                     </div>
@@ -1443,7 +1443,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -1466,14 +1466,14 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 mc-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                                 editDisabled={false}
                             />
-                            <div className="sbte-cue-divider-good" />
+                            <div className="mc-cue-divider-good" />
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
@@ -1481,7 +1481,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1496,7 +1496,7 @@ describe("CueLine", () => {
                                 targetCueIndex={2}
                                 cue={targetCues[2]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1560,7 +1560,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -1585,14 +1585,14 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 mc-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                                 editDisabled={false}
                             />
-                            <div className="sbte-cue-divider-error" />
+                            <div className="mc-cue-divider-error" />
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
@@ -1600,7 +1600,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1614,7 +1614,7 @@ describe("CueLine", () => {
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1628,7 +1628,7 @@ describe("CueLine", () => {
                                 targetCueIndex={2}
                                 cue={corruptedTargetCueWithIndex.cue}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1692,7 +1692,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -1717,14 +1717,14 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 mc-source-cue"
                                 showGlossaryTerms
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                                 editDisabled={false}
                             />
-                            <div className="sbte-cue-divider-error" />
+                            <div className="mc-cue-divider-error" />
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
@@ -1732,7 +1732,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCues[0]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1746,7 +1746,7 @@ describe("CueLine", () => {
                                 targetCueIndex={1}
                                 cue={targetCues[1]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -1759,7 +1759,7 @@ describe("CueLine", () => {
                                 setGlossaryTerm={jest.fn()}
                                 matchedCuesIndex={0}
                             />
-                            <div className="sbte-cues-errors">• Max Characters Per Line Exceeded<br /></div>
+                            <div className="mc-cues-errors">• Max Characters Per Line Exceeded<br /></div>
                         </div>
                     </div>
                 </Provider>
@@ -1815,7 +1815,7 @@ describe("CueLine", () => {
             );
 
             // WHEN
-            fireEvent.click(actualNode.container.querySelector(".sbte-edit-disabled") as Element);
+            fireEvent.click(actualNode.container.querySelector(".mc-edit-disabled") as Element);
 
             // THEN
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
@@ -1856,7 +1856,7 @@ describe("CueLine", () => {
             );
 
             // THEN
-            const insertCueButton = actualNode.container.querySelector(".sbte-add-cue-button") as Element;
+            const insertCueButton = actualNode.container.querySelector(".mc-add-cue-button") as Element;
             expect(insertCueButton).toBeNull();
         });
 
@@ -1893,7 +1893,7 @@ describe("CueLine", () => {
             );
 
             // WHEN
-            fireEvent.click(actualNode.container.querySelector(".sbte-click-cue-wrapper") as Element);
+            fireEvent.click(actualNode.container.querySelector(".mc-click-cue-wrapper") as Element);
 
             // THEN
             expect(testingStore.getState().editingCueIndex).toEqual(1);
@@ -1932,7 +1932,7 @@ describe("CueLine", () => {
             );
 
             // WHEN
-            fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+            fireEvent.click(actualNode.container.querySelector(".mc-add-cue-button") as Element);
 
             // THEN
             expect(testingStore.getState().editingCueIndex).toEqual(1);
@@ -1973,7 +1973,7 @@ describe("CueLine", () => {
             );
 
             // WHEN
-            fireEvent.click(actualNode.container.querySelector(".sbte-click-cue-wrapper") as Element);
+            fireEvent.click(actualNode.container.querySelector(".mc-click-cue-wrapper") as Element);
 
             // THEN
             expect(testingStore.getState().editingCueIndex).toEqual(1);
@@ -2033,7 +2033,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -2100,7 +2100,7 @@ describe("CueLine", () => {
             const expectedNode = render(
                 <Provider store={testingStore}>
                     <div
-                        className="sbte-cue-line"
+                        className="mc-cue-line"
                         style={{ display: "flex", paddingBottom: "5px", width: "100%" }}
                     >
                         <CueLineFlap
@@ -2120,14 +2120,14 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={sourceCues[0]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-source-cue"
+                                className="bg-gray-0 mc-source-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="LTR"
                                 sourceCuesIndexes={[0]}
                                 nextTargetCueIndex={0}
                                 editDisabled={false}
                             />
-                            <div className="sbte-cue-divider-good" />
+                            <div className="mc-cue-divider-good" />
                             <CueView
                                 rowIndex={0}
                                 isTargetCue
@@ -2135,7 +2135,7 @@ describe("CueLine", () => {
                                 targetCueIndex={0}
                                 cue={targetCuesWithComments[0]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -2150,7 +2150,7 @@ describe("CueLine", () => {
                                 targetCueIndex={1}
                                 cue={targetCuesWithComments[1]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}
@@ -2165,7 +2165,7 @@ describe("CueLine", () => {
                                 targetCueIndex={2}
                                 cue={targetCuesWithComments[2]}
                                 targetCuesLength={3}
-                                className="bg-gray-0 sbte-target-cue"
+                                className="bg-gray-0 mc-target-cue"
                                 showGlossaryTerms={false}
                                 languageDirection="RTL"
                                 sourceCuesIndexes={[0]}

@@ -85,7 +85,7 @@ describe("CuesList", () => {
                         }}
                     >
                         <AddCueLineButton text="Start Captioning" cueIndex={-1} sourceCueIndexes={[]} />
-                        <div style={{ overflow: "auto" }} className="sbte-cue-list" />
+                        <div style={{ overflow: "auto" }} className="mc-cue-list" />
                         <CueListToolbar
                             editingTrack={testingTranslationTrack}
                             onViewTrackHistory={jest.fn()}
@@ -148,7 +148,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                        <div style={{ overflow: "auto" }} className="mc-cue-list">
                             <CueLine
                                 key={0}
                                 data={matchedCuesShort[0]}
@@ -232,7 +232,7 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                        <div style={{ overflow: "auto" }} className="mc-cue-list">
                             {
                                 Array.from({ length: 105 }, (_element, index) => (
                                     <CueLine
@@ -250,7 +250,7 @@ describe("CuesList", () => {
                                 ))
                             }
                             <button
-                                className="sbte-btn sbte-btn-primary sbte-next-button w-full"
+                                className="mc-btn mc-btn-primary mc-next-button w-full"
                                 onClick={jest.fn()}
                             >
                                 Load Next Cues
@@ -302,10 +302,10 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                        <div style={{ overflow: "auto" }} className="mc-cue-list">
                             <button
                                 style={{ marginBottom: 5 }}
-                                className="sbte-btn sbte-btn-primary sbte-previous-button w-full"
+                                className="mc-btn mc-btn-primary mc-previous-button w-full"
                                 onClick={jest.fn()}
                             >
                                 Load Previous Cues
@@ -327,7 +327,7 @@ describe("CuesList", () => {
                                 ))
                             }
                             <button
-                                className="sbte-btn sbte-btn-primary sbte-next-button w-full"
+                                className="mc-btn mc-btn-primary mc-next-button w-full"
                                 onClick={jest.fn()}
                             >
                                 Load Next Cues
@@ -379,10 +379,10 @@ describe("CuesList", () => {
                             justifyContent: "space-between"
                         }}
                     >
-                        <div style={{ overflow: "auto" }} className="sbte-cue-list">
+                        <div style={{ overflow: "auto" }} className="mc-cue-list">
                             <button
                                 style={{ marginBottom: 5 }}
-                                className="sbte-btn sbte-btn-primary sbte-previous-button w-full"
+                                className="mc-btn mc-btn-primary mc-previous-button w-full"
                                 onClick={jest.fn()}
                             >
                                 Load Previous Cues
@@ -453,7 +453,7 @@ describe("CuesList", () => {
             );
 
             // WHEN
-            fireEvent.click(actualNode.container.querySelector(".sbte-previous-button") as Element);
+            fireEvent.click(actualNode.container.querySelector(".mc-previous-button") as Element);
 
             // THEN
             expect(testingStore.getState().focusedCueIndex).toEqual(99);
@@ -476,15 +476,15 @@ describe("CuesList", () => {
                 </Provider>
             );
             await act(async () => {
-                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".mc-cue-list")?.dispatchEvent(new Event("scroll"));
             });
             await act(async () => {
-                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".mc-cue-list")?.dispatchEvent(new Event("scroll"));
             });
 
             // WHEN
             await act(async () => {
-                fireEvent.click(actualNode.container.querySelector(".sbte-previous-button") as Element);
+                fireEvent.click(actualNode.container.querySelector(".mc-previous-button") as Element);
             });
 
             // THEN
@@ -509,7 +509,7 @@ describe("CuesList", () => {
             );
 
             // WHEN
-            fireEvent.click(actualNode.container.querySelector(".sbte-next-button") as Element);
+            fireEvent.click(actualNode.container.querySelector(".mc-next-button") as Element);
 
             // THEN
             expect(testingStore.getState().focusedCueIndex).toEqual(100);
@@ -532,15 +532,15 @@ describe("CuesList", () => {
                 </Provider>
             );
             await act(async () => {
-                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".mc-cue-list")?.dispatchEvent(new Event("scroll"));
             });
             await act(async () => {
-                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".mc-cue-list")?.dispatchEvent(new Event("scroll"));
             });
 
             // WHEN
             await act(async () => {
-                fireEvent.click(actualNode.container.querySelector(".sbte-next-button") as Element);
+                fireEvent.click(actualNode.container.querySelector(".mc-next-button") as Element);
             });
 
             // THEN
@@ -952,10 +952,10 @@ describe("CuesList", () => {
                 testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
             });
             await act(async () => {
-                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".mc-cue-list")?.dispatchEvent(new Event("scroll"));
             });
             await act(async () => {
-                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".mc-cue-list")?.dispatchEvent(new Event("scroll"));
             });
             await act(async () => {
                 testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
@@ -992,10 +992,10 @@ describe("CuesList", () => {
                 testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
             });
             await act(async () => {
-                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".mc-cue-list")?.dispatchEvent(new Event("scroll"));
             });
             await act(async () => {
-                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".mc-cue-list")?.dispatchEvent(new Event("scroll"));
             });
             await act(async () => {
                 testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
@@ -1034,10 +1034,10 @@ describe("CuesList", () => {
                 testingStore.dispatch(changeScrollPosition(ScrollPosition.LAST) as {} as AnyAction);
             });
             await act(async () => {
-                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".mc-cue-list")?.dispatchEvent(new Event("scroll"));
             });
             await act(async () => {
-                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".mc-cue-list")?.dispatchEvent(new Event("scroll"));
             });
 
             // THEN
@@ -1119,7 +1119,7 @@ describe("CuesList", () => {
                     getData: (): string => " Paste text to end",
                 }
             });
-            fireEvent.click(actualNode.container.querySelector(".sbte-delete-cue-button") as Element);
+            fireEvent.click(actualNode.container.querySelector(".mc-delete-cue-button") as Element);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.text).toEqual("Target Line 1");
@@ -1195,7 +1195,7 @@ describe("CuesList", () => {
             );
 
             // WHEN
-            fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+            fireEvent.click(actualNode.container.querySelector(".mc-add-cue-button") as Element);
             await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
             const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
             fireEvent.paste(editor, {
@@ -1245,7 +1245,7 @@ describe("CuesList", () => {
             );
 
             // WHEN
-            fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+            fireEvent.click(actualNode.container.querySelector(".mc-add-cue-button") as Element);
             const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
             fireEvent.paste(editor, {
                 clipboardData: {
@@ -1281,10 +1281,10 @@ describe("CuesList", () => {
             testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
             testingStore.dispatch(updateEditingCueIndex(50) as {} as AnyAction);
             await act(async () => {
-                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".mc-cue-list")?.dispatchEvent(new Event("scroll"));
             });
             await act(async () => {
-                actualNode.container.querySelector(".sbte-cue-list")?.dispatchEvent(new Event("scroll"));
+                actualNode.container.querySelector(".mc-cue-list")?.dispatchEvent(new Event("scroll"));
             });
 
             // THEN

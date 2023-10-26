@@ -35,19 +35,19 @@ describe("MergeEditor", () => {
                     Select the lines to be merged then click Merge
                 </label>
                 <button
-                    className="sbte-btn sbte-btn-light sbte-btn-sm !text-blue-light"
+                    className="mc-btn mc-btn-light mc-btn-sm !text-blue-light"
                     type="button"
                     style={{ marginLeft: "5px" }}
-                    data-testid="sbte-search-prev"
+                    data-testid="mc-search-prev"
                 >
                     Merge
                 </button>
                 <span style={{ flex: 1 }} />
                 <button
-                    className="sbte-btn sbte-btn-danger sbte-btn-sm"
+                    className="mc-btn mc-btn-danger mc-btn-sm"
                     type="button"
                     style={{ marginLeft: "5px" }}
-                    data-testid="sbte-close-merge-sbte-btn"
+                    data-testid="mc-close-merge-mc-btn"
                 >
                     <i className="fa-duotone fa-times-circle" />
                 </button>
@@ -88,7 +88,7 @@ describe("MergeEditor", () => {
                 <MergeEditor />
             </Provider>
         );
-        const closeButton = getByTestId("sbte-close-merge-sbte-btn");
+        const closeButton = getByTestId("mc-close-merge-mc-btn");
 
         // WHEN
         fireEvent.click(closeButton);

@@ -33,7 +33,7 @@ export const TimecodesLockToggle = (props: Props): ReactElement => {
                                 <i className="w-7 fa-duotone fa-clock text-blue-primary" />
                                 <span>Timecodes</span>
                             </span>
-                            <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-success">UNLOCKED</span>
+                            <span className="mc-badge font-medium mc-badge-sm mc-badge-success">UNLOCKED</span>
                         </>
                     )
                     : (
@@ -42,7 +42,7 @@ export const TimecodesLockToggle = (props: Props): ReactElement => {
                                 <i className="w-7 fa-duotone fa-clock text-blue-primary" />
                                 <span>Timecodes</span>
                             </span>
-                            <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-secondary">LOCKED</span>
+                            <span className="mc-badge font-medium mc-badge-sm mc-badge-secondary">LOCKED</span>
                         </>
                     )
             )}

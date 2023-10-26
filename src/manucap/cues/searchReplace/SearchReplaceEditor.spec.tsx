@@ -62,33 +62,33 @@ describe("SearchReplaceEditor", () => {
         const expectedNode = render(
             <div style={{ display: "flex", flexFlow: "row", marginBottom: "5px" }}>
                 <div style={{ display: "flex", flexFlow: "row", width: "50%" }}>
-                    <input type="text" defaultValue="" placeholder="Find" className="sbte-form-control !h-full" />
+                    <input type="text" defaultValue="" placeholder="Find" className="mc-form-control !h-full" />
                     <input
                         type="text"
                         defaultValue=""
                         placeholder="Replace"
-                        className="sbte-form-control !h-full"
+                        className="mc-form-control !h-full"
                         style={{ marginLeft: "5px" }}
                     />
                 </div>
                 <button
-                    className="sbte-btn sbte-btn-light sbte-btn-sm sbte-search-next"
+                    className="mc-btn mc-btn-light mc-btn-sm mc-search-next"
                     type="button"
                     style={{ marginLeft: "5px" }}
-                    data-testid="sbte-search-next"
+                    data-testid="mc-search-next"
                 >
                     <i className="fa-duotone fa-arrow-down" />
                 </button>
                 <button
-                    className="sbte-btn sbte-btn-light sbte-btn-sm sbte-search-prev"
+                    className="mc-btn mc-btn-light mc-btn-sm mc-search-prev"
                     type="button"
                     style={{ marginLeft: "5px" }}
-                    data-testid="sbte-search-prev"
+                    data-testid="mc-search-prev"
                 >
                     <i className="fa-duotone fa-arrow-up" />
                 </button>
                 <button
-                    className="sbte-btn sbte-btn-light sbte-btn-sm !text-blue-light"
+                    className="mc-btn mc-btn-light mc-btn-sm !text-blue-light"
                     type="button"
                     disabled
                     style={{ marginLeft: "5px" }}
@@ -96,14 +96,14 @@ describe("SearchReplaceEditor", () => {
                     Replace
                 </button>
                 <button
-                    className="sbte-btn sbte-btn-light sbte-btn-sm !text-blue-light"
+                    className="mc-btn mc-btn-light mc-btn-sm !text-blue-light"
                     type="button"
                     style={{ marginLeft: "5px", marginRight: "5px" }}
                 >
                     Replace All
                 </button>
                 <ToggleButton
-                    className="sbte-btn sbte-btn-light !text-blue-light"
+                    className="mc-btn mc-btn-light !text-blue-light"
                     toggled={false}
                     onClick={jest.fn()}
                     render={(): ReactElement => (<span>Aa</span>)}
@@ -111,10 +111,10 @@ describe("SearchReplaceEditor", () => {
                 />
                 <span style={{ flex: 1 }} />
                 <button
-                    className="sbte-btn sbte-btn-danger sbte-btn-sm"
+                    className="mc-btn mc-btn-danger mc-btn-sm"
                     type="button"
                     style={{ marginLeft: "5px" }}
-                    data-testid="sbte-close-search-replace-sbte-btn"
+                    data-testid="mc-close-search-replace-mc-btn"
                 >
                     <i className="fa-duotone fa-times-circle" />
                 </button>
@@ -192,7 +192,7 @@ describe("SearchReplaceEditor", () => {
                 <SearchReplaceEditor />
             </Provider>
         );
-        const closeButton = getByTestId("sbte-close-search-replace-sbte-btn");
+        const closeButton = getByTestId("mc-close-search-replace-mc-btn");
 
         // WHEN
         fireEvent.click(closeButton);
@@ -231,7 +231,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const nextButton = getByTestId("sbte-search-next");
+            const nextButton = getByTestId("mc-search-next");
 
             // WHEN
             fireEvent.click(nextButton);
@@ -262,7 +262,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const nextButton = getByTestId("sbte-search-next");
+            const nextButton = getByTestId("mc-search-next");
 
             // WHEN
             fireEvent.click(nextButton);
@@ -293,7 +293,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const nextButton = getByTestId("sbte-search-next");
+            const nextButton = getByTestId("mc-search-next");
 
             // WHEN
             fireEvent.click(nextButton);
@@ -324,7 +324,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const nextButton = getByTestId("sbte-search-next");
+            const nextButton = getByTestId("mc-search-next");
 
             // WHEN
             fireEvent.click(nextButton);
@@ -355,7 +355,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const nextButton = getByTestId("sbte-search-next");
+            const nextButton = getByTestId("mc-search-next");
             fireEvent.click(nextButton);
             fireEvent.click(nextButton);
 
@@ -388,7 +388,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const nextButton = getByTestId("sbte-search-next");
+            const nextButton = getByTestId("mc-search-next");
 
             // WHEN
             fireEvent.click(nextButton);
@@ -419,7 +419,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const nextButton = getByTestId("sbte-search-next");
+            const nextButton = getByTestId("mc-search-next");
             testingStore.dispatch(searchReplaceSlice.actions.setIndices({
                 matchedCueIndex: 10,
                 sourceCueIndex: 9007199254740991,
@@ -458,7 +458,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const nextButton = getByTestId("sbte-search-next");
+            const nextButton = getByTestId("mc-search-next");
             testingStore.dispatch(searchReplaceSlice.actions.setIndices({
                 matchedCueIndex: 10,
                 sourceCueIndex: 2,
@@ -497,7 +497,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const nextButton = getByTestId("sbte-search-next");
+            const nextButton = getByTestId("mc-search-next");
             testingStore.dispatch(searchReplaceSlice.actions.setIndices({
                 matchedCueIndex: 10,
                 sourceCueIndex: -1,
@@ -547,7 +547,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const nextButton = getByTestId("sbte-search-next");
+            const nextButton = getByTestId("mc-search-next");
 
             // WHEN
             fireEvent.click(nextButton);
@@ -573,7 +573,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const prevButton = getByTestId("sbte-search-prev");
+            const prevButton = getByTestId("mc-search-prev");
 
             // WHEN
             fireEvent.click(prevButton);
@@ -604,7 +604,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const prevButton = getByTestId("sbte-search-prev");
+            const prevButton = getByTestId("mc-search-prev");
 
             // WHEN
             fireEvent.click(prevButton);
@@ -635,7 +635,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const prevButton = getByTestId("sbte-search-prev");
+            const prevButton = getByTestId("mc-search-prev");
 
             // WHEN
             fireEvent.click(prevButton);
@@ -666,7 +666,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const prevButton = getByTestId("sbte-search-prev");
+            const prevButton = getByTestId("mc-search-prev");
 
             // WHEN
             fireEvent.click(prevButton);
@@ -697,7 +697,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const prevButton = getByTestId("sbte-search-prev");
+            const prevButton = getByTestId("mc-search-prev");
             fireEvent.click(prevButton);
             fireEvent.click(prevButton);
 
@@ -730,7 +730,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const prevButton = getByTestId("sbte-search-prev");
+            const prevButton = getByTestId("mc-search-prev");
 
             // WHEN
             fireEvent.click(prevButton);
@@ -761,7 +761,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const prevButton = getByTestId("sbte-search-prev");
+            const prevButton = getByTestId("mc-search-prev");
             testingStore.dispatch(searchReplaceSlice.actions.setIndices({
                 matchedCueIndex: 10,
                 sourceCueIndex: -1,
@@ -800,7 +800,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const prevButton = getByTestId("sbte-search-prev");
+            const prevButton = getByTestId("mc-search-prev");
             testingStore.dispatch(searchReplaceSlice.actions.setIndices({
                 matchedCueIndex: 10,
                 sourceCueIndex: 0,
@@ -839,7 +839,7 @@ describe("SearchReplaceEditor", () => {
                     <SearchReplaceEditor />
                 </Provider>
             );
-            const prevButton = getByTestId("sbte-search-prev");
+            const prevButton = getByTestId("mc-search-prev");
             testingStore.dispatch(searchReplaceSlice.actions.setIndices({
                 matchedCueIndex: 10,
                 sourceCueIndex: 9007199254740991,

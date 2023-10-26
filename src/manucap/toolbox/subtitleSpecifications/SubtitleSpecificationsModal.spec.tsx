@@ -44,11 +44,11 @@ describe("SubtitleSpecificationsModal", () => {
                             <hr className="my-4" />
                             <div style={{ marginTop: "10px" }}>
                                 <label><strong>Media Notes:&nbsp;</strong></label>
-                                <div className="sbte-subspec-freeform-text sbte-media-notes" />
+                                <div className="mc-subspec-freeform-text mc-media-notes" />
                             </div>
                         </div>
                         <div className="p-dialog-footer">
-                            <button className="sbte-btn sbte-btn-primary">Close</button>
+                            <button className="mc-btn mc-btn-primary">Close</button>
                         </div>
                     </div>
                 </div>

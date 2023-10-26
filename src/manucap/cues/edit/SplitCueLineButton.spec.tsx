@@ -45,7 +45,7 @@ describe("SplitCueLineButton", () => {
                 <button
                     id="splitCueLineButton-0"
                     style={{ maxHeight: "38px" }}
-                    className="sbte-btn sbte-btn-primary sbte-split-cue-button w-full sbte-btn-sm"
+                    className="mc-btn mc-btn-primary mc-split-cue-button w-full mc-btn-sm"
                     title="Unlock timecodes to enable"
                     data-pr-tooltip="Split this subtitle"
                     data-pr-position="left"
@@ -76,7 +76,7 @@ describe("SplitCueLineButton", () => {
                 <button
                     id="splitCueLineButton-0"
                     style={{ maxHeight: "38px" }}
-                    className="sbte-btn sbte-btn-primary sbte-split-cue-button w-full sbte-btn-sm"
+                    className="mc-btn mc-btn-primary mc-split-cue-button w-full mc-btn-sm"
                     title="Unlock timecodes to enable"
                     data-pr-tooltip="Split this subtitle"
                     data-pr-position="left"
@@ -109,7 +109,7 @@ describe("SplitCueLineButton", () => {
                 <button
                     id="splitCueLineButton-0"
                     style={{ maxHeight: "38px" }}
-                    className="sbte-btn sbte-btn-primary sbte-split-cue-button w-full sbte-btn-sm"
+                    className="mc-btn mc-btn-primary mc-split-cue-button w-full mc-btn-sm"
                     disabled
                     title="Unlock timecodes to enable"
                     data-pr-tooltip="Split this subtitle"
@@ -150,7 +150,7 @@ describe("SplitCueLineButton", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".sbte-split-cue-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-split-cue-button") as Element);
 
         // THEN
         expect(testingStore.getState().cues.length).toEqual(3);

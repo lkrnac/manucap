@@ -36,8 +36,8 @@ const CueComments = (props: Props): ReactElement => {
         <>
             <button
                 id={`deleteCueCommentButton-${cueIndex}-${commentIndex}`}
-                data-testid="sbte-delete-cue-comment-button"
-                className="sbte-btn sbte-btn-primary sbte-btn-xs sbte-delete-cue-comment-button"
+                data-testid="mc-delete-cue-comment-button"
+                className="mc-btn mc-btn-primary mc-btn-xs mc-delete-cue-comment-button"
                 data-pr-tooltip="Delete comment"
                 data-pr-position="left"
                 data-pr-at="left top+10"
@@ -73,7 +73,7 @@ const CueComments = (props: Props): ReactElement => {
                     >
                         <div>
                             <span
-                                className="sbte-cue-comment-user"
+                                className="mc-cue-comment-user"
                                 style={{
                                     borderRadius: "5px",
                                     padding: "2px 6px",
@@ -136,7 +136,7 @@ const CueComments = (props: Props): ReactElement => {
                 />
                 <button
                     type="button"
-                    className="sbte-btn sbte-btn-xs sbte-btn-primary"
+                    className="mc-btn mc-btn-xs mc-btn-primary"
                     style={{ float: "right", marginLeft: "5px" }}
                     onClick={addNewComment}
                     disabled={!text}

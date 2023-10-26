@@ -553,7 +553,7 @@ describe("CueTextEditor", () => {
                 />
             </Provider>
         );
-        const errorSpan = container.querySelectorAll(".sbte-text-with-error")[0] as Element;
+        const errorSpan = container.querySelectorAll(".mc-text-with-error")[0] as Element;
         fireEvent.click(errorSpan);
 
         //WHEN

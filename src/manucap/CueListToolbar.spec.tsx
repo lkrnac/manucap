@@ -36,14 +36,14 @@ describe("CueListToolbar", () => {
             <Provider store={testingStore}>
                 <div className="space-x-2 flex items-center mt-1.5">
                     <button
-                        className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
+                        className="mc-btn mc-btn-primary mc-view-all-tracks-mc-btn"
                         type="button"
                     >
                         View Track History
                     </button>
                     <button
                         id="jumpToFirstButton"
-                        className="sbte-btn sbte-btn-light sbte-jump-to-first-button"
+                        className="mc-btn mc-btn-light mc-jump-to-first-button"
                         type="button"
                         data-pr-tooltip="Scroll to top"
                         data-pr-position="top"
@@ -53,7 +53,7 @@ describe("CueListToolbar", () => {
                     </button>
                     <button
                         id="jumpToLastButton"
-                        className="sbte-btn sbte-btn-light sbte-jump-to-last-button"
+                        className="mc-btn mc-btn-light mc-jump-to-last-button"
                         type="button"
                         data-pr-tooltip="Scroll to bottom"
                         data-pr-position="top"
@@ -63,8 +63,8 @@ describe("CueListToolbar", () => {
                     </button>
                     <button
                         id="editCueButton"
-                        data-testid="sbte-jump-to-edit-cue-button"
-                        className="sbte-btn sbte-btn-light"
+                        data-testid="mc-jump-to-edit-cue-button"
+                        className="mc-btn mc-btn-light"
                         type="button"
                         data-pr-tooltip="Scroll to currently editing subtitle"
                         data-pr-position="top"
@@ -74,8 +74,8 @@ describe("CueListToolbar", () => {
                     </button>
                     <button
                         id="playbackCueButton"
-                        data-testid="sbte-jump-to-playback-cue-button"
-                        className="sbte-btn sbte-btn-light"
+                        data-testid="mc-jump-to-playback-cue-button"
+                        className="mc-btn mc-btn-light"
                         type="button"
                         data-pr-tooltip="Scroll to subtitle in playback position"
                         data-pr-position="top"
@@ -86,8 +86,8 @@ describe("CueListToolbar", () => {
                     <button
                         hidden
                         id="translatedCueButton"
-                        data-testid="sbte-jump-to-last-translated-cue-button"
-                        className="sbte-btn sbte-btn-light"
+                        data-testid="mc-jump-to-last-translated-cue-button"
+                        className="mc-btn mc-btn-light"
                         type="button"
                         data-pr-tooltip="Scroll to last translated subtitle"
                         data-pr-position="top"
@@ -97,8 +97,8 @@ describe("CueListToolbar", () => {
                     </button>
                     <button
                         id="cueErrorButton"
-                        data-testid="sbte-jump-error-cue-button"
-                        className="sbte-btn sbte-btn-light"
+                        data-testid="mc-jump-error-cue-button"
+                        className="mc-btn mc-btn-light"
                         type="button"
                         data-pr-tooltip="Scroll to next subtitle error"
                         data-pr-position="top"
@@ -116,7 +116,7 @@ describe("CueListToolbar", () => {
                         </div>
                         <button
                             type="button"
-                            className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn"
+                            className="mc-btn mc-btn-primary mc-complete-subtitle-mc-btn"
                         >
                             Complete
                         </button>
@@ -147,14 +147,14 @@ describe("CueListToolbar", () => {
             <Provider store={testingStore}>
                 <div className="space-x-2 flex items-center mt-1.5">
                     <button
-                        className="sbte-btn sbte-btn-primary sbte-view-all-tracks-sbte-btn"
+                        className="mc-btn mc-btn-primary mc-view-all-tracks-mc-btn"
                         type="button"
                     >
                         View Track History
                     </button>
                     <button
                         id="jumpToFirstButton"
-                        className="sbte-btn sbte-btn-light sbte-jump-to-first-button"
+                        className="mc-btn mc-btn-light mc-jump-to-first-button"
                         type="button"
                         data-pr-tooltip="Scroll to top"
                         data-pr-position="top"
@@ -164,7 +164,7 @@ describe("CueListToolbar", () => {
                     </button>
                     <button
                         id="jumpToLastButton"
-                        className="sbte-btn sbte-btn-light sbte-jump-to-last-button"
+                        className="mc-btn mc-btn-light mc-jump-to-last-button"
                         type="button"
                         data-pr-tooltip="Scroll to bottom"
                         data-pr-position="top"
@@ -174,8 +174,8 @@ describe("CueListToolbar", () => {
                     </button>
                     <button
                         id="editCueButton"
-                        data-testid="sbte-jump-to-edit-cue-button"
-                        className="sbte-btn sbte-btn-light"
+                        data-testid="mc-jump-to-edit-cue-button"
+                        className="mc-btn mc-btn-light"
                         type="button"
                         data-pr-tooltip="Scroll to currently editing subtitle"
                         data-pr-position="top"
@@ -185,8 +185,8 @@ describe("CueListToolbar", () => {
                     </button>
                     <button
                         id="playbackCueButton"
-                        data-testid="sbte-jump-to-playback-cue-button"
-                        className="sbte-btn sbte-btn-light"
+                        data-testid="mc-jump-to-playback-cue-button"
+                        className="mc-btn mc-btn-light"
                         type="button"
                         data-pr-tooltip="Scroll to subtitle in playback position"
                         data-pr-position="top"
@@ -197,8 +197,8 @@ describe("CueListToolbar", () => {
                     <button
                         hidden
                         id="translatedCueButton"
-                        data-testid="sbte-jump-to-last-translated-cue-button"
-                        className="sbte-btn sbte-btn-light"
+                        data-testid="mc-jump-to-last-translated-cue-button"
+                        className="mc-btn mc-btn-light"
                         type="button"
                         data-pr-tooltip="Scroll to last translated subtitle"
                         data-pr-position="top"
@@ -208,8 +208,8 @@ describe("CueListToolbar", () => {
                     </button>
                     <button
                         id="cueErrorButton"
-                        data-testid="sbte-jump-error-cue-button"
-                        className="sbte-btn sbte-btn-light"
+                        data-testid="mc-jump-error-cue-button"
+                        className="mc-btn mc-btn-light"
                         type="button"
                         data-pr-tooltip="Scroll to next subtitle error"
                         data-pr-position="top"
@@ -226,7 +226,7 @@ describe("CueListToolbar", () => {
                         </div>
                         <button
                             type="button"
-                            className="sbte-btn sbte-btn-primary sbte-complete-subtitle-sbte-btn"
+                            className="mc-btn mc-btn-primary mc-complete-subtitle-mc-btn"
                             disabled
                         >
                             Complete

@@ -133,14 +133,14 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                 }}
             >
                 <div style={{ display: "flex", flexDirection:"column", paddingBottom: "15px" }}>
-                    <div className="sbte-time-editors">
+                    <div className="mc-time-editors">
                         {
                             isTranslation && !timecodesUnlocked
                             ? (
                                 <>
                                     <div
                                         id={`${cueLineId}-startTime`}
-                                        className="sbte-form-control text-center !border-blue-light-mostly-transparent
+                                        className="mc-form-control text-center !border-blue-light-mostly-transparent
                                             !text-gray-700 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
@@ -150,7 +150,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
                                     </div>
                                     <div
                                         id={`${cueLineId}-endTime`}
-                                        className="sbte-form-control text-center !border-blue-light-mostly-transparent
+                                        className="mc-form-control text-center !border-blue-light-mostly-transparent
                                             !text-gray-700 disabled"
                                         data-pr-tooltip="Timecodes are locked"
                                         data-pr-position="right"
@@ -214,7 +214,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
             </div>
             <div
                 className="border-l border-blue-light-mostly-transparent flex items-center"
-                data-testid="sbte-cue-editor-container"
+                data-testid="mc-cue-editor-container"
                 style={{ flex: "1 1 70%" }}
             >
                 <CueTextEditor

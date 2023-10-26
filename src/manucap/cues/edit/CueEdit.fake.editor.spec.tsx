@@ -85,7 +85,7 @@ describe("CueEdit", () => {
             );
 
             // THEN
-            const editorContainer = actualNode.getByTestId("sbte-cue-editor-container");
+            const editorContainer = actualNode.getByTestId("mc-cue-editor-container");
             expect(editorContainer.innerHTML).toContain(
                  "<div>CueTextEditor: {\"index\":1,\"vttCue\":{\"hasBeenReset\":false,\"id\":\"\"," +
                  "\"pauseOnExit\":false,\"startTime\":3,\"endTime\":7,\"text\":\"Caption Line 2\",\"region\":null," +
@@ -113,7 +113,7 @@ describe("CueEdit", () => {
             );
 
             // THEN
-            const editorContainer = actualNode.getByTestId("sbte-cue-editor-container");
+            const editorContainer = actualNode.getByTestId("mc-cue-editor-container");
             expect(editorContainer.innerHTML).toContain(
                  "<div>CueTextEditor: {\"index\":1,\"vttCue\":{\"hasBeenReset\":false,\"id\":\"\"," +
                  "\"pauseOnExit\":false,\"startTime\":3,\"endTime\":7,\"text\":\"Caption Line 2\",\"region\":null," +
@@ -123,7 +123,7 @@ describe("CueEdit", () => {
             );
             // noinspection HtmlUnknownAttribute
             expect(document.activeElement?.outerHTML).toEqual(
-                "<input type=\"text\" class=\"sbte-form-control mousetrap block text-center\" value=\"00:00:03.000\">"
+                "<input type=\"text\" class=\"mc-form-control mousetrap block text-center\" value=\"00:00:03.000\">"
             );
         });
     });

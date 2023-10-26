@@ -88,23 +88,23 @@ const SearchReplaceEditor = (): ReactElement | null => {
                     type="text"
                     value={searchReplace?.find}
                     placeholder="Find"
-                    className="sbte-form-control !h-full"
+                    className="mc-form-control !h-full"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>): AppThunk => dispatch(setFind(e.target.value))}
                 />
                 <input
                     type="text"
                     value={replacement}
                     placeholder="Replace"
-                    className="sbte-form-control !h-full"
+                    className="mc-form-control !h-full"
                     style={{ marginLeft: "5px" }}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>): void => setReplacement(e.target.value)}
                 />
             </div>
             <button
-                className="sbte-btn sbte-btn-light sbte-btn-sm sbte-search-next"
+                className="mc-btn mc-btn-light mc-btn-sm mc-search-next"
                 type="button"
                 style={{ marginLeft: "5px" }}
-                data-testid="sbte-search-next"
+                data-testid="mc-search-next"
                 onClick={(): void => {
                     dispatch(searchNextCues());
                 }}
@@ -112,10 +112,10 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 <i className="fa-duotone fa-arrow-down" />
             </button>
             <button
-                className="sbte-btn sbte-btn-light sbte-btn-sm sbte-search-prev"
+                className="mc-btn mc-btn-light mc-btn-sm mc-search-prev"
                 type="button"
                 style={{ marginLeft: "5px" }}
-                data-testid="sbte-search-prev"
+                data-testid="mc-search-prev"
                 onClick={(): void => {
                     dispatch(searchPreviousCues());
                 }}
@@ -123,7 +123,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 <i className="fa-duotone fa-arrow-up" />
             </button>
             <button
-                className="sbte-btn sbte-btn-light sbte-btn-sm !text-blue-light"
+                className="mc-btn mc-btn-light mc-btn-sm !text-blue-light"
                 type="button"
                 disabled={editingCueIndex === -1}
                 style={{ marginLeft: "5px" }}
@@ -134,7 +134,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 Replace
             </button>
             <button
-                className="sbte-btn sbte-btn-light sbte-btn-sm !text-blue-light"
+                className="mc-btn mc-btn-light mc-btn-sm !text-blue-light"
                 type="button"
                 style={{ marginLeft: "5px", marginRight: "5px" }}
                 onClick={(): void => searchReplaceAll(dispatch, cues, searchReplace, replacement)}
@@ -142,7 +142,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                 Replace All
             </button>
             <ToggleButton
-                className="sbte-btn sbte-btn-light !text-blue-light"
+                className="mc-btn mc-btn-light !text-blue-light"
                 toggled={searchReplace.matchCase}
                 onClick={(): void => {
                     dispatch(setMatchCase(!searchReplace.matchCase));
@@ -152,10 +152,10 @@ const SearchReplaceEditor = (): ReactElement | null => {
             />
             <span style={{ flex: 1 }} />
             <button
-                className="sbte-btn sbte-btn-danger sbte-btn-sm"
+                className="mc-btn mc-btn-danger mc-btn-sm"
                 type="button"
                 style={{ marginLeft: "5px" }}
-                data-testid="sbte-close-search-replace-sbte-btn"
+                data-testid="mc-close-search-replace-mc-btn"
                 onClick={(): void => {
                     dispatch(showSearchReplace(false));
                 }}

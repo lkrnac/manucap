@@ -29,7 +29,7 @@ describe("DeleteCueLineButton", () => {
                 <button
                     id="deleteCueLineButton0"
                     style={{ maxHeight: "38px" }}
-                    className="sbte-btn sbte-btn-primary sbte-btn-sm sbte-delete-cue-button w-full"
+                    className="mc-btn mc-btn-primary mc-btn-sm mc-delete-cue-button w-full"
                     data-pr-tooltip="Delete this subtitle"
                     data-pr-position="left"
                     data-pr-at="left center"
@@ -64,7 +64,7 @@ describe("DeleteCueLineButton", () => {
         );
 
         // WHEN
-        actualNode.find(".sbte-delete-cue-button").simulate("click");
+        actualNode.find(".mc-delete-cue-button").simulate("click");
 
         // THEN
         expect(testingStore.getState().cues.length).toEqual(1);
@@ -91,7 +91,7 @@ describe("DeleteCueLineButton", () => {
         );
 
         // WHEN
-        actualNode.find(".sbte-delete-cue-button").simulate("click");
+        actualNode.find(".mc-delete-cue-button").simulate("click");
 
         // THEN
         expect(deleteCueMock).toHaveBeenCalledWith(

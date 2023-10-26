@@ -45,7 +45,7 @@ describe("SpellCheckerIssue", () => {
         // GIVEN
         const expectedNode = mount(
             <span
-                className="sbte-text-with-error"
+                className="mc-text-with-error"
                 aria-controls="spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-15-18"
                 aria-haspopup="true"
             >
@@ -132,7 +132,7 @@ describe("SpellCheckerIssue", () => {
         const expectedNode = mount(
             <div
                 id="spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-15-18"
-                className="p-menu p-component p-menu-overlay spellcheck-menu sbte-big-menu
+                className="p-menu p-component p-menu-overlay spellcheck-menu mc-big-menu
                      p-0 shadow-md p-connected-overlay-exit p-connected-overlay-exit-active"
             >
                 <ul className="p-menu-list p-reset" role="menu">
@@ -190,7 +190,7 @@ describe("SpellCheckerIssue", () => {
         );
 
         // WHEN
-        actualNode.find(".sbte-text-with-error").simulate("click");
+        actualNode.find(".mc-text-with-error").simulate("click");
 
         // THEN
         const actual = removeSelectCssClass(actualNode.find( ".spellcheck-menu").at(0).html());
@@ -203,7 +203,7 @@ describe("SpellCheckerIssue", () => {
         const expectedNode = mount(
             <div
                 id="spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-15-18"
-                className="p-menu p-component p-menu-overlay spellcheck-menu sbte-big-menu
+                className="p-menu p-component p-menu-overlay spellcheck-menu mc-big-menu
                      p-0 shadow-md p-connected-overlay-exit p-connected-overlay-exit-active"
             >
                 <ul className="p-menu-list p-reset" role="menu">
@@ -245,7 +245,7 @@ describe("SpellCheckerIssue", () => {
         );
 
         // WHEN
-        actualNode.find(".sbte-text-with-error").simulate("click");
+        actualNode.find(".mc-text-with-error").simulate("click");
 
         // THEN
         const actual = removeSelectCssClass(actualNode.find( ".spellcheck-menu").at(0).html());
@@ -288,7 +288,7 @@ describe("SpellCheckerIssue", () => {
         );
 
         // WHEN
-        actualNode.find(".sbte-text-with-error").simulate("click");
+        actualNode.find(".mc-text-with-error").simulate("click");
         actualNode.findWhere(spellCheckOptionPredicate(2)).simulate("click");
 
         // THEN

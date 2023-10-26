@@ -128,7 +128,7 @@ const createExpectedNode = (
             </div>
         </div>
         <div
-            className="sbte-sbte-form-control border-b border-blue-light-mostly-transparent"
+            className="mc-mc-form-control border-b border-blue-light-mostly-transparent"
             style={{
                 display: "flex",
                 flexDirection: "row",
@@ -144,12 +144,12 @@ const createExpectedNode = (
             </div>
             <div style={{ flex: 0 }}>
                 { chars.map((character: number, index: number) => (
-                    <div key={index}><span className="sbte-count-tag">{character} ch</span><br /></div>
+                    <div key={index}><span className="mc-count-tag">{character} ch</span><br /></div>
                 )) }
             </div>
             <div style={{ flex: 0, paddingRight: "5px" }}>
                 { words.map((word: number, index: number) => (
-                    <div key={index}><span className="sbte-count-tag">{word} w</span><br /></div>
+                    <div key={index}><span className="mc-count-tag">{word} w</span><br /></div>
                 )) }
             </div>
         </div>
@@ -159,7 +159,7 @@ const createExpectedNode = (
         >
             <button
                 id="inlineStyle-BOLD0"
-                className="sbte-inline-style-btn sbte-btn sbte-btn-primary"
+                className="mc-inline-style-btn mc-btn mc-btn-primary"
                 data-pr-tooltip="BOLD"
                 data-pr-position="top"
                 data-pr-at="center top"
@@ -168,7 +168,7 @@ const createExpectedNode = (
             </button>
             <button
                 id="inlineStyle-ITALIC0"
-                className="sbte-inline-style-btn sbte-btn sbte-btn-primary"
+                className="mc-inline-style-btn mc-btn mc-btn-primary"
                 data-pr-tooltip="ITALIC"
                 data-pr-position="top"
                 data-pr-at="center top"
@@ -177,7 +177,7 @@ const createExpectedNode = (
             </button>
             <button
                 id="inlineStyle-UNDERLINE0"
-                className="sbte-inline-style-btn sbte-btn sbte-btn-primary"
+                className="mc-inline-style-btn mc-btn mc-btn-primary"
                 data-pr-tooltip="UNDERLINE"
                 data-pr-position="top"
                 data-pr-at="center top"
@@ -948,14 +948,14 @@ describe("CueTextEditor", () => {
             const vttCue = new VTTCue(0, 1, "some <i>HTML</i> <b>Text</b> sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
             const expectedContent = "<span data-offset-key=\"\"><span data-text=\"true\">some </span></span>" +
-                "<span class=\"sbte-text-with-error\" " +
+                "<span class=\"mc-text-with-error\" " +
                 "aria-controls=\"spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-5-9\" aria-haspopup=\"true\">" +
                 "<span data-offset-key=\"\" style=\"font-style: italic;\">" +
                 "<span data-text=\"true\">HTML</span></span></span>" +
                 "<span data-offset-key=\"\"><span data-text=\"true\"> </span></span>" +
                 "<span data-offset-key=\"\" style=\"font-weight: bold;\"><span data-text=\"true\">Text</span></span>" +
                 "<span data-offset-key=\"\"><span data-text=\"true\"> </span></span>" +
-                "<span class=\"sbte-text-with-error\" " +
+                "<span class=\"mc-text-with-error\" " +
                 "aria-controls=\"spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-15-21\" aria-haspopup=\"true\">" +
                 "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">sample</span></span>";
@@ -1003,7 +1003,7 @@ describe("CueTextEditor", () => {
                 const vttCue = new VTTCue(0, 1, "t");
                 const editUuid = testingStore.getState().cues[0].editUuid;
                 const expectedContent = "<span data-offset-key=\"\"><span data-text=\"true\">t\n</span></span>" +
-                    "<span class=\"sbte-text-with-error\"" +
+                    "<span class=\"mc-text-with-error\"" +
                     " aria-controls=\"spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-2-6\" " +
                     "aria-haspopup=\"true\"><span data-offset-key=\"\">" +
                     "<span data-text=\"true\">ffff</span></span></span>";
@@ -1062,7 +1062,7 @@ describe("CueTextEditor", () => {
                 const editUuid = testingStore.getState().cues[0].editUuid;
                 const expectedContent = "<span data-offset-key=\"\" style=\"font-style: italic;\">" +
                     "<span data-text=\"true\">t\n</span></span>" +
-                    "<span class=\"sbte-text-with-error\" " +
+                    "<span class=\"mc-text-with-error\" " +
                     "aria-controls=\"spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-2-6\" " +
                     "aria-haspopup=\"true\"><span data-offset-key=\"\" style=\"font-style: italic;\">" +
                     "<span data-text=\"true\">ffff</span></span></span>";
@@ -1133,7 +1133,7 @@ describe("CueTextEditor", () => {
             );
 
             // WHEN
-            actualNode.find(".sbte-text-with-error").at(0).simulate("click");
+            actualNode.find(".mc-text-with-error").at(0).simulate("click");
             actualNode.findWhere(spellCheckOptionPredicate(2)).at(0).simulate("click");
 
             // THEN
@@ -1174,7 +1174,7 @@ describe("CueTextEditor", () => {
             ), { container: document.body });
 
             // WHEN
-            const spellcheckButtons = actualNode.container.querySelectorAll(".sbte-text-with-error");
+            const spellcheckButtons = actualNode.container.querySelectorAll(".mc-text-with-error");
 
             // Clicking the first button and waiting for transition to end.
             fireEvent.click(spellcheckButtons[0]);
@@ -1222,10 +1222,10 @@ describe("CueTextEditor", () => {
                 </Provider>,
                 { container: document.body }
             );
-            fireEvent.click(actualNode.container.querySelectorAll(".sbte-text-with-error")[0]);
+            fireEvent.click(actualNode.container.querySelectorAll(".mc-text-with-error")[0]);
 
             // WHEN
-            fireEvent.click(actualNode.container.querySelectorAll(".sbte-text-with-error")[0]);
+            fireEvent.click(actualNode.container.querySelectorAll(".mc-text-with-error")[0]);
 
             // THEN
             expect(false).toBeFalsy();
@@ -1286,7 +1286,7 @@ describe("CueTextEditor", () => {
             );
 
             //THEN
-            const errorSpan = container.querySelectorAll(".sbte-text-with-error")[0] as Element;
+            const errorSpan = container.querySelectorAll(".mc-text-with-error")[0] as Element;
             expect(errorSpan).not.toBeNull();
         });
 
@@ -1350,7 +1350,7 @@ describe("CueTextEditor", () => {
                     />
                 </Provider>
             );
-            const errorSpan = container.querySelectorAll(".sbte-text-with-error")[0] as Element;
+            const errorSpan = container.querySelectorAll(".mc-text-with-error")[0] as Element;
             fireEvent.click(errorSpan);
 
             //WHEN
@@ -1426,7 +1426,7 @@ describe("CueTextEditor", () => {
                     />
                 </Provider>
             );
-            const errorSpan = container.querySelectorAll(".sbte-text-with-error")[0] as Element;
+            const errorSpan = container.querySelectorAll(".mc-text-with-error")[0] as Element;
             fireEvent(errorSpan,
                 new MouseEvent("click", {
                     bubbles: true,
@@ -2082,7 +2082,7 @@ describe("CueTextEditor", () => {
             const vttCue = new VTTCue(0, 1, "some verry long text sample very long text sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
             const expectedContent = "<span data-offset-key=\"\"><span data-text=\"true\">some </span></span>" +
-                "<span class=\"sbte-text-with-error\" " +
+                "<span class=\"mc-text-with-error\" " +
                 "aria-controls=\"spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-5-10\" aria-haspopup=\"true\">" +
                 "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">verry</span></span></span>" +
@@ -2365,7 +2365,7 @@ describe("CueTextEditor", () => {
             const vttCue = new VTTCue(0, 1, "some verry long\ntext sample very long\ntext sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
             const expectedContent = "<span data-offset-key=\"\"><span data-text=\"true\">some </span></span>" +
-                "<span class=\"sbte-text-with-error\" " +
+                "<span class=\"mc-text-with-error\" " +
                 "aria-controls=\"spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-5-10\" aria-haspopup=\"true\">" +
                 "<span data-offset-key=\"\">" +
                 "<span data-text=\"true\">verry</span></span></span>" +

@@ -25,7 +25,7 @@ describe("ExportTrackCuesButton", () => {
        const expectedNode = render(
            <button
                id="exportFileBtn"
-               className="sbte-export-button sbte-btn sbte-btn-light"
+               className="mc-export-button mc-btn mc-btn-light"
                data-pr-tooltip="Export File"
                data-pr-position="top"
                data-pr-at="center+2 top-2"
@@ -56,7 +56,7 @@ describe("ExportTrackCuesButton", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".sbte-export-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-export-button") as Element);
 
         // THEN
         expect(mockHandleExport).toHaveBeenCalledWith(testingTrack);

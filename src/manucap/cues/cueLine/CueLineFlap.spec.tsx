@@ -20,7 +20,7 @@ describe("CueLineFlap", () => {
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 </div>
                 <div
-                    className="sbte-cue-line-flap"
+                    className="mc-cue-line-flap"
                     style={{
                         textAlign: "center",
                         width: "30px",
@@ -100,7 +100,7 @@ describe("CueLineFlap", () => {
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 </div>
                 <div
-                    className="sbte-cue-line-flap-good"
+                    className="mc-cue-line-flap-good"
                     style={{
                         textAlign: "center",
                         width: "30px",
@@ -181,7 +181,7 @@ describe("CueLineFlap", () => {
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 </div>
                 <div
-                    className="sbte-cue-line-flap-good"
+                    className="mc-cue-line-flap-good"
                     style={{
                         textAlign: "center",
                         width: "30px",
@@ -265,7 +265,7 @@ describe("CueLineFlap", () => {
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 </div>
                 <div
-                    className="sbte-cue-line-flap-error"
+                    className="mc-cue-line-flap-error"
                     style={{
                         textAlign: "center",
                         width: "30px",
@@ -347,7 +347,7 @@ describe("CueLineFlap", () => {
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 </div>
                 <div
-                    className="sbte-cue-line-flap-error"
+                    className="mc-cue-line-flap-error"
                     style={{
                         textAlign: "center",
                         width: "30px",
@@ -432,11 +432,11 @@ describe("CueLineFlap", () => {
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <input
                         type="checkbox"
-                        className="sbte-cue-line-flap-checkbox"
+                        className="mc-cue-line-flap-checkbox"
                     />
                 </div>
                 <div
-                    className="sbte-cue-line-flap-good"
+                    className="mc-cue-line-flap-good"
                     style={{
                         textAlign: "center",
                         width: "30px",
@@ -518,12 +518,12 @@ describe("CueLineFlap", () => {
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <input
                         type="checkbox"
-                        className="sbte-cue-line-flap-checkbox"
+                        className="mc-cue-line-flap-checkbox"
                         disabled
                     />
                 </div>
                 <div
-                    className="sbte-cue-line-flap-good"
+                    className="mc-cue-line-flap-good"
                     style={{
                         textAlign: "center",
                         width: "30px",
@@ -609,12 +609,12 @@ describe("CueLineFlap", () => {
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <input
                         type="checkbox"
-                        className="sbte-cue-line-flap-checkbox"
+                        className="mc-cue-line-flap-checkbox"
                         disabled
                     />
                 </div>
                 <div
-                    className="sbte-cue-line-flap-good"
+                    className="mc-cue-line-flap-good"
                     style={{
                         textAlign: "center",
                         width: "30px",
@@ -698,11 +698,11 @@ describe("CueLineFlap", () => {
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <input
                         type="checkbox"
-                        className="sbte-cue-line-flap-checkbox"
+                        className="mc-cue-line-flap-checkbox"
                     />
                 </div>
                 <div
-                    className="sbte-cue-line-flap-good"
+                    className="mc-cue-line-flap-good"
                     style={{
                         textAlign: "center",
                         width: "30px",
@@ -787,11 +787,11 @@ describe("CueLineFlap", () => {
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <input
                         type="checkbox"
-                        className="sbte-cue-line-flap-checkbox"
+                        className="mc-cue-line-flap-checkbox"
                     />
                 </div>
                 <div
-                    className="sbte-cue-line-flap-good"
+                    className="mc-cue-line-flap-good"
                     style={{
                         textAlign: "center",
                         width: "30px",
@@ -880,7 +880,7 @@ describe("CueLineFlap", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".sbte-cue-line-flap-checkbox") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-cue-line-flap-checkbox") as Element);
 
         // THEN
         expect(testingStore.getState().rowsToMerge).toEqual([{ index: 0 }]);
@@ -900,8 +900,8 @@ describe("CueLineFlap", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".sbte-cue-line-flap-checkbox") as Element);
-        fireEvent.click(actualNode.container.querySelector(".sbte-cue-line-flap-checkbox") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-cue-line-flap-checkbox") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-cue-line-flap-checkbox") as Element);
 
         // THEN
         expect(testingStore.getState().rowsToMerge).toEqual([]);
@@ -915,11 +915,11 @@ describe("CueLineFlap", () => {
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <input
                         type="checkbox"
-                        className="sbte-cue-line-flap-checkbox"
+                        className="mc-cue-line-flap-checkbox"
                     />
                 </div>
                 <div
-                    className="sbte-cue-line-flap-good"
+                    className="mc-cue-line-flap-good"
                     style={{
                         textAlign: "center",
                         width: "30px",
@@ -1004,11 +1004,11 @@ describe("CueLineFlap", () => {
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <input
                         type="checkbox"
-                        className="sbte-cue-line-flap-checkbox"
+                        className="mc-cue-line-flap-checkbox"
                     />
                 </div>
                 <div
-                    className="sbte-cue-line-flap-good"
+                    className="mc-cue-line-flap-good"
                     style={{
                         textAlign: "center",
                         width: "30px",
@@ -1101,12 +1101,12 @@ describe("CueLineFlap", () => {
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <input
                         type="checkbox"
-                        className="sbte-cue-line-flap-checkbox"
+                        className="mc-cue-line-flap-checkbox"
                         disabled
                     />
                 </div>
                 <div
-                    className="sbte-cue-line-flap-good"
+                    className="mc-cue-line-flap-good"
                     style={{
                         textAlign: "center",
                         width: "30px",
@@ -1202,12 +1202,12 @@ describe("CueLineFlap", () => {
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <input
                         type="checkbox"
-                        className="sbte-cue-line-flap-checkbox"
+                        className="mc-cue-line-flap-checkbox"
                         disabled
                     />
                 </div>
                 <div
-                    className="sbte-cue-line-flap-error"
+                    className="mc-cue-line-flap-error"
                     style={{
                         textAlign: "center",
                         width: "30px",

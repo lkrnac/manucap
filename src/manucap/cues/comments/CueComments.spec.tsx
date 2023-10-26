@@ -67,7 +67,7 @@ describe("CueComments", () => {
                 <div style={{ marginBottom: "8px" }} className="flex items-center justify-between">
                     <div>
                         <span
-                            className="sbte-cue-comment-user"
+                            className="mc-cue-comment-user"
                             style={{
                                 borderRadius: "5px",
                                 padding: "2px 6px",
@@ -95,7 +95,7 @@ describe("CueComments", () => {
                 >
                     <div>
                         <span
-                            className="sbte-cue-comment-user"
+                            className="mc-cue-comment-user"
                             style={{
                                     borderRadius: "5px",
                                     padding: "2px 6px",
@@ -117,8 +117,8 @@ describe("CueComments", () => {
                         </span>
                         <button
                             id="deleteCueCommentButton-0-1"
-                            data-testid="sbte-delete-cue-comment-button"
-                            className="sbte-btn sbte-btn-primary sbte-btn-xs sbte-delete-cue-comment-button"
+                            data-testid="mc-delete-cue-comment-button"
+                            className="mc-btn mc-btn-primary mc-btn-xs mc-delete-cue-comment-button"
                             data-pr-tooltip="Delete comment"
                             data-pr-position="left"
                             data-pr-at="left top+10"
@@ -150,7 +150,7 @@ describe("CueComments", () => {
                     />
                     <button
                         type="button"
-                        className="sbte-btn sbte-btn-xs sbte-btn-primary"
+                        className="mc-btn mc-btn-xs mc-btn-primary"
                         style={{ float: "right", marginLeft: "5px" }}
                         disabled
                     >
@@ -215,7 +215,7 @@ describe("CueComments", () => {
                     />
                     <button
                         type="button"
-                        className="sbte-btn sbte-btn-xs sbte-btn-primary"
+                        className="mc-btn mc-btn-xs mc-btn-primary"
                         style={{ float: "right", marginLeft: "5px" }}
                         disabled
                     >
@@ -246,7 +246,7 @@ describe("CueComments", () => {
         );
 
         // WHEN
-        const deleteButton = actualNode.queryByTestId("sbte-delete-cue-comment-button");
+        const deleteButton = actualNode.queryByTestId("mc-delete-cue-comment-button");
 
         // THEN
         expect(deleteButton).toBeInTheDocument();
@@ -266,7 +266,7 @@ describe("CueComments", () => {
         );
 
         // WHEN
-        const deleteButton = actualNode.queryByTestId("sbte-delete-cue-comment-button");
+        const deleteButton = actualNode.queryByTestId("mc-delete-cue-comment-button");
 
         // THEN
         expect(deleteButton).not.toBeInTheDocument();
@@ -367,7 +367,7 @@ describe("CueComments", () => {
                 <CueComments index={0} cue={testCue} commentAuthor="Linguist" />
             </Provider>
         );
-        const deleteButton = getByTestId("sbte-delete-cue-comment-button");
+        const deleteButton = getByTestId("mc-delete-cue-comment-button");
 
         // WHEN
         fireEvent.click(deleteButton);

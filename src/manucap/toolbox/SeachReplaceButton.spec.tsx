@@ -17,7 +17,7 @@ describe("SeachReplaceButton", () => {
         const expectedNode = render(
             <button
                 id="searchReplaceBtn"
-                className="sbte-search-replace-button sbte-btn sbte-btn-light"
+                className="mc-search-replace-button mc-btn mc-btn-light"
                 data-pr-tooltip="Search / Replace"
                 data-pr-position="top"
                 data-pr-at="center+2 top-2"
@@ -46,7 +46,7 @@ describe("SeachReplaceButton", () => {
         );
 
         // WHEN
-        fireEvent.click(container.querySelector(".sbte-search-replace-button") as Element);
+        fireEvent.click(container.querySelector(".mc-search-replace-button") as Element);
 
         // THEN
         expect(testingStore.getState().searchReplaceVisible).toBeTruthy();
@@ -61,7 +61,7 @@ describe("SeachReplaceButton", () => {
             </Provider>
         );
         const mergeButton = getByText("Merge Cues");
-        const searchButton = container.querySelector(".sbte-search-replace-button") as Element;
+        const searchButton = container.querySelector(".mc-search-replace-button") as Element;
 
         // WHEN
         fireEvent.click(mergeButton);

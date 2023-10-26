@@ -12,7 +12,7 @@ const InsertCueButton = (): ReactElement => (
     >
         <button
             style={{ maxHeight: "38px", margin: "5px", width: "300px" }}
-            className="sbte-btn sbte-btn-primary sbte-add-cue-button"
+            className="mc-btn mc-btn-primary mc-add-cue-button"
         >
             Insert cue
         </button>

@@ -14,10 +14,10 @@ const MergeEditor = (): ReactElement | null => {
                 Select the lines to be merged then click Merge
             </label>
             <button
-                className="sbte-btn sbte-btn-light sbte-btn-sm !text-blue-light"
+                className="mc-btn mc-btn-light mc-btn-sm !text-blue-light"
                 type="button"
                 style={{ marginLeft: "5px" }}
-                data-testid="sbte-search-prev"
+                data-testid="mc-search-prev"
                 onClick={(): void => {
                     dispatch(mergeCues());
                 }}
@@ -26,10 +26,10 @@ const MergeEditor = (): ReactElement | null => {
             </button>
             <span style={{ flex: 1 }} />
             <button
-                className="sbte-btn sbte-btn-danger sbte-btn-sm"
+                className="mc-btn mc-btn-danger mc-btn-sm"
                 type="button"
                 style={{ marginLeft: "5px" }}
-                data-testid="sbte-close-merge-sbte-btn"
+                data-testid="mc-close-merge-mc-btn"
                 onClick={(): void => {
                     dispatch(showMerge(false));
                 }}

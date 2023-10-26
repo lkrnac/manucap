@@ -454,7 +454,7 @@ describe("VideoPlayer with waveform", () => {
         await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
 
         // THEN
-        const waveformNode = actualNode.find(".sbte-waveform");
+        const waveformNode = actualNode.find(".mc-waveform");
 
         expect(waveformNode.get(0)).toBeUndefined();
     });
@@ -476,7 +476,7 @@ describe("VideoPlayer with waveform", () => {
         await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
 
         // THEN
-        const waveformNode = actualNode.find(".sbte-waveform");
+        const waveformNode = actualNode.find(".mc-waveform");
 
         expect(waveformNode.get(0)).toBeUndefined();
     });
@@ -499,7 +499,7 @@ describe("VideoPlayer with waveform", () => {
         await act(async () => new Promise(resolve => setTimeout(resolve, 200)));
 
         // THEN
-        const waveformNode = actualNode.find(".sbte-waveform");
+        const waveformNode = actualNode.find(".mc-waveform");
 
         expect(waveformNode.get(0).props.hidden).toBeTruthy();
     });

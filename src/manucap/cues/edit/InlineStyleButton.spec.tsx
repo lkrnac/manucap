@@ -14,7 +14,7 @@ describe("InlineStyleButton", () => {
         const expectedNode = render(
             <button
                 id="inlineStyle-BOLD0"
-                className="sbte-inline-style-btn sbte-btn sbte-btn-primary"
+                className="mc-inline-style-btn mc-btn mc-btn-primary"
                 data-pr-tooltip="BOLD"
                 data-pr-position="top"
                 data-pr-at="center top"
@@ -47,7 +47,7 @@ describe("InlineStyleButton", () => {
         const expectedNode = render(
             <button
                 id="inlineStyle-BOLD0"
-                className="sbte-inline-style-btn sbte-btn sbte-btn-primary active"
+                className="mc-inline-style-btn mc-btn mc-btn-primary active"
                 data-pr-tooltip="BOLD"
                 data-pr-position="top"
                 data-pr-at="center top"
@@ -79,7 +79,7 @@ describe("InlineStyleButton", () => {
         const expectedNode = render(
             <button
                 id="inlineStyle-ITALIC0"
-                className="sbte-inline-style-btn sbte-btn sbte-btn-primary active"
+                className="mc-inline-style-btn mc-btn mc-btn-primary active"
                 data-pr-tooltip="ITALIC"
                 data-pr-position="top"
                 data-pr-at="center top"
@@ -111,7 +111,7 @@ describe("InlineStyleButton", () => {
         const expectedNode = render(
             <button
                 id="inlineStyle-UNDERLINE0"
-                className="sbte-inline-style-btn sbte-btn sbte-btn-primary active"
+                className="mc-inline-style-btn mc-btn mc-btn-primary active"
                 data-pr-tooltip="UNDERLINE"
                 data-pr-position="top"
                 data-pr-at="center top"
@@ -180,7 +180,7 @@ describe("InlineStyleButton", () => {
                 editorState={editorState}
             />
         , { container: document.body });
-        const button = actualNode.container.querySelector(".sbte-btn-primary") as Element;
+        const button = actualNode.container.querySelector(".mc-btn-primary") as Element;
 
         //WHEN
         fireEvent.mouseEnter(button);

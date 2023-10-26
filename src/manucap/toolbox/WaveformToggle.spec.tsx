@@ -19,7 +19,7 @@ describe("WaveformToggle", () => {
                     <i className="w-7 fa-duotone fa-waveform-lines text-blue-primary" />
                     <span>Waveform</span>
                 </span>
-                <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-success">SHOWN</span>
+                <span className="mc-badge font-medium mc-badge-sm mc-badge-success">SHOWN</span>
             </button>
         );
 
@@ -45,7 +45,7 @@ describe("WaveformToggle", () => {
                     <i className="w-7 fa-duotone fa-waveform-lines text-blue-primary" />
                     <span>Waveform</span>
                 </span>
-                <span className="sbte-badge font-medium sbte-badge-sm sbte-badge-secondary">HIDDEN</span>
+                <span className="mc-badge font-medium mc-badge-sm mc-badge-secondary">HIDDEN</span>
             </button>
         );
 

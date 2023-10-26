@@ -16,7 +16,7 @@ const KeyboardShortcutLabel = (props: Props): ReactElement => {
         <div style={{ display: "flex", alignItems: "center" }}>
             <div className={`${props.hideMetaKey? "hidden" : "flex"} items-center justify-center`}>
                 <h4 className="m-0">
-                    <span className="sbte-keyboard-label">
+                    <span className="mc-keyboard-label">
                         {commandKey}
                     </span>
                 </h4>
@@ -25,7 +25,7 @@ const KeyboardShortcutLabel = (props: Props): ReactElement => {
 
             <div className={`${props.hideShiftKey? "hidden" : "flex"} items-center justify-center`}>
                 <h4 className="m-0">
-                    <span className="sbte-keyboard-label">
+                    <span className="mc-keyboard-label">
                         Shift
                     </span>
                 </h4>
@@ -33,7 +33,7 @@ const KeyboardShortcutLabel = (props: Props): ReactElement => {
             </div>
             <div className="flex items-center justify-center">
                 <h4 className="m-0">
-                    <span className="sbte-keyboard-label">
+                    <span className="mc-keyboard-label">
                         {props.character}
                     </span>
                 </h4>
@@ -45,7 +45,7 @@ const KeyboardShortcutLabel = (props: Props): ReactElement => {
                 <span>&#160;&#160;&#160;or&#160;&#160;&#160;</span>
                 <div className={`${props.hideAltKey? "hidden" : "flex"} items-center justify-center`}>
                     <h4 className="m-0">
-                        <span className="sbte-keyboard-label">
+                        <span className="mc-keyboard-label">
                             Alt
                         </span>
                     </h4>
@@ -53,7 +53,7 @@ const KeyboardShortcutLabel = (props: Props): ReactElement => {
                 </div>
                 <div className={`${props.hideShiftKey? "hidden" : "flex"} items-center justify-center`}>
                     <h4 className="m-0">
-                        <span className="sbte-keyboard-label">
+                        <span className="mc-keyboard-label">
                             Shift
                         </span>
                     </h4>
@@ -61,7 +61,7 @@ const KeyboardShortcutLabel = (props: Props): ReactElement => {
                 </div>
                 <div className="flex items-center justify-center">
                     <h4 className="m-0">
-                        <span className="sbte-keyboard-label">
+                        <span className="mc-keyboard-label">
                             {props.character}
                         </span>
                     </h4>

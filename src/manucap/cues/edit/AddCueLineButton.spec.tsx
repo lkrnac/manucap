@@ -32,7 +32,7 @@ describe("AddCueLineButton", () => {
                 <button
                     id="addCuelineButton-0"
                     style={{ maxHeight: "38px", height: "100%" }}
-                    className="sbte-btn sbte-btn-primary sbte-add-cue-button w-full sbte-btn-sm"
+                    className="mc-btn mc-btn-primary mc-add-cue-button w-full mc-btn-sm"
                     data-pr-tooltip="Insert new subtitle"
                     data-pr-position="left"
                     data-pr-at="left center"
@@ -60,7 +60,7 @@ describe("AddCueLineButton", () => {
                 <button
                     id="addCuelineButton-0"
                     style={{ maxHeight: "38px", height: "100%" }}
-                    className="sbte-btn sbte-btn-primary sbte-add-cue-button w-full sbte-btn-sm"
+                    className="mc-btn mc-btn-primary mc-add-cue-button w-full mc-btn-sm"
                     data-pr-tooltip="Insert new subtitle"
                     data-pr-position="bottom"
                 >
@@ -91,7 +91,7 @@ describe("AddCueLineButton", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-add-cue-button") as Element);
 
         // THEN
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
@@ -115,7 +115,7 @@ describe("AddCueLineButton", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-add-cue-button") as Element);
 
         // THEN
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
@@ -139,7 +139,7 @@ describe("AddCueLineButton", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-add-cue-button") as Element);
 
         // THEN
         expect(testingStore.getState().cues[1].vttCue.text).toEqual("");
@@ -166,7 +166,7 @@ describe("AddCueLineButton", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-add-cue-button") as Element);
 
         // THEN
         expect(testingStore.getState().cues.length).toEqual(2);
@@ -187,7 +187,7 @@ describe("AddCueLineButton", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-add-cue-button") as Element);
 
         // THEN
         expect(testingStore.getState().cues).toHaveLength(3);
@@ -208,7 +208,7 @@ describe("AddCueLineButton", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-add-cue-button") as Element);
 
         // THEN
         expect(testingStore.getState().cues).toHaveLength(3);
@@ -233,7 +233,7 @@ describe("AddCueLineButton", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-add-cue-button") as Element);
 
         // THEN
         expect(testingStore.getState().cues).toHaveLength(2);
@@ -248,7 +248,7 @@ describe("AddCueLineButton", () => {
                 <button
                     id="addCuelineButton-0"
                     style={{ maxHeight: 38, height: "100%" }}
-                    className="sbte-btn sbte-btn-primary sbte-add-cue-button w-full sbte-btn-sm"
+                    className="mc-btn mc-btn-primary mc-add-cue-button w-full mc-btn-sm"
                     data-pr-tooltip="Insert new subtitle"
                     data-pr-position="left"
                     data-pr-at="left center"
@@ -265,7 +265,7 @@ describe("AddCueLineButton", () => {
         );
 
         // WHEN
-        fireEvent.mouseOver(actualNode.container.querySelector(".sbte-add-cue-button") as Element);
+        fireEvent.mouseOver(actualNode.container.querySelector(".mc-add-cue-button") as Element);
 
         // THEN
         expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);

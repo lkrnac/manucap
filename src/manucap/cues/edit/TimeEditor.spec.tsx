@@ -9,7 +9,7 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
-                className="sbte-form-control mousetrap block text-center"
+                className="mc-form-control mousetrap block text-center"
                 value="00:00:00.000"
                 onChange={(): void => undefined}
             />
@@ -29,7 +29,7 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
-                className="sbte-form-control mousetrap block text-center"
+                className="mc-form-control mousetrap block text-center"
                 value="00:00:01.000"
                 onChange={(): void => undefined}
             />
@@ -49,7 +49,7 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
-                className="sbte-form-control mousetrap block text-center"
+                className="mc-form-control mousetrap block text-center"
                 value="00:05:00.000"
                 onChange={(): void => undefined}
             />
@@ -69,7 +69,7 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
-                className="sbte-form-control mousetrap block text-center"
+                className="mc-form-control mousetrap block text-center"
                 value="02:00:35.976"
                 onChange={(): void => undefined}
             />
@@ -89,7 +89,7 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
-                className="sbte-form-control mousetrap block text-center"
+                className="mc-form-control mousetrap block text-center"
                 value="99:59:59.999"
                 onChange={(): void => undefined}
             />
@@ -109,7 +109,7 @@ describe("TimeEditor", () => {
         const expectedNode = mount(
             <input
                 type="text"
-                className="sbte-form-control mousetrap block text-center"
+                className="mc-form-control mousetrap block text-center"
                 value="01:59:59.025"
                 onChange={(): void => undefined}
             />

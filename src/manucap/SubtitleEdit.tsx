@@ -78,7 +78,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
 
     return (
         <div
-            className="sbte-subtitle-edit"
+            className="mc-subtitle-edit"
             style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%", overflow: "hidden" }}
         >
             <CueErrorAlert />
@@ -93,7 +93,7 @@ const SubtitleEdit = (props: SubtitleEditProps): ReactElement => {
                         }}
                     >
                         <div className="text-center space-y-4">
-                            <div className="sbte-spinner-icon" />
+                            <div className="mc-spinner-icon" />
                             <p className="font-medium text-blue-light m-0">
                                 Hang in there, we&apos;re loading the track...
                             </p>

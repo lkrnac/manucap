@@ -73,7 +73,7 @@ describe("KeyboardShortcutsModal", () => {
                             </div>
                         </div>
                         <div className="p-dialog-footer">
-                            <button className="sbte-btn sbte-btn-primary" onClick={jest.fn()}>
+                            <button className="mc-btn mc-btn-primary" onClick={jest.fn()}>
                                 Close
                             </button>
                         </div>

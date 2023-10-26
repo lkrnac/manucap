@@ -11,7 +11,7 @@ describe("PositionButton", () => {
         const vttCue = new VTTCue(0, 1, "some text");
         const expectedNode = mount(
             <button
-                className="sbte-position-toggle-button sbte-dropdown-toggle sbte-btn sbte-btn-light"
+                className="mc-position-toggle-button mc-dropdown-toggle mc-btn mc-btn-light"
                 aria-controls="positionButtonMenu"
                 aria-haspopup="true"
             >
@@ -34,7 +34,7 @@ describe("PositionButton", () => {
         const expectedNode = render(
             <>
                 <button
-                    className="sbte-position-toggle-button sbte-dropdown-toggle sbte-btn sbte-btn-light"
+                    className="mc-position-toggle-button mc-dropdown-toggle mc-btn mc-btn-light"
                     aria-controls="positionButtonMenu"
                     aria-haspopup="true"
                 >
@@ -43,7 +43,7 @@ describe("PositionButton", () => {
                 </button>
                 <div
                     id="positionButtonMenu"
-                    className="p-menu p-component p-menu-overlay sbte-position-button-list
+                    className="p-menu p-component p-menu-overlay mc-position-button-list
                         p-connected-overlay-enter p-connected-overlay-enter-active"
                     style={{
                         zIndex: 1001,
@@ -59,127 +59,127 @@ describe("PositionButton", () => {
                         role="menu"
                     >
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ↖↖
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ↖↑
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option" >
+                            <span className="mc-position-button-option" >
                                 ↑↑
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ↑↗
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ↗↗
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ↖←
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ↖
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ↑
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ↗
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 →↗
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ←←
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ←
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 •
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 →
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 →→
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ↙←
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ↙
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ↓
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ↘
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 →↘
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ↙↙
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ↙↓
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ↓↓
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ↓↘
                             </span>
                         </li>
                         <li className="p-menuitem" role="none">
-                            <span className="sbte-position-button-option">
+                            <span className="mc-position-button-option">
                                 ↘↘
                             </span>
                         </li>
@@ -225,6 +225,6 @@ describe("PositionButton", () => {
         const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={(): void => undefined} />);
 
         // THEN
-        expect(actualNode.find(".sbte-dropdown-toggle").text()).toEqual("↖");
+        expect(actualNode.find(".mc-dropdown-toggle").text()).toEqual("↖");
     });
 });
