@@ -16,3 +16,4 @@ jobs:
             - run: npm test
             - run: npx react-scripts build # tests if local development browser build is working
             - run: npm run lint
+            - run: ./scripts/post-build-js-checks.sh
