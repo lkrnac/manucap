@@ -5,16 +5,16 @@ import "primereact/resources/primereact.min.css";
 import "primereact/resources/themes/bootstrap4-light-blue/theme.css";
 import { Provider, useDispatch } from "react-redux";
 import { ReactElement, useEffect, useState } from "react";
-import { updateCues } from "./subtitleEdit/cues/cuesList/cuesListActions";
-import { updateEditingTrack } from "./subtitleEdit/trackSlices";
-import { updateSubtitleUser } from "./subtitleEdit/userSlices";
-import { CueDto, Language, SaveState, Track, User } from "./subtitleEdit/model";
+import { updateCues } from "./manucap/cues/cuesList/cuesListActions";
+import { updateEditingTrack } from "./manucap/trackSlices";
+import { updateSubtitleUser } from "./manucap/userSlices";
+import { CueDto, Language, SaveState, Track, User } from "./manucap/model";
 import ReactDOM from "react-dom";
-import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
-import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecifications/subtitleSpecificationSlice";
+import ManuCap from "./manucap/ManuCap";
+import { readSubtitleSpecification } from "./manucap/toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import testingStore from "./testUtils/testingStore";
 import "draft-js/dist/Draft.css";
-import { updateSourceCues } from "./subtitleEdit/cues/view/sourceCueSlices";
+import { updateSourceCues } from "./manucap/cues/view/sourceCueSlices";
 
 // ################## TESTING DATA TWEAKS ##############################
 const language = { id: "en-US", name: "English (US)", direction: "LTR" } as Language;
@@ -297,7 +297,7 @@ const TestApp = (): ReactElement => {
                 id: "0fd7af04-6c87-4793-8d66-fdb19b5fd04d",
                 createdBy: {
                     displayName: "John Doe",
-                    email: "john.doe@dotsub.com",
+                    email: "john.doe@gmail.com",
                     firstname: "John",
                     lastname: "Doe",
                     systemAdmin: "",
@@ -312,7 +312,7 @@ const TestApp = (): ReactElement => {
     useEffect(() => {
         const subtitleUser = {
             displayName: "Jane Doe",
-            email: "jane.doe@dotsub.com",
+            email: "jane.doe@gmail.com",
             firstname: "Jane",
             lastname: "Doe",
             systemAdmin: "",
@@ -341,19 +341,19 @@ const TestApp = (): ReactElement => {
                 minCaptionDurationInMillis: MIN_DURATION_SECONDS * 1000,
                 maxCaptionDurationInMillis: 8000,
                 maxCharactersPerSecondPerCaption: 50,
-                comments: "Media comments, please click [here](https://dotsub.com)",
-                mediaNotes: "Media notes, please click [here](https://dotsub.com)"
+                comments: "Media comments, please click [here](https://google.com)",
+                mediaNotes: "Media notes, please click [here](https://google.com)"
             })),
             500
         );
     }, [dispatch]);
 
-    const video = `https://dotsub-media-encoded.s3.amazonaws.com/sample/${LONG_VIDEO_TESTING
+    const video = `https://media-encoded.s3.amazonaws.com/sample/${LONG_VIDEO_TESTING
         ? "my-long-movie"
-        : "dotsubExplainer"}`;
+        : "CHANGE ME AFTER REBRANDING"}`;
 
     return (
-        <SubtitleEdit
+        <ManuCap
             poster={`${video}.jpeg`}
             mp4={`${video}.mp4`}
             waveform={`${video}.json`}
