@@ -16,8 +16,8 @@ import SubtitleEdit from "manucap";
 const Example = props => (
     <SubtitleEdit.VideoPlayer
         id="testvpid"
-        poster="http://dotsub-media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
-        mp4="http://dotsub-media-encoded.s3.amazonaws.com/1/14/14.mp4"
+        poster="http://media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
+        mp4="http://media-encoded.s3.amazonaws.com/1/14/14.mp4"
     />
 );
 ```

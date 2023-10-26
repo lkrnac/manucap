@@ -60,8 +60,7 @@ interface MatchedCueIndexes {
 }
 
 const findMatchedIndexes = (state: SubtitleEditState, index: number): MatchedCueIndexes => {
-    // TODO: Remove following ugly code when we implement
-    //  https://dotsub.atlassian.net/browse/VTMS-3304
+    // TODO: Remove following ugly code
     let targetCuesIndex = 0;
     const editingIndexMatchedCues = state.matchedCues.matchedCues.findIndex(
         (cueLineDto: CueLineDto): boolean => cueLineDto.targetCues
@@ -344,7 +343,7 @@ export const updateVttCue = (
             }
 
             // TODO: This is not possible to support searching of newly edited term, because of this discussion:
-            //  https://dotsub.slack.com/archives/C02P5HLGC/p1675253139271659
+            //  (SLACK LINK LOST un/fortunately)
             //  If we would want to enable this we would do something like in cueEditorSlices.updateEditingCueIndex
             //  But with current structure of this method + cues + matchedCues interaction,
             //  there would be endless recursion.

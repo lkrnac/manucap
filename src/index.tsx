@@ -341,16 +341,16 @@ const TestApp = (): ReactElement => {
                 minCaptionDurationInMillis: MIN_DURATION_SECONDS * 1000,
                 maxCaptionDurationInMillis: 8000,
                 maxCharactersPerSecondPerCaption: 50,
-                comments: "Media comments, please click [here](https://dotsub.com)",
-                mediaNotes: "Media notes, please click [here](https://dotsub.com)"
+                comments: "Media comments, please click [here](https://google.com)",
+                mediaNotes: "Media notes, please click [here](https://google.com)"
             })),
             500
         );
     }, [dispatch]);
 
-    const video = `https://dotsub-media-encoded.s3.amazonaws.com/sample/${LONG_VIDEO_TESTING
+    const video = `https://media-encoded.s3.amazonaws.com/sample/${LONG_VIDEO_TESTING
         ? "my-long-movie"
-        : "dotsubExplainer"}`;
+        : "CHANGE ME AFTER REBRANDING"}`;
 
     return (
         <SubtitleEdit
