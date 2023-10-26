@@ -1,7 +1,7 @@
 import { ReactElement, useEffect, useRef } from "react";
 import { Toast } from "primereact/toast";
 import { useDispatch, useSelector } from "react-redux";
-import { SubtitleEditState } from "../subtitleEditReducers";
+import { SubtitleEditState } from "../manuCapReducers";
 import { setValidationErrors } from "./edit/cueEditorSlices";
 
 const DEFAULT_TIME_OUT = 100;

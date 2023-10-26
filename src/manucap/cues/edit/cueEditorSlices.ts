@@ -1,7 +1,7 @@
 import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CueChange, CueError, ScrollPosition, SubtitleEditAction } from "../../model";
-import { AppThunk } from "../../subtitleEditReducers";
+import { AppThunk } from "../../manuCapReducers";
 import { changeScrollPosition } from "../cuesList/cuesListScrollSlice";
 import { cuesSlice } from "../cuesList/cuesListSlices";
 import { editingTrackSlice } from "../../trackSlices";

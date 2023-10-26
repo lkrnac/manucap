@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { deleteCue } from "../cuesList/cuesListActions";
 import { useDispatch } from "react-redux";
-import { AppThunk } from "../../subtitleEditReducers";
+import { AppThunk } from "../../manuCapReducers";
 import { Tooltip } from "primereact/tooltip";
 
 interface Props {

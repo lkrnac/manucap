@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { SubtitleEditState } from "../../subtitleEditReducers";
+import { SubtitleEditState } from "../../manuCapReducers";
 import { CueDtoWithIndex, CueLineDto } from "../../model";
 import { getTimeString } from "../../utils/timeUtils";
 import { isDirectTranslationTrack } from "../../utils/subtitleEditUtils";

@@ -11,7 +11,7 @@ import {
     setReplacement,
     showSearchReplace
 } from "./searchReplaceSlices";
-import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "../../manuCapReducers";
 import { saveTrack, updateVttCueTextOnly } from "../cuesList/cuesListActions";
 import { CueDto, SubtitleEditAction } from "../../model";
 import { replaceVttCueContent } from "../edit/editUtils";

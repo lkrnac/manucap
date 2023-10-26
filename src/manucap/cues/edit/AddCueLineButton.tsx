@@ -1,4 +1,4 @@
-import { AppThunk } from "../../subtitleEditReducers";
+import { AppThunk } from "../../manuCapReducers";
 import { ReactElement } from "react";
 import { addCue } from "../cuesList/cuesListActions";
 import { useDispatch } from "react-redux";

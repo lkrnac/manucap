@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, Slice } from "@reduxjs/toolkit";
 import { SpellcheckerSettings } from "./model";
-import { AppThunk } from "./subtitleEditReducers";
+import { AppThunk } from "./manuCapReducers";
 import { Dispatch } from "react";
 import { applySpellcheckerOnCue } from "./cues/cuesList/cuesListActions";
 

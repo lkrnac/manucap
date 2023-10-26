@@ -1,6 +1,6 @@
 import { ReactElement, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SubtitleEditState } from "../../subtitleEditReducers";
+import { SubtitleEditState } from "../../manuCapReducers";
 import { applyShiftTimeByPosition } from "../../cues/cuesList/cuesListActions";
 import { useForm } from "react-hook-form";
 import { Dialog } from "primereact/dialog";

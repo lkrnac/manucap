@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { SubtitleEditAction, Track } from "./model";
-import { AppThunk } from "./subtitleEditReducers";
+import { AppThunk } from "./manuCapReducers";
 import { Dispatch } from "react";
 
 interface EditingTrackAction extends SubtitleEditAction {

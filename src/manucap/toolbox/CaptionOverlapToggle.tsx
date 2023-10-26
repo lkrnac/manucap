@@ -1,6 +1,6 @@
 import { MouseEvent, ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SubtitleEditState } from "../subtitleEditReducers";
+import { SubtitleEditState } from "../manuCapReducers";
 import ToggleButton from "./ToggleButton";
 import { updateEditingTrack } from "../trackSlices";
 import { SaveState, Track } from "../model";

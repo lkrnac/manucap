@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { useSelector } from "react-redux";
-import { SubtitleEditState } from "./subtitleEditReducers";
+import { SubtitleEditState } from "./manuCapReducers";
 import { SaveState, TrackCues } from "./model";
 
 interface Props {

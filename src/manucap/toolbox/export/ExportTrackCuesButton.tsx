@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { useSelector } from "react-redux";
-import { SubtitleEditState } from "../../subtitleEditReducers";
+import { SubtitleEditState } from "../../manuCapReducers";
 import { Track } from "../../model";
 import { Tooltip } from "primereact/tooltip";
 

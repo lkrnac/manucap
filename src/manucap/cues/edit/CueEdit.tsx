@@ -2,7 +2,7 @@ import { CueCategory, CueDto, CueDtoWithIndex, CueLineDto } from "../../model";
 import { copyNonConstructorProperties, Position, positionStyles } from "../cueUtils";
 import { Dispatch, ReactElement, useEffect } from "react";
 import { addCue, saveTrack, updateCueCategory, updateVttCue } from "../cuesList/cuesListActions";
-import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "../../manuCapReducers";
 import CueCategoryButton from "./CueCategoryButton";
 import CueTextEditor from "./CueTextEditor";
 import { KeyCombination } from "../../utils/shortcutConstants";

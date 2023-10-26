@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { syncCues } from "../cues/cuesList/cuesListActions";
 import { Track } from "../model";
 import { updateEditingTrack } from "../trackSlices";
-import { SubtitleEditState } from "../subtitleEditReducers";
+import { SubtitleEditState } from "../manuCapReducers";
 
 interface Props {
     onClick: (event: MouseEvent<HTMLElement>) => void

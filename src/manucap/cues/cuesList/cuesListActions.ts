@@ -16,7 +16,7 @@ import {
     SubtitleEditAction,
     Track
 } from "../../model";
-import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "../../manuCapReducers";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import {
     applyInvalidChunkRangePreventionEnd,

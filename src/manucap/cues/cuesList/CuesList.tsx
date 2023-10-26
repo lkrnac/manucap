@@ -6,7 +6,7 @@ import AddCueLineButton from "../edit/AddCueLineButton";
 import { TrackCues, CueLineDto, ScrollPosition, Track, SaveState } from "../../model";
 import CueLine from "../cueLine/CueLine";
 import { addCue } from "./cuesListActions";
-import { SubtitleEditState } from "../../subtitleEditReducers";
+import { SubtitleEditState } from "../../manuCapReducers";
 import Mousetrap from "mousetrap";
 import { KeyCombination } from "../../utils/shortcutConstants";
 import {

@@ -2,7 +2,7 @@ import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { CueDto, SubtitleEditAction } from "../../model";
-import { AppThunk } from "../../subtitleEditReducers";
+import { AppThunk } from "../../manuCapReducers";
 import { editingTrackSlice } from "../../trackSlices";
 import { updateMatchedCues } from "../cuesList/cuesListActions";
 

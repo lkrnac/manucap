@@ -20,7 +20,7 @@ import {
     updateMatchedCues,
     validateCorruptedCues
 } from "../cuesList/cuesListActions";
-import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "../../manuCapReducers";
 import { StylesConfig } from "react-select/dist/declarations/src/styles";
 import { Menu } from "primereact/menu";
 

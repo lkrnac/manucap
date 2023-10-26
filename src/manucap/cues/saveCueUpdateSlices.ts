@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dispatch } from "react";
 import { CueDto, SubtitleEditAction, SaveTrackCue } from "../model";
-import { AppThunk } from "../subtitleEditReducers";
+import { AppThunk } from "../manuCapReducers";
 import { cuesSlice } from "./cuesList/cuesListSlices";
 
 export interface SaveCueUpdateCallback {

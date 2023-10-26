@@ -3,7 +3,7 @@ import * as React from "react";
 import { CueComment, CueDto } from "../../model";
 import { useDispatch, useSelector } from "react-redux";
 import { addCueComment, deleteCueComment } from "../cuesList/cuesListActions";
-import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "../../manuCapReducers";
 import { Character } from "../../utils/shortcutConstants";
 import { Tooltip } from "primereact/tooltip";
 import DateTime from "../../common/DateTime";

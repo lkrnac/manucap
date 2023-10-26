@@ -1,6 +1,6 @@
 import { updateCues } from "./manucap/cues/cuesList/cuesListActions";
 import { updateEditingTrack } from "./manucap/trackSlices";
-import { Reducers } from "./manucap/subtitleEditReducers";
+import { Reducers } from "./manucap/manuCapReducers";
 import ManuCap from "./manucap/ManuCap";
 import VideoPlayer from "./manucap/player/VideoPlayer";
 import useMatchedCuesAsCsv from "./manucap/cues/cuesList/useMatchedCuesAsCsv";

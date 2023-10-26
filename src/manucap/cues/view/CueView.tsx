@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import ClickCueWrapper from "./ClickCueWrapper";
 import { validateVttCue } from "../cuesList/cuesListActions";
-import { SubtitleEditState } from "../../subtitleEditReducers";
+import { SubtitleEditState } from "../../manuCapReducers";
 import { SearchReplaceMatch } from "../searchReplace/SearchReplaceMatch";
 import { renderToString } from "react-dom/server";
 import { SearchReplace } from "../searchReplace/model";

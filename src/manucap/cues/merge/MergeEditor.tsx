@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SubtitleEditState } from "../../subtitleEditReducers";
+import { SubtitleEditState } from "../../manuCapReducers";
 import { showMerge } from "./mergeSlices";
 import { mergeCues } from "../cuesList/cuesListActions";
 

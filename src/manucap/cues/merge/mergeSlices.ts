@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { editingTrackSlice } from "../../trackSlices";
-import { AppThunk } from "../../subtitleEditReducers";
+import { AppThunk } from "../../manuCapReducers";
 import { Dispatch } from "react";
 import { CuesWithRowIndex, SubtitleEditAction } from "../../model";
 import _ from "lodash";

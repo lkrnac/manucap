@@ -3,7 +3,7 @@ import * as React from "react";
 import { CUE_LINE_STATE_CLASSES, CueDto, CueDtoWithIndex, CueError, CueLineDto, CueLineState } from "../../model";
 import CueEdit from "../edit/CueEdit";
 import CueView from "../view/CueView";
-import { SubtitleEditState } from "../../subtitleEditReducers";
+import { SubtitleEditState } from "../../manuCapReducers";
 import { useSelector } from "react-redux";
 import CueLineFlap from "./CueLineFlap";
 import _ from "lodash";

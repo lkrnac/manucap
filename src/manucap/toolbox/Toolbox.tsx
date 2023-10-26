@@ -6,7 +6,7 @@ import CaptionOverlapToggle from "./CaptionOverlapToggle";
 import ExportTrackCuesButton from "./export/ExportTrackCuesButton";
 import ImportTrackCuesButton from "./ImportTrackCuesButton";
 import { useSelector } from "react-redux";
-import { SubtitleEditState } from "../subtitleEditReducers";
+import { SubtitleEditState } from "../manuCapReducers";
 import SearchReplaceButton from "./SearchReplaceButton";
 import MergeCuesButton from "./MergeCuesButton";
 import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";

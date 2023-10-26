@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { AppThunk } from "../../subtitleEditReducers";
+import { AppThunk } from "../../manuCapReducers";
 import { CueDto } from "../../model";
 import { playVideoSection } from "../../player/playbackSlices";
 import { useDispatch } from "react-redux";

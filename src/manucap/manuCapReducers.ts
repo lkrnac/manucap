@@ -55,11 +55,11 @@ export const Reducers = {
     focusedInput: focusedInputSlice.reducer
 };
 
-const subtitleEditReducers = combineReducers(Reducers);
+const manuCapReducers = combineReducers(Reducers);
 
-export default subtitleEditReducers;
+export default manuCapReducers;
 
-export type SubtitleEditState = ReturnType<typeof subtitleEditReducers>;
+export type SubtitleEditState = ReturnType<typeof manuCapReducers>;
 
 /**
  * We are forced to use `as {} as AnyAction` casting then we are executing actions with `testingStore.dispatch`.

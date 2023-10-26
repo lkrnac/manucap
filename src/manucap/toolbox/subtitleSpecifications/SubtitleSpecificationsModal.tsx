@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Dialog } from "primereact/dialog";
-import { SubtitleEditState } from "../../subtitleEditReducers";
+import { SubtitleEditState } from "../../manuCapReducers";
 import { SubtitleSpecification } from "../model";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
 import { useSelector } from "react-redux";

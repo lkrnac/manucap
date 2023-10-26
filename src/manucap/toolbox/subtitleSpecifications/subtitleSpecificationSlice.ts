@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { AppThunk } from "../../subtitleEditReducers";
+import { AppThunk } from "../../manuCapReducers";
 import { Dispatch } from "react";
 import { SubtitleSpecification } from "../model";
 import { SubtitleEditAction } from "../../model";

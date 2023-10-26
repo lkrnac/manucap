@@ -4,7 +4,7 @@ import "../global.css";
 import { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import EditingVideoPlayer from "./player/EditingVideoPlayer";
-import { AppThunk, SubtitleEditState } from "./subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "./manuCapReducers";
 import Toolbox from "./toolbox/Toolbox";
 import { enableMapSet } from "immer";
 import { hasDataLoaded } from "./utils/subtitleEditUtils";

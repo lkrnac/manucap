@@ -1,4 +1,4 @@
-import { AppThunk, SubtitleEditState } from "../subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "../manuCapReducers";
 import { ReactElement, useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import VideoPlayer from "./VideoPlayer";

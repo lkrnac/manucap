@@ -1,6 +1,6 @@
 import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
 import { CueDto, ScrollPosition } from "../../model";
-import { AppThunk } from "../../subtitleEditReducers";
+import { AppThunk } from "../../manuCapReducers";
 import _ from "lodash";
 
 export const DEFAULT_PAGE_SIZE = 100;

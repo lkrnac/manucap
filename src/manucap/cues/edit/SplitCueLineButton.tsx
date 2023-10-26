@@ -1,4 +1,4 @@
-import { AppThunk, SubtitleEditState } from "../../subtitleEditReducers";
+import { AppThunk, SubtitleEditState } from "../../manuCapReducers";
 import { ReactElement } from "react";
 import { splitCue } from "../cuesList/cuesListActions";
 import { useDispatch, useSelector } from "react-redux";

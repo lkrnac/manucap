@@ -1,5 +1,5 @@
 import { Dispatch, PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { AppThunk } from "../subtitleEditReducers";
+import { AppThunk } from "../manuCapReducers";
 import { SubtitleEditAction } from "../model";
 
 export interface PlayVideoAction extends SubtitleEditAction {

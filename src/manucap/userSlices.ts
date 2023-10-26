@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { SubtitleEditAction, User } from "./model";
-import { AppThunk } from "./subtitleEditReducers";
+import { AppThunk } from "./manuCapReducers";
 import { Dispatch } from "react";
 
 export interface UserAction extends SubtitleEditAction {

@@ -1,7 +1,7 @@
 import { CSSProperties, ReactElement, useEffect, useState } from "react";
 import { CUE_LINE_STATE_CLASSES, CueDtoWithIndex, CueError, CueLineState, CuesWithRowIndex } from "../../model";
 import { useDispatch, useSelector } from "react-redux";
-import { SubtitleEditState } from "../../subtitleEditReducers";
+import { SubtitleEditState } from "../../manuCapReducers";
 import { addCuesToMergeList, removeCuesToMergeList } from "../cuesList/cuesListActions";
 import { Tooltip } from "primereact/tooltip";
 

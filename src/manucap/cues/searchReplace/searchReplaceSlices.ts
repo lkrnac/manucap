@@ -1,7 +1,7 @@
 import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ScrollPosition, SubtitleEditAction } from "../../model";
-import { AppThunk } from "../../subtitleEditReducers";
+import { AppThunk } from "../../manuCapReducers";
 import { editingTrackSlice } from "../../trackSlices";
 import { SearchDirection, SearchReplace, SearchReplaceIndices } from "./model";
 import { mergeVisibleSlice } from "../merge/mergeSlices";
