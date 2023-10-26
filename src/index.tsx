@@ -297,7 +297,7 @@ const TestApp = (): ReactElement => {
                 id: "0fd7af04-6c87-4793-8d66-fdb19b5fd04d",
                 createdBy: {
                     displayName: "John Doe",
-                    email: "john.doe@dotsub.com",
+                    email: "john.doe@gmail.com",
                     firstname: "John",
                     lastname: "Doe",
                     systemAdmin: "",
@@ -312,7 +312,7 @@ const TestApp = (): ReactElement => {
     useEffect(() => {
         const subtitleUser = {
             displayName: "Jane Doe",
-            email: "jane.doe@dotsub.com",
+            email: "jane.doe@gmail.com",
             firstname: "Jane",
             lastname: "Doe",
             systemAdmin: "",
