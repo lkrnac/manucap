@@ -5,4 +5,5 @@ jobs:
     unit-tests-regression:
         runs-on: ubuntu-latest
         steps:
+            - run: npm i
             - run: npm test
