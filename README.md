@@ -1,13 +1,9 @@
-# vtms-subtitle-edit-ui
-
->
-
-[![NPM](https://img.shields.io/npm/v/vtms-subtitle-edit-ui.svg)](https://www.npmjs.com/package/vtms-subtitle-edit-ui) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+# manucap
 
 ## Install
 
 ```bash
-npm install --save vtms-subtitle-edit-ui
+npm install --save manucap
 ```
 
 ## Usage
@@ -15,7 +11,7 @@ npm install --save vtms-subtitle-edit-ui
 ```tsx
 import * as React from 'react'
 
-import SubtitleEdit from "vtms-subtitle-edit-ui";
+import SubtitleEdit from "manucap";
 
 const Example = props => (
     <SubtitleEdit.VideoPlayer

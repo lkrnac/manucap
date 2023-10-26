@@ -1,4 +1,4 @@
-declare module "@dotsub/vtms-subtitle-edit-ui" {
+declare module "@dotsub/manucap" {
 
     import SubtitleEdit from "../subtitleEdit/SubtitleEdit";
     import { AppThunk, Reducers } from "../subtitleEdit/subtitleEditReducers";
@@ -26,7 +26,7 @@ declare module "@dotsub/vtms-subtitle-edit-ui" {
     };
 }
 
-declare module "@dotsub/vtms-subtitle-edit-ui/models" {
+declare module "@dotsub/manucap/models" {
 
     import {
         CueDto,
