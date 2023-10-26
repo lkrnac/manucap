@@ -1,5 +1,5 @@
-import "@fortawesome/fontawesome-pro/css/fontawesome.min.css";
-import "@fortawesome/fontawesome-pro/css/duotone.min.css";
+// import "@fortawesome/fontawesome-pro/css/fontawesome.min.css";
+// import "@fortawesome/fontawesome-pro/css/duotone.min.css";
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.min.css";
 import "primereact/resources/themes/bootstrap4-light-blue/theme.css";
