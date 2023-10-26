@@ -149,9 +149,9 @@ describe("spellCheckerUtils", () => {
             ["fa-AF", "fa"], ["fa-IR", "fa"], ["es-ES", "es"], ["es-MX", "es"],["sv-SE", "sv"]
         ])(
             "returns equivalent language tool language code for %s",
-            (vtmsLanguageId: string, languageToolValue: string) => {
+            (manucapLanguageId: string, languageToolValue: string) => {
                 //THEN
-                expect(languageToolLanguageMapping.get(vtmsLanguageId)).toEqual(languageToolValue);
+                expect(languageToolLanguageMapping.get(manucapLanguageId)).toEqual(languageToolValue);
             },
         );
 
