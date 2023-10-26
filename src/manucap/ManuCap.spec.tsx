@@ -66,7 +66,7 @@ const matchedCues = [
 ];
 
 const testingTrack = {
-    type: "CAPTION",
+    type: "CAPTION1",
     language: { id: "en-US", name: "English (US)" } as Language,
     default: true,
     mediaTitle: "This is the video title",
@@ -162,7 +162,7 @@ describe("SubtitleEdit", () => {
                                             targetCuesLength: 2,
                                             withoutSourceCues: true,
                                             matchedCues,
-                                            commentAuthor: "Linguist1"
+                                            commentAuthor: "Linguist"
                                         }}
                                         rowRef={createRef()}
                                     />
