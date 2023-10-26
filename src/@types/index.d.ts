@@ -1,9 +1,9 @@
 declare module "@dotsub/manucap" {
 
-    import SubtitleEdit from "../subtitleEdit/SubtitleEdit";
-    import { AppThunk, Reducers } from "../subtitleEdit/subtitleEditReducers";
-    import VideoPlayer, { Props as VideoPlayerProps } from "../subtitleEdit/player/VideoPlayer";
-    import { CueDto, Track, User } from "../subtitleEdit/model";
+    import SubtitleEdit from "../manucap/SubtitleEdit";
+    import { AppThunk, Reducers } from "../manucap/subtitleEditReducers";
+    import VideoPlayer, { Props as VideoPlayerProps } from "../manucap/player/VideoPlayer";
+    import { CueDto, Track, User } from "../manucap/model";
 
     const Actions: {
         updateEditingTrack: (track: Track) => AppThunk;
@@ -42,7 +42,7 @@ declare module "@dotsub/manucap/models" {
         TrackType,
         SaveTrackCue,
         SaveState
-    } from "../subtitleEdit/model";
+    } from "../manucap/model";
 
     export {
         CueDto,

@@ -5,16 +5,16 @@ import "primereact/resources/primereact.min.css";
 import "primereact/resources/themes/bootstrap4-light-blue/theme.css";
 import { Provider, useDispatch } from "react-redux";
 import { ReactElement, useEffect, useState } from "react";
-import { updateCues } from "./subtitleEdit/cues/cuesList/cuesListActions";
-import { updateEditingTrack } from "./subtitleEdit/trackSlices";
-import { updateSubtitleUser } from "./subtitleEdit/userSlices";
-import { CueDto, Language, SaveState, Track, User } from "./subtitleEdit/model";
+import { updateCues } from "./manucap/cues/cuesList/cuesListActions";
+import { updateEditingTrack } from "./manucap/trackSlices";
+import { updateSubtitleUser } from "./manucap/userSlices";
+import { CueDto, Language, SaveState, Track, User } from "./manucap/model";
 import ReactDOM from "react-dom";
-import SubtitleEdit from "./subtitleEdit/SubtitleEdit";
-import { readSubtitleSpecification } from "./subtitleEdit/toolbox/subtitleSpecifications/subtitleSpecificationSlice";
+import SubtitleEdit from "./manucap/SubtitleEdit";
+import { readSubtitleSpecification } from "./manucap/toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import testingStore from "./testUtils/testingStore";
 import "draft-js/dist/Draft.css";
-import { updateSourceCues } from "./subtitleEdit/cues/view/sourceCueSlices";
+import { updateSourceCues } from "./manucap/cues/view/sourceCueSlices";
 
 // ################## TESTING DATA TWEAKS ##############################
 const language = { id: "en-US", name: "English (US)", direction: "LTR" } as Language;
