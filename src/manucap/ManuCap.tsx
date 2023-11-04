@@ -32,7 +32,7 @@ import { saveCueDeleteSlice } from "./cues/saveCueDeleteSlices";
 //  Can be removed once fixed.
 enableMapSet();
 
-export interface SubtitleEditProps {
+export interface ManuCapProps {
     mp4: string;
     poster: string;
     waveform?: string;
@@ -50,7 +50,7 @@ export interface SubtitleEditProps {
     saveState: SaveState;
 }
 
-const ManuCap = (props: SubtitleEditProps): ReactElement => {
+const ManuCap = (props: ManuCapProps): ReactElement => {
     const dispatch = useDispatch();
     const loadingIndicator = useSelector((state: ManuCapState) => state.loadingIndicator);
     const editingTrack = useSelector((state: ManuCapState) => state.editingTrack);

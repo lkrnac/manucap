@@ -85,7 +85,7 @@ const testingTranslationTrack = {
 
 jest.setTimeout(9000);
 
-describe("SubtitleEdit", () => {
+describe("ManuCap", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
         jest.clearAllMocks();
