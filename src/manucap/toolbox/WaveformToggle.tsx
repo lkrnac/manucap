@@ -1,6 +1,6 @@
 import { MouseEvent, ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SubtitleEditState } from "../manuCapReducers";
+import { ManuCapState } from "../manuCapReducers";
 import ToggleButton from "./ToggleButton";
 import { waveformVisibleSlice } from "../player/waveformSlices";
 
@@ -10,7 +10,7 @@ interface Props {
 
 export const WaveformToggle = (props: Props): ReactElement => {
     const dispatch = useDispatch();
-    const waveformVisible = useSelector((state: SubtitleEditState) => state.waveformVisible);
+    const waveformVisible = useSelector((state: ManuCapState) => state.waveformVisible);
     return (
         <ToggleButton
             className="flex items-center justify-between"

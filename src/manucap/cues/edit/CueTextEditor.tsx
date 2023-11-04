@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Mousetrap from "mousetrap";
 import _ from "lodash";
 
-import { AppThunk, SubtitleEditState } from "../../manuCapReducers";
+import { AppThunk, ManuCapState } from "../../manuCapReducers";
 import { Character, getActionByKeyboardEvent, mousetrapBindings } from "../../utils/shortcutConstants";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import { convertVttToHtml, getVttText } from "./cueTextConverter";
@@ -264,11 +264,11 @@ export let editorStateFOR_TESTING: EditorState;
 export let setEditorStateFOR_TESTING: (editorState: EditorState) => void;
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
-    const spellcheckerEnabled = useSelector((state: SubtitleEditState) => state.spellCheckerSettings.enabled);
-    const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
-    const replacement = useSelector((state: SubtitleEditState) => state.searchReplace.replacement);
-    const searchReplace = useSelector((state: SubtitleEditState) => state.searchReplace);
+    const editingTrack = useSelector((state: ManuCapState) => state.editingTrack);
+    const spellcheckerEnabled = useSelector((state: ManuCapState) => state.spellCheckerSettings.enabled);
+    const subtitleSpecifications = useSelector((state: ManuCapState) => state.subtitleSpecifications);
+    const replacement = useSelector((state: ManuCapState) => state.searchReplace.replacement);
+    const searchReplace = useSelector((state: ManuCapState) => state.searchReplace);
 
     const [spellCheckerMatchingOffset, setSpellCheckerMatchingOffset] = useState(null);
     const editorRef = useRef(null);

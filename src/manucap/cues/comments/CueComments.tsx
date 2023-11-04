@@ -3,7 +3,7 @@ import * as React from "react";
 import { CueComment, CueDto } from "../../model";
 import { useDispatch, useSelector } from "react-redux";
 import { addCueComment, deleteCueComment } from "../cuesList/cuesListActions";
-import { AppThunk, SubtitleEditState } from "../../manuCapReducers";
+import { AppThunk, ManuCapState } from "../../manuCapReducers";
 import { Character } from "../../utils/shortcutConstants";
 import { Tooltip } from "primereact/tooltip";
 import DateTime from "../../common/DateTime";
@@ -17,7 +17,7 @@ interface Props {
 const CueComments = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const [text, setText] = useState("");
-    const currentUser = useSelector((state: SubtitleEditState) => state.subtitleUser);
+    const currentUser = useSelector((state: ManuCapState) => state.subtitleUser);
 
     const addNewComment = useCallback(() => {
         if (text) {

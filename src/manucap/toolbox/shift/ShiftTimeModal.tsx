@@ -1,6 +1,6 @@
 import { ReactElement, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SubtitleEditState } from "../../manuCapReducers";
+import { ManuCapState } from "../../manuCapReducers";
 import { applyShiftTimeByPosition } from "../../cues/cuesList/cuesListActions";
 import { useForm } from "react-hook-form";
 import { Dialog } from "primereact/dialog";
@@ -34,9 +34,9 @@ const validationMessage = {
 const ShiftTimeModal = (props: Props): ReactElement => {
     const [errorMessage, setErrorMessage] = useState();
     const dispatch = useDispatch();
-    const firstTrackTime = useSelector((state: SubtitleEditState) => state.cues[0]?.vttCue.startTime);
-    const mediaChunkStart = useSelector((state: SubtitleEditState) => state.editingTrack?.mediaChunkStart);
-    const editCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
+    const firstTrackTime = useSelector((state: ManuCapState) => state.cues[0]?.vttCue.startTime);
+    const mediaChunkStart = useSelector((state: ManuCapState) => state.editingTrack?.mediaChunkStart);
+    const editCueIndex = useSelector((state: ManuCapState) => state.editingCueIndex);
     const isMediaChunk = !!mediaChunkStart || mediaChunkStart === 0;
 
     const validationSchema = Joi.object({

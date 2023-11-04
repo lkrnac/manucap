@@ -1,7 +1,7 @@
 import { CSSProperties, ReactElement, useEffect, useState } from "react";
 import { CUE_LINE_STATE_CLASSES, CueDtoWithIndex, CueError, CueLineState, CuesWithRowIndex } from "../../model";
 import { useDispatch, useSelector } from "react-redux";
-import { SubtitleEditState } from "../../manuCapReducers";
+import { ManuCapState } from "../../manuCapReducers";
 import { addCuesToMergeList, removeCuesToMergeList } from "../cuesList/cuesListActions";
 import { Tooltip } from "primereact/tooltip";
 
@@ -48,8 +48,8 @@ const getIconStyle = (bottom: string): CSSProperties => {
 
 const CueLineFlap = (props: Props): ReactElement => {
     const dispatch = useDispatch();
-    const mergeVisible = useSelector((state: SubtitleEditState) => state.mergeVisible);
-    const rowsToMerge = useSelector((state: SubtitleEditState) => state.rowsToMerge);
+    const mergeVisible = useSelector((state: ManuCapState) => state.mergeVisible);
+    const rowsToMerge = useSelector((state: ManuCapState) => state.rowsToMerge);
     const [checked, setChecked] = useState(false);
     const showCommentsIcon = props.cueCommentsCount && props.cueCommentsCount > 0;
 

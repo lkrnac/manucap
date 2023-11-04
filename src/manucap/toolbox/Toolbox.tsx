@@ -6,7 +6,7 @@ import CaptionOverlapToggle from "./CaptionOverlapToggle";
 import ExportTrackCuesButton from "./export/ExportTrackCuesButton";
 import ImportTrackCuesButton from "./ImportTrackCuesButton";
 import { useSelector } from "react-redux";
-import { SubtitleEditState } from "../manuCapReducers";
+import { ManuCapState } from "../manuCapReducers";
 import SearchReplaceButton from "./SearchReplaceButton";
 import MergeCuesButton from "./MergeCuesButton";
 import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
@@ -31,7 +31,7 @@ const Toolbox = (props: Props): ReactElement => {
 
     // Tracks.
 
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const editingTrack = useSelector((state: ManuCapState) => state.editingTrack);
     const isTranslation = !!editingTrack?.sourceLanguage;
 
     // Menu Toolbox.

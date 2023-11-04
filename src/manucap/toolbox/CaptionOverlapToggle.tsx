@@ -1,6 +1,6 @@
 import { MouseEvent, ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SubtitleEditState } from "../manuCapReducers";
+import { ManuCapState } from "../manuCapReducers";
 import ToggleButton from "./ToggleButton";
 import { updateEditingTrack } from "../trackSlices";
 import { SaveState, Track } from "../model";
@@ -13,8 +13,8 @@ interface Props {
 
 export const CaptionOverlapToggle = (props: Props): ReactElement => {
     const dispatch = useDispatch();
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
-    const cues = useSelector((state: SubtitleEditState) => state.cues);
+    const editingTrack = useSelector((state: ManuCapState) => state.editingTrack);
+    const cues = useSelector((state: ManuCapState) => state.cues);
     const overlapEnabled = editingTrack?.overlapEnabled;
     return (
         <ToggleButton

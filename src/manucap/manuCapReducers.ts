@@ -59,7 +59,7 @@ const manuCapReducers = combineReducers(Reducers);
 
 export default manuCapReducers;
 
-export type SubtitleEditState = ReturnType<typeof manuCapReducers>;
+export type ManuCapState = ReturnType<typeof manuCapReducers>;
 
 /**
  * We are forced to use `as {} as AnyAction` casting then we are executing actions with `testingStore.dispatch`.
@@ -67,4 +67,4 @@ export type SubtitleEditState = ReturnType<typeof manuCapReducers>;
  * But no suggestions from that issue work nor mentioned fix didn't work. I couldn't figure out any other fix than
  * applying ugly cast workaround.
  */
-export type AppThunk = ThunkAction<void, SubtitleEditState, unknown, Action<string>>;
+export type AppThunk = ThunkAction<void, ManuCapState, unknown, Action<string>>;

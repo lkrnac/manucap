@@ -1,4 +1,4 @@
-import { AppThunk, SubtitleEditState } from "../manuCapReducers";
+import { AppThunk, ManuCapState } from "../manuCapReducers";
 import { ReactElement, useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import VideoPlayer from "./VideoPlayer";
@@ -17,16 +17,16 @@ interface Props {
 
 const EditingVideoPlayer = (props: Props): ReactElement => {
     const dispatch = useDispatch();
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const editingTrack = useSelector((state: ManuCapState) => state.editingTrack);
 
     /**
      * This expects that EditingVideoPlayer would be rendered with cues initialized in Redux.
      * It uses shallowEqual as the equalityFn because replacing all the cues was not performant.
      */
-    const editingCues = useSelector((state: SubtitleEditState) => state.cues, shallowEqual);
-    const lastCueChange = useSelector((state: SubtitleEditState) => state.lastCueChange);
-    const videoSectionToPlay = useSelector((state: SubtitleEditState) => state.videoSectionToPlay);
-    const waveformVisible = useSelector((state: SubtitleEditState) => state.waveformVisible);
+    const editingCues = useSelector((state: ManuCapState) => state.cues, shallowEqual);
+    const lastCueChange = useSelector((state: ManuCapState) => state.lastCueChange);
+    const videoSectionToPlay = useSelector((state: ManuCapState) => state.videoSectionToPlay);
+    const waveformVisible = useSelector((state: ManuCapState) => state.waveformVisible);
     const languageCuesArray = editingTrack ? [{ languageId: editingTrack.language.id, cues: editingCues }] : [];
     const tracks = editingTrack ? [editingTrack] : [];
 

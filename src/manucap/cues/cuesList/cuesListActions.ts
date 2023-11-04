@@ -16,7 +16,7 @@ import {
     SubtitleEditAction,
     Track
 } from "../../model";
-import { AppThunk, SubtitleEditState } from "../../manuCapReducers";
+import { AppThunk, ManuCapState } from "../../manuCapReducers";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import {
     applyInvalidChunkRangePreventionEnd,
@@ -59,7 +59,7 @@ interface MatchedCueIndexes {
     editingIndexMatchedCues: number;
 }
 
-const findMatchedIndexes = (state: SubtitleEditState, index: number): MatchedCueIndexes => {
+const findMatchedIndexes = (state: ManuCapState, index: number): MatchedCueIndexes => {
     // TODO: Remove following ugly code
     let targetCuesIndex = 0;
     const editingIndexMatchedCues = state.matchedCues.matchedCues.findIndex(
@@ -118,7 +118,7 @@ const validateShift = (position: ShiftPosition, cueIndex: number): void => {
 
 export const updateMatchedCue = (
     dispatch: Dispatch<SubtitleEditAction>,
-    state: SubtitleEditState,
+    state: ManuCapState,
     index: number
 ): void => {
     const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(state, index);
@@ -130,7 +130,7 @@ export const updateMatchedCue = (
 export const applySpellcheckerOnCue = createAsyncThunk(
     "spellchecker/applySpellcheckerOnCue",
     async (index: number, thunkApi) => {
-        const state: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
+        const state: ManuCapState = thunkApi.getState() as ManuCapState;
         const track = state.editingTrack as Track;
         const currentEditingCue = state.cues[index];
         if (currentEditingCue) {
@@ -140,7 +140,7 @@ export const applySpellcheckerOnCue = createAsyncThunk(
                 return fetchSpellCheck(text, spellCheckerSettings, track.language.id)
                     .then(spellCheck => {
                         addSpellCheck(thunkApi.dispatch, index, spellCheck, track.id);
-                        const freshState: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
+                        const freshState: ManuCapState = thunkApi.getState() as ManuCapState;
                         updateMatchedCue(thunkApi.dispatch, freshState, index);
                     });
             }
@@ -159,7 +159,7 @@ export const updateMatchedCues = (): AppThunk =>
 export const checkSpelling = createAsyncThunk<
         void,
         { index: number },
-        { state: SubtitleEditState }
+        { state: ManuCapState }
     >(
     "validations/checkSpelling",
     async ({ index },
@@ -181,7 +181,7 @@ export const checkSpelling = createAsyncThunk<
 export const checkErrors = createAsyncThunk<
         void,
         { index: number; shouldSpellCheck: boolean },
-        { state: SubtitleEditState }
+        { state: ManuCapState }
     >(
     "validations/checkErrors",
     async ({ index, shouldSpellCheck },
@@ -223,7 +223,7 @@ export const validateCue = (
 
 const reorderCues = (
     dispatch: Dispatch<SubtitleEditAction>,
-    state: SubtitleEditState,
+    state: ManuCapState,
     cuesToUpdate?: CueDto[]
 ): CueDto | null | undefined => {
     const newCues = cuesToUpdate ? cuesToUpdate : state.cues;
@@ -241,7 +241,7 @@ const reorderCues = (
 
 const resetEditingIndexIfNeeded = (
     dispatch: Dispatch<SubtitleEditAction>,
-    state: SubtitleEditState,
+    state: ManuCapState,
     newEditingCueIndex: number
 ): void => {
     const editingCueIndex = state.editingCueIndex;
@@ -254,7 +254,7 @@ const resetEditingIndexIfNeeded = (
 
 const resetEditingIndexTimeChangeIfNeeded = (
     dispatch: Dispatch<SubtitleEditAction>,
-    state: SubtitleEditState,
+    state: ManuCapState,
     editUuid: string | null | undefined
 ): void => {
     const newEditingCueIndex = _.findIndex(state.cues, [ "editUuid", editUuid ]);
@@ -263,7 +263,7 @@ const resetEditingIndexTimeChangeIfNeeded = (
 
 const resetEditingIndexAllCuesChangesIfNeeded = (
     dispatch: Dispatch<SubtitleEditAction>,
-    state: SubtitleEditState,
+    state: ManuCapState,
     editingCue: CueDto | null | undefined
 ): void => {
     const newEditingCueIndex = _.findIndex(state.cues,
@@ -404,11 +404,11 @@ export const removeIgnoredSpellcheckedMatchesFromAllCues = (): AppThunk =>
 export const validateCorruptedCues = createAsyncThunk<
         void,
         string,
-        { state: SubtitleEditState }
+        { state: ManuCapState }
     >(
     "validations/validateCorruptedCues",
     async (matchText, thunkAPI) => {
-        const state: SubtitleEditState = thunkAPI.getState();
+        const state: ManuCapState = thunkAPI.getState();
         const cues = state.cues;
         cues.filter(cue => cue.errors
             && cue.vttCue.text.includes(matchText)).forEach((cue: CueDto) => {
@@ -444,7 +444,7 @@ export const saveTrack = (): AppThunk =>
 
 export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
     (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
-        const state: SubtitleEditState = getState();
+        const state: ManuCapState = getState();
         const subtitleSpecifications = state.subtitleSpecifications;
         const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
         let step = Math.min(timeGapLimit.maxGap, NEW_ADDED_CUE_DEFAULT_STEP);
@@ -494,7 +494,7 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
 
 export const splitCue = (idx: number): AppThunk =>
     async (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): Promise<void> => {
-        const state: SubtitleEditState = getState();
+        const state: ManuCapState = getState();
         const subtitleSpecifications = state.subtitleSpecifications;
         const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
         const originalCue = state.cues[idx];
@@ -647,7 +647,7 @@ export const mergeCues = (): AppThunk =>
                     comments: mergedComments
                 } as CueDto;
 
-                const state: SubtitleEditState = getState();
+                const state: ManuCapState = getState();
                 const subtitleSpecifications = state.subtitleSpecifications;
                 const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
                 const editingTrack = state.editingTrack;

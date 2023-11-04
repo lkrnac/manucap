@@ -1,13 +1,13 @@
 import { ReactElement } from "react";
 import { useSelector } from "react-redux";
-import { SubtitleEditState } from "../../manuCapReducers";
+import { ManuCapState } from "../../manuCapReducers";
 
 interface Props {
     onClick: () => void
 }
 
 const ShiftTimeButton = (props: Props): ReactElement => {
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const editingTrack = useSelector((state: ManuCapState) => state.editingTrack);
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     return (
         <button

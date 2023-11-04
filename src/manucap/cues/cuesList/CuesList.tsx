@@ -6,7 +6,7 @@ import AddCueLineButton from "../edit/AddCueLineButton";
 import { TrackCues, CueLineDto, ScrollPosition, Track, SaveState } from "../../model";
 import CueLine from "../cueLine/CueLine";
 import { addCue } from "./cuesListActions";
-import { SubtitleEditState } from "../../manuCapReducers";
+import { ManuCapState } from "../../manuCapReducers";
 import Mousetrap from "mousetrap";
 import { KeyCombination } from "../../utils/shortcutConstants";
 import {
@@ -27,10 +27,10 @@ interface Props {
 
 const CuesList = (props: Props): ReactElement => {
     const dispatch = useDispatch();
-    const targetCuesArray = useSelector((state: SubtitleEditState) => state.cues);
-    const matchedCues = useSelector((state: SubtitleEditState) => state.matchedCues);
+    const targetCuesArray = useSelector((state: ManuCapState) => state.cues);
+    const matchedCues = useSelector((state: ManuCapState) => state.matchedCues);
     const previousNonNullFocusedCueIndex = useRef(-1);
-    const startAt = useSelector((state: SubtitleEditState) => state.focusedCueIndex);
+    const startAt = useSelector((state: ManuCapState) => state.focusedCueIndex);
     const isMediaChunked = props.editingTrack?.mediaChunkStart !== undefined;
     if (startAt !== null) {
         previousNonNullFocusedCueIndex.current = startAt;

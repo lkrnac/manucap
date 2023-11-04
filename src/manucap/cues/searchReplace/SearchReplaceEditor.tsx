@@ -11,7 +11,7 @@ import {
     setReplacement,
     showSearchReplace
 } from "./searchReplaceSlices";
-import { AppThunk, SubtitleEditState } from "../../manuCapReducers";
+import { AppThunk, ManuCapState } from "../../manuCapReducers";
 import { saveTrack, updateVttCueTextOnly } from "../cuesList/cuesListActions";
 import { CueDto, SubtitleEditAction } from "../../model";
 import { replaceVttCueContent } from "../edit/editUtils";
@@ -75,10 +75,10 @@ const searchReplaceAll = (
 
 const SearchReplaceEditor = (): ReactElement | null => {
     const dispatch = useDispatch();
-    const searchReplace = useSelector((state: SubtitleEditState) => state.searchReplace);
-    const searchReplaceVisible = useSelector((state: SubtitleEditState) => state.searchReplaceVisible);
-    const cues = useSelector((state: SubtitleEditState) => state.cues);
-    const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
+    const searchReplace = useSelector((state: ManuCapState) => state.searchReplace);
+    const searchReplaceVisible = useSelector((state: ManuCapState) => state.searchReplaceVisible);
+    const cues = useSelector((state: ManuCapState) => state.cues);
+    const editingCueIndex = useSelector((state: ManuCapState) => state.editingCueIndex);
     const [replacement, setReplacement] = useState("");
 
     return searchReplaceVisible ? (

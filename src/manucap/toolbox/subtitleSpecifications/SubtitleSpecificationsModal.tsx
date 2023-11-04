@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Dialog } from "primereact/dialog";
-import { SubtitleEditState } from "../../manuCapReducers";
+import { ManuCapState } from "../../manuCapReducers";
 import { SubtitleSpecification } from "../model";
 import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
 import { useSelector } from "react-redux";
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const SubtitleSpecificationsModal = (props: Props): ReactElement => {
-    const stateSubtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
+    const stateSubtitleSpecifications = useSelector((state: ManuCapState) => state.subtitleSpecifications);
     const subtitleSpecifications = stateSubtitleSpecifications ? stateSubtitleSpecifications :
         {} as SubtitleSpecification;
     return (

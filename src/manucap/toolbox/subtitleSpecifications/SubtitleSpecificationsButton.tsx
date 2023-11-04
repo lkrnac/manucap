@@ -1,11 +1,11 @@
 import { ReactElement, useEffect, useState } from "react";
 import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
 import { useSelector } from "react-redux";
-import { SubtitleEditState } from "../../manuCapReducers";
+import { ManuCapState } from "../../manuCapReducers";
 import { Tooltip } from "primereact/tooltip";
 
 const SubtitleSpecificationsButton = (): ReactElement => {
-    const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
+    const subtitleSpecifications = useSelector((state: ManuCapState) => state.subtitleSpecifications);
     const [show, setShow] = useState(false);
     useEffect(
         () => {

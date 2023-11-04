@@ -3,7 +3,7 @@ import * as React from "react";
 import { CUE_LINE_STATE_CLASSES, CueDto, CueDtoWithIndex, CueError, CueLineDto, CueLineState } from "../../model";
 import CueEdit from "../edit/CueEdit";
 import CueView from "../view/CueView";
-import { SubtitleEditState } from "../../manuCapReducers";
+import { ManuCapState } from "../../manuCapReducers";
 import { useSelector } from "react-redux";
 import CueLineFlap from "./CueLineFlap";
 import _ from "lodash";
@@ -117,8 +117,8 @@ const CueErrorsList = (props: CueErrorsListProps): ReactElement | null => {
 };
 
 const CueLine = (props: CueLineProps): ReactElement => {
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
-    const editingCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
+    const editingTrack = useSelector((state: ManuCapState) => state.editingTrack);
+    const editingCueIndex = useSelector((state: ManuCapState) => state.editingCueIndex);
     const captionClassName = "bg-gray-0";
     const translationCueClassName = props.data.targetCues?.length === 0 ? captionClassName : "bg-gray-0";
 
@@ -143,7 +143,7 @@ const CueLine = (props: CueLineProps): ReactElement => {
         }
     });
 
-    const commentsVisible = useSelector((state: SubtitleEditState) => state.commentsVisible);
+    const commentsVisible = useSelector((state: ManuCapState) => state.commentsVisible);
     let cueCommentsCount = 0;
     props.data.targetCues?.forEach((targetCue: CueDtoWithIndex) => {
         if (targetCue.cue.comments) {
