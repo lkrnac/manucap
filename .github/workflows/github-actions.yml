@@ -16,5 +16,6 @@ jobs:
             - run: npm test
             - run: npx react-scripts build # tests if local development browser build is working
             - run: npm run lint
-            - run: sudo apt-get install -y pcre2-utils
+            - run: sudo apt-get install -y pcre2-uti
+            - run: export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
             - run: ./scripts/post-build-js-checks.sh
