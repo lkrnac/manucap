@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { useSelector } from "react-redux";
-import { SubtitleEditState } from "../../manuCapReducers";
+import { ManuCapState } from "../../manuCapReducers";
 import { Track } from "../../model";
 import { Tooltip } from "primereact/tooltip";
 
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const ExportTrackCuesButton = (props: Props): ReactElement => {
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const editingTrack = useSelector((state: ManuCapState) => state.editingTrack);
     return (
         <>
             <button

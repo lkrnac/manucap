@@ -7,11 +7,11 @@ import { Provider, useDispatch } from "react-redux";
 import { ReactElement, useEffect, useState } from "react";
 import { updateCues } from "./manucap/cues/cuesList/cuesListActions";
 import { updateEditingTrack } from "./manucap/trackSlices";
-import { updateSubtitleUser } from "./manucap/userSlices";
+import { updateCaptionUser } from "./manucap/userSlices";
 import { CueDto, Language, SaveState, Track, User } from "./manucap/model";
 import ReactDOM from "react-dom";
 import ManuCap from "./manucap/ManuCap";
-import { readSubtitleSpecification } from "./manucap/toolbox/subtitleSpecifications/subtitleSpecificationSlice";
+import { readCaptionSpecification } from "./manucap/toolbox/captionSpecifications/captionSpecificationSlice";
 import testingStore from "./testUtils/testingStore";
 import "draft-js/dist/Draft.css";
 import { updateSourceCues } from "./manucap/cues/view/sourceCueSlices";
@@ -310,7 +310,7 @@ const TestApp = (): ReactElement => {
 
     // ################################## User ###########################################
     useEffect(() => {
-        const subtitleUser = {
+        const captionUser = {
             displayName: "Jane Doe",
             email: "jane.doe@gmail.com",
             firstname: "Jane",
@@ -319,16 +319,16 @@ const TestApp = (): ReactElement => {
             userId: "jane.doe"
         } as User;
         setTimeout(
-            () => dispatch(updateSubtitleUser(subtitleUser)),
+            () => dispatch(updateCaptionUser(captionUser)),
             500
         );
     }, [dispatch]);
 
-    // ################################## Subtitle Specs ###########################################
+    // ################################## Caption Specs ###########################################
     useEffect(() => {
         setTimeout( // this simulates latency caused by server roundtrip
-            () => dispatch(readSubtitleSpecification({
-                subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
+            () => dispatch(readCaptionSpecification({
+                captionSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
                 projectId: "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
                 enabled: true,
                 audioDescription: false,

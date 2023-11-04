@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Mousetrap from "mousetrap";
 import _ from "lodash";
 
-import { AppThunk, SubtitleEditState } from "../../manuCapReducers";
+import { AppThunk, ManuCapState } from "../../manuCapReducers";
 import { Character, getActionByKeyboardEvent, mousetrapBindings } from "../../utils/shortcutConstants";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import { convertVttToHtml, getVttText } from "./cueTextConverter";
@@ -32,7 +32,7 @@ import { replaceContent } from "./editUtils";
 import { searchNextCues, setReplacement } from "../searchReplace/searchReplaceSlices";
 import { CueExtraCharacters } from "./CueExtraCharacters";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
-import { SubtitleSpecification } from "../../toolbox/model";
+import { CaptionSpecification } from "../../toolbox/model";
 import { Track } from "../../model";
 import { SearchReplaceIndices } from "../searchReplace/model";
 import { callSaveCueUpdate } from "../saveCueUpdateSlices";
@@ -56,10 +56,10 @@ const findSearchReplaceMatch = (searchReplaceIndices: SearchReplaceIndices | und
         }
     };
 
-const findExtraCharacters = (subtitleSpecifications: SubtitleSpecification | null) =>
+const findExtraCharacters = (captionSpecifications: CaptionSpecification | null) =>
     (contentBlock: ContentBlock, callback: Function): void => {
-        if (subtitleSpecifications && subtitleSpecifications.enabled && subtitleSpecifications.maxCharactersPerLine) {
-            const maxCharactersPerLine = subtitleSpecifications.maxCharactersPerLine;
+        if (captionSpecifications && captionSpecifications.enabled && captionSpecifications.maxCharactersPerLine) {
+            const maxCharactersPerLine = captionSpecifications.maxCharactersPerLine;
             const text = contentBlock.getText();
             const lines = text.split("\n");
             return lines.forEach(line => {
@@ -72,10 +72,10 @@ const findExtraCharacters = (subtitleSpecifications: SubtitleSpecification | nul
         }
     };
 
-const findExtraLines = (subtitleSpecifications: SubtitleSpecification | null) =>
+const findExtraLines = (captionSpecifications: CaptionSpecification | null) =>
     (contentBlock: ContentBlock, callback: Function): void => {
-        if (subtitleSpecifications && subtitleSpecifications.enabled && subtitleSpecifications.maxLinesPerCaption) {
-            const maxLinesPerCaption = subtitleSpecifications.maxLinesPerCaption;
+        if (captionSpecifications && captionSpecifications.enabled && captionSpecifications.maxLinesPerCaption) {
+            const maxLinesPerCaption = captionSpecifications.maxLinesPerCaption;
             const text = contentBlock.getText();
             const lines = text.split("\n");
             let charCount = 0;
@@ -264,11 +264,11 @@ export let editorStateFOR_TESTING: EditorState;
 export let setEditorStateFOR_TESTING: (editorState: EditorState) => void;
 
 const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
-    const spellcheckerEnabled = useSelector((state: SubtitleEditState) => state.spellCheckerSettings.enabled);
-    const subtitleSpecifications = useSelector((state: SubtitleEditState) => state.subtitleSpecifications);
-    const replacement = useSelector((state: SubtitleEditState) => state.searchReplace.replacement);
-    const searchReplace = useSelector((state: SubtitleEditState) => state.searchReplace);
+    const editingTrack = useSelector((state: ManuCapState) => state.editingTrack);
+    const spellcheckerEnabled = useSelector((state: ManuCapState) => state.spellCheckerSettings.enabled);
+    const captionSpecifications = useSelector((state: ManuCapState) => state.captionSpecifications);
+    const replacement = useSelector((state: ManuCapState) => state.searchReplace.replacement);
+    const searchReplace = useSelector((state: ManuCapState) => state.searchReplace);
 
     const [spellCheckerMatchingOffset, setSpellCheckerMatchingOffset] = useState(null);
     const editorRef = useRef(null);
@@ -305,12 +305,12 @@ const CueTextEditor = (props: CueTextEditorProps): ReactElement => {
                 component: SearchReplaceMatch,
             },
             {
-                strategy: findExtraCharacters(subtitleSpecifications),
+                strategy: findExtraCharacters(captionSpecifications),
                 component: CueExtraCharacters,
                 props: {}
             },
             {
-                strategy: findExtraLines(subtitleSpecifications),
+                strategy: findExtraLines(captionSpecifications),
                 component: CueExtraCharacters,
                 props: {}
             },

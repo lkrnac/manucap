@@ -1,14 +1,14 @@
 import "../../../testUtils/initBrowserEnvironment";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import { SubtitleSpecification } from "../model";
-import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
+import { CaptionSpecification } from "../model";
+import CaptionSpecificationsModal from "./CaptionSpecificationsModal";
 import { mount } from "enzyme";
-import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
+import { readCaptionSpecification } from "./captionSpecificationSlice";
 import testingStore from "../../../testUtils/testingStore";
 import { removeIds } from "../../../testUtils/testUtils";
 
-describe("SubtitleSpecificationsModal", () => {
+describe("CaptionSpecificationsModal", () => {
     it("renders shown", () => {
         // GIVEN
         const expectedNode = mount(
@@ -26,7 +26,7 @@ describe("SubtitleSpecificationsModal", () => {
                     >
                         <div className="p-dialog-header">
                             <div className="p-dialog-title">
-                                Subtitle Specifications
+                                Caption Specifications
                             </div>
                             <div className="p-dialog-header-icons">
                                 <button
@@ -57,11 +57,11 @@ describe("SubtitleSpecificationsModal", () => {
 
         // WHEN
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsModal show onClose={(): void => undefined} />
+                <CaptionSpecificationsModal show onClose={(): void => undefined} />
             </Provider>
         );
 

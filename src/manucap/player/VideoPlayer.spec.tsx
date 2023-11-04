@@ -68,7 +68,7 @@ describe("VideoPlayer", () => {
         // GIVEN
         const expectedTextTrackOptions = [
             { kind: "captions", mode: "showing", srclang: "en-US", default: true } as videojs.TextTrackOptions,
-            { kind: "subtitles", mode: "showing", srclang: "es-ES", default: false } as videojs.TextTrackOptions
+            { kind: "captions", mode: "showing", srclang: "es-ES", default: false } as videojs.TextTrackOptions
         ];
 
         // WHEN
@@ -99,7 +99,7 @@ describe("VideoPlayer", () => {
         isSafari.mockImplementationOnce(() => true);
         const expectedTextTrackOptions = [
             { kind: "captions", mode: "showing", srclang: "en-US", default: true } as videojs.TextTrackOptions,
-            { kind: "subtitles", mode: "showing", srclang: "es-ES", default: false } as videojs.TextTrackOptions
+            { kind: "captions", mode: "showing", srclang: "es-ES", default: false } as videojs.TextTrackOptions
         ];
 
         // WHEN

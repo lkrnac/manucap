@@ -1,12 +1,12 @@
 import { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SubtitleEditState } from "../../manuCapReducers";
+import { ManuCapState } from "../../manuCapReducers";
 import { showMerge } from "./mergeSlices";
 import { mergeCues } from "../cuesList/cuesListActions";
 
 const MergeEditor = (): ReactElement | null => {
     const dispatch = useDispatch();
-    const mergeVisible = useSelector((state: SubtitleEditState) => state.mergeVisible);
+    const mergeVisible = useSelector((state: ManuCapState) => state.mergeVisible);
 
     return mergeVisible ? (
         <div style={{ display: "flex", flexFlow: "row", marginBottom: "5px" }}>

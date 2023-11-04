@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import ClickCueWrapper from "./ClickCueWrapper";
 import { validateVttCue } from "../cuesList/cuesListActions";
-import { SubtitleEditState } from "../../manuCapReducers";
+import { ManuCapState } from "../../manuCapReducers";
 import { SearchReplaceMatch } from "../searchReplace/SearchReplaceMatch";
 import { renderToString } from "react-dom/server";
 import { SearchReplace } from "../searchReplace/model";
@@ -122,8 +122,8 @@ const buildContent = (
 };
 
 const CueView = (props: CueViewProps): ReactElement => {
-    const searchReplaceVisible = useSelector((state: SubtitleEditState) => state.searchReplaceVisible);
-    const searchReplace = useSelector((state: SubtitleEditState) => state.searchReplace);
+    const searchReplaceVisible = useSelector((state: ManuCapState) => state.searchReplaceVisible);
+    const searchReplace = useSelector((state: ManuCapState) => state.searchReplace);
     const dispatch = useDispatch();
 
     const html = props.hideText

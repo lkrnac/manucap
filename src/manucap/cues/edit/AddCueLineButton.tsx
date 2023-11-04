@@ -20,7 +20,7 @@ const AddCueLineButton = (props: Props): ReactElement => {
                 style={{ maxHeight: "38px", height: "100%" }}
                 className="mc-btn mc-btn-primary mc-add-cue-button w-full mc-btn-sm"
                 onClick={(): AppThunk => dispatch(addCue(props.cueIndex + 1, props.sourceCueIndexes))}
-                data-pr-tooltip="Insert new subtitle"
+                data-pr-tooltip="Insert new caption"
                 data-pr-position={props.text ? "bottom" : "left"}
                 data-pr-at={props.text ? undefined : "left center"}
             >

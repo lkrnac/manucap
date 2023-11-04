@@ -1,6 +1,6 @@
 import { MouseEvent, ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SubtitleEditState } from "../manuCapReducers";
+import { ManuCapState } from "../manuCapReducers";
 import ToggleButton from "./ToggleButton";
 import { Track } from "../model";
 import { updateEditingTrack } from "../trackSlices";
@@ -11,7 +11,7 @@ interface Props {
 
 export const TimecodesLockToggle = (props: Props): ReactElement => {
     const dispatch = useDispatch();
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const editingTrack = useSelector((state: ManuCapState) => state.editingTrack);
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     return (
         <ToggleButton

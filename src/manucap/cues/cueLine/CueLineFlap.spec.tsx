@@ -1054,7 +1054,7 @@ describe("CueLineFlap", () => {
                             <i
                                 id="cuelineComment-0"
                                 className="fa-duotone fa-comments"
-                                data-pr-tooltip="Subtitle(s) has comments"
+                                data-pr-tooltip="Caption(s) has comments"
                                 data-pr-position="right"
                                 data-pr-at="right+10 top+10"
                             />
@@ -1154,7 +1154,7 @@ describe("CueLineFlap", () => {
                             <i
                                 id="cuelineComment-0"
                                 className="fa-duotone fa-comments"
-                                data-pr-tooltip="Subtitle(s) has comments"
+                                data-pr-tooltip="Caption(s) has comments"
                                 data-pr-position="right"
                                 data-pr-at="right+10 top+10"
                             />
@@ -1255,7 +1255,7 @@ describe("CueLineFlap", () => {
                             <i
                                 id="cuelineComment-0"
                                 className="fa-duotone fa-comments"
-                                data-pr-tooltip="Subtitle(s) has comments"
+                                data-pr-tooltip="Caption(s) has comments"
                                 data-pr-position="right"
                                 data-pr-at="right+10 top+10"
                             />

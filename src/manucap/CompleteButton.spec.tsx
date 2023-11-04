@@ -44,7 +44,7 @@ describe("CompleteButton", () => {
                             <i className="ml-2" />
                         </span>
                     </div>
-                    <button type="button" className="mc-btn mc-btn-primary mc-complete-subtitle-mc-btn">
+                    <button type="button" className="mc-btn mc-btn-primary mc-complete-caption-mc-btn">
                         Complete
                     </button>
                 </div>
@@ -74,7 +74,7 @@ describe("CompleteButton", () => {
                     </div>
                     <button
                         type="button"
-                        className="mc-btn mc-btn-primary mc-complete-subtitle-mc-btn"
+                        className="mc-btn mc-btn-primary mc-complete-caption-mc-btn"
                         disabled
                     >
                         Complete
@@ -107,7 +107,7 @@ describe("CompleteButton", () => {
                     </div>
                     <button
                         type="button"
-                        className="mc-btn mc-btn-primary mc-complete-subtitle-mc-btn"
+                        className="mc-btn mc-btn-primary mc-complete-caption-mc-btn"
                         disabled
                     >
                         Complete
@@ -140,7 +140,7 @@ describe("CompleteButton", () => {
                     </div>
                     <button
                         type="button"
-                        className="mc-btn mc-btn-primary mc-complete-subtitle-mc-btn"
+                        className="mc-btn mc-btn-primary mc-complete-caption-mc-btn"
                         disabled
                     >
                         Complete
@@ -171,7 +171,7 @@ describe("CompleteButton", () => {
                             <i className="ml-2 fa-duotone fa-check-circle" />
                         </span>
                     </div>
-                    <button type="button" className="mc-btn mc-btn-primary mc-complete-subtitle-mc-btn">
+                    <button type="button" className="mc-btn mc-btn-primary mc-complete-caption-mc-btn">
                         Complete
                     </button>
                 </div>
@@ -200,7 +200,7 @@ describe("CompleteButton", () => {
                             <i className="ml-2 fa-duotone fa-exclamation-triangle" />
                         </span>
                     </div>
-                    <button type="button" className="mc-btn mc-btn-primary mc-complete-subtitle-mc-btn">
+                    <button type="button" className="mc-btn mc-btn-primary mc-complete-caption-mc-btn">
                         Complete
                     </button>
                 </div>
@@ -230,7 +230,7 @@ describe("CompleteButton", () => {
         );
 
         // WHEN
-        actualNode.find(".mc-complete-subtitle-mc-btn").simulate("click");
+        actualNode.find(".mc-complete-caption-mc-btn").simulate("click");
 
         // THEN
         expect(mockOnComplete).toHaveBeenCalledWith(

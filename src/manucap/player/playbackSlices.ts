@@ -1,8 +1,8 @@
 import { Dispatch, PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppThunk } from "../manuCapReducers";
-import { SubtitleEditAction } from "../model";
+import { ManuCapAction } from "../model";
 
-export interface PlayVideoAction extends SubtitleEditAction {
+export interface PlayVideoAction extends ManuCapAction {
     startTime: number;
     endTime?: number;
 }
@@ -16,6 +16,6 @@ export const playVideoSectionSlice = createSlice({
 });
 
 export const playVideoSection = (startTime: number, endTime?: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<ManuCapAction>>): void => {
         dispatch(playVideoSectionSlice.actions.playVideoSectionSlice({ startTime, endTime }));
     };

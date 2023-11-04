@@ -1,4 +1,4 @@
-import { AppThunk, SubtitleEditState } from "../../manuCapReducers";
+import { AppThunk, ManuCapState } from "../../manuCapReducers";
 import { ReactElement } from "react";
 import { splitCue } from "../cuesList/cuesListActions";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +10,7 @@ interface Props {
 
 const SplitCueLineButton = (props: Props): ReactElement => {
     const dispatch = useDispatch();
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const editingTrack = useSelector((state: ManuCapState) => state.editingTrack);
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     const buttonId = `splitCueLineButton-${props.cueIndex}`;
     return (
@@ -21,7 +21,7 @@ const SplitCueLineButton = (props: Props): ReactElement => {
                 className="mc-btn mc-btn-primary mc-split-cue-button w-full mc-btn-sm"
                 disabled={!timecodesUnlocked}
                 title="Unlock timecodes to enable"
-                data-pr-tooltip="Split this subtitle"
+                data-pr-tooltip="Split this caption"
                 data-pr-position="left"
                 data-pr-at="left center"
                 onClick={(): AppThunk => dispatch(splitCue(props.cueIndex))}

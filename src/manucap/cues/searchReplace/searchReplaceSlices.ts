@@ -1,6 +1,6 @@
 import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ScrollPosition, SubtitleEditAction } from "../../model";
+import { ScrollPosition, ManuCapAction } from "../../model";
 import { AppThunk } from "../../manuCapReducers";
 import { editingTrackSlice } from "../../trackSlices";
 import { SearchDirection, SearchReplace, SearchReplaceIndices } from "./model";
@@ -72,27 +72,27 @@ export const searchReplaceSlice = createSlice({
 });
 
 export const setFind = (find: string): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<ManuCapAction>>): void => {
         dispatch(searchReplaceSlice.actions.setFind(find));
     };
 
 export const setReplacement = (replacement: string): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<ManuCapAction>>): void => {
         dispatch(searchReplaceSlice.actions.setReplacement(replacement));
     };
 
 export const setMatchCase = (matchCase: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<ManuCapAction>>): void => {
         dispatch(searchReplaceSlice.actions.setMatchCase(matchCase));
     };
 
 export const showSearchReplace = (visible: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<boolean | SubtitleEditAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<boolean | ManuCapAction>>): void => {
         dispatch(searchReplaceVisibleSlice.actions.setSearchReplaceVisible(visible));
     };
 
 const getNextCue = (
-    dispatch: Dispatch<SubtitleEditAction>,
+    dispatch: Dispatch<ManuCapAction>,
     getState: Function,
     startingMatchedCueIndex?: number
 ): number => {
@@ -185,7 +185,7 @@ const getNextCue = (
 };
 
 const getPreviousCue = (
-    dispatch: Dispatch<SubtitleEditAction>,
+    dispatch: Dispatch<ManuCapAction>,
     getState: Function,
     startingMatchedCueIndex?: number
 ): number => {
@@ -283,7 +283,7 @@ const getPreviousCue = (
 };
 
 const findCueAndUpdateIndices = (
-    dispatch: Dispatch<SubtitleEditAction>,
+    dispatch: Dispatch<ManuCapAction>,
     getState: Function,
     direction: SearchDirection
 ): void => {
@@ -335,12 +335,12 @@ export const searchCueText = (text: string, find: string, matchCase: boolean): A
 };
 
 export const searchNextCues = (): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
+    (dispatch: Dispatch<ManuCapAction | void>, getState): void => {
         findCueAndUpdateIndices(dispatch, getState, "NEXT");
     };
 
 export const searchPreviousCues = (): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
+    (dispatch: Dispatch<ManuCapAction | void>, getState): void => {
         findCueAndUpdateIndices(dispatch, getState, "PREVIOUS");
     };
 

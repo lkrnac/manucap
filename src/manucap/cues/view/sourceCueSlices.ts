@@ -1,12 +1,12 @@
 import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { CueDto, SubtitleEditAction } from "../../model";
+import { CueDto, ManuCapAction } from "../../model";
 import { AppThunk } from "../../manuCapReducers";
 import { editingTrackSlice } from "../../trackSlices";
 import { updateMatchedCues } from "../cuesList/cuesListActions";
 
-interface CuesAction extends SubtitleEditAction {
+interface CuesAction extends ManuCapAction {
     cues: CueDto[];
 }
 
@@ -22,7 +22,7 @@ export const sourceCuesSlice = createSlice({
 });
 
 export const updateSourceCues = (cues: CueDto[]): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction>): void => {
+    (dispatch: Dispatch<ManuCapAction>): void => {
         dispatch(sourceCuesSlice.actions.updateSourceCues({ cues }));
         dispatch(updateMatchedCues());
     };

@@ -1,12 +1,12 @@
 import { ReactElement, MouseEvent, useRef, useState } from "react";
 import KeyboardShortcuts from "./keyboardShortcuts/KeyboardShortcuts";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
-import SubtitleSpecificationsButton from "./subtitleSpecifications/SubtitleSpecificationsButton";
+import CaptionSpecificationsButton from "./captionSpecifications/CaptionSpecificationsButton";
 import CaptionOverlapToggle from "./CaptionOverlapToggle";
 import ExportTrackCuesButton from "./export/ExportTrackCuesButton";
 import ImportTrackCuesButton from "./ImportTrackCuesButton";
 import { useSelector } from "react-redux";
-import { SubtitleEditState } from "../manuCapReducers";
+import { ManuCapState } from "../manuCapReducers";
 import SearchReplaceButton from "./SearchReplaceButton";
 import MergeCuesButton from "./MergeCuesButton";
 import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
@@ -31,7 +31,7 @@ const Toolbox = (props: Props): ReactElement => {
 
     // Tracks.
 
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const editingTrack = useSelector((state: ManuCapState) => state.editingTrack);
     const isTranslation = !!editingTrack?.sourceLanguage;
 
     // Menu Toolbox.
@@ -53,7 +53,7 @@ const Toolbox = (props: Props): ReactElement => {
             className="mt-6 space-x-2 flex items-stretch
                 z-100 justify-center mc-button-toolbar"
         >
-            <SubtitleSpecificationsButton />
+            <CaptionSpecificationsButton />
             <SearchReplaceButton />
             <ImportTrackCuesButton
                 handleImport={props.handleImportFile}

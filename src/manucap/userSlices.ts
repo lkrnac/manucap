@@ -1,22 +1,22 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { SubtitleEditAction, User } from "./model";
+import { ManuCapAction, User } from "./model";
 import { AppThunk } from "./manuCapReducers";
 import { Dispatch } from "react";
 
-export interface UserAction extends SubtitleEditAction {
-    subtitleUser: User;
+export interface UserAction extends ManuCapAction {
+    captionUser: User;
 }
 
 export const userSlice = createSlice({
-    name: "subtitleUser",
+    name: "captionUser",
     initialState: null as User | null,
     reducers: {
-        updateSubtitleUser: (_state, action: PayloadAction<UserAction>): User =>
-            action.payload.subtitleUser
+        updateCaptionUser: (_state, action: PayloadAction<UserAction>): User =>
+            action.payload.captionUser
     }
 });
 
-export const  updateSubtitleUser = (user: User): AppThunk =>
+export const  updateCaptionUser = (user: User): AppThunk =>
     (dispatch: Dispatch<PayloadAction<UserAction>>): void => {
-        dispatch(userSlice.actions.updateSubtitleUser({ subtitleUser: user }));
+        dispatch(userSlice.actions.updateCaptionUser({ captionUser: user }));
     };

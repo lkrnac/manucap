@@ -66,7 +66,7 @@ describe("CueListToolbar", () => {
                         data-testid="mc-jump-to-edit-cue-button"
                         className="mc-btn mc-btn-light"
                         type="button"
-                        data-pr-tooltip="Scroll to currently editing subtitle"
+                        data-pr-tooltip="Scroll to currently editing caption"
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
@@ -77,7 +77,7 @@ describe("CueListToolbar", () => {
                         data-testid="mc-jump-to-playback-cue-button"
                         className="mc-btn mc-btn-light"
                         type="button"
-                        data-pr-tooltip="Scroll to subtitle in playback position"
+                        data-pr-tooltip="Scroll to caption in playback position"
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
@@ -89,7 +89,7 @@ describe("CueListToolbar", () => {
                         data-testid="mc-jump-to-last-translated-cue-button"
                         className="mc-btn mc-btn-light"
                         type="button"
-                        data-pr-tooltip="Scroll to last translated subtitle"
+                        data-pr-tooltip="Scroll to last translated caption"
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
@@ -100,7 +100,7 @@ describe("CueListToolbar", () => {
                         data-testid="mc-jump-error-cue-button"
                         className="mc-btn mc-btn-light"
                         type="button"
-                        data-pr-tooltip="Scroll to next subtitle error"
+                        data-pr-tooltip="Scroll to next caption error"
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
@@ -116,7 +116,7 @@ describe("CueListToolbar", () => {
                         </div>
                         <button
                             type="button"
-                            className="mc-btn mc-btn-primary mc-complete-subtitle-mc-btn"
+                            className="mc-btn mc-btn-primary mc-complete-caption-mc-btn"
                         >
                             Complete
                         </button>
@@ -177,7 +177,7 @@ describe("CueListToolbar", () => {
                         data-testid="mc-jump-to-edit-cue-button"
                         className="mc-btn mc-btn-light"
                         type="button"
-                        data-pr-tooltip="Scroll to currently editing subtitle"
+                        data-pr-tooltip="Scroll to currently editing caption"
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
@@ -188,7 +188,7 @@ describe("CueListToolbar", () => {
                         data-testid="mc-jump-to-playback-cue-button"
                         className="mc-btn mc-btn-light"
                         type="button"
-                        data-pr-tooltip="Scroll to subtitle in playback position"
+                        data-pr-tooltip="Scroll to caption in playback position"
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
@@ -200,7 +200,7 @@ describe("CueListToolbar", () => {
                         data-testid="mc-jump-to-last-translated-cue-button"
                         className="mc-btn mc-btn-light"
                         type="button"
-                        data-pr-tooltip="Scroll to last translated subtitle"
+                        data-pr-tooltip="Scroll to last translated caption"
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
@@ -211,7 +211,7 @@ describe("CueListToolbar", () => {
                         data-testid="mc-jump-error-cue-button"
                         className="mc-btn mc-btn-light"
                         type="button"
-                        data-pr-tooltip="Scroll to next subtitle error"
+                        data-pr-tooltip="Scroll to next caption error"
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
@@ -226,7 +226,7 @@ describe("CueListToolbar", () => {
                         </div>
                         <button
                             type="button"
-                            className="mc-btn mc-btn-primary mc-complete-subtitle-mc-btn"
+                            className="mc-btn mc-btn-primary mc-complete-caption-mc-btn"
                             disabled
                         >
                             Complete

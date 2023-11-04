@@ -3,21 +3,21 @@ import "../../../testUtils/initBrowserEnvironment";
 import { ReactElement } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import { SubtitleSpecification } from "../model";
-import SubtitleSpecificationsButton from "./SubtitleSpecificationsButton";
-import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
+import { CaptionSpecification } from "../model";
+import CaptionSpecificationsButton from "./CaptionSpecificationsButton";
+import CaptionSpecificationsModal from "./CaptionSpecificationsModal";
 import { mount, ReactWrapper } from "enzyme";
-import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
+import { readCaptionSpecification } from "./captionSpecificationSlice";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateCues } from "../../cues/cuesList/cuesListActions";
 import { CueDto } from "../../model";
 import "video.js";
 import { act } from "react-dom/test-utils";
 
-jest.mock("./SubtitleSpecificationsModal");
+jest.mock("./CaptionSpecificationsModal");
 
 // @ts-ignore We are mocking module
-SubtitleSpecificationsModal.mockImplementation(({ show }): ReactElement => show ? <div>shown</div> : <div />);
+CaptionSpecificationsModal.mockImplementation(({ show }): ReactElement => show ? <div>shown</div> : <div />);
 
 const cues = [
     { vttCue: new VTTCue(0, 1, "Cue 1"), cueCategory: "DIALOGUE" },
@@ -25,7 +25,7 @@ const cues = [
 ] as CueDto[];
 let testingStore = createTestingStore();
 
-describe("SubtitleSpecificationsButton", () => {
+describe("CaptionSpecificationsButton", () => {
     beforeEach(() => {
         testingStore = createTestingStore();
     });
@@ -34,9 +34,9 @@ describe("SubtitleSpecificationsButton", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <button
-                    id="subtitleSpecsBtn"
-                    className="dotsub-subtitle-specifications-button mc-btn mc-btn-light"
-                    data-pr-tooltip="Subtitle Specifications"
+                    id="captionSpecsBtn"
+                    className="mc-caption-specifications-button mc-btn mc-btn-light"
+                    data-pr-tooltip="Caption Specifications"
                     data-pr-position="top"
                     data-pr-at="center+2 top-2"
                 >
@@ -48,17 +48,17 @@ describe("SubtitleSpecificationsButton", () => {
 
         // WHEN
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsButton />
+                <CaptionSpecificationsButton />
             </Provider>
         );
 
-        actualNode.find("button.dotsub-subtitle-specifications-button").simulate("click");
+        actualNode.find("button.mc-caption-specifications-button").simulate("click");
 
         // THEN
         expect(actualNode.html()).toEqual(expectedNode.html());
@@ -69,9 +69,9 @@ describe("SubtitleSpecificationsButton", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <button
-                    id="subtitleSpecsBtn"
-                    className="dotsub-subtitle-specifications-button mc-btn mc-btn-light"
-                    data-pr-tooltip="Subtitle Specifications"
+                    id="captionSpecsBtn"
+                    className="mc-caption-specifications-button mc-btn mc-btn-light"
+                    data-pr-tooltip="Caption Specifications"
                     data-pr-position="top"
                     data-pr-at="center+2 top-2"
                 >
@@ -83,12 +83,12 @@ describe("SubtitleSpecificationsButton", () => {
 
         // WHEN
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsButton />
+                <CaptionSpecificationsButton />
             </Provider>
         );
 
@@ -96,56 +96,56 @@ describe("SubtitleSpecificationsButton", () => {
         expect(actualNode.html()).toEqual(expectedNode.html());
     });
 
-    it("opens subtitle specifications modal when button is clicked", () => {
+    it("opens caption specifications modal when button is clicked", () => {
         // GIVEN
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsButton />
+                <CaptionSpecificationsButton />
             </Provider>
         );
 
         // WHEN
-        actualNode.find("button.dotsub-subtitle-specifications-button")
+        actualNode.find("button.mc-caption-specifications-button")
             .simulate("click");
 
         // THEN
-        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
+        expect(actualNode.find(CaptionSpecificationsModal).props().show).toEqual(true);
     });
 
-    it("closes subtitle specifications modal when close button is clicked", () => {
+    it("closes caption specifications modal when close button is clicked", () => {
         // GIVEN
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         let actualNode = {} as ReactWrapper;
         act(() => {
             actualNode = mount(
                 <Provider store={testingStore}>
-                    <SubtitleSpecificationsButton />
+                    <CaptionSpecificationsButton />
                 </Provider>
             );
         });
 
         // WHEN
         act(() => {
-            actualNode.find("button.dotsub-subtitle-specifications-button").simulate("click");
-            actualNode.find(SubtitleSpecificationsModal).props().onClose();
+            actualNode.find("button.mc-caption-specifications-button").simulate("click");
+            actualNode.find(CaptionSpecificationsModal).props().onClose();
         });
 
         // THEN
-        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
+        expect(actualNode.find(CaptionSpecificationsModal).props().show).toEqual(false);
     });
 
-    it("Hides subtitle button if subtitle specification is null", () => {
+    it("Hides caption button if caption specification is null", () => {
          // WHEN
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsButton />
+                <CaptionSpecificationsButton />
             </Provider>
         );
 
@@ -153,78 +153,78 @@ describe("SubtitleSpecificationsButton", () => {
         expect(actualNode.find("button[hidden]").length).toEqual(1);
     });
 
-    it("Auto shows subtitle specification if cues are empty", () => {
+    it("Auto shows caption specification if cues are empty", () => {
         // WHEN
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: true } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: true } as CaptionSpecification) as {} as AnyAction
         );
         // @ts-ignore passing empty
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsButton />
+                <CaptionSpecificationsButton />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
+        expect(actualNode.find(CaptionSpecificationsModal).props().show).toEqual(true);
     });
 
-    it("Does auto show subtitle specification if cues are not empty", () => {
+    it("Does auto show caption specification if cues are not empty", () => {
         // WHEN
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: true } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: true } as CaptionSpecification) as {} as AnyAction
         );
         // @ts-ignore passing empty
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsButton />
+                <CaptionSpecificationsButton />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(true);
+        expect(actualNode.find(CaptionSpecificationsModal).props().show).toEqual(true);
     });
 
-    it("Does not auto show subtitle specification if subtitle specification is null", () => {
+    it("Does not auto show caption specification if caption specification is null", () => {
         // WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsButton />
+                <CaptionSpecificationsButton />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
+        expect(actualNode.find(CaptionSpecificationsModal).props().show).toEqual(false);
     });
 
-    it("Does not auto show subtitle specification if enabled is false", () => {
+    it("Does not auto show caption specification if enabled is false", () => {
         // WHEN
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         // @ts-ignore passing empty
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         const actualNode = mount(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsButton />
+                <CaptionSpecificationsButton />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
+        expect(actualNode.find(CaptionSpecificationsModal).props().show).toEqual(false);
     });
 
-    it("Auto shows subtitle specification only once even with cues change", () => {
+    it("Auto shows caption specification only once even with cues change", () => {
         // GIVEN
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: true } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: true } as CaptionSpecification) as {} as AnyAction
         );
         // @ts-ignore passing empty
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
@@ -233,16 +233,16 @@ describe("SubtitleSpecificationsButton", () => {
         act(() => {
              actualNode = mount(
                  <Provider store={testingStore}>
-                     <SubtitleSpecificationsButton />
+                     <CaptionSpecificationsButton />
                  </Provider>
             );
-            actualNode.find(SubtitleSpecificationsModal).props().onClose();
+            actualNode.find(CaptionSpecificationsModal).props().onClose();
         });
 
         //WHEN
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // THEN
-        expect(actualNode.find(SubtitleSpecificationsModal).props().show).toEqual(false);
+        expect(actualNode.find(CaptionSpecificationsModal).props().show).toEqual(false);
     });
 });

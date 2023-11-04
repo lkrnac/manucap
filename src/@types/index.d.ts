@@ -9,7 +9,7 @@ declare module "manucap" {
         updateEditingTrack: (track: Track) => AppThunk;
         updateCues: (cues: CueDto[]) => AppThunk;
         updateSourceCues: (cues: CueDto[]) => AppThunk;
-        updateSubtitleUser: (user: User) => AppThunk;
+        updateCaptionUser: (user: User) => AppThunk;
     };
 
     const Hooks: {

@@ -1,18 +1,18 @@
 import { ReactElement } from "react";
 import { useSelector } from "react-redux";
-import { SubtitleEditState } from "../../manuCapReducers";
+import { ManuCapState } from "../../manuCapReducers";
 
 interface Props {
     onClick: () => void
 }
 
 const ShiftTimeButton = (props: Props): ReactElement => {
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const editingTrack = useSelector((state: ManuCapState) => state.editingTrack);
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     return (
         <button
             onClick={props.onClick}
-            className="dotsub-shift-time-button flex items-center"
+            className="mc-shift-time-button flex items-center"
             disabled={!timecodesUnlocked}
             title="Unlock timecodes to enable"
         >

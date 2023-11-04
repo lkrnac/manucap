@@ -4,7 +4,7 @@ import { editingTrackSlice } from "./trackSlices";
 import { userSlice } from "./userSlices";
 import { ThunkAction } from "redux-thunk";
 import { playVideoSectionSlice } from "./player/playbackSlices";
-import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecifications/subtitleSpecificationSlice";
+import { captionSpecificationSlice } from "./toolbox/captionSpecifications/captionSpecificationSlice";
 import { loadingIndicatorSlices } from "./loadingIndicatorSlices";
 import { saveTrackSlice } from "./cues/saveSlices";
 import {
@@ -30,7 +30,7 @@ import { saveCueDeleteSlice } from "./cues/saveCueDeleteSlices";
 export const Reducers = {
     cues: cuesSlice.reducer,
     editingTrack: editingTrackSlice.reducer,
-    subtitleSpecifications: subtitleSpecificationSlice.reducer,
+    captionSpecifications: captionSpecificationSlice.reducer,
     sourceCues: sourceCuesSlice.reducer,
     videoSectionToPlay: playVideoSectionSlice.reducer,
     loadingIndicator: loadingIndicatorSlices.reducer,
@@ -42,7 +42,7 @@ export const Reducers = {
     searchReplaceVisible: searchReplaceVisibleSlice.reducer,
     mergeVisible: mergeVisibleSlice.reducer,
     rowsToMerge: rowsToMergeSlice.reducer,
-    subtitleUser: userSlice.reducer,
+    captionUser: userSlice.reducer,
     editingCueIndex: editingCueIndexSlice.reducer,
     lastCueChange: lastCueChangeSlice.reducer,
     validationErrors: validationErrorSlice.reducer,
@@ -59,7 +59,7 @@ const manuCapReducers = combineReducers(Reducers);
 
 export default manuCapReducers;
 
-export type SubtitleEditState = ReturnType<typeof manuCapReducers>;
+export type ManuCapState = ReturnType<typeof manuCapReducers>;
 
 /**
  * We are forced to use `as {} as AnyAction` casting then we are executing actions with `testingStore.dispatch`.
@@ -67,4 +67,4 @@ export type SubtitleEditState = ReturnType<typeof manuCapReducers>;
  * But no suggestions from that issue work nor mentioned fix didn't work. I couldn't figure out any other fix than
  * applying ugly cast workaround.
  */
-export type AppThunk = ThunkAction<void, SubtitleEditState, unknown, Action<string>>;
+export type AppThunk = ThunkAction<void, ManuCapState, unknown, Action<string>>;

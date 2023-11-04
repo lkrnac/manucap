@@ -20,7 +20,7 @@ import {
     updateMatchedCues,
     validateCorruptedCues
 } from "../cuesList/cuesListActions";
-import { AppThunk, SubtitleEditState } from "../../manuCapReducers";
+import { AppThunk, ManuCapState } from "../../manuCapReducers";
 import { StylesConfig } from "react-select/dist/declarations/src/styles";
 import { Menu } from "primereact/menu";
 
@@ -84,7 +84,7 @@ const onkeydown = (setSpellCheckerMatchingOffset: Function): KeyboardEventHandle
 export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const dispatch = useDispatch();
     const selectRef = useRef(null);
-    const searchReplaceFind = useSelector((state: SubtitleEditState) => state.searchReplace.find);
+    const searchReplaceFind = useSelector((state: ManuCapState) => state.searchReplace.find);
     const menu = useRef<Menu>(null);
     const spellCheckSpan = useRef(null);
     const show = props.spellCheckerMatchingOffset === props.start;

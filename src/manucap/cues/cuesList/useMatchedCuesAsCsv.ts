@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { SubtitleEditState } from "../../manuCapReducers";
+import { ManuCapState } from "../../manuCapReducers";
 import { CueDtoWithIndex, CueLineDto } from "../../model";
 import { getTimeString } from "../../utils/timeUtils";
 import { isDirectTranslationTrack } from "../../utils/manuCapUtils";
@@ -35,8 +35,8 @@ export const matchedCuesToCsv = (matchedCues: Array<CueLineDto>, isTranslationTr
 };
 
 const useMatchedCuesAsCsv = (): Function => {
-    const matchedCues = useSelector((state: SubtitleEditState) => state.matchedCues.matchedCues);
-    const track = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const matchedCues = useSelector((state: ManuCapState) => state.matchedCues.matchedCues);
+    const track = useSelector((state: ManuCapState) => state.editingTrack);
     return () => {
         const isTranslationTrack = track?.type === "TRANSLATION" && !isDirectTranslationTrack(track);
         return matchedCuesToCsv(matchedCues, isTranslationTrack);

@@ -21,7 +21,7 @@ const PlayCueButton = (props: Props): ReactElement => {
                 id={buttonId}
                 style={{ maxHeight: "38px" }}
                 className="mc-btn mc-btn-primary w-full mc-btn-sm"
-                data-pr-tooltip={`Play this subtitle (${shortcutText})`}
+                data-pr-tooltip={`Play this caption (${shortcutText})`}
                 data-pr-position="left"
                 data-pr-at="left center"
                 onClick={(): AppThunk =>

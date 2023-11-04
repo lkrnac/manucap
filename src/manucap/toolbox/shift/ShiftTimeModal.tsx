@@ -1,6 +1,6 @@
 import { ReactElement, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SubtitleEditState } from "../../manuCapReducers";
+import { ManuCapState } from "../../manuCapReducers";
 import { applyShiftTimeByPosition } from "../../cues/cuesList/cuesListActions";
 import { useForm } from "react-hook-form";
 import { Dialog } from "primereact/dialog";
@@ -34,9 +34,9 @@ const validationMessage = {
 const ShiftTimeModal = (props: Props): ReactElement => {
     const [errorMessage, setErrorMessage] = useState();
     const dispatch = useDispatch();
-    const firstTrackTime = useSelector((state: SubtitleEditState) => state.cues[0]?.vttCue.startTime);
-    const mediaChunkStart = useSelector((state: SubtitleEditState) => state.editingTrack?.mediaChunkStart);
-    const editCueIndex = useSelector((state: SubtitleEditState) => state.editingCueIndex);
+    const firstTrackTime = useSelector((state: ManuCapState) => state.cues[0]?.vttCue.startTime);
+    const mediaChunkStart = useSelector((state: ManuCapState) => state.editingTrack?.mediaChunkStart);
+    const editCueIndex = useSelector((state: ManuCapState) => state.editingCueIndex);
     const isMediaChunk = !!mediaChunkStart || mediaChunkStart === 0;
 
     const validationSchema = Joi.object({
@@ -86,7 +86,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                 <>
                     <button
                         type="submit"
-                        className="dotsub-shift-modal-apply-button mc-btn mc-btn-primary"
+                        className="mc-shift-modal-apply-button mc-btn mc-btn-primary"
                         onClick={handleSubmit(onSubmit)}
                     >
                         Apply
@@ -94,7 +94,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                     <button
                         type="button"
                         onClick={handleCancelShift}
-                        className="dotsub-shift-modal-close-button mc-btn mc-btn-light"
+                        className="mc-shift-modal-close-button mc-btn mc-btn-light"
                     >
                         Close
                     </button>
@@ -107,7 +107,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                     <input
                         name="shiftTime"
                         type="number"
-                        className="mc-form-control dotsub-track-line-shift mt-2"
+                        className="mc-form-control mc-track-line-shift mt-2"
                         style={{ width: "120px" }}
                         placeholder="0.000"
                         step={"0.100"}
