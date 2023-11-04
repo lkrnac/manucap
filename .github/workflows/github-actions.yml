@@ -10,7 +10,7 @@ jobs:
               with:
                   node-version: 18
                   cache: 'npm'
-            - run: npm i --legacy-peer-deps
+            - run: npm ci --legacy-peer-deps
 #            - run:   run build
             - run: npm run compile-with-tests
             - run: npm test
