@@ -86,7 +86,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                 <>
                     <button
                         type="submit"
-                        className="dotsub-shift-modal-apply-button mc-btn mc-btn-primary"
+                        className="mc-shift-modal-apply-button mc-btn mc-btn-primary"
                         onClick={handleSubmit(onSubmit)}
                     >
                         Apply
@@ -94,7 +94,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                     <button
                         type="button"
                         onClick={handleCancelShift}
-                        className="dotsub-shift-modal-close-button mc-btn mc-btn-light"
+                        className="mc-shift-modal-close-button mc-btn mc-btn-light"
                     >
                         Close
                     </button>
@@ -107,7 +107,7 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                     <input
                         name="shiftTime"
                         type="number"
-                        className="mc-form-control dotsub-track-line-shift mt-2"
+                        className="mc-form-control mc-track-line-shift mt-2"
                         style={{ width: "120px" }}
                         placeholder="0.000"
                         step={"0.100"}
