@@ -1,10 +1,10 @@
 import "../../testUtils/initBrowserEnvironment";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import { SubtitleSpecification } from "./model";
-import SubtitleSpecificationsButton from "./subtitleSpecifications/SubtitleSpecificationsButton";
+import { CaptionSpecification } from "./model";
+import CaptionSpecificationsButton from "./subtitleSpecifications/CaptionSpecificationsButton";
 import Toolbox from "./Toolbox";
-import { readSubtitleSpecification } from "./subtitleSpecifications/subtitleSpecificationSlice";
+import { readCaptionSpecification } from "./subtitleSpecifications/subtitleSpecificationSlice";
 import testingStore from "../../testUtils/testingStore";
 import ExportTrackCuesButton from "./export/ExportTrackCuesButton";
 import ImportTrackCuesButton from "./ImportTrackCuesButton";
@@ -29,7 +29,7 @@ describe("Toolbox", () => {
                     className="mt-6 space-x-2 flex items-stretch z-100
                         justify-center mc-button-toolbar"
                 >
-                    <SubtitleSpecificationsButton />
+                    <CaptionSpecificationsButton />
                     <SearchReplaceButton />
                     <ImportTrackCuesButton handleImport={jest.fn()} />
                     <ExportTrackCuesButton handleExport={jest.fn()} />
@@ -57,7 +57,7 @@ describe("Toolbox", () => {
             </Provider>
         );
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
 
         // THEN
@@ -81,7 +81,7 @@ describe("Toolbox", () => {
                     className="mt-6 space-x-2 flex items-stretch
                         z-100 justify-center mc-button-toolbar"
                 >
-                    <SubtitleSpecificationsButton />
+                    <CaptionSpecificationsButton />
                     <SearchReplaceButton />
                     <ImportTrackCuesButton handleImport={jest.fn()} />
                     <ExportSourceTrackCuesButton handleExport={jest.fn()} />

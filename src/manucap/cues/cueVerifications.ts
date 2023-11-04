@@ -1,7 +1,7 @@
 import sanitizeHtml from "sanitize-html";
 
 import { CueDto, CueError, TimeGapLimit, Track } from "../model";
-import { SubtitleSpecification } from "../toolbox/model";
+import { CaptionSpecification } from "../toolbox/model";
 
 const removeHtmlTags = (html: string): string => sanitizeHtml(html, { allowedTags: []});
 
@@ -9,7 +9,7 @@ const removeLineBreaks = (text: string): string => text.replace(/(\r\n|\n|\r)/gm
 
 export const checkLineLimitation = (
     text: string,
-    subtitleSpecification: SubtitleSpecification | null
+    subtitleSpecification: CaptionSpecification | null
 ): boolean => {
     if (subtitleSpecification && subtitleSpecification.enabled) {
         const lines = text.split("\n");
@@ -21,7 +21,7 @@ export const checkLineLimitation = (
 
 export const checkCharacterLimitation = (
     text: string,
-    subtitleSpecification: SubtitleSpecification | null
+    subtitleSpecification: CaptionSpecification | null
 ): boolean => {
     if (subtitleSpecification && subtitleSpecification.enabled) {
         const lines = text.split("\n");
@@ -38,7 +38,7 @@ export const checkCharacterLimitation = (
 const checkCharacterAndLineLimitation = (
     cueErrors: CueError[],
     text: string,
-    subtitleSpecification: SubtitleSpecification | null
+    subtitleSpecification: CaptionSpecification | null
 ): void => {
     const charactersPerLineLimitOk = checkCharacterLimitation(text, subtitleSpecification);
     const linesCountLimitOk = checkLineLimitation(text, subtitleSpecification);
@@ -50,7 +50,7 @@ const checkCharacterAndLineLimitation = (
     }
 };
 
-export const getTimeGapLimits = (subtitleSpecs: SubtitleSpecification | null): TimeGapLimit => {
+export const getTimeGapLimits = (subtitleSpecs: CaptionSpecification | null): TimeGapLimit => {
     const DEFAULT_MIN_GAP = 0.001;
     const DEFAULT_MAX_GAP = Number.MAX_SAFE_INTEGER;
     let minGap: number = DEFAULT_MIN_GAP;
@@ -73,7 +73,7 @@ const maxRangeOk = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
     (vttCue.endTime - vttCue.startTime) <= timeGapLimit.maxGap;
 
 const checkRange =
-    (cueErrors: CueError[], vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null): void => {
+    (cueErrors: CueError[], vttCue: VTTCue, subtitleSpecification: CaptionSpecification | null): void => {
     const timeGapLimit = getTimeGapLimits(subtitleSpecification);
     if(!minRangeOk(vttCue, timeGapLimit) || !maxRangeOk(vttCue, timeGapLimit)) {
         cueErrors.push(CueError.TIME_GAP_LIMIT_EXCEEDED);
@@ -104,7 +104,7 @@ const checkSpelling = (cueErrors: CueError[], cue: CueDto): void => {
 };
 
 const checkCharsPerSecond =
-    (cueErrors: CueError[], vttCue: VTTCue, subtitleSpecification: SubtitleSpecification | null): void => {
+    (cueErrors: CueError[], vttCue: VTTCue, subtitleSpecification: CaptionSpecification | null): void => {
     if (subtitleSpecification?.enabled && subtitleSpecification.maxCharactersPerSecondPerCaption) {
         const cleanText = removeHtmlTags(removeLineBreaks(vttCue.text));
         const cueTextCharsPerSecond = cleanText.length / (vttCue.endTime - vttCue.startTime);
@@ -116,7 +116,7 @@ const checkCharsPerSecond =
 
 export const conformToRules = (
     cue: CueDto,
-    subtitleSpecification: SubtitleSpecification | null,
+    subtitleSpecification: CaptionSpecification | null,
     previousCue?: CueDto,
     followingCue?: CueDto,
     overlapCaptions?: boolean
@@ -140,7 +140,7 @@ export const conformToSpelling = (cue: CueDto): CueError[] => {
 
 export const applyInvalidRangePreventionStart = (
     vttCue: VTTCue,
-    subtitleSpecification: SubtitleSpecification | null
+    subtitleSpecification: CaptionSpecification | null
 ): boolean => {
     let applied = false;
     const timeGapLimit = getTimeGapLimits(subtitleSpecification);
@@ -158,7 +158,7 @@ export const applyInvalidRangePreventionStart = (
 
 export const applyInvalidRangePreventionEnd = (
     vttCue: VTTCue,
-    subtitleSpecification: SubtitleSpecification | null
+    subtitleSpecification: CaptionSpecification | null
 ): boolean => {
     let applied = false;
     const timeGapLimit = getTimeGapLimits(subtitleSpecification);

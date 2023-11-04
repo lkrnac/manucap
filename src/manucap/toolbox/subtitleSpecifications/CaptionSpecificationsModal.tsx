@@ -1,8 +1,8 @@
 import { ReactElement } from "react";
 import { Dialog } from "primereact/dialog";
 import { ManuCapState } from "../../manuCapReducers";
-import { SubtitleSpecification } from "../model";
-import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
+import { CaptionSpecification } from "../model";
+import CaptionSpecificationsForm from "./CaptionSpecificationsForm";
 import { useSelector } from "react-redux";
 
 interface Props {
@@ -10,16 +10,16 @@ interface Props {
     onClose: () => void;
 }
 
-const SubtitleSpecificationsModal = (props: Props): ReactElement => {
-    const stateSubtitleSpecifications = useSelector((state: ManuCapState) => state.subtitleSpecifications);
-    const subtitleSpecifications = stateSubtitleSpecifications ? stateSubtitleSpecifications :
-        {} as SubtitleSpecification;
+const CaptionSpecificationsModal = (props: Props): ReactElement => {
+    const stateCaptionSpecifications = useSelector((state: ManuCapState) => state.subtitleSpecifications);
+    const subtitleSpecifications = stateCaptionSpecifications ? stateCaptionSpecifications :
+        {} as CaptionSpecification;
     return (
         <Dialog
             className="max-w-3xl"
             visible={props.show}
             onHide={props.onClose}
-            header="Subtitle Specifications"
+            header="Caption Specifications"
             draggable={false}
             dismissableMask
             resizable={false}
@@ -29,9 +29,9 @@ const SubtitleSpecificationsModal = (props: Props): ReactElement => {
                 </button>
             )}
         >
-            <SubtitleSpecificationsForm subTitleSpecifications={subtitleSpecifications} />
+            <CaptionSpecificationsForm subTitleSpecifications={subtitleSpecifications} />
         </Dialog>
     );
 };
 
-export default SubtitleSpecificationsModal;
+export default CaptionSpecificationsModal;

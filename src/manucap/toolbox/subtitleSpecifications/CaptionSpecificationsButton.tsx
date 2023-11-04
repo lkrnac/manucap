@@ -1,10 +1,10 @@
 import { ReactElement, useEffect, useState } from "react";
-import SubtitleSpecificationsModal from "./SubtitleSpecificationsModal";
+import CaptionSpecificationsModal from "./CaptionSpecificationsModal";
 import { useSelector } from "react-redux";
 import { ManuCapState } from "../../manuCapReducers";
 import { Tooltip } from "primereact/tooltip";
 
-const SubtitleSpecificationsButton = (): ReactElement => {
+const CaptionSpecificationsButton = (): ReactElement => {
     const subtitleSpecifications = useSelector((state: ManuCapState) => state.subtitleSpecifications);
     const [show, setShow] = useState(false);
     useEffect(
@@ -23,7 +23,7 @@ const SubtitleSpecificationsButton = (): ReactElement => {
                 className="mc-subtitle-specifications-button mc-btn mc-btn-light"
                 onClick={handleShow}
                 hidden={subtitleSpecifications == null}
-                data-pr-tooltip="Subtitle Specifications"
+                data-pr-tooltip="Caption Specifications"
                 data-pr-position="top"
                 data-pr-at="center+2 top-2"
             >
@@ -33,9 +33,9 @@ const SubtitleSpecificationsButton = (): ReactElement => {
                 id="subtitleSpecsBtnTooltip"
                 target="#subtitleSpecsBtn"
             />
-            <SubtitleSpecificationsModal show={show} onClose={handleClose} />
+            <CaptionSpecificationsModal show={show} onClose={handleClose} />
         </>
     );
 };
 
-export default SubtitleSpecificationsButton;
+export default CaptionSpecificationsButton;

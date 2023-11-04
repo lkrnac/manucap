@@ -26,8 +26,8 @@ import {
 } from "./cuesListActions";
 import { CueDto, CueError, ScrollPosition, Track } from "../../model";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { SubtitleSpecification } from "../../toolbox/model";
-import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
+import { CaptionSpecification } from "../../toolbox/model";
+import { readCaptionSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { resetEditingTrack, updateEditingTrack } from "../../trackSlices";
 import { generateSpellcheckHash } from "../spellCheck/spellCheckerUtils";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
@@ -849,12 +849,12 @@ describe("cueListActions", () => {
 
             it("doesn't allow start time to be less than chunk start time with sub spec", () => {
                 // GIVEN
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     minCaptionDurationInMillis: 1200,
                     maxCaptionDurationInMillis: 4000,
                     enabled: true
-                } as SubtitleSpecification;
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                } as CaptionSpecification;
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(testingChunkTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
@@ -871,12 +871,12 @@ describe("cueListActions", () => {
 
             it("doesn't allow end time to be greater than chunk end time with sub spec", () => {
                 // GIVEN
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     minCaptionDurationInMillis: 1200,
                     maxCaptionDurationInMillis: 4000,
                     enabled: true
-                } as SubtitleSpecification;
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                } as CaptionSpecification;
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 testingStore.dispatch(updateEditingTrack(testingChunkTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
@@ -893,14 +893,14 @@ describe("cueListActions", () => {
 
             it("Adjust startTime to follow min caption gap passed from subtitle spec", () => {
                 // GIVEN
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     minCaptionDurationInMillis: 1200,
                     maxCaptionDurationInMillis: 4000,
                     enabled: true
-                } as SubtitleSpecification;
+                } as CaptionSpecification;
 
                 testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
@@ -916,15 +916,15 @@ describe("cueListActions", () => {
 
             it("doesn't apply min range limitation for start/end time if time values weren't changed", () => {
                 // GIVEN
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     minCaptionDurationInMillis: 3000,
                     maxCaptionDurationInMillis: 4000,
                     enabled: true
-                } as SubtitleSpecification;
+                } as CaptionSpecification;
 
                 testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
@@ -939,15 +939,15 @@ describe("cueListActions", () => {
 
             it("Adjust endtime to follow min caption gap passed from subtitle spec", () => {
                 // GIVEN
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     minCaptionDurationInMillis: 1200,
                     maxCaptionDurationInMillis: 4000,
                     enabled: true
-                } as SubtitleSpecification;
+                } as CaptionSpecification;
 
                 testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
@@ -962,14 +962,14 @@ describe("cueListActions", () => {
 
             it("Adjust startTime to follow max caption gap passed from subtitle spec", () => {
                 // GIVEN
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     minCaptionDurationInMillis: 500,
                     maxCaptionDurationInMillis: 1000,
                     enabled: true
-                } as SubtitleSpecification;
+                } as CaptionSpecification;
 
                 testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
@@ -985,14 +985,14 @@ describe("cueListActions", () => {
 
             it("doesn't apply max range limitation for start/end time if time values weren't changed", () => {
                 // GIVEN
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     minCaptionDurationInMillis: 1200,
                     maxCaptionDurationInMillis: 1500,
                     enabled: true
-                } as SubtitleSpecification;
+                } as CaptionSpecification;
 
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
@@ -1008,14 +1008,14 @@ describe("cueListActions", () => {
 
             it("Adjust endtime to follow max caption gap passed from subtitle spec", () => {
                 // GIVEN
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     minCaptionDurationInMillis: 500,
                     maxCaptionDurationInMillis: 1000,
                     enabled: true
-                } as SubtitleSpecification;
+                } as CaptionSpecification;
 
                 testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
@@ -1098,14 +1098,14 @@ describe("cueListActions", () => {
 
             it("applies the change if current cue doesn't conform to character limitation rules", () => {
                 // GIVEN
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     maxLinesPerCaption: 2,
                     maxCharactersPerLine: 10,
                     enabled: true
-                } as SubtitleSpecification;
+                } as CaptionSpecification;
 
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
@@ -1243,8 +1243,8 @@ describe("cueListActions", () => {
 
             it("doesn't apply overlap prevention if overlapping is enabled and there are no subtitle specs", () => {
                 // GIVEN
-                const testingSubtitleSpecification = { enabled: false } as SubtitleSpecification;
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                const testingCaptionSpecification = { enabled: false } as CaptionSpecification;
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 const cuesOverlapped = [
                     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
                     { vttCue: new VTTCue(1, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -1269,12 +1269,12 @@ describe("cueListActions", () => {
 
             it("doesn't apply overlap prevention if overlapping is enabled and there are subtitle specs", () => {
                 // GIVEN
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     enabled: true,
                     minCaptionDurationInMillis: 1000,
                     maxCaptionDurationInMillis: 2000
-                } as SubtitleSpecification;
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                } as CaptionSpecification;
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 const cuesOverlapped = [
                     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
                     { vttCue: new VTTCue(1, 4, "Caption Line 2"), cueCategory: "DIALOGUE" },
@@ -1304,12 +1304,12 @@ describe("cueListActions", () => {
             it("ignore line count prevention if null in subtitle specs", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     enabled: true,
                     maxLinesPerCaption: null,
                     maxCharactersPerLine: 30,
-                } as SubtitleSpecification;
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                } as CaptionSpecification;
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
@@ -1323,12 +1323,12 @@ describe("cueListActions", () => {
             it("ignore line count prevention if subtitle specs are disabled", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     enabled: false,
                     maxLinesPerCaption: 2,
                     maxCharactersPerLine: 30,
-                } as SubtitleSpecification;
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                } as CaptionSpecification;
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
@@ -1342,13 +1342,13 @@ describe("cueListActions", () => {
             it("doesn't apply character count limitation to first line", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     enabled: true,
                     maxLinesPerCaption: 2,
                     maxCharactersPerLine: 15,
-                } as SubtitleSpecification;
+                } as CaptionSpecification;
                 testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
@@ -1364,13 +1364,13 @@ describe("cueListActions", () => {
             it("doesn't apply character count limitation to second line", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     enabled: true,
                     maxLinesPerCaption: 2,
                     maxCharactersPerLine: 15,
-                } as SubtitleSpecification;
+                } as CaptionSpecification;
                 testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[1].editUuid;
 
                 // WHEN
@@ -1386,12 +1386,12 @@ describe("cueListActions", () => {
             it("do not count HTML tags into line count limitation", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     enabled: true,
                     maxLinesPerCaption: 2,
                     maxCharactersPerLine: 10,
-                } as SubtitleSpecification;
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                } as CaptionSpecification;
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
@@ -1407,12 +1407,12 @@ describe("cueListActions", () => {
             it("ignore character line count limitation if null in subtitle specs", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     enabled: true,
                     maxLinesPerCaption: 2,
                     maxCharactersPerLine: null,
-                } as SubtitleSpecification;
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                } as CaptionSpecification;
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
@@ -1428,12 +1428,12 @@ describe("cueListActions", () => {
             it("ignore character line count limitation if subtitle specs are disabled", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     enabled: false,
                     maxLinesPerCaption: 2,
                     maxCharactersPerLine: 10,
-                } as SubtitleSpecification;
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                } as CaptionSpecification;
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
@@ -1452,12 +1452,12 @@ describe("cueListActions", () => {
                     { vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
                 ] as CueDto[];
                 testingStore.dispatch(updateCues(cuesLong) as {} as AnyAction);
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     enabled: true,
                     maxLinesPerCaption: 2,
                     maxCharactersPerLine: 10,
-                } as SubtitleSpecification;
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                } as CaptionSpecification;
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 const editUuid = testingStore.getState().cues[0].editUuid;
 
                 // WHEN
@@ -1684,12 +1684,12 @@ describe("cueListActions", () => {
                 { id: "cue-3", vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
                 { id: "cue-4", vttCue: new VTTCue(5, 8, "Caption 4"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 10,
                 enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // WHEN
@@ -1721,12 +1721,12 @@ describe("cueListActions", () => {
                     cueCategory: "DIALOGUE" },
                 { id: "cue-4", vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: null,
                 enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
@@ -1753,12 +1753,12 @@ describe("cueListActions", () => {
                     cueCategory: "DIALOGUE" },
                 { id: "cue-4", vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 0,
                 enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
@@ -1791,12 +1791,12 @@ describe("cueListActions", () => {
                 },
                 { id: "cue-c-4", vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 0,
                 enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
@@ -1823,11 +1823,11 @@ describe("cueListActions", () => {
                     cueCategory: "DIALOGUE"
                 },
             ] as CueDto[];
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 maxCharactersPerSecondPerCaption: 20,
                 enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // WHEN
@@ -1852,11 +1852,11 @@ describe("cueListActions", () => {
                     cueCategory: "DIALOGUE"
                 },
             ] as CueDto[];
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 maxCharactersPerSecondPerCaption: 20,
                 enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // WHEN
@@ -1881,12 +1881,12 @@ describe("cueListActions", () => {
                     cueCategory: "DIALOGUE"
                 },
             ] as CueDto[];
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 maxCharactersPerLine: 15,
                 maxCharactersPerSecondPerCaption: 20,
                 enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // WHEN
@@ -1912,12 +1912,12 @@ describe("cueListActions", () => {
                     cueCategory: "DIALOGUE"
                 },
             ] as CueDto[];
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 maxLinesPerCaption: 2,
                 maxCharactersPerSecondPerCaption: 15,
                 enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             testingStore.dispatch(updateCues(cuesCorrupted) as {} as AnyAction);
 
             // WHEN
@@ -1944,11 +1944,11 @@ describe("cueListActions", () => {
                     cueCategory: "DIALOGUE"
                 },
             ] as CueDto[];
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 maxCharactersPerSecondPerCaption: 40,
                 enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
@@ -1969,11 +1969,11 @@ describe("cueListActions", () => {
                 { id: "cue-2", vttCue: new VTTCue(2, 4, "line with too many characters per second"),
                     cueCategory: "DIALOGUE" },
             ] as CueDto[];
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 enabled: true,
                 maxCharactersPerSecondPerCaption: null,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
@@ -1994,11 +1994,11 @@ describe("cueListActions", () => {
                 { id: "cue-2", vttCue: new VTTCue(2, 4, "line with too many characters per second"),
                     cueCategory: "DIALOGUE" },
             ] as CueDto[];
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 enabled: false,
                 maxCharactersPerSecondPerCaption: 15,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
@@ -2019,11 +2019,11 @@ describe("cueListActions", () => {
                 { id: "cue-2", vttCue: new VTTCue(2, 4,
                         "line with <i>too</i> many <b>characters</b> per second"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 maxCharactersPerSecondPerCaption: 20,
                 enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
@@ -2047,12 +2047,12 @@ describe("cueListActions", () => {
                 { id: "cue-3", vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
                 { id: "cue-4", vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: null,
                 enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
@@ -2079,12 +2079,12 @@ describe("cueListActions", () => {
                 { id: "cue-3", vttCue: new VTTCue(4, 6, "Caption Long Overlapped 3"), cueCategory: "DIALOGUE" },
                 { id: "cue-4", vttCue: new VTTCue(6, 8, "Caption 4"), cueCategory: "DIALOGUE" },
             ] as CueDto[];
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: null,
                 enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             testingStore.dispatch(cuesSlice.actions.updateCues({ cues: cuesCorrupted }));
 
             // WHEN
@@ -2247,10 +2247,10 @@ describe("cueListActions", () => {
             it("uses min duration value as step if default step value is lower", () => {
                 // GIVEN
                 testingStore.dispatch(
-                    readSubtitleSpecification({
+                    readCaptionSpecification({
                         minCaptionDurationInMillis: 5000,
                         enabled: true
-                    } as SubtitleSpecification) as {} as AnyAction
+                    } as CaptionSpecification) as {} as AnyAction
                 );
                 testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
@@ -2590,10 +2590,10 @@ describe("cueListActions", () => {
                 // GIVEN
                 const testingStore = createTestingStore();
                 testingStore.dispatch(
-                    readSubtitleSpecification({
+                    readCaptionSpecification({
                         minCaptionDurationInMillis: 3000,
                         enabled: true
-                    } as SubtitleSpecification) as {} as AnyAction
+                    } as CaptionSpecification) as {} as AnyAction
                 );
                 testingStore.dispatch(updateCues([
                     { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -2732,12 +2732,12 @@ describe("cueListActions", () => {
             it("does not add cue if duration is less than min gap limit", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     minCaptionDurationInMillis: 3000,
                     maxCaptionDurationInMillis: 5000,
                     enabled: true
-                } as SubtitleSpecification;
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                } as CaptionSpecification;
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
 
                 // WHEN
                 testingStore.dispatch(
@@ -2757,12 +2757,12 @@ describe("cueListActions", () => {
             it("picks default step if it less than max gap limit provided by subtitle specs", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     minCaptionDurationInMillis: 3000,
                     maxCaptionDurationInMillis: 5000,
                     enabled: true
-                } as SubtitleSpecification;
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                } as CaptionSpecification;
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
 
                 // WHEN
                 testingStore.dispatch(
@@ -2781,12 +2781,12 @@ describe("cueListActions", () => {
             it("picks subtitle specs max gap as step if it is greater than default step value", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     minCaptionDurationInMillis: 1000,
                     maxCaptionDurationInMillis: 2000,
                     enabled: true
-                } as SubtitleSpecification;
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                } as CaptionSpecification;
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
 
                 // WHEN
                 testingStore.dispatch(
@@ -3426,12 +3426,12 @@ describe("cueListActions", () => {
                 // GIVEN
                 const chunkTrack = { ...testingTrack, mediaChunkStart: 0, mediaChunkEnd: 5000 };
                 testingStore.dispatch(updateEditingTrack(chunkTrack as Track) as {} as AnyAction);
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     minCaptionDurationInMillis: 2000,
                     maxCaptionDurationInMillis: 4000,
                     enabled: true
-                } as SubtitleSpecification;
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                } as CaptionSpecification;
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 testingStore.dispatch(addCuesToMergeList(
                     { index: 0, cues: [{ index: 0, cue: testingCues[0] }]}) as {} as AnyAction);
                 testingStore.dispatch(addCuesToMergeList(
@@ -3734,12 +3734,12 @@ describe("cueListActions", () => {
 
         it("doesn't split too short cue", async () => {
             // GIVEN
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 minCaptionDurationInMillis: 2000,
                 maxCaptionDurationInMillis: 4000,
                 enabled: true
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
 
             // WHEN
             await testingStore.dispatch(splitCue(0) as {} as AnyAction);

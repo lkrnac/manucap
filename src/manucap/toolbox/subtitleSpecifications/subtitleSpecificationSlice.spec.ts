@@ -1,10 +1,10 @@
 import "video.js"; // VTTCue
 import { AnyAction } from "@reduxjs/toolkit";
-import { SubtitleSpecification } from "../model";
-import { readSubtitleSpecification } from "./subtitleSpecificationSlice";
+import { CaptionSpecification } from "../model";
+import { readCaptionSpecification } from "./subtitleSpecificationSlice";
 import { createTestingStore } from "../../../testUtils/testingStore";
 
-const testingSubtitleSpecification = {
+const testingCaptionSpecification = {
     subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
     projectId: "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
     enabled: true,
@@ -18,7 +18,7 @@ const testingSubtitleSpecification = {
     minCaptionDurationInMillis: 2,
     maxCaptionDurationInMillis: 6,
     comments: "Note"
-} as SubtitleSpecification;
+} as CaptionSpecification;
 
 
 let testingStore = createTestingStore();
@@ -27,13 +27,13 @@ describe("subtitleSpecificationSlices", () => {
         testingStore = createTestingStore();
     });
 
-    describe("readSubtitleSpecification", () => {
+    describe("readCaptionSpecification", () => {
         it("reads a subtitle specification", () => {
             // WHEN
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().subtitleSpecifications).toEqual(testingSubtitleSpecification);
+            expect(testingStore.getState().subtitleSpecifications).toEqual(testingCaptionSpecification);
         });
     });
 });

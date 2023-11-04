@@ -165,7 +165,7 @@ export enum CueError {
     INVALID_RANGE_END = "Invalid End Time",
     OUT_OF_CHUNK_RAGE = "Out of Chunk Range",
     MERGE_ERROR = "Merged subtitle is too long/Not enough subtitles selected",
-    SPLIT_ERROR = "Subtitle is too short to split",
+    SPLIT_ERROR = "Caption is too short to split",
     CHARS_PER_SECOND_EXCEEDED = "Max Characters Per Second Exceeded"
 }
 

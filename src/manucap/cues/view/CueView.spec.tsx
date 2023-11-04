@@ -12,8 +12,8 @@ import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateEditingTrack } from "../../trackSlices";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import { updateCues } from "../cuesList/cuesListActions";
-import { SubtitleSpecification } from "../../toolbox/model";
-import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
+import { CaptionSpecification } from "../../toolbox/model";
+import { readCaptionSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { searchReplaceSlice, setFind, showSearchReplace } from "../searchReplace/searchReplaceSlices";
 
 let testingStore = createTestingStore();
@@ -1107,13 +1107,13 @@ describe("CueView", () => {
         const cue = {
             vttCue: new VTTCue(1, 40, "Line 1\nLine 2\nLine 3"), cueCategory: "DIALOGUE"
         } as CueDto;
-        const testingSubtitleSpecification = {
+        const testingCaptionSpecification = {
             enabled: true,
             maxLinesPerCaption: 2,
             maxCharactersPerLine: 10,
             maxCaptionDurationInMillis: 6000
-        } as SubtitleSpecification;
-        testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+        } as CaptionSpecification;
+        testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
 
         const expectedSourceCueContent = "Line 1<br>Line 2<br>Line 3";
 
@@ -1152,13 +1152,13 @@ describe("CueView", () => {
         const cue = {
             vttCue: new VTTCue(1, 40, "Line 1\nLine 2\nLine 3"), cueCategory: "DIALOGUE", errors: null
         } as CueDto;
-        const testingSubtitleSpecification = {
+        const testingCaptionSpecification = {
             enabled: true,
             maxLinesPerCaption: 2,
             maxCharactersPerLine: 10,
             maxCaptionDurationInMillis: 6000
-        } as SubtitleSpecification;
-        testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+        } as CaptionSpecification;
+        testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
 
         const expectedSourceCueContent = "Line 1<br>Line 2<br>Line 3";
 
@@ -1197,13 +1197,13 @@ describe("CueView", () => {
         const cue = {
             vttCue: new VTTCue(1, 40, "Line 1\nLine 2\nLine 3"), cueCategory: "DIALOGUE"
         } as CueDto;
-        const testingSubtitleSpecification = {
+        const testingCaptionSpecification = {
             enabled: true,
             maxLinesPerCaption: 2,
             maxCharactersPerLine: 10,
             maxCaptionDurationInMillis: 6000
-        } as SubtitleSpecification;
-        testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+        } as CaptionSpecification;
+        testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
 
         const expectedSourceCueContent = "Line 1<br>Line 2<br>Line 3";
 
@@ -1240,13 +1240,13 @@ describe("CueView", () => {
         const cue = {
             vttCue: new VTTCue(1, 40, "Line 1\nLine 2\nLine 3"), cueCategory: "DIALOGUE", errors: []
         } as CueDto;
-        const testingSubtitleSpecification = {
+        const testingCaptionSpecification = {
             enabled: true,
             maxLinesPerCaption: 2,
             maxCharactersPerLine: 10,
             maxCaptionDurationInMillis: 6000
-        } as SubtitleSpecification;
-        testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+        } as CaptionSpecification;
+        testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
 
         const expectedSourceCueContent = "Line 1<br>Line 2<br>Line 3";
 

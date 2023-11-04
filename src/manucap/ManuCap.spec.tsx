@@ -17,11 +17,11 @@ import { updateCues } from "./cues/cuesList/cuesListActions";
 import { updateEditingTrack } from "./trackSlices";
 import CueLine from "./cues/cueLine/CueLine";
 import ManuCap from "./ManuCap";
-import { SubtitleSpecification } from "./toolbox/model";
+import { CaptionSpecification } from "./toolbox/model";
 import Toolbox from "./toolbox/Toolbox";
 import VideoPlayer from "./player/VideoPlayer";
 import { createTestingStore } from "../testUtils/testingStore";
-import { readSubtitleSpecification } from "./toolbox/subtitleSpecifications/subtitleSpecificationSlice";
+import { readCaptionSpecification } from "./toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 import { callSaveTrack, setSaveTrack } from "./cues/saveSlices";
 import * as cuesListScrollSlice from "./cues/cuesList/cuesListScrollSlice";
@@ -200,7 +200,7 @@ describe("ManuCap", () => {
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
@@ -303,7 +303,7 @@ describe("ManuCap", () => {
         );
         testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
@@ -363,7 +363,7 @@ describe("ManuCap", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
 
         // THEN
@@ -421,7 +421,7 @@ describe("ManuCap", () => {
         );
         testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
@@ -544,7 +544,7 @@ describe("ManuCap", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
@@ -668,7 +668,7 @@ describe("ManuCap", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(showMerge(true) as {} as AnyAction);
@@ -795,7 +795,7 @@ describe("ManuCap", () => {
         );
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
@@ -930,7 +930,7 @@ describe("ManuCap", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
@@ -967,7 +967,7 @@ describe("ManuCap", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         actualNode.update();
@@ -1002,7 +1002,7 @@ describe("ManuCap", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         actualNode.update();
@@ -1038,7 +1038,7 @@ describe("ManuCap", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         actualNode.update();
@@ -1073,7 +1073,7 @@ describe("ManuCap", () => {
         testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
 
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
@@ -1108,7 +1108,7 @@ describe("ManuCap", () => {
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
         testingStore.dispatch(
-            readSubtitleSpecification({ enabled: false } as SubtitleSpecification) as {} as AnyAction
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         actualNode.update();

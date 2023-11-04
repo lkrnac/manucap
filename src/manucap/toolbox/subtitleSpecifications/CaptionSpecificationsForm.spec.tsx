@@ -1,15 +1,15 @@
 import "../../../testUtils/initBrowserEnvironment";
 
 import { Provider } from "react-redux";
-import { SubtitleSpecification } from "../model";
-import SubtitleSpecificationsForm from "./SubtitleSpecificationsForm";
+import { CaptionSpecification } from "../model";
+import CaptionSpecificationsForm from "./CaptionSpecificationsForm";
 import testingStore from "../../../testUtils/testingStore";
 import { render } from "@testing-library/react";
 
-describe("SubtitleSpecificationsForm", () => {
+describe("CaptionSpecificationsForm", () => {
     it("renders disabled", () => {
         // GIVEN
-        const subTitleSpecifications: SubtitleSpecification = {
+        const subTitleSpecifications: CaptionSpecification = {
             subtitleSpecificationId: "",
             projectId: "",
             enabled: false,
@@ -42,7 +42,7 @@ describe("SubtitleSpecificationsForm", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
             </Provider>
         );
 
@@ -52,7 +52,7 @@ describe("SubtitleSpecificationsForm", () => {
 
     it("renders disabled with media notes", () => {
         // GIVEN
-        const subTitleSpecifications: SubtitleSpecification = {
+        const subTitleSpecifications: CaptionSpecification = {
             subtitleSpecificationId: "",
             projectId: "",
             enabled: false,
@@ -85,7 +85,7 @@ describe("SubtitleSpecificationsForm", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
             </Provider>
         );
 
@@ -95,7 +95,7 @@ describe("SubtitleSpecificationsForm", () => {
 
     it("renders enabled", () => {
         // GIVEN
-        const subTitleSpecifications: SubtitleSpecification = {
+        const subTitleSpecifications: CaptionSpecification = {
             subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
             projectId: "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
             enabled: true,
@@ -181,7 +181,7 @@ describe("SubtitleSpecificationsForm", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
             </Provider>
         );
 
@@ -192,7 +192,7 @@ describe("SubtitleSpecificationsForm", () => {
 
     it("renders null character and length limitation values", () => {
         // GIVEN
-        const subTitleSpecifications: SubtitleSpecification = {
+        const subTitleSpecifications: CaptionSpecification = {
             subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
             projectId: "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
             enabled: true,
@@ -278,7 +278,7 @@ describe("SubtitleSpecificationsForm", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
             </Provider>
         );
 
@@ -288,7 +288,7 @@ describe("SubtitleSpecificationsForm", () => {
     });
 
     describe("renders media notes markdown links", () => {
-        const subTitleSpecifications: SubtitleSpecification = {
+        const subTitleSpecifications: CaptionSpecification = {
             subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
             projectId: "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
             enabled: true,
@@ -316,7 +316,7 @@ describe("SubtitleSpecificationsForm", () => {
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                    <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
                 </Provider>
             );
 
@@ -336,7 +336,7 @@ describe("SubtitleSpecificationsForm", () => {
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                    <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
                 </Provider>
             );
 
@@ -357,7 +357,7 @@ describe("SubtitleSpecificationsForm", () => {
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                    <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
                 </Provider>
             );
 
@@ -368,7 +368,7 @@ describe("SubtitleSpecificationsForm", () => {
     });
 
     describe("renders subtitle specs comments markdown links", () => {
-        const subTitleSpecifications: SubtitleSpecification = {
+        const subTitleSpecifications: CaptionSpecification = {
             subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
             projectId: "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
             enabled: true,
@@ -396,7 +396,7 @@ describe("SubtitleSpecificationsForm", () => {
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                    <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
                 </Provider>
             );
 
@@ -417,7 +417,7 @@ describe("SubtitleSpecificationsForm", () => {
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                    <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
                 </Provider>
             );
 
@@ -439,7 +439,7 @@ describe("SubtitleSpecificationsForm", () => {
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <SubtitleSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                    <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
                 </Provider>
             );
 

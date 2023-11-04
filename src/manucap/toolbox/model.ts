@@ -1,4 +1,4 @@
-export interface SubtitleSpecification {
+export interface CaptionSpecification {
     subtitleSpecificationId: string;
     projectId: string;
     enabled: boolean;

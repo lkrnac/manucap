@@ -1,10 +1,10 @@
 import { ReactElement } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { SubtitleSpecification } from "../model";
+import { CaptionSpecification } from "../model";
 
 export interface Props {
-    subTitleSpecifications: SubtitleSpecification;
+    subTitleSpecifications: CaptionSpecification;
 }
 
 const speakerIdentificationValues = {
@@ -30,7 +30,7 @@ const millisToSeconds = (millis: number | null): string => millis ? "" + (millis
 const LinkNewTabRenderer = (props: HTMLLinkElement): any =>
     <a href={props.href} rel="noopener noreferrer" target="_blank">{props.children}</a>;
 
-const SubtitleSpecificationsForm = (props: Props): ReactElement => (
+const CaptionSpecificationsForm = (props: Props): ReactElement => (
     <>
         <label><strong>Enabled:&nbsp;</strong></label>
         <label>{props.subTitleSpecifications.enabled ? "Yes" : "No"}</label>
@@ -133,4 +133,4 @@ const SubtitleSpecificationsForm = (props: Props): ReactElement => (
     </>
 );
 
-export default SubtitleSpecificationsForm;
+export default CaptionSpecificationsForm;

@@ -1,7 +1,7 @@
 import { ReactElement, MouseEvent, useRef, useState } from "react";
 import KeyboardShortcuts from "./keyboardShortcuts/KeyboardShortcuts";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
-import SubtitleSpecificationsButton from "./subtitleSpecifications/SubtitleSpecificationsButton";
+import CaptionSpecificationsButton from "./subtitleSpecifications/CaptionSpecificationsButton";
 import CaptionOverlapToggle from "./CaptionOverlapToggle";
 import ExportTrackCuesButton from "./export/ExportTrackCuesButton";
 import ImportTrackCuesButton from "./ImportTrackCuesButton";
@@ -53,7 +53,7 @@ const Toolbox = (props: Props): ReactElement => {
             className="mt-6 space-x-2 flex items-stretch
                 z-100 justify-center mc-button-toolbar"
         >
-            <SubtitleSpecificationsButton />
+            <CaptionSpecificationsButton />
             <SearchReplaceButton />
             <ImportTrackCuesButton
                 handleImport={props.handleImportFile}

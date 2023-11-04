@@ -22,7 +22,7 @@ const getCommentIcon = (index: number): ReactElement => {
             <i
                 id={commentIconId}
                 className="fa-duotone fa-comments"
-                data-pr-tooltip="Subtitle(s) has comments"
+                data-pr-tooltip="Caption(s) has comments"
                 data-pr-position="right"
                 data-pr-at="right+10 top+10"
             />

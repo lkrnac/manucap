@@ -18,8 +18,8 @@ import {
     removeDraftJsDynamicValues,
     spellCheckOptionPredicate
 } from "../../../testUtils/testUtils";
-import { SubtitleSpecification } from "../../toolbox/model";
-import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
+import { CaptionSpecification } from "../../toolbox/model";
+import { readCaptionSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
 import { CueDto, CueError, Language, Track } from "../../model";
 import * as cueListActions from "../cuesList/cuesListActions";
 import CueTextEditor, { CueTextEditorProps, editorStateFOR_TESTING, setEditorStateFOR_TESTING } from "./CueTextEditor";
@@ -1852,12 +1852,12 @@ describe("CueTextEditor", () => {
 
         it("renders with too long lines", () => {
             // GIVEN
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 enabled: true,
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 30,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             const spellCheck = { matches: []} as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some very long text sample very long text sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
@@ -1888,12 +1888,12 @@ describe("CueTextEditor", () => {
 
         it("renders with multiple too long lines", () => {
             // GIVEN
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 enabled: true,
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 10,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             const spellCheck = { matches: []} as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some very long text\nsample very long text sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
@@ -1958,12 +1958,12 @@ describe("CueTextEditor", () => {
 
         it("does not render with too long lines decorator with subtitle specs disabled", () => {
             // GIVEN
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 enabled: false,
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 30,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             const spellCheck = { matches: []} as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some very long text sample very long text sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
@@ -1994,12 +1994,12 @@ describe("CueTextEditor", () => {
 
         it("does not render with too long lines decorator with subtitle specs maxCharactersPerLine null", () => {
                 // GIVEN
-                const testingSubtitleSpecification = {
+                const testingCaptionSpecification = {
                     enabled: true,
                     maxLinesPerCaption: 2,
                     maxCharactersPerLine: null,
-                } as SubtitleSpecification;
-                testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+                } as CaptionSpecification;
+                testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
                 const spellCheck = { matches: []} as SpellCheck;
                 const vttCue = new VTTCue(0, 1, "some very long text sample very long text sample");
                 const editUuid = testingStore.getState().cues[0].editUuid;
@@ -2030,12 +2030,12 @@ describe("CueTextEditor", () => {
 
         it("does not render with too long lines decorator with subtitle specs maxCharactersPerLine 0", () => {
             // GIVEN
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 enabled: true,
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 0,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             const spellCheck = { matches: []} as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some very long text sample very long text sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
@@ -2067,12 +2067,12 @@ describe("CueTextEditor", () => {
         it("renders with too long lines and spell check errors", () => {
             // GIVEN
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 enabled: true,
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 30,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             const spellCheck = {
                 matches: [{ offset: 5, length: 5, replacements: [] as Replacement[],
                     context: { text: "some verry long text sample very long text sample", length: 5, offset: 5 },
@@ -2130,12 +2130,12 @@ describe("CueTextEditor", () => {
 
         it("renders with too many lines", () => {
             // GIVEN
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 enabled: true,
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 30,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             const spellCheck = { matches: []} as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some very long\ntext sample very long\ntext sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
@@ -2166,12 +2166,12 @@ describe("CueTextEditor", () => {
 
         it("renders too many lines that are also too long", () => {
             // GIVEN
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 enabled: true,
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 10,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             const spellCheck = { matches: []} as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some very long text\nsample very long text\nsample");
             const editUuid = testingStore.getState().cues[0].editUuid;
@@ -2241,12 +2241,12 @@ describe("CueTextEditor", () => {
 
         it("does not render with too many lines decorator with subtitle specs disabled", () => {
             // GIVEN
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 enabled: false,
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 30,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             const spellCheck = { matches: []} as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some very long\ntext sample very long\ntext sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
@@ -2277,12 +2277,12 @@ describe("CueTextEditor", () => {
 
         it("does not render with too many lines decorator with subtitle specs maxLinesPerCaption null", () => {
             // GIVEN
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 enabled: true,
                 maxLinesPerCaption: null,
                 maxCharactersPerLine: 40,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             const spellCheck = { matches: []} as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some very long\ntext sample very long\ntext sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
@@ -2313,12 +2313,12 @@ describe("CueTextEditor", () => {
 
         it("does not render with too many lines decorator with subtitle specs maxLinesPerCaption 0", () => {
             // GIVEN
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 enabled: true,
                 maxLinesPerCaption: 0,
                 maxCharactersPerLine: 40,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             const spellCheck = { matches: []} as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some very long\ntext sample very long\ntext sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
@@ -2350,12 +2350,12 @@ describe("CueTextEditor", () => {
         it("renders with too many lines and spell check errors", () => {
             // GIVEN
             testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
-            const testingSubtitleSpecification = {
+            const testingCaptionSpecification = {
                 enabled: true,
                 maxLinesPerCaption: 2,
                 maxCharactersPerLine: 40,
-            } as SubtitleSpecification;
-            testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+            } as CaptionSpecification;
+            testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
             const spellCheck = {
                 matches: [{ offset: 5, length: 5, replacements: [] as Replacement[],
                     context: { text: "some verry long text sample very long text sample", length: 5, offset: 5 },

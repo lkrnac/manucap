@@ -32,7 +32,7 @@ import { replaceContent } from "./editUtils";
 import { searchNextCues, setReplacement } from "../searchReplace/searchReplaceSlices";
 import { CueExtraCharacters } from "./CueExtraCharacters";
 import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
-import { SubtitleSpecification } from "../../toolbox/model";
+import { CaptionSpecification } from "../../toolbox/model";
 import { Track } from "../../model";
 import { SearchReplaceIndices } from "../searchReplace/model";
 import { callSaveCueUpdate } from "../saveCueUpdateSlices";
@@ -56,7 +56,7 @@ const findSearchReplaceMatch = (searchReplaceIndices: SearchReplaceIndices | und
         }
     };
 
-const findExtraCharacters = (subtitleSpecifications: SubtitleSpecification | null) =>
+const findExtraCharacters = (subtitleSpecifications: CaptionSpecification | null) =>
     (contentBlock: ContentBlock, callback: Function): void => {
         if (subtitleSpecifications && subtitleSpecifications.enabled && subtitleSpecifications.maxCharactersPerLine) {
             const maxCharactersPerLine = subtitleSpecifications.maxCharactersPerLine;
@@ -72,7 +72,7 @@ const findExtraCharacters = (subtitleSpecifications: SubtitleSpecification | nul
         }
     };
 
-const findExtraLines = (subtitleSpecifications: SubtitleSpecification | null) =>
+const findExtraLines = (subtitleSpecifications: CaptionSpecification | null) =>
     (contentBlock: ContentBlock, callback: Function): void => {
         if (subtitleSpecifications && subtitleSpecifications.enabled && subtitleSpecifications.maxLinesPerCaption) {
             const maxLinesPerCaption = subtitleSpecifications.maxLinesPerCaption;
