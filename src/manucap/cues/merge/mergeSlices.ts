@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { editingTrackSlice } from "../../trackSlices";
 import { AppThunk } from "../../manuCapReducers";
 import { Dispatch } from "react";
-import { CuesWithRowIndex, SubtitleEditAction } from "../../model";
+import { CuesWithRowIndex, ManuCapAction } from "../../model";
 import _ from "lodash";
 import { cuesSlice } from "../cuesList/cuesListSlices";
 
@@ -19,7 +19,7 @@ export const mergeVisibleSlice = createSlice({
 });
 
 export const showMerge = (visible: boolean): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<boolean | SubtitleEditAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<boolean | ManuCapAction>>): void => {
         dispatch(mergeVisibleSlice.actions.setMergeVisible(visible));
     };
 

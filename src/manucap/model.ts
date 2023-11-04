@@ -114,7 +114,7 @@ export interface User {
  * This is marker interface for all the actions that can be dispatched
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface SubtitleEditAction {
+export interface ManuCapAction {
 }
 
 export interface TimeGapLimit {

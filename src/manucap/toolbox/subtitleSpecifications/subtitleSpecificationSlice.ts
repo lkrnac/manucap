@@ -2,9 +2,9 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { AppThunk } from "../../manuCapReducers";
 import { Dispatch } from "react";
 import { SubtitleSpecification } from "../model";
-import { SubtitleEditAction } from "../../model";
+import { ManuCapAction } from "../../model";
 
-export interface SubtitleSpecificationAction extends SubtitleEditAction{
+export interface SubtitleSpecificationAction extends ManuCapAction{
     subtitleSpecification: SubtitleSpecification | null;
 }
 

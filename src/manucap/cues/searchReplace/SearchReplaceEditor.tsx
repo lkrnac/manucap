@@ -13,7 +13,7 @@ import {
 } from "./searchReplaceSlices";
 import { AppThunk, ManuCapState } from "../../manuCapReducers";
 import { saveTrack, updateVttCueTextOnly } from "../cuesList/cuesListActions";
-import { CueDto, SubtitleEditAction } from "../../model";
+import { CueDto, ManuCapAction } from "../../model";
 import { replaceVttCueContent } from "../edit/editUtils";
 import ToggleButton from "../../toolbox/ToggleButton";
 import { SearchReplace } from "./model";
@@ -45,7 +45,7 @@ const replaceAllInVttCue = (
 };
 
 const searchReplaceAll = (
-    dispatch: Dispatch<SubtitleEditAction>,
+    dispatch: Dispatch<ManuCapAction>,
     cues: Array<CueDto>,
     searchReplace: SearchReplace,
     replacement: string

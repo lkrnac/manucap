@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Dispatch } from "react";
-import { CueDto, SubtitleEditAction, SaveTrackCue } from "../model";
+import { CueDto, ManuCapAction, SaveTrackCue } from "../model";
 import { AppThunk } from "../manuCapReducers";
 import { cuesSlice } from "./cuesList/cuesListSlices";
 
@@ -23,7 +23,7 @@ export const saveCueUpdateSlice = createSlice({
 });
 
 const updateAddedCueIdIfNeeded = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction | AppThunk | undefined>>,
+    dispatch: Dispatch<PayloadAction<ManuCapAction | AppThunk | undefined>>,
     getState: Function,
     cueAddId: string | undefined,
     cue: CueDto
@@ -37,7 +37,7 @@ const updateAddedCueIdIfNeeded = (
 };
 
 const executeCueUpdateCallback = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction | undefined>>,
+    dispatch: Dispatch<PayloadAction<ManuCapAction | undefined>>,
     getState: Function,
     cueToUpdate: CueDto
 ): void => {
@@ -50,7 +50,7 @@ const executeCueUpdateCallback = (
 };
 
 export const callSaveCueUpdate = (cueIndex: number): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | undefined> | void>, getState): void => {
+    (dispatch: Dispatch<PayloadAction<ManuCapAction | undefined> | void>, getState): void => {
     const cue = getState().cues[cueIndex];
     if (cue) {
         executeCueUpdateCallback(dispatch, getState, cue);

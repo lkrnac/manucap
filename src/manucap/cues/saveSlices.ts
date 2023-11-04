@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../manuCapReducers";
 import { Dispatch } from "react";
-import { CueDto, SubtitleEditAction, Track } from "../model";
+import { CueDto, ManuCapAction, Track } from "../model";
 import { editingTrackSlice } from "../trackSlices";
 
-interface SaveActionWithPayload extends SubtitleEditAction {
+interface SaveActionWithPayload extends ManuCapAction {
     cues: CueDto[];
     editingTrack: Track | null;
     shouldCreateNewVersion: boolean;
@@ -33,7 +33,7 @@ export const setSaveTrack = (saveTrack: Function): AppThunk =>
     };
 
 export const callSaveTrack = (
-    dispatch: Dispatch<PayloadAction<SubtitleEditAction>>,
+    dispatch: Dispatch<PayloadAction<ManuCapAction>>,
     getState: Function
 ): void => {
     const cues = getState().cues;
