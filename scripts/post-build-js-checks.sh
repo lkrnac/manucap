@@ -9,7 +9,7 @@ else
 fi
 
 # Check console outputs from JS test suite
-CONSOLE_PROBLEMS=$(cat */js-build.log | \
+CONSOLE_PROBLEMS=$(cat js-build.log | \
   # THESE ARE MOST WIDE SPREAD:
   pcre2grep -Mv 'console.error.*\n.*Warning: An update to.*inside a test'| \
   pcre2grep -Mv 'console.warn.*\n.*Warning: componentWillMount has been renamed' | \
