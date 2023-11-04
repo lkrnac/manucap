@@ -3,7 +3,7 @@ import { CaptionSpecification } from "../toolbox/model";
 
 describe("cueVerifications", () => {
     describe("getTimeGapLimits", () => {
-        it("Gets default time gaps if subtitleSpecs is null", () => {
+        it("Gets default time gaps if captionSpecs is null", () => {
             // GIVEN // WHEN
             const timeGap = getTimeGapLimits(null);
 
@@ -12,7 +12,7 @@ describe("cueVerifications", () => {
             expect(timeGap.maxGap).toEqual(Number.MAX_SAFE_INTEGER);
         });
 
-        it("Gets time gap limits from subtitle specs if provided and enabled", () => {
+        it("Gets time gap limits from caption specs if provided and enabled", () => {
             // GIVEN // WHEN
             const testingCaptionSpecification = {
                 minCaptionDurationInMillis: 2000,
@@ -27,7 +27,7 @@ describe("cueVerifications", () => {
             expect(timeGap.maxGap).toEqual(6);
         });
 
-        it("Gets time gap limits from subtitle specs if provided but not enabled", () => {
+        it("Gets time gap limits from caption specs if provided but not enabled", () => {
             // GIVEN // WHEN
             const testingCaptionSpecification = {
                 minCaptionDurationInMillis: 2000,
@@ -42,7 +42,7 @@ describe("cueVerifications", () => {
             expect(timeGap.maxGap).toEqual(Number.MAX_SAFE_INTEGER);
         });
 
-        it("Gets default min gap limit if subtitle specs is enabled but min caption is null", () => {
+        it("Gets default min gap limit if caption specs is enabled but min caption is null", () => {
             // GIVEN // WHEN
             const testingCaptionSpecification = {
                 minCaptionDurationInMillis: null,
@@ -57,7 +57,7 @@ describe("cueVerifications", () => {
             expect(timeGap.maxGap).toEqual(7.5);
         });
 
-        it("Gets default min gap limit if subtitle specs is disabled and min caption provided", () => {
+        it("Gets default min gap limit if caption specs is disabled and min caption provided", () => {
             // GIVEN // WHEN
             const testingCaptionSpecification = {
                 minCaptionDurationInMillis: 200,
@@ -72,7 +72,7 @@ describe("cueVerifications", () => {
             expect(timeGap.maxGap).toEqual(Number.MAX_SAFE_INTEGER);
         });
 
-        it("Gets default max gap limit if subtitle specs is enabled but max caption is null", () => {
+        it("Gets default max gap limit if caption specs is enabled but max caption is null", () => {
             // GIVEN // WHEN
             const testingCaptionSpecification = {
                 minCaptionDurationInMillis: 1500,

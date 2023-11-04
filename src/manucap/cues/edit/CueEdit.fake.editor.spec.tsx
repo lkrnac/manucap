@@ -13,7 +13,7 @@ import { createTestingStore } from "../../../testUtils/testingStore";
 import { MockedDebouncedFunction } from "../../../testUtils/testUtils";
 import { updateCues } from "../cuesList/cuesListActions";
 import { CaptionSpecification } from "../../toolbox/model";
-import { readCaptionSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
+import { readCaptionSpecification } from "../../toolbox/captionSpecifications/captionSpecificationSlice";
 import { updateEditingTrack } from "../../trackSlices";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";

@@ -5,13 +5,13 @@ import { ManuCapState } from "../../manuCapReducers";
 import { Tooltip } from "primereact/tooltip";
 
 const CaptionSpecificationsButton = (): ReactElement => {
-    const subtitleSpecifications = useSelector((state: ManuCapState) => state.subtitleSpecifications);
+    const captionSpecifications = useSelector((state: ManuCapState) => state.captionSpecifications);
     const [show, setShow] = useState(false);
     useEffect(
         () => {
-            setShow(subtitleSpecifications != null &&
-                (subtitleSpecifications.enabled || !!subtitleSpecifications.mediaNotes));
-        }, [subtitleSpecifications]
+            setShow(captionSpecifications != null &&
+                (captionSpecifications.enabled || !!captionSpecifications.mediaNotes));
+        }, [captionSpecifications]
     );
 
     const handleClose = (): void => setShow(false);
@@ -19,10 +19,10 @@ const CaptionSpecificationsButton = (): ReactElement => {
     return (
         <>
             <button
-                id="subtitleSpecsBtn"
-                className="mc-subtitle-specifications-button mc-btn mc-btn-light"
+                id="captionSpecsBtn"
+                className="mc-caption-specifications-button mc-btn mc-btn-light"
                 onClick={handleShow}
-                hidden={subtitleSpecifications == null}
+                hidden={captionSpecifications == null}
                 data-pr-tooltip="Caption Specifications"
                 data-pr-position="top"
                 data-pr-at="center+2 top-2"
@@ -30,8 +30,8 @@ const CaptionSpecificationsButton = (): ReactElement => {
                 <i className="fa-duotone fa-clipboard-list fa-lg" />
             </button>
             <Tooltip
-                id="subtitleSpecsBtnTooltip"
-                target="#subtitleSpecsBtn"
+                id="captionSpecsBtnTooltip"
+                target="#captionSpecsBtn"
             />
             <CaptionSpecificationsModal show={show} onClose={handleClose} />
         </>

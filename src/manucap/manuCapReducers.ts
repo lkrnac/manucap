@@ -4,7 +4,7 @@ import { editingTrackSlice } from "./trackSlices";
 import { userSlice } from "./userSlices";
 import { ThunkAction } from "redux-thunk";
 import { playVideoSectionSlice } from "./player/playbackSlices";
-import { subtitleSpecificationSlice } from "./toolbox/subtitleSpecifications/subtitleSpecificationSlice";
+import { captionSpecificationSlice } from "./toolbox/captionSpecifications/captionSpecificationSlice";
 import { loadingIndicatorSlices } from "./loadingIndicatorSlices";
 import { saveTrackSlice } from "./cues/saveSlices";
 import {
@@ -30,7 +30,7 @@ import { saveCueDeleteSlice } from "./cues/saveCueDeleteSlices";
 export const Reducers = {
     cues: cuesSlice.reducer,
     editingTrack: editingTrackSlice.reducer,
-    subtitleSpecifications: subtitleSpecificationSlice.reducer,
+    captionSpecifications: captionSpecificationSlice.reducer,
     sourceCues: sourceCuesSlice.reducer,
     videoSectionToPlay: playVideoSectionSlice.reducer,
     loadingIndicator: loadingIndicatorSlices.reducer,
@@ -42,7 +42,7 @@ export const Reducers = {
     searchReplaceVisible: searchReplaceVisibleSlice.reducer,
     mergeVisible: mergeVisibleSlice.reducer,
     rowsToMerge: rowsToMergeSlice.reducer,
-    subtitleUser: userSlice.reducer,
+    captionUser: userSlice.reducer,
     editingCueIndex: editingCueIndexSlice.reducer,
     lastCueChange: lastCueChangeSlice.reducer,
     validationErrors: validationErrorSlice.reducer,

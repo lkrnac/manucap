@@ -21,7 +21,7 @@ import { CaptionSpecification } from "./toolbox/model";
 import Toolbox from "./toolbox/Toolbox";
 import VideoPlayer from "./player/VideoPlayer";
 import { createTestingStore } from "../testUtils/testingStore";
-import { readCaptionSpecification } from "./toolbox/subtitleSpecifications/subtitleSpecificationSlice";
+import { readCaptionSpecification } from "./toolbox/captionSpecifications/captionSpecificationSlice";
 import AddCueLineButton from "./cues/edit/AddCueLineButton";
 import { callSaveTrack, setSaveTrack } from "./cues/saveSlices";
 import * as cuesListScrollSlice from "./cues/cuesList/cuesListScrollSlice";
@@ -1008,7 +1008,7 @@ describe("ManuCap", () => {
         actualNode.update();
 
         // WHEN
-        actualNode.find("button.mc-complete-subtitle-mc-btn").simulate("click");
+        actualNode.find("button.mc-complete-caption-mc-btn").simulate("click");
 
         // THEN
         expect(mockOnComplete).toHaveBeenCalledWith(
@@ -1347,7 +1347,7 @@ describe("ManuCap", () => {
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.PLAYBACK);
     });
 
-    it("jump to last translated subtitle button clicked", async () => {
+    it("jump to last translated caption button clicked", async () => {
         // GIVEN
         const cues = [] as CueDto[];
         const cueSize = 50;
@@ -1386,7 +1386,7 @@ describe("ManuCap", () => {
         expect(changeScrollPositionSpy).toBeCalledWith(ScrollPosition.LAST_TRANSLATED);
     });
 
-    it("jump to last unlocked translated chunk subtitle button clicked", async () => {
+    it("jump to last unlocked translated chunk caption button clicked", async () => {
         // GIVEN
         const cues = [] as CueDto[];
         const mediaChunkStart = 14;

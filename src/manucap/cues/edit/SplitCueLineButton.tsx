@@ -21,7 +21,7 @@ const SplitCueLineButton = (props: Props): ReactElement => {
                 className="mc-btn mc-btn-primary mc-split-cue-button w-full mc-btn-sm"
                 disabled={!timecodesUnlocked}
                 title="Unlock timecodes to enable"
-                data-pr-tooltip="Split this subtitle"
+                data-pr-tooltip="Split this caption"
                 data-pr-position="left"
                 data-pr-at="left center"
                 onClick={(): AppThunk => dispatch(splitCue(props.cueIndex))}

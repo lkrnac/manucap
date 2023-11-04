@@ -9,8 +9,8 @@ import { render } from "@testing-library/react";
 describe("CaptionSpecificationsForm", () => {
     it("renders disabled", () => {
         // GIVEN
-        const subTitleSpecifications: CaptionSpecification = {
-            subtitleSpecificationId: "",
+        const captionSpecifications: CaptionSpecification = {
+            captionSpecificationId: "",
             projectId: "",
             enabled: false,
             audioDescription: false,
@@ -42,7 +42,7 @@ describe("CaptionSpecificationsForm", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                <CaptionSpecificationsForm captionSpecifications={captionSpecifications} />
             </Provider>
         );
 
@@ -52,8 +52,8 @@ describe("CaptionSpecificationsForm", () => {
 
     it("renders disabled with media notes", () => {
         // GIVEN
-        const subTitleSpecifications: CaptionSpecification = {
-            subtitleSpecificationId: "",
+        const captionSpecifications: CaptionSpecification = {
+            captionSpecificationId: "",
             projectId: "",
             enabled: false,
             audioDescription: false,
@@ -85,7 +85,7 @@ describe("CaptionSpecificationsForm", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                <CaptionSpecificationsForm captionSpecifications={captionSpecifications} />
             </Provider>
         );
 
@@ -95,8 +95,8 @@ describe("CaptionSpecificationsForm", () => {
 
     it("renders enabled", () => {
         // GIVEN
-        const subTitleSpecifications: CaptionSpecification = {
-            subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
+        const captionSpecifications: CaptionSpecification = {
+            captionSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
             projectId: "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
             enabled: true,
             audioDescription: true,
@@ -181,7 +181,7 @@ describe("CaptionSpecificationsForm", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                <CaptionSpecificationsForm captionSpecifications={captionSpecifications} />
             </Provider>
         );
 
@@ -192,8 +192,8 @@ describe("CaptionSpecificationsForm", () => {
 
     it("renders null character and length limitation values", () => {
         // GIVEN
-        const subTitleSpecifications: CaptionSpecification = {
-            subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
+        const captionSpecifications: CaptionSpecification = {
+            captionSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
             projectId: "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
             enabled: true,
             audioDescription: true,
@@ -278,7 +278,7 @@ describe("CaptionSpecificationsForm", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                <CaptionSpecificationsForm captionSpecifications={captionSpecifications} />
             </Provider>
         );
 
@@ -288,8 +288,8 @@ describe("CaptionSpecificationsForm", () => {
     });
 
     describe("renders media notes markdown links", () => {
-        const subTitleSpecifications: CaptionSpecification = {
-            subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
+        const captionSpecifications: CaptionSpecification = {
+            captionSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
             projectId: "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
             enabled: true,
             audioDescription: true,
@@ -310,13 +310,13 @@ describe("CaptionSpecificationsForm", () => {
             const expectedMediaNotes = "<a href=\"https://google.com\" rel=\"noopener noreferrer\"" +
                 " target=\"_blank\">here</a>";
 
-            subTitleSpecifications.mediaNotes = "Please click [here](https://google.com)";
+            captionSpecifications.mediaNotes = "Please click [here](https://google.com)";
 
 
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                    <CaptionSpecificationsForm captionSpecifications={captionSpecifications} />
                 </Provider>
             );
 
@@ -329,14 +329,14 @@ describe("CaptionSpecificationsForm", () => {
             // GIVEN
             const expectedMediaNotes = "<a href=\"https://google.com\" rel=\"noopener noreferrer\"" +
                 " target=\"_blank\">google</a>";
-            subTitleSpecifications.mediaNotes = "This is [google][1], and that means subtitles.\n" +
+            captionSpecifications.mediaNotes = "This is [google][1], and that means captions.\n" +
                     "\n" +
                     "[1]: <https://google.com> \"Google\"";
 
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                    <CaptionSpecificationsForm captionSpecifications={captionSpecifications} />
                 </Provider>
             );
 
@@ -350,14 +350,14 @@ describe("CaptionSpecificationsForm", () => {
             const expectedMediaNotes = "<a href=\"https://google.com/images/bootstrap/logo.png\"" +
                 " rel=\"noopener noreferrer\" target=\"_blank\">" +
                 "<img src=\"https://google.com/images/bootstrap/logo.png\" alt=\"test\"></a>";
-            subTitleSpecifications.mediaNotes = "[![test](https://google.com/images/bootstrap/logo.png)]" +
+            captionSpecifications.mediaNotes = "[![test](https://google.com/images/bootstrap/logo.png)]" +
                     "(https://google.com/images/bootstrap/logo.png)";
 
 
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                    <CaptionSpecificationsForm captionSpecifications={captionSpecifications} />
                 </Provider>
             );
 
@@ -367,9 +367,9 @@ describe("CaptionSpecificationsForm", () => {
         });
     });
 
-    describe("renders subtitle specs comments markdown links", () => {
-        const subTitleSpecifications: CaptionSpecification = {
-            subtitleSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
+    describe("renders caption specs comments markdown links", () => {
+        const captionSpecifications: CaptionSpecification = {
+            captionSpecificationId: "3f458b11-2996-41f5-8f22-0114c7bc84db",
             projectId: "68ed2f59-c5c3-4956-823b-d1f9f26585fb",
             enabled: true,
             audioDescription: true,
@@ -390,13 +390,13 @@ describe("CaptionSpecificationsForm", () => {
             const expectedMediaNotes = "<a href=\"https://google.com\" rel=\"noopener noreferrer\"" +
                 " target=\"_blank\">here</a>";
 
-            subTitleSpecifications.comments = "Please click [here](https://google.com)";
+            captionSpecifications.comments = "Please click [here](https://google.com)";
 
 
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                    <CaptionSpecificationsForm captionSpecifications={captionSpecifications} />
                 </Provider>
             );
 
@@ -410,14 +410,14 @@ describe("CaptionSpecificationsForm", () => {
             // GIVEN
             const expectedMediaNotes = "<a href=\"https://google.com\" rel=\"noopener noreferrer\"" +
                 " target=\"_blank\">google</a>";
-            subTitleSpecifications.comments = "This is [google][1], and that means subtitles.\n" +
+            captionSpecifications.comments = "This is [google][1], and that means captions.\n" +
                     "\n" +
                     "[1]: <https://google.com> \"Google\"";
 
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                    <CaptionSpecificationsForm captionSpecifications={captionSpecifications} />
                 </Provider>
             );
 
@@ -432,14 +432,14 @@ describe("CaptionSpecificationsForm", () => {
             const expectedMediaNotes = "<a href=\"https://google.com/images/bootstrap/logo.png\"" +
                 " rel=\"noopener noreferrer\" target=\"_blank\">" +
                 "<img src=\"https://google.com/images/bootstrap/logo.png\" alt=\"test\"></a>";
-            subTitleSpecifications.comments = "[![test](https://google.com/images/bootstrap/logo.png)]" +
+            captionSpecifications.comments = "[![test](https://google.com/images/bootstrap/logo.png)]" +
                     "(https://google.com/images/bootstrap/logo.png)";
 
 
             // WHEN
             const actualNode = render(
                 <Provider store={testingStore}>
-                    <CaptionSpecificationsForm subTitleSpecifications={subTitleSpecifications} />
+                    <CaptionSpecificationsForm captionSpecifications={captionSpecifications} />
                 </Provider>
             );
 

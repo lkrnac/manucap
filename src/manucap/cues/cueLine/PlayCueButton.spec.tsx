@@ -17,7 +17,7 @@ describe("PlayCueButton", () => {
                     id="playCueButton-1"
                     style={{ maxHeight: "38px" }}
                     className="mc-btn mc-btn-primary w-full mc-btn-sm"
-                    data-pr-tooltip="Play this subtitle (Ctrl/Alt + Shift + k)"
+                    data-pr-tooltip="Play this caption (Ctrl/Alt + Shift + k)"
                     data-pr-position="left"
                     data-pr-at="left center"
                 >

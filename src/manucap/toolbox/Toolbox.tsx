@@ -1,7 +1,7 @@
 import { ReactElement, MouseEvent, useRef, useState } from "react";
 import KeyboardShortcuts from "./keyboardShortcuts/KeyboardShortcuts";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
-import CaptionSpecificationsButton from "./subtitleSpecifications/CaptionSpecificationsButton";
+import CaptionSpecificationsButton from "./captionSpecifications/CaptionSpecificationsButton";
 import CaptionOverlapToggle from "./CaptionOverlapToggle";
 import ExportTrackCuesButton from "./export/ExportTrackCuesButton";
 import ImportTrackCuesButton from "./ImportTrackCuesButton";

@@ -188,7 +188,7 @@ export const checkErrors = createAsyncThunk<
            thunkApi) => {
         if (index !== undefined) {
             const state = thunkApi.getState();
-            const subtitleSpecification = state.subtitleSpecifications;
+            const captionSpecification = state.captionSpecifications;
             const overlapEnabled = state.editingTrack?.overlapEnabled;
             const cues = state.cues;
             const previousCue = cues[index - 1];
@@ -199,7 +199,7 @@ export const checkErrors = createAsyncThunk<
                 thunkApi.dispatch(applySpellcheckerOnCue(index));
             }
             const cueErrors = conformToRules(
-                currentCue, subtitleSpecification, previousCue, followingCue,
+                currentCue, captionSpecification, previousCue, followingCue,
                 overlapEnabled
             );
             thunkApi.dispatch(cuesSlice.actions.setErrors(
@@ -298,7 +298,7 @@ export const updateVttCue = (
 
             const previousCue = cues[idx - 1];
             const followingCue = cues[idx + 1];
-            const subtitleSpecifications = getState().subtitleSpecifications;
+            const captionSpecifications = getState().captionSpecifications;
             const track = getState().editingTrack as Track;
             const overlapCaptionsAllowed = track?.overlapEnabled;
 
@@ -309,7 +309,7 @@ export const updateVttCue = (
                         cueErrors.push(CueError.TIME_GAP_OVERLAP);
                     }
                 }
-                if (applyInvalidRangePreventionStart(newVttCue, subtitleSpecifications)) {
+                if (applyInvalidRangePreventionStart(newVttCue, captionSpecifications)) {
                     cueErrors.push(CueError.INVALID_RANGE_START);
                 }
                 if (applyInvalidChunkRangePreventionStart(newVttCue, originalCue.vttCue.startTime, track)) {
@@ -322,7 +322,7 @@ export const updateVttCue = (
                         cueErrors.push(CueError.TIME_GAP_OVERLAP);
                     }
                 }
-                if (applyInvalidRangePreventionEnd(newVttCue, subtitleSpecifications)) {
+                if (applyInvalidRangePreventionEnd(newVttCue, captionSpecifications)) {
                     cueErrors.push(CueError.INVALID_RANGE_END);
                 }
                 if (applyInvalidChunkRangePreventionEnd(newVttCue, originalCue.vttCue.endTime, track)) {
@@ -445,8 +445,8 @@ export const saveTrack = (): AppThunk =>
 export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
     (dispatch: Dispatch<ManuCapAction>, getState): void => {
         const state: ManuCapState = getState();
-        const subtitleSpecifications = state.subtitleSpecifications;
-        const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
+        const captionSpecifications = state.captionSpecifications;
+        const timeGapLimit = getTimeGapLimits(captionSpecifications);
         let step = Math.min(timeGapLimit.maxGap, NEW_ADDED_CUE_DEFAULT_STEP);
         if (timeGapLimit.minGap > step) {
             step = timeGapLimit.minGap;
@@ -495,8 +495,8 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
 export const splitCue = (idx: number): AppThunk =>
     async (dispatch: Dispatch<ManuCapAction | void | null>, getState): Promise<void> => {
         const state: ManuCapState = getState();
-        const subtitleSpecifications = state.subtitleSpecifications;
-        const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
+        const captionSpecifications = state.captionSpecifications;
+        const timeGapLimit = getTimeGapLimits(captionSpecifications);
         const originalCue = state.cues[idx];
         const originalStartTime = originalCue.vttCue.startTime;
         const originalEndTime = originalCue.vttCue.endTime;
@@ -648,8 +648,8 @@ export const mergeCues = (): AppThunk =>
                 } as CueDto;
 
                 const state: ManuCapState = getState();
-                const subtitleSpecifications = state.subtitleSpecifications;
-                const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
+                const captionSpecifications = state.captionSpecifications;
+                const timeGapLimit = getTimeGapLimits(captionSpecifications);
                 const editingTrack = state.editingTrack;
                 const validCueDuration = editingTrack && verifyCueDuration(mergedVttCue, editingTrack, timeGapLimit);
 

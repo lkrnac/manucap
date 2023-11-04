@@ -27,7 +27,7 @@ import {
 import { CueDto, CueError, ScrollPosition, Track } from "../../model";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { CaptionSpecification } from "../../toolbox/model";
-import { readCaptionSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
+import { readCaptionSpecification } from "../../toolbox/captionSpecifications/captionSpecificationSlice";
 import { resetEditingTrack, updateEditingTrack } from "../../trackSlices";
 import { generateSpellcheckHash } from "../spellCheck/spellCheckerUtils";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
@@ -891,7 +891,7 @@ describe("cueListActions", () => {
                 expect(testingStore.getState().validationErrors).toContain(CueError.OUT_OF_CHUNK_RAGE);
             });
 
-            it("Adjust startTime to follow min caption gap passed from subtitle spec", () => {
+            it("Adjust startTime to follow min caption gap passed from caption spec", () => {
                 // GIVEN
                 const testingCaptionSpecification = {
                     minCaptionDurationInMillis: 1200,
@@ -937,7 +937,7 @@ describe("cueListActions", () => {
                 expect(testingStore.getState().validationErrors).toEqual([]);
             });
 
-            it("Adjust endtime to follow min caption gap passed from subtitle spec", () => {
+            it("Adjust endtime to follow min caption gap passed from caption spec", () => {
                 // GIVEN
                 const testingCaptionSpecification = {
                     minCaptionDurationInMillis: 1200,
@@ -960,7 +960,7 @@ describe("cueListActions", () => {
                 expect(testingStore.getState().validationErrors).toContain(CueError.INVALID_RANGE_END);
             });
 
-            it("Adjust startTime to follow max caption gap passed from subtitle spec", () => {
+            it("Adjust startTime to follow max caption gap passed from caption spec", () => {
                 // GIVEN
                 const testingCaptionSpecification = {
                     minCaptionDurationInMillis: 500,
@@ -1006,7 +1006,7 @@ describe("cueListActions", () => {
                 expect(testingStore.getState().validationErrors).toEqual([]);
             });
 
-            it("Adjust endtime to follow max caption gap passed from subtitle spec", () => {
+            it("Adjust endtime to follow max caption gap passed from caption spec", () => {
                 // GIVEN
                 const testingCaptionSpecification = {
                     minCaptionDurationInMillis: 500,
@@ -1241,7 +1241,7 @@ describe("cueListActions", () => {
                 expect(testingStore.getState().validationErrors).not.toContain(CueError.TIME_GAP_OVERLAP);
             });
 
-            it("doesn't apply overlap prevention if overlapping is enabled and there are no subtitle specs", () => {
+            it("doesn't apply overlap prevention if overlapping is enabled and there are no caption specs", () => {
                 // GIVEN
                 const testingCaptionSpecification = { enabled: false } as CaptionSpecification;
                 testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
@@ -1267,7 +1267,7 @@ describe("cueListActions", () => {
                 expect(testingStore.getState().validationErrors).not.toContain(CueError.TIME_GAP_OVERLAP);
             });
 
-            it("doesn't apply overlap prevention if overlapping is enabled and there are subtitle specs", () => {
+            it("doesn't apply overlap prevention if overlapping is enabled and there are caption specs", () => {
                 // GIVEN
                 const testingCaptionSpecification = {
                     enabled: true,
@@ -1301,7 +1301,7 @@ describe("cueListActions", () => {
         });
 
         describe("character/line count limitation", () => {
-            it("ignore line count prevention if null in subtitle specs", () => {
+            it("ignore line count prevention if null in caption specs", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const testingCaptionSpecification = {
@@ -1320,7 +1320,7 @@ describe("cueListActions", () => {
                 expect(testingStore.getState().validationErrors).toEqual([]);
             });
 
-            it("ignore line count prevention if subtitle specs are disabled", () => {
+            it("ignore line count prevention if caption specs are disabled", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const testingCaptionSpecification = {
@@ -1404,7 +1404,7 @@ describe("cueListActions", () => {
                 expect(testingStore.getState().validationErrors).not.toContain(CueError.LINE_COUNT_EXCEEDED);
             });
 
-            it("ignore character line count limitation if null in subtitle specs", () => {
+            it("ignore character line count limitation if null in caption specs", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const testingCaptionSpecification = {
@@ -1425,7 +1425,7 @@ describe("cueListActions", () => {
                 expect(testingStore.getState().validationErrors).not.toContain(CueError.LINE_CHAR_LIMIT_EXCEEDED);
             });
 
-            it("ignore character line count limitation if subtitle specs are disabled", () => {
+            it("ignore character line count limitation if caption specs are disabled", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
                 const testingCaptionSpecification = {
@@ -1962,7 +1962,7 @@ describe("cueListActions", () => {
             expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
-        it("ignores max chars per second if null in subtitle specs", () => {
+        it("ignores max chars per second if null in caption specs", () => {
             // GIVEN
             const cuesCorrupted = [
                 { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
@@ -1987,7 +1987,7 @@ describe("cueListActions", () => {
             expect(saveTrackMock).not.toHaveBeenCalled();
         });
 
-        it("ignores max chars per second if subtitle specs are disabled", () => {
+        it("ignores max chars per second if caption specs are disabled", () => {
             // GIVEN
             const cuesCorrupted = [
                 { id: "cue-1", vttCue: new VTTCue(0, 2, "Caption 1"), cueCategory: "DIALOGUE" },
@@ -2754,7 +2754,7 @@ describe("cueListActions", () => {
                 expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
-            it("picks default step if it less than max gap limit provided by subtitle specs", () => {
+            it("picks default step if it less than max gap limit provided by caption specs", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
                 const testingCaptionSpecification = {
@@ -2778,7 +2778,7 @@ describe("cueListActions", () => {
                 expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
-            it("picks subtitle specs max gap as step if it is greater than default step value", () => {
+            it("picks caption specs max gap as step if it is greater than default step value", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
                 const testingCaptionSpecification = {
@@ -2802,7 +2802,7 @@ describe("cueListActions", () => {
                 expect(saveTrackMock).not.toHaveBeenCalled();
             });
 
-            it("uses default NEW_ADDED_CUE_DEFAULT_STEP if no subtitle specs provided", () => {
+            it("uses default NEW_ADDED_CUE_DEFAULT_STEP if no caption specs provided", () => {
                 // GIVEN
                 testingStore.dispatch(updateCues(testingCuesWithGaps) as {} as AnyAction);
 

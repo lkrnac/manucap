@@ -9,26 +9,26 @@ const removeLineBreaks = (text: string): string => text.replace(/(\r\n|\n|\r)/gm
 
 export const checkLineLimitation = (
     text: string,
-    subtitleSpecification: CaptionSpecification | null
+    captionSpecification: CaptionSpecification | null
 ): boolean => {
-    if (subtitleSpecification && subtitleSpecification.enabled) {
+    if (captionSpecification && captionSpecification.enabled) {
         const lines = text.split("\n");
-        return !subtitleSpecification.maxLinesPerCaption
-            || lines.length <= subtitleSpecification.maxLinesPerCaption;
+        return !captionSpecification.maxLinesPerCaption
+            || lines.length <= captionSpecification.maxLinesPerCaption;
     }
     return true;
 };
 
 export const checkCharacterLimitation = (
     text: string,
-    subtitleSpecification: CaptionSpecification | null
+    captionSpecification: CaptionSpecification | null
 ): boolean => {
-    if (subtitleSpecification && subtitleSpecification.enabled) {
+    if (captionSpecification && captionSpecification.enabled) {
         const lines = text.split("\n");
         return lines
             .map(
-                line => !subtitleSpecification.maxCharactersPerLine
-                    || removeHtmlTags(line).length <= subtitleSpecification.maxCharactersPerLine
+                line => !captionSpecification.maxCharactersPerLine
+                    || removeHtmlTags(line).length <= captionSpecification.maxCharactersPerLine
             )
             .reduce((accumulator, lineOk) => accumulator && lineOk);
     }
@@ -38,10 +38,10 @@ export const checkCharacterLimitation = (
 const checkCharacterAndLineLimitation = (
     cueErrors: CueError[],
     text: string,
-    subtitleSpecification: CaptionSpecification | null
+    captionSpecification: CaptionSpecification | null
 ): void => {
-    const charactersPerLineLimitOk = checkCharacterLimitation(text, subtitleSpecification);
-    const linesCountLimitOk = checkLineLimitation(text, subtitleSpecification);
+    const charactersPerLineLimitOk = checkCharacterLimitation(text, captionSpecification);
+    const linesCountLimitOk = checkLineLimitation(text, captionSpecification);
     if (!charactersPerLineLimitOk) {
         cueErrors.push(CueError.LINE_CHAR_LIMIT_EXCEEDED);
     }
@@ -50,17 +50,17 @@ const checkCharacterAndLineLimitation = (
     }
 };
 
-export const getTimeGapLimits = (subtitleSpecs: CaptionSpecification | null): TimeGapLimit => {
+export const getTimeGapLimits = (captionSpecs: CaptionSpecification | null): TimeGapLimit => {
     const DEFAULT_MIN_GAP = 0.001;
     const DEFAULT_MAX_GAP = Number.MAX_SAFE_INTEGER;
     let minGap: number = DEFAULT_MIN_GAP;
     let maxGap: number = DEFAULT_MAX_GAP;
 
-    if (subtitleSpecs?.enabled) {
-        if (subtitleSpecs.minCaptionDurationInMillis)
-            minGap = subtitleSpecs.minCaptionDurationInMillis / 1000;
-        if (subtitleSpecs.maxCaptionDurationInMillis)
-            maxGap = subtitleSpecs.maxCaptionDurationInMillis / 1000;
+    if (captionSpecs?.enabled) {
+        if (captionSpecs.minCaptionDurationInMillis)
+            minGap = captionSpecs.minCaptionDurationInMillis / 1000;
+        if (captionSpecs.maxCaptionDurationInMillis)
+            maxGap = captionSpecs.maxCaptionDurationInMillis / 1000;
     }
 
     return { minGap, maxGap };
@@ -73,8 +73,8 @@ const maxRangeOk = (vttCue: VTTCue, timeGapLimit: TimeGapLimit): boolean =>
     (vttCue.endTime - vttCue.startTime) <= timeGapLimit.maxGap;
 
 const checkRange =
-    (cueErrors: CueError[], vttCue: VTTCue, subtitleSpecification: CaptionSpecification | null): void => {
-    const timeGapLimit = getTimeGapLimits(subtitleSpecification);
+    (cueErrors: CueError[], vttCue: VTTCue, captionSpecification: CaptionSpecification | null): void => {
+    const timeGapLimit = getTimeGapLimits(captionSpecification);
     if(!minRangeOk(vttCue, timeGapLimit) || !maxRangeOk(vttCue, timeGapLimit)) {
         cueErrors.push(CueError.TIME_GAP_LIMIT_EXCEEDED);
     }
@@ -104,11 +104,11 @@ const checkSpelling = (cueErrors: CueError[], cue: CueDto): void => {
 };
 
 const checkCharsPerSecond =
-    (cueErrors: CueError[], vttCue: VTTCue, subtitleSpecification: CaptionSpecification | null): void => {
-    if (subtitleSpecification?.enabled && subtitleSpecification.maxCharactersPerSecondPerCaption) {
+    (cueErrors: CueError[], vttCue: VTTCue, captionSpecification: CaptionSpecification | null): void => {
+    if (captionSpecification?.enabled && captionSpecification.maxCharactersPerSecondPerCaption) {
         const cleanText = removeHtmlTags(removeLineBreaks(vttCue.text));
         const cueTextCharsPerSecond = cleanText.length / (vttCue.endTime - vttCue.startTime);
-        if (cueTextCharsPerSecond > subtitleSpecification.maxCharactersPerSecondPerCaption) {
+        if (cueTextCharsPerSecond > captionSpecification.maxCharactersPerSecondPerCaption) {
             cueErrors.push(CueError.CHARS_PER_SECOND_EXCEEDED);
         }
     }
@@ -116,18 +116,18 @@ const checkCharsPerSecond =
 
 export const conformToRules = (
     cue: CueDto,
-    subtitleSpecification: CaptionSpecification | null,
+    captionSpecification: CaptionSpecification | null,
     previousCue?: CueDto,
     followingCue?: CueDto,
     overlapCaptions?: boolean
 ): CueError[] => {
     const cueErrors = [] as CueError[];
-    checkCharacterAndLineLimitation(cueErrors, cue.vttCue.text, subtitleSpecification);
-    checkRange(cueErrors, cue.vttCue, subtitleSpecification);
+    checkCharacterAndLineLimitation(cueErrors, cue.vttCue.text, captionSpecification);
+    checkRange(cueErrors, cue.vttCue, captionSpecification);
     if (!overlapCaptions) {
         checkOverlap(cueErrors, cue.vttCue, previousCue, followingCue);
     }
-    checkCharsPerSecond(cueErrors, cue.vttCue, subtitleSpecification);
+    checkCharsPerSecond(cueErrors, cue.vttCue, captionSpecification);
     return cueErrors;
 };
 
@@ -140,10 +140,10 @@ export const conformToSpelling = (cue: CueDto): CueError[] => {
 
 export const applyInvalidRangePreventionStart = (
     vttCue: VTTCue,
-    subtitleSpecification: CaptionSpecification | null
+    captionSpecification: CaptionSpecification | null
 ): boolean => {
     let applied = false;
-    const timeGapLimit = getTimeGapLimits(subtitleSpecification);
+    const timeGapLimit = getTimeGapLimits(captionSpecification);
 
     if (!minRangeOk(vttCue, timeGapLimit)) {
         vttCue.startTime = Number((vttCue.endTime - timeGapLimit.minGap).toFixed(3));
@@ -158,10 +158,10 @@ export const applyInvalidRangePreventionStart = (
 
 export const applyInvalidRangePreventionEnd = (
     vttCue: VTTCue,
-    subtitleSpecification: CaptionSpecification | null
+    captionSpecification: CaptionSpecification | null
 ): boolean => {
     let applied = false;
-    const timeGapLimit = getTimeGapLimits(subtitleSpecification);
+    const timeGapLimit = getTimeGapLimits(captionSpecification);
 
     if (!minRangeOk(vttCue, timeGapLimit)) {
         vttCue.endTime = Number((vttCue.startTime + timeGapLimit.minGap).toFixed(3));

@@ -19,7 +19,7 @@ import { createTestingStore } from "../../../testUtils/testingStore";
 import { MockedDebouncedFunction, removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import { updateCues, updateMatchedCues } from "../cuesList/cuesListActions";
 import { CaptionSpecification } from "../../toolbox/model";
-import { readCaptionSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
+import { readCaptionSpecification } from "../../toolbox/captionSpecifications/captionSpecificationSlice";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { Replacement, SpellCheck } from "../spellCheck/model";

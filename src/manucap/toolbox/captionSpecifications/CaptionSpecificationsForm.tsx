@@ -4,7 +4,7 @@ import remarkGfm from "remark-gfm";
 import { CaptionSpecification } from "../model";
 
 export interface Props {
-    subTitleSpecifications: CaptionSpecification;
+    captionSpecifications: CaptionSpecification;
 }
 
 const speakerIdentificationValues = {
@@ -33,34 +33,34 @@ const LinkNewTabRenderer = (props: HTMLLinkElement): any =>
 const CaptionSpecificationsForm = (props: Props): ReactElement => (
     <>
         <label><strong>Enabled:&nbsp;</strong></label>
-        <label>{props.subTitleSpecifications.enabled ? "Yes" : "No"}</label>
+        <label>{props.captionSpecifications.enabled ? "Yes" : "No"}</label>
         <hr className="my-4" />
-        {props.subTitleSpecifications.enabled ? (
+        {props.captionSpecifications.enabled ? (
             <>
                 <div style={{ display: "flex", marginRight: "20px" }}>
                     <div style={{ flex: 1 }}>
                         <div>
                             <label><strong> Audio Tags:&nbsp;</strong></label>
-                            <label>{props.subTitleSpecifications.audioDescription ? "Yes" : "No"}</label>
+                            <label>{props.captionSpecifications.audioDescription ? "Yes" : "No"}</label>
                         </div>
                         <div>
                             <label><strong>On-Screen Text:&nbsp;</strong></label>
-                            <label>{props.subTitleSpecifications.onScreenText ? "Yes" : "No"}</label>
+                            <label>{props.captionSpecifications.onScreenText ? "Yes" : "No"}</label>
                         </div>
                         <div>
                             <label><strong>Spoken Audio:&nbsp;</strong></label>
-                            <label>{props.subTitleSpecifications.spokenAudio ? "Yes" : "No"}</label>
+                            <label>{props.captionSpecifications.spokenAudio ? "Yes" : "No"}</label>
                         </div>
                         <div>
                             <label><strong>Speaker Identification:&nbsp;</strong></label>
                             <label>
-                                {speakerIdentificationValues[props.subTitleSpecifications.speakerIdentification]}
+                                {speakerIdentificationValues[props.captionSpecifications.speakerIdentification]}
                             </label>
                         </div>
                         <div>
                             <label><strong>Dialogue Style:&nbsp;</strong></label>
                             <label>
-                                {dialogueStyleValues[props.subTitleSpecifications.dialogueStyle]}
+                                {dialogueStyleValues[props.captionSpecifications.dialogueStyle]}
                             </label>
                         </div>
                     </div>
@@ -69,8 +69,8 @@ const CaptionSpecificationsForm = (props: Props): ReactElement => (
                             <label><strong>Max Lines Per Caption:&nbsp;</strong></label>
                             <label>
                                 {
-                                    props.subTitleSpecifications.maxLinesPerCaption
-                                        ? props.subTitleSpecifications.maxLinesPerCaption
+                                    props.captionSpecifications.maxLinesPerCaption
+                                        ? props.captionSpecifications.maxLinesPerCaption
                                         : "n/a"
                                 }
                             </label>
@@ -79,8 +79,8 @@ const CaptionSpecificationsForm = (props: Props): ReactElement => (
                             <label><strong>Max Characters Per Caption Line:&nbsp;</strong></label>
                             <label>
                                 {
-                                    props.subTitleSpecifications.maxCharactersPerLine
-                                        ? props.subTitleSpecifications.maxCharactersPerLine
+                                    props.captionSpecifications.maxCharactersPerLine
+                                        ? props.captionSpecifications.maxCharactersPerLine
                                         : "n/a"
                                 }
                             </label>
@@ -89,8 +89,8 @@ const CaptionSpecificationsForm = (props: Props): ReactElement => (
                             <label><strong>Max Characters Per Second Per Caption:&nbsp;</strong></label>
                             <label>
                                 {
-                                    props.subTitleSpecifications.maxCharactersPerSecondPerCaption
-                                        ? props.subTitleSpecifications.maxCharactersPerSecondPerCaption
+                                    props.captionSpecifications.maxCharactersPerSecondPerCaption
+                                        ? props.captionSpecifications.maxCharactersPerSecondPerCaption
                                         : "n/a"
                                 }
                             </label>
@@ -98,13 +98,13 @@ const CaptionSpecificationsForm = (props: Props): ReactElement => (
                         <div>
                             <label><strong>Min Caption Duration In Seconds:&nbsp;</strong></label>
                             <label>
-                                {millisToSeconds(props.subTitleSpecifications.minCaptionDurationInMillis)}
+                                {millisToSeconds(props.captionSpecifications.minCaptionDurationInMillis)}
                             </label>
                         </div>
                         <div>
                             <label><strong>Max Caption Duration In Seconds:&nbsp;</strong></label>
                             <label>
-                                {millisToSeconds(props.subTitleSpecifications.maxCaptionDurationInMillis)}
+                                {millisToSeconds(props.captionSpecifications.maxCaptionDurationInMillis)}
                             </label>
                         </div>
                     </div>
@@ -113,7 +113,7 @@ const CaptionSpecificationsForm = (props: Props): ReactElement => (
                 <label><strong>Comments:&nbsp;</strong></label>
                 <ReactMarkdown
                     renderers={{ link: LinkNewTabRenderer, linkReference: LinkNewTabRenderer }}
-                    source={props.subTitleSpecifications.comments}
+                    source={props.captionSpecifications.comments}
                     disallowedTypes={["html"]}
                     plugins={[remarkGfm]}
                     className="mc-subspec-freeform-text mc-subspec-comments"
@@ -124,7 +124,7 @@ const CaptionSpecificationsForm = (props: Props): ReactElement => (
             <label><strong>Media Notes:&nbsp;</strong></label>
             <ReactMarkdown
                 renderers={{ link: LinkNewTabRenderer, linkReference: LinkNewTabRenderer }}
-                source={props.subTitleSpecifications.mediaNotes ? props.subTitleSpecifications.mediaNotes : ""}
+                source={props.captionSpecifications.mediaNotes ? props.captionSpecifications.mediaNotes : ""}
                 disallowedTypes={["html"]}
                 plugins={[remarkGfm]}
                 className="mc-subspec-freeform-text mc-media-notes"

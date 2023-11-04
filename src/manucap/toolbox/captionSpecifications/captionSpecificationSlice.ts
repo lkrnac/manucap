@@ -5,20 +5,20 @@ import { CaptionSpecification } from "../model";
 import { ManuCapAction } from "../../model";
 
 export interface CaptionSpecificationAction extends ManuCapAction{
-    subtitleSpecification: CaptionSpecification | null;
+    captionSpecification: CaptionSpecification | null;
 }
 
-export const subtitleSpecificationSlice = createSlice({
-    name: "subtitleSpecification",
+export const captionSpecificationSlice = createSlice({
+    name: "captionSpecification",
     initialState: null as CaptionSpecification | null,
     reducers: {
         readCaptionSpecification:
             (_state, action: PayloadAction<CaptionSpecificationAction>): CaptionSpecification | null =>
-                action.payload.subtitleSpecification,
+                action.payload.captionSpecification,
     }
 });
 
-export const readCaptionSpecification = (subtitleSpecification: CaptionSpecification): AppThunk =>
+export const readCaptionSpecification = (captionSpecification: CaptionSpecification): AppThunk =>
     (dispatch: Dispatch<PayloadAction<CaptionSpecificationAction>>): void => {
-        dispatch(subtitleSpecificationSlice.actions.readCaptionSpecification({ subtitleSpecification }));
+        dispatch(captionSpecificationSlice.actions.readCaptionSpecification({ captionSpecification }));
     };

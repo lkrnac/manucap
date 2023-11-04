@@ -17,7 +17,7 @@ interface Props {
 const CueComments = (props: Props): ReactElement => {
     const dispatch = useDispatch();
     const [text, setText] = useState("");
-    const currentUser = useSelector((state: ManuCapState) => state.subtitleUser);
+    const currentUser = useSelector((state: ManuCapState) => state.captionUser);
 
     const addNewComment = useCallback(() => {
         if (text) {

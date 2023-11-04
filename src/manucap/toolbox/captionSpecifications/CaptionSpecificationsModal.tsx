@@ -11,8 +11,8 @@ interface Props {
 }
 
 const CaptionSpecificationsModal = (props: Props): ReactElement => {
-    const stateCaptionSpecifications = useSelector((state: ManuCapState) => state.subtitleSpecifications);
-    const subtitleSpecifications = stateCaptionSpecifications ? stateCaptionSpecifications :
+    const stateCaptionSpecifications = useSelector((state: ManuCapState) => state.captionSpecifications);
+    const captionSpecifications = stateCaptionSpecifications ? stateCaptionSpecifications :
         {} as CaptionSpecification;
     return (
         <Dialog
@@ -29,7 +29,7 @@ const CaptionSpecificationsModal = (props: Props): ReactElement => {
                 </button>
             )}
         >
-            <CaptionSpecificationsForm subTitleSpecifications={subtitleSpecifications} />
+            <CaptionSpecificationsForm captionSpecifications={captionSpecifications} />
         </Dialog>
     );
 };

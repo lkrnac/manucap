@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { CaptionSpecification } from "../model";
 import CaptionSpecificationsModal from "./CaptionSpecificationsModal";
 import { mount } from "enzyme";
-import { readCaptionSpecification } from "./subtitleSpecificationSlice";
+import { readCaptionSpecification } from "./captionSpecificationSlice";
 import testingStore from "../../../testUtils/testingStore";
 import { removeIds } from "../../../testUtils/testUtils";
 

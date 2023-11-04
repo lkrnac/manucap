@@ -1,5 +1,5 @@
 export interface CaptionSpecification {
-    subtitleSpecificationId: string;
+    captionSpecificationId: string;
     projectId: string;
     enabled: boolean;
     audioDescription: boolean;

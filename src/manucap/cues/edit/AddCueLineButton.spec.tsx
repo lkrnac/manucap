@@ -33,7 +33,7 @@ describe("AddCueLineButton", () => {
                     id="addCuelineButton-0"
                     style={{ maxHeight: "38px", height: "100%" }}
                     className="mc-btn mc-btn-primary mc-add-cue-button w-full mc-btn-sm"
-                    data-pr-tooltip="Insert new subtitle"
+                    data-pr-tooltip="Insert new caption"
                     data-pr-position="left"
                     data-pr-at="left center"
                 >
@@ -61,7 +61,7 @@ describe("AddCueLineButton", () => {
                     id="addCuelineButton-0"
                     style={{ maxHeight: "38px", height: "100%" }}
                     className="mc-btn mc-btn-primary mc-add-cue-button w-full mc-btn-sm"
-                    data-pr-tooltip="Insert new subtitle"
+                    data-pr-tooltip="Insert new caption"
                     data-pr-position="bottom"
                 >
                     <span>Add Cue Line</span>
@@ -249,7 +249,7 @@ describe("AddCueLineButton", () => {
                     id="addCuelineButton-0"
                     style={{ maxHeight: 38, height: "100%" }}
                     className="mc-btn mc-btn-primary mc-add-cue-button w-full mc-btn-sm"
-                    data-pr-tooltip="Insert new subtitle"
+                    data-pr-tooltip="Insert new caption"
                     data-pr-position="left"
                     data-pr-at="left center"
                 >

@@ -13,7 +13,7 @@ import { updateEditingTrack } from "../../trackSlices";
 import { CueActionsPanel } from "../cueLine/CueActionsPanel";
 import { updateCues } from "../cuesList/cuesListActions";
 import { CaptionSpecification } from "../../toolbox/model";
-import { readCaptionSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
+import { readCaptionSpecification } from "../../toolbox/captionSpecifications/captionSpecificationSlice";
 import { searchReplaceSlice, setFind, showSearchReplace } from "../searchReplace/searchReplaceSlices";
 
 let testingStore = createTestingStore();

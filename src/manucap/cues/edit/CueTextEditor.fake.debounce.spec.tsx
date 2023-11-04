@@ -19,7 +19,7 @@ import {
     spellCheckOptionPredicate
 } from "../../../testUtils/testUtils";
 import { CaptionSpecification } from "../../toolbox/model";
-import { readCaptionSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
+import { readCaptionSpecification } from "../../toolbox/captionSpecifications/captionSpecificationSlice";
 import { CueDto, CueError, Language, Track } from "../../model";
 import * as cueListActions from "../cuesList/cuesListActions";
 import CueTextEditor, { CueTextEditorProps, editorStateFOR_TESTING, setEditorStateFOR_TESTING } from "./CueTextEditor";
@@ -1928,7 +1928,7 @@ describe("CueTextEditor", () => {
             expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
         });
 
-        it("renders with too long lines and no subtitle specs", () => {
+        it("renders with too long lines and no caption specs", () => {
             // GIVEN
             const spellCheck = { matches: []} as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some very long text sample very long text sample");
@@ -1956,7 +1956,7 @@ describe("CueTextEditor", () => {
             expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
         });
 
-        it("does not render with too long lines decorator with subtitle specs disabled", () => {
+        it("does not render with too long lines decorator with caption specs disabled", () => {
             // GIVEN
             const testingCaptionSpecification = {
                 enabled: false,
@@ -1992,7 +1992,7 @@ describe("CueTextEditor", () => {
                 .not.toContain("<span class=\"text-red-primary\" data-offset-key=\"\">");
         });
 
-        it("does not render with too long lines decorator with subtitle specs maxCharactersPerLine null", () => {
+        it("does not render with too long lines decorator with caption specs maxCharactersPerLine null", () => {
                 // GIVEN
                 const testingCaptionSpecification = {
                     enabled: true,
@@ -2028,7 +2028,7 @@ describe("CueTextEditor", () => {
                 .not.toContain("<span class=\"text-red-primary\" data-offset-key=\"\">");
         });
 
-        it("does not render with too long lines decorator with subtitle specs maxCharactersPerLine 0", () => {
+        it("does not render with too long lines decorator with caption specs maxCharactersPerLine 0", () => {
             // GIVEN
             const testingCaptionSpecification = {
                 enabled: true,
@@ -2211,7 +2211,7 @@ describe("CueTextEditor", () => {
             expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
         });
 
-        it("does not render with too many lines decorator with no subtitle specs", () => {
+        it("does not render with too many lines decorator with no caption specs", () => {
             // GIVEN
             const spellCheck = { matches: []} as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some very long\ntext sample very long\ntext sample");
@@ -2239,7 +2239,7 @@ describe("CueTextEditor", () => {
             expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
         });
 
-        it("does not render with too many lines decorator with subtitle specs disabled", () => {
+        it("does not render with too many lines decorator with caption specs disabled", () => {
             // GIVEN
             const testingCaptionSpecification = {
                 enabled: false,
@@ -2275,7 +2275,7 @@ describe("CueTextEditor", () => {
                 .not.toContain("<span class=\"text-red-primary\" data-offset-key=\"\">");
         });
 
-        it("does not render with too many lines decorator with subtitle specs maxLinesPerCaption null", () => {
+        it("does not render with too many lines decorator with caption specs maxLinesPerCaption null", () => {
             // GIVEN
             const testingCaptionSpecification = {
                 enabled: true,
@@ -2311,7 +2311,7 @@ describe("CueTextEditor", () => {
                 .not.toContain("<span class=\"text-red-primary\" data-offset-key=\"\">");
         });
 
-        it("does not render with too many lines decorator with subtitle specs maxLinesPerCaption 0", () => {
+        it("does not render with too many lines decorator with caption specs maxLinesPerCaption 0", () => {
             // GIVEN
             const testingCaptionSpecification = {
                 enabled: true,
