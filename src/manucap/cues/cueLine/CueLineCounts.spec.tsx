@@ -47,7 +47,7 @@ describe("CueLineCounts", () => {
     });
 
     it("renders with text", () => {
-        testContentRendered("i am a caption line", 0, 1, 1, 20, 5, 20);
+        testContentRendered("i am a caption line", 0, 1, 1, 19, 5, 19);
     });
 
     it("renders with text and line breaks, spaces and tabs ", () => {
@@ -56,7 +56,7 @@ describe("CueLineCounts", () => {
     });
 
     it("renders with html", () => {
-        testContentRendered("i <i>am</i> <b>a caption</b> line", 0, 1, 1, 20, 5, 20);
+        testContentRendered("i <i>am</i> <b>a caption</b> line", 0, 1, 1, 19, 5, 19);
     });
 
     it("renders with long text and duration", () => {
