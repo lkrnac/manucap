@@ -1,9 +1,9 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { SubtitleEditAction, Track } from "./model";
+import { ManuCapAction, Track } from "./model";
 import { AppThunk } from "./manuCapReducers";
 import { Dispatch } from "react";
 
-interface EditingTrackAction extends SubtitleEditAction {
+interface EditingTrackAction extends ManuCapAction {
     editingTrack: Track;
 }
 
@@ -24,7 +24,7 @@ export const editingTrackSlice = createSlice({
 });
 
 export const updateEditingTrack = (track: Track): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>): void => {
+    (dispatch: Dispatch<PayloadAction<ManuCapAction>>): void => {
         dispatch(editingTrackSlice.actions.updateEditingTrack({ editingTrack: track }));
     };
 

@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { useSelector } from "react-redux";
-import { SubtitleEditState } from "./manuCapReducers";
+import { ManuCapState } from "./manuCapReducers";
 import { SaveState, TrackCues } from "./model";
 
 interface Props {
@@ -34,8 +34,8 @@ const stateCssClasses = new Map<SaveState, string>([
 ]);
 
 const CompleteButton = (props: Props): ReactElement => {
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
-    const cues = useSelector((state: SubtitleEditState) => state.cues);
+    const editingTrack = useSelector((state: ManuCapState) => state.editingTrack);
+    const cues = useSelector((state: ManuCapState) => state.cues);
     const stateIconClass = stateIconCssClasses.get(props.saveState);
     return (
         <div className="space-x-4 flex items-center">
@@ -54,7 +54,7 @@ const CompleteButton = (props: Props): ReactElement => {
             </div>
             <button
                 type="button"
-                className="mc-btn mc-btn-primary mc-complete-subtitle-mc-btn"
+                className="mc-btn mc-btn-primary mc-complete-caption-mc-btn"
                 onClick={(): void => props.onComplete({ editingTrack, cues })}
                 disabled={props.disabled || props.saveState === "TRIGGERED"}
             >

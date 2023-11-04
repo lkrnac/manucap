@@ -67,7 +67,7 @@ const CueListToolbar = (props: Props): ReactElement => {
                 onClick={(): void => {
                 dispatch(changeScrollPosition(ScrollPosition.CURRENT));
             }}
-                data-pr-tooltip="Scroll to currently editing subtitle"
+                data-pr-tooltip="Scroll to currently editing caption"
                 data-pr-position="top"
                 data-pr-at="center top-2"
             >
@@ -85,7 +85,7 @@ const CueListToolbar = (props: Props): ReactElement => {
                 onClick={(): void => {
                 dispatch(changeScrollPosition(ScrollPosition.PLAYBACK));
             }}
-                data-pr-tooltip="Scroll to subtitle in playback position"
+                data-pr-tooltip="Scroll to caption in playback position"
                 data-pr-position="top"
                 data-pr-at="center top-2"
             >
@@ -104,7 +104,7 @@ const CueListToolbar = (props: Props): ReactElement => {
                 onClick={(): void => {
                 dispatch(changeScrollPosition(ScrollPosition.LAST_TRANSLATED));
             }}
-                data-pr-tooltip="Scroll to last translated subtitle"
+                data-pr-tooltip="Scroll to last translated caption"
                 data-pr-position="top"
                 data-pr-at="center top-2"
             >
@@ -122,7 +122,7 @@ const CueListToolbar = (props: Props): ReactElement => {
                 onClick={(): void => {
                 dispatch(changeScrollPosition(ScrollPosition.ERROR));
             }}
-                data-pr-tooltip="Scroll to next subtitle error"
+                data-pr-tooltip="Scroll to next caption error"
                 data-pr-position="top"
                 data-pr-at="center top-2"
             >

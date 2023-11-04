@@ -4,7 +4,7 @@ import "../global.css";
 import { ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import EditingVideoPlayer from "./player/EditingVideoPlayer";
-import { AppThunk, SubtitleEditState } from "./manuCapReducers";
+import { AppThunk, ManuCapState } from "./manuCapReducers";
 import Toolbox from "./toolbox/Toolbox";
 import { enableMapSet } from "immer";
 import { hasDataLoaded } from "./utils/manuCapUtils";
@@ -32,7 +32,7 @@ import { saveCueDeleteSlice } from "./cues/saveCueDeleteSlices";
 //  Can be removed once fixed.
 enableMapSet();
 
-export interface SubtitleEditProps {
+export interface ManuCapProps {
     mp4: string;
     poster: string;
     waveform?: string;
@@ -50,10 +50,10 @@ export interface SubtitleEditProps {
     saveState: SaveState;
 }
 
-const ManuCap = (props: SubtitleEditProps): ReactElement => {
+const ManuCap = (props: ManuCapProps): ReactElement => {
     const dispatch = useDispatch();
-    const loadingIndicator = useSelector((state: SubtitleEditState) => state.loadingIndicator);
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const loadingIndicator = useSelector((state: ManuCapState) => state.loadingIndicator);
+    const editingTrack = useSelector((state: ManuCapState) => state.editingTrack);
     const handleTimeChange = (time: number): AppThunk => dispatch(setCurrentPlayerTime(time));
 
     useEffect(
@@ -78,7 +78,7 @@ const ManuCap = (props: SubtitleEditProps): ReactElement => {
 
     return (
         <div
-            className="mc-subtitle-edit"
+            className="mc-manucap"
             style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%", overflow: "hidden" }}
         >
             <CueErrorAlert />

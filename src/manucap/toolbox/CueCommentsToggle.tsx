@@ -1,6 +1,6 @@
 import { MouseEvent, ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SubtitleEditState } from "../manuCapReducers";
+import { ManuCapState } from "../manuCapReducers";
 import ToggleButton from "./ToggleButton";
 import { commentsVisibleSlice } from "../cues/comments/commentsSlices";
 
@@ -10,7 +10,7 @@ interface Props {
 
 export const CueCommentsToggle = (props: Props): ReactElement => {
     const dispatch = useDispatch();
-    const commentsVisible = useSelector((state: SubtitleEditState) => state.commentsVisible);
+    const commentsVisible = useSelector((state: ManuCapState) => state.commentsVisible);
     return (
         <ToggleButton
             className="flex items-center justify-between"

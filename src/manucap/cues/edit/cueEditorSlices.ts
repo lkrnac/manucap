@@ -1,6 +1,6 @@
 import { Dispatch } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CueChange, CueError, ScrollPosition, SubtitleEditAction } from "../../model";
+import { CueChange, CueError, ScrollPosition, ManuCapAction } from "../../model";
 import { AppThunk } from "../../manuCapReducers";
 import { changeScrollPosition } from "../cuesList/cuesListScrollSlice";
 import { cuesSlice } from "../cuesList/cuesListSlices";
@@ -9,7 +9,7 @@ import { mergeVisibleSlice } from "../merge/mergeSlices";
 import { updateMatchedCues } from "../cuesList/cuesListActions";
 import { searchCueText, searchReplaceSlice } from "../searchReplace/searchReplaceSlices";
 
-export interface CueIndexAction extends SubtitleEditAction {
+export interface CueIndexAction extends ManuCapAction {
     idx: number;
 }
 
@@ -38,7 +38,7 @@ export const focusedInputSlice = createSlice({
     }
 });
 
-export const updateEditingCueIndexNoThunk = (dispatch: Dispatch<SubtitleEditAction>, idx: number): void => {
+export const updateEditingCueIndexNoThunk = (dispatch: Dispatch<ManuCapAction>, idx: number): void => {
     dispatch(focusedInputSlice.actions.updateFocusedInput("EDITOR"));
     dispatch(editingCueIndexSlice.actions.updateEditingCueIndex({ idx }));
     if (idx >= 0) {
@@ -48,7 +48,7 @@ export const updateEditingCueIndexNoThunk = (dispatch: Dispatch<SubtitleEditActi
 };
 
 const adjustSearchReplaceIndices = (
-    dispatch: Dispatch<SubtitleEditAction>,
+    dispatch: Dispatch<ManuCapAction>,
     getState: Function,
     idx: number,
     matchedCueIndex?: number
@@ -89,7 +89,7 @@ const adjustSearchReplaceIndices = (
 };
 
 export const updateEditingCueIndex = (idx: number, matchedCueIndex?: number): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
+    (dispatch: Dispatch<ManuCapAction | void>, getState): void => {
         updateEditingCueIndexNoThunk(dispatch, idx);
         adjustSearchReplaceIndices(dispatch, getState, idx, matchedCueIndex);
     };

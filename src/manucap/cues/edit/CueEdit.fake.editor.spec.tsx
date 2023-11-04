@@ -12,8 +12,8 @@ import { CueTextEditorProps } from "./CueTextEditor";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { MockedDebouncedFunction } from "../../../testUtils/testUtils";
 import { updateCues } from "../cuesList/cuesListActions";
-import { SubtitleSpecification } from "../../toolbox/model";
-import { readSubtitleSpecification } from "../../toolbox/subtitleSpecifications/subtitleSpecificationSlice";
+import { CaptionSpecification } from "../../toolbox/model";
+import { readCaptionSpecification } from "../../toolbox/captionSpecifications/captionSpecificationSlice";
 import { updateEditingTrack } from "../../trackSlices";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
@@ -53,15 +53,15 @@ describe("CueEdit", () => {
     beforeEach(() => {
         document.getElementsByTagName("html")[0].innerHTML = "";
         testingStore = createTestingStore();
-        const testingSubtitleSpecification = {
+        const testingCaptionSpecification = {
             minCaptionDurationInMillis: 500,
             maxCaptionDurationInMillis: 960000,
             maxLinesPerCaption: 2,
             maxCharactersPerLine: 30,
             enabled: true
-        } as SubtitleSpecification;
+        } as CaptionSpecification;
         testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
-        testingStore.dispatch(readSubtitleSpecification(testingSubtitleSpecification) as {} as AnyAction);
+        testingStore.dispatch(readCaptionSpecification(testingCaptionSpecification) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
         jest.resetAllMocks();

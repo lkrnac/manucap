@@ -35,7 +35,7 @@ describe("textTrackOptionsConversion", () => {
             } as Track;
 
             const expectedTrackOptions = {
-                kind: "subtitles",
+                kind: "captions",
                 mode: "showing",
                 srclang: "es-ES",
                 default: false,

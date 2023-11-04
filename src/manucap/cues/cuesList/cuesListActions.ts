@@ -13,10 +13,10 @@ import {
     GlossaryMatchDto,
     ScrollPosition,
     SpellcheckerSettings,
-    SubtitleEditAction,
+    ManuCapAction,
     Track
 } from "../../model";
-import { AppThunk, SubtitleEditState } from "../../manuCapReducers";
+import { AppThunk, ManuCapState } from "../../manuCapReducers";
 import { constructCueValuesArray, copyNonConstructorProperties } from "../cueUtils";
 import {
     applyInvalidChunkRangePreventionEnd,
@@ -59,7 +59,7 @@ interface MatchedCueIndexes {
     editingIndexMatchedCues: number;
 }
 
-const findMatchedIndexes = (state: SubtitleEditState, index: number): MatchedCueIndexes => {
+const findMatchedIndexes = (state: ManuCapState, index: number): MatchedCueIndexes => {
     // TODO: Remove following ugly code
     let targetCuesIndex = 0;
     const editingIndexMatchedCues = state.matchedCues.matchedCues.findIndex(
@@ -117,8 +117,8 @@ const validateShift = (position: ShiftPosition, cueIndex: number): void => {
 };
 
 export const updateMatchedCue = (
-    dispatch: Dispatch<SubtitleEditAction>,
-    state: SubtitleEditState,
+    dispatch: Dispatch<ManuCapAction>,
+    state: ManuCapState,
     index: number
 ): void => {
     const { targetCuesIndex, editingIndexMatchedCues } = findMatchedIndexes(state, index);
@@ -130,7 +130,7 @@ export const updateMatchedCue = (
 export const applySpellcheckerOnCue = createAsyncThunk(
     "spellchecker/applySpellcheckerOnCue",
     async (index: number, thunkApi) => {
-        const state: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
+        const state: ManuCapState = thunkApi.getState() as ManuCapState;
         const track = state.editingTrack as Track;
         const currentEditingCue = state.cues[index];
         if (currentEditingCue) {
@@ -140,7 +140,7 @@ export const applySpellcheckerOnCue = createAsyncThunk(
                 return fetchSpellCheck(text, spellCheckerSettings, track.language.id)
                     .then(spellCheck => {
                         addSpellCheck(thunkApi.dispatch, index, spellCheck, track.id);
-                        const freshState: SubtitleEditState = thunkApi.getState() as SubtitleEditState;
+                        const freshState: ManuCapState = thunkApi.getState() as ManuCapState;
                         updateMatchedCue(thunkApi.dispatch, freshState, index);
                     });
             }
@@ -149,7 +149,7 @@ export const applySpellcheckerOnCue = createAsyncThunk(
 );
 
 export const updateMatchedCues = (): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction>>, getState: Function): void => {
+    (dispatch: Dispatch<PayloadAction<ManuCapAction>>, getState: Function): void => {
         const lastState = getState();
         dispatch(matchedCuesSlice.actions.matchCuesByTime(
             { cues: lastState.cues, sourceCues: lastState.sourceCues, editingCueIndex: lastState.editingCueIndex }
@@ -159,7 +159,7 @@ export const updateMatchedCues = (): AppThunk =>
 export const checkSpelling = createAsyncThunk<
         void,
         { index: number },
-        { state: SubtitleEditState }
+        { state: ManuCapState }
     >(
     "validations/checkSpelling",
     async ({ index },
@@ -181,14 +181,14 @@ export const checkSpelling = createAsyncThunk<
 export const checkErrors = createAsyncThunk<
         void,
         { index: number; shouldSpellCheck: boolean },
-        { state: SubtitleEditState }
+        { state: ManuCapState }
     >(
     "validations/checkErrors",
     async ({ index, shouldSpellCheck },
            thunkApi) => {
         if (index !== undefined) {
             const state = thunkApi.getState();
-            const subtitleSpecification = state.subtitleSpecifications;
+            const captionSpecification = state.captionSpecifications;
             const overlapEnabled = state.editingTrack?.overlapEnabled;
             const cues = state.cues;
             const previousCue = cues[index - 1];
@@ -199,7 +199,7 @@ export const checkErrors = createAsyncThunk<
                 thunkApi.dispatch(applySpellcheckerOnCue(index));
             }
             const cueErrors = conformToRules(
-                currentCue, subtitleSpecification, previousCue, followingCue,
+                currentCue, captionSpecification, previousCue, followingCue,
                 overlapEnabled
             );
             thunkApi.dispatch(cuesSlice.actions.setErrors(
@@ -212,7 +212,7 @@ export const checkErrors = createAsyncThunk<
     });
 
 export const validateCue = (
-    dispatch: Dispatch<SubtitleEditAction | void>,
+    dispatch: Dispatch<ManuCapAction | void>,
     index: number,
     shouldSpellCheck: boolean
 ): void => {
@@ -222,8 +222,8 @@ export const validateCue = (
 };
 
 const reorderCues = (
-    dispatch: Dispatch<SubtitleEditAction>,
-    state: SubtitleEditState,
+    dispatch: Dispatch<ManuCapAction>,
+    state: ManuCapState,
     cuesToUpdate?: CueDto[]
 ): CueDto | null | undefined => {
     const newCues = cuesToUpdate ? cuesToUpdate : state.cues;
@@ -240,8 +240,8 @@ const reorderCues = (
 };
 
 const resetEditingIndexIfNeeded = (
-    dispatch: Dispatch<SubtitleEditAction>,
-    state: SubtitleEditState,
+    dispatch: Dispatch<ManuCapAction>,
+    state: ManuCapState,
     newEditingCueIndex: number
 ): void => {
     const editingCueIndex = state.editingCueIndex;
@@ -253,8 +253,8 @@ const resetEditingIndexIfNeeded = (
 };
 
 const resetEditingIndexTimeChangeIfNeeded = (
-    dispatch: Dispatch<SubtitleEditAction>,
-    state: SubtitleEditState,
+    dispatch: Dispatch<ManuCapAction>,
+    state: ManuCapState,
     editUuid: string | null | undefined
 ): void => {
     const newEditingCueIndex = _.findIndex(state.cues, [ "editUuid", editUuid ]);
@@ -262,8 +262,8 @@ const resetEditingIndexTimeChangeIfNeeded = (
 };
 
 const resetEditingIndexAllCuesChangesIfNeeded = (
-    dispatch: Dispatch<SubtitleEditAction>,
-    state: SubtitleEditState,
+    dispatch: Dispatch<ManuCapAction>,
+    state: ManuCapState,
     editingCue: CueDto | null | undefined
 ): void => {
     const newEditingCueIndex = _.findIndex(state.cues,
@@ -285,7 +285,7 @@ export const updateVttCue = (
     vttCue: VTTCue,
     editUuid?: string
 ): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
+    (dispatch: Dispatch<ManuCapAction | void | null>, getState): void => {
         const cues = getState().cues;
         const originalCue = cues[idx];
         const cueErrors = [] as CueError[];
@@ -298,7 +298,7 @@ export const updateVttCue = (
 
             const previousCue = cues[idx - 1];
             const followingCue = cues[idx + 1];
-            const subtitleSpecifications = getState().subtitleSpecifications;
+            const captionSpecifications = getState().captionSpecifications;
             const track = getState().editingTrack as Track;
             const overlapCaptionsAllowed = track?.overlapEnabled;
 
@@ -309,7 +309,7 @@ export const updateVttCue = (
                         cueErrors.push(CueError.TIME_GAP_OVERLAP);
                     }
                 }
-                if (applyInvalidRangePreventionStart(newVttCue, subtitleSpecifications)) {
+                if (applyInvalidRangePreventionStart(newVttCue, captionSpecifications)) {
                     cueErrors.push(CueError.INVALID_RANGE_START);
                 }
                 if (applyInvalidChunkRangePreventionStart(newVttCue, originalCue.vttCue.startTime, track)) {
@@ -322,7 +322,7 @@ export const updateVttCue = (
                         cueErrors.push(CueError.TIME_GAP_OVERLAP);
                     }
                 }
-                if (applyInvalidRangePreventionEnd(newVttCue, subtitleSpecifications)) {
+                if (applyInvalidRangePreventionEnd(newVttCue, captionSpecifications)) {
                     cueErrors.push(CueError.INVALID_RANGE_END);
                 }
                 if (applyInvalidChunkRangePreventionEnd(newVttCue, originalCue.vttCue.endTime, track)) {
@@ -368,7 +368,7 @@ export const updateVttCueTextOnly = (
     vttCue: VTTCue,
     editUuid?: string
 ): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
+    (dispatch: Dispatch<ManuCapAction | void | null>, getState): void => {
         const cues = getState().cues;
         const originalCue = cues[idx];
 
@@ -387,13 +387,13 @@ export const updateVttCueTextOnly = (
     };
 
 export const validateVttCue = (idx: number): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
+    (dispatch: Dispatch<ManuCapAction | void | null>, getState): void => {
         validateCue(dispatch, idx, false);
         updateMatchedCue(dispatch, getState(), idx);
     };
 
 export const removeIgnoredSpellcheckedMatchesFromAllCues = (): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
+    (dispatch: Dispatch<ManuCapAction>, getState): void => {
         const trackId = getState().editingTrack?.id;
         if (trackId) {
             dispatch(cuesSlice.actions
@@ -404,11 +404,11 @@ export const removeIgnoredSpellcheckedMatchesFromAllCues = (): AppThunk =>
 export const validateCorruptedCues = createAsyncThunk<
         void,
         string,
-        { state: SubtitleEditState }
+        { state: ManuCapState }
     >(
     "validations/validateCorruptedCues",
     async (matchText, thunkAPI) => {
-        const state: SubtitleEditState = thunkAPI.getState();
+        const state: ManuCapState = thunkAPI.getState();
         const cues = state.cues;
         cues.filter(cue => cue.errors
             && cue.vttCue.text.includes(matchText)).forEach((cue: CueDto) => {
@@ -417,36 +417,36 @@ export const validateCorruptedCues = createAsyncThunk<
     });
 
 export const updateCueCategory = (idx: number, cueCategory: CueCategory): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
+    (dispatch: Dispatch<ManuCapAction>, getState): void => {
         dispatch(cuesSlice.actions.updateCueCategory({ idx, cueCategory }));
         updateMatchedCue(dispatch, getState(), idx);
         dispatch(callSaveCueUpdate(idx));
     };
 
 export const addCueComment = (idx: number, cueComment: CueComment): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
+    (dispatch: Dispatch<ManuCapAction | void>, getState): void => {
         dispatch(cuesSlice.actions.addCueComment({ idx, cueComment }));
         updateMatchedCue(dispatch, getState(), idx);
         dispatch(callSaveCueUpdate(idx));
     };
 
 export const deleteCueComment = (idx: number, cueCommentIndex: number): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
+    (dispatch: Dispatch<ManuCapAction | void>, getState): void => {
         dispatch(cuesSlice.actions.deleteCueComment({ idx, cueCommentIndex }));
         updateMatchedCue(dispatch, getState(), idx);
         dispatch(callSaveCueUpdate(idx));
     };
 
 export const saveTrack = (): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void>, getState): void => {
+    (dispatch: Dispatch<ManuCapAction | void>, getState): void => {
         callSaveTrack(dispatch, getState);
     };
 
 export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
-        const state: SubtitleEditState = getState();
-        const subtitleSpecifications = state.subtitleSpecifications;
-        const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
+    (dispatch: Dispatch<ManuCapAction>, getState): void => {
+        const state: ManuCapState = getState();
+        const captionSpecifications = state.captionSpecifications;
+        const timeGapLimit = getTimeGapLimits(captionSpecifications);
         let step = Math.min(timeGapLimit.maxGap, NEW_ADDED_CUE_DEFAULT_STEP);
         if (timeGapLimit.minGap > step) {
             step = timeGapLimit.minGap;
@@ -493,10 +493,10 @@ export const addCue = (idx: number, sourceIndexes: number[]): AppThunk =>
     };
 
 export const splitCue = (idx: number): AppThunk =>
-    async (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): Promise<void> => {
-        const state: SubtitleEditState = getState();
-        const subtitleSpecifications = state.subtitleSpecifications;
-        const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
+    async (dispatch: Dispatch<ManuCapAction | void | null>, getState): Promise<void> => {
+        const state: ManuCapState = getState();
+        const captionSpecifications = state.captionSpecifications;
+        const timeGapLimit = getTimeGapLimits(captionSpecifications);
         const originalCue = state.cues[idx];
         const originalStartTime = originalCue.vttCue.startTime;
         const originalEndTime = originalCue.vttCue.endTime;
@@ -529,7 +529,7 @@ export const splitCue = (idx: number): AppThunk =>
 
 const saveDeleteStubCueIfNeeded = (
     cuesLength: number,
-    dispatch: Dispatch<SubtitleEditAction | null>,
+    dispatch: Dispatch<ManuCapAction | null>,
     getState: Function
 ) => {
     if (cuesLength === 1) {
@@ -541,7 +541,7 @@ const saveDeleteStubCueIfNeeded = (
 };
 
 export const deleteCue = (idx: number): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | null>, getState): void => {
+    (dispatch: Dispatch<ManuCapAction | null>, getState): void => {
         const cueToDelete = getState().cues[idx];
         const cuesLength = getState().cues.length;
         dispatch(cuesSlice.actions.deleteCue({ idx }));
@@ -558,7 +558,7 @@ export const deleteCue = (idx: number): AppThunk =>
     };
 
 export const updateCues = (cues: CueDto[]): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
+    (dispatch: Dispatch<ManuCapAction>, getState): void => {
         const editingCue = reorderCues(dispatch, getState(), cues);
         resetEditingIndexAllCuesChangesIfNeeded(dispatch, getState(), editingCue);
         dispatch(lastCueChangeSlice.actions.recordCueChange({ changeType: "UPDATE_ALL", index: -1 }));
@@ -566,7 +566,7 @@ export const updateCues = (cues: CueDto[]): AppThunk =>
     };
 
 export const applyShiftTimeByPosition = (shiftPosition: ShiftPosition, cueIndex: number, shiftTime: number): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
+    (dispatch: Dispatch<ManuCapAction>, getState): void => {
         const editingTrack = getState().editingTrack;
         validateShift(shiftPosition, cueIndex);
         validateShiftWithinChunkRange(shiftTime, editingTrack, getState().cues);
@@ -580,7 +580,7 @@ export const applyShiftTimeByPosition = (shiftPosition: ShiftPosition, cueIndex:
     };
 
 export const syncCues = (): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction>, getState): void => {
+    (dispatch: Dispatch<ManuCapAction>, getState): void => {
         const cues = getState().sourceCues;
         if (cues && cues.length > 0) {
             dispatch(cuesSlice.actions.syncCues({ cues }));
@@ -590,15 +590,15 @@ export const syncCues = (): AppThunk =>
     };
 
 export const addCuesToMergeList = (row: CuesWithRowIndex): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>): void =>
+    (dispatch: Dispatch<PayloadAction<ManuCapAction | void | null>>): void =>
         dispatch(rowsToMergeSlice.actions.addRowCues(row));
 
 export const removeCuesToMergeList = (row: CuesWithRowIndex): AppThunk =>
-    (dispatch: Dispatch<PayloadAction<SubtitleEditAction | void | null>>): void =>
+    (dispatch: Dispatch<PayloadAction<ManuCapAction | void | null>>): void =>
         dispatch(rowsToMergeSlice.actions.removeRowCues(row));
 
 export const mergeCues = (): AppThunk =>
-    (dispatch: Dispatch<SubtitleEditAction | void | null>, getState): void => {
+    (dispatch: Dispatch<ManuCapAction | void | null>, getState): void => {
         let mergeSuccess = false;
         const rowsToMerge = _.sortBy(getState().rowsToMerge, row => row.index);
         if (rowsToMerge && rowsToMerge.length > 0) {
@@ -647,9 +647,9 @@ export const mergeCues = (): AppThunk =>
                     comments: mergedComments
                 } as CueDto;
 
-                const state: SubtitleEditState = getState();
-                const subtitleSpecifications = state.subtitleSpecifications;
-                const timeGapLimit = getTimeGapLimits(subtitleSpecifications);
+                const state: ManuCapState = getState();
+                const captionSpecifications = state.captionSpecifications;
+                const timeGapLimit = getTimeGapLimits(captionSpecifications);
                 const editingTrack = state.editingTrack;
                 const validCueDuration = editingTrack && verifyCueDuration(mergedVttCue, editingTrack, timeGapLimit);
 

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { CueCategory, CueComment, CueDto, CueError, CueLineDto, SubtitleEditAction } from "../../model";
+import { CueCategory, CueComment, CueDto, CueError, CueLineDto, ManuCapAction } from "../../model";
 import { copyNonConstructorProperties } from "../cueUtils";
 import { editingTrackSlice } from "../../trackSlices";
 import { Match, SpellCheck } from "../spellCheck/model";
@@ -8,7 +8,7 @@ import { hasIgnoredKeyword } from "../spellCheck/spellCheckerUtils";
 import { matchCuesByTime, MatchedCuesWithEditingFocus } from "./cuesListTimeMatching";
 import { v4 as uuidv4 } from "uuid";
 
-export interface CueIndexAction extends SubtitleEditAction {
+export interface CueIndexAction extends ManuCapAction {
     idx: number;
 }
 
@@ -30,7 +30,7 @@ export interface CueAction extends CueIndexAction {
     cue: CueDto;
 }
 
-interface CuesAction extends SubtitleEditAction {
+interface CuesAction extends ManuCapAction {
     cues: CueDto[];
 }
 

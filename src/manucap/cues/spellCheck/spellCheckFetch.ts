@@ -1,6 +1,6 @@
 import sanitizeHtml from "sanitize-html";
 import { SpellCheck } from "./model";
-import { SpellcheckerSettings, SubtitleEditAction } from "../../model";
+import { SpellcheckerSettings, ManuCapAction } from "../../model";
 import { hasIgnoredKeyword, languageToolLanguageMapping } from "./spellCheckerUtils";
 import { cuesSlice } from "../cuesList/cuesListSlices";
 import { checkSpelling } from "../cuesList/cuesListActions";
@@ -9,7 +9,7 @@ import { Dispatch } from "react";
 const SPELLCHECKER_EXCLUDED_RULES = "UPPERCASE_SENTENCE_START,PUNCTUATION_PARAGRAPH_END";
 
 export const addSpellCheck = (
-    dispatch: Dispatch<SubtitleEditAction | void>,
+    dispatch: Dispatch<ManuCapAction | void>,
     index: number,
     spellCheck: SpellCheck,
     trackId?: string

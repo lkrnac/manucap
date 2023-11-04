@@ -2,7 +2,7 @@ import { CueCategory, CueDto, CueDtoWithIndex, CueLineDto } from "../../model";
 import { copyNonConstructorProperties, Position, positionStyles } from "../cueUtils";
 import { Dispatch, ReactElement, useEffect } from "react";
 import { addCue, saveTrack, updateCueCategory, updateVttCue } from "../cuesList/cuesListActions";
-import { AppThunk, SubtitleEditState } from "../../manuCapReducers";
+import { AppThunk, ManuCapState } from "../../manuCapReducers";
 import CueCategoryButton from "./CueCategoryButton";
 import CueTextEditor from "./CueTextEditor";
 import { KeyCombination } from "../../utils/shortcutConstants";
@@ -38,13 +38,13 @@ const getCueIndexes = (cues: CueDtoWithIndex[] | undefined): number[] => cues
 
 const CueEdit = (props: CueEditProps): ReactElement => {
     const dispatch = useDispatch();
-    const currentPlayerTime = useSelector((state: SubtitleEditState) => state.currentPlayerTime);
-    const focusedInput = useSelector((state: SubtitleEditState) => state.focusedInput);
+    const currentPlayerTime = useSelector((state: ManuCapState) => state.currentPlayerTime);
+    const focusedInput = useSelector((state: ManuCapState) => state.focusedInput);
     const nextSourceCuesIndexes = props.nextCueLine
         ? getCueIndexes(props.nextCueLine.sourceCues)
         : [];
 
-    const cuesCount = useSelector((state: SubtitleEditState) => state.cues.length);
+    const cuesCount = useSelector((state: ManuCapState) => state.cues.length);
 
     const unbindCueViewModeKeyboardShortcut =(): void => {
         Mousetrap.unbind([KeyCombination.ESCAPE, KeyCombination.ENTER]);
@@ -107,7 +107,7 @@ const CueEdit = (props: CueEditProps): ReactElement => {
         });
     }, [ dispatch, props.cue.vttCue.startTime, props.cue.vttCue.endTime ]);
 
-    const editingTrack = useSelector((state: SubtitleEditState) => state.editingTrack);
+    const editingTrack = useSelector((state: ManuCapState) => state.editingTrack);
     const isTranslation = editingTrack?.type === "TRANSLATION";
     const timecodesUnlocked = editingTrack?.timecodesUnlocked;
     const cueLineId = `cueEditLine-${props.index}`;

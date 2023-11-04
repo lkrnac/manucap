@@ -5,13 +5,13 @@ import ManuCap from "./manucap/ManuCap";
 import VideoPlayer from "./manucap/player/VideoPlayer";
 import useMatchedCuesAsCsv from "./manucap/cues/cuesList/useMatchedCuesAsCsv";
 import { updateSourceCues } from "./manucap/cues/view/sourceCueSlices";
-import { updateSubtitleUser } from "./manucap/userSlices";
+import { updateCaptionUser } from "./manucap/userSlices";
 
 const Actions = ({
     updateEditingTrack,
     updateCues,
     updateSourceCues,
-    updateSubtitleUser,
+    updateCaptionUser,
 });
 
 const Hooks = ({
