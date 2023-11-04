@@ -1,0 +1,25 @@
+name: manucap CI/CD
+run-name: ${{ github.actor }} manucap CI/CD
+on: [push]
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+                  cache: 'npm'
+            - run: npm ci --legacy-peer-deps
+#            - run:   run build
+            - run: npm run compile-with-tests
+            - run: npm test
+            - name: Upload coverage reports to Codecov
+              uses: codecov/codecov-action@v3
+              env:
+                  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+            - run: npx react-scripts build # tests if local development browser build is working
+            - run: npm run lint
+            - run: sudo apt-get install -y pcre2-utils
+#            - run: export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+            - run: ./scripts/post-build-js-checks.sh
