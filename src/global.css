@@ -618,7 +618,7 @@ region.wavesurfer-region:before {
     animation: mc-rotation 1s linear infinite;
 }
 
-.mc-subtitle-edit .mc-spinner-icon {
+.mc-manucap .mc-spinner-icon {
     @apply border-x-blue-primary border-t-blue-primary border-b-transparent;
 }
 

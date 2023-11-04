@@ -96,7 +96,7 @@ describe("ManuCap", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    className="mc-subtitle-edit"
+                    className="mc-manucap"
                     style={{
                         display: "flex",
                         flexFlow: "column",
@@ -217,7 +217,7 @@ describe("ManuCap", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div
-                    className="mc-subtitle-edit"
+                    className="mc-manucap"
                     style={{
                         display: "flex",
                         flexFlow: "column",
@@ -320,7 +320,7 @@ describe("ManuCap", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div
-                    className="mc-subtitle-edit"
+                    className="mc-manucap"
                     style={{
                         display: "flex",
                         flexFlow: "column",
@@ -379,7 +379,7 @@ describe("ManuCap", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div
-                    className="mc-subtitle-edit"
+                    className="mc-manucap"
                     style={{
                         display: "flex",
                         flexFlow: "column",
@@ -438,7 +438,7 @@ describe("ManuCap", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    className="mc-subtitle-edit"
+                    className="mc-manucap"
                     style={{
                         display: "flex",
                         flexFlow: "column",
@@ -562,7 +562,7 @@ describe("ManuCap", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    className="mc-subtitle-edit"
+                    className="mc-manucap"
                     style={{
                         display: "flex",
                         flexFlow: "column",
@@ -686,7 +686,7 @@ describe("ManuCap", () => {
         const expectedNode = mount(
             <Provider store={testingStore}>
                 <div
-                    className="mc-subtitle-edit"
+                    className="mc-manucap"
                     style={{
                         display: "flex",
                         flexFlow: "column",
@@ -818,7 +818,7 @@ describe("ManuCap", () => {
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    className="mc-subtitle-edit"
+                    className="mc-manucap"
                     style={{
                         display: "flex",
                         flexFlow: "column",

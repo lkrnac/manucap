@@ -78,7 +78,7 @@ const ManuCap = (props: ManuCapProps): ReactElement => {
 
     return (
         <div
-            className="mc-subtitle-edit"
+            className="mc-manucap"
             style={{ display: "flex", flexFlow: "column", padding: "10px", height: "100%", overflow: "hidden" }}
         >
             <CueErrorAlert />
