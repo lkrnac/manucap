@@ -2,6 +2,7 @@
 #check for ESLint violations
 if (grep '<error' build/eslint.xml 1> /dev/null 2>&1) then
     sumEslint=$(cat build/eslint.xml | grep -o '<error' | wc -l)
+    echo '{"name":"ESLint","head_sha":'"${GITHUB_SHA}"',"status":"completed","conclusion":"failure","output":{"title":"ESLint found '"${sumEslint}"' issues!","summary":"","text":""}}'
     echo "ESLint found "${sumEslint}" issues!";
 #  curl -H "Authorization: token $GITHUB_TOKEN" --request POST --data '{"state": "failure", "context": "ESLint", "description": "ESLint found '"${sumEslint}"' issues!"}' https://api.github.com/repos/lkrnac/manucap/statuses/${GITHUB_SHA} > /dev/null
     curl -L \
@@ -13,6 +14,7 @@ if (grep '<error' build/eslint.xml 1> /dev/null 2>&1) then
       -d '{"name":"ESLint","head_sha":'"${GITHUB_SHA}"',"status":"completed","conclusion":"failure","output":{"title":"ESLint found '"${sumEslint}"' issues!","summary":"","text":""}}'
 else
 #  curl -H "Authorization: token $GITHUB_TOKEN" --request POST --data '{"state": "success", "context": "ESLint", "description": "ESLint Passed"}' https://api.github.com/repos/lkrnac/manucap/statuses/${GITHUB_SHA} > /dev/null
+    echo '{"name":"ESLint","head_sha":'"${GITHUB_SHA}"',"status":"completed","conclusion":"success","output":{"title":"ESLint passed","summary":"","text":""}}'
     curl -L \
       -X POST \
       -H "Accept: application/vnd.github+json" \
