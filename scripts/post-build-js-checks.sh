@@ -2,9 +2,7 @@
 #check for ESLint violations
 if (grep '<error' build/eslint.xml 1> /dev/null 2>&1) then
     sumEslint=$(cat build/eslint.xml | grep -o '<error' | wc -l)
-    echo '{"name":"ESLint","head_sha":"'${GITHUB_SHA}'","status":"completed","conclusion":"failure","output":{"title":"ESLint found '${sumEslint}' issues!","summary":"","text":""}}'
-    echo "ESLint found "${sumEslint}" issues!";
-#  curl -H "Authorization: token $GITHUB_TOKEN" --request POST --data '{"state": "failure", "context": "ESLint", "description": "ESLint found '"${sumEslint}"' issues!"}' https://api.github.com/repos/lkrnac/manucap/statuses/${GITHUB_SHA} > /dev/null
+    echo "ESLint found ${sumEslint} issues!";
     curl -L \
       -X POST \
       -H "Accept: application/vnd.github+json" \
@@ -13,8 +11,6 @@ if (grep '<error' build/eslint.xml 1> /dev/null 2>&1) then
       https://api.github.com/repos/lkrnac/manucap/check-runs \
       -d '{"name":"ESLint","head_sha":"'${GITHUB_SHA}'","status":"completed","conclusion":"failure","output":{"title":"ESLint found '${sumEslint}' issues!","summary":"","text":""}}'
 else
-#  curl -H "Authorization: token $GITHUB_TOKEN" --request POST --data '{"state": "success", "context": "ESLint", "description": "ESLint Passed"}' https://api.github.com/repos/lkrnac/manucap/statuses/${GITHUB_SHA} > /dev/null
-    echo '{"name":"ESLint","head_sha":"'${GITHUB_SHA}'","status":"completed","conclusion":"success","output":{"title":"ESLint passed","summary":"","text":""}}'
     curl -L \
       -X POST \
       -H "Accept: application/vnd.github+json" \
@@ -70,9 +66,23 @@ CONSOLE_PROBLEMS=$(cat js-build.log | \
   pcre2grep -Mc '(\A\s*console\..*\n.*)|(Network Error)|(ECONNREFUSED)|(UnhandledPromiseRejectionWarning)')
 
 if (( CONSOLE_PROBLEMS > 0 )); then
-  curl -H "Authorization: token $GITHUB_TOKEN" --request POST --data '{"state": "failure", "context": "console-issues", "description": "Found '"${CONSOLE_PROBLEMS}"' browser console issues!"}' https://api.github.com/repos/lkrnac/manucap/statuses/${GITHUB_SHA} > /dev/null
-  echo $CONSOLE_PROBLEMS
+#  curl -H "Authorization: token $GITHUB_TOKEN" --request POST --data '{"state": "failure", "context": "console-issues", "description": "Found '"${CONSOLE_PROBLEMS}"' browser console issues!"}' https://api.github.com/repos/lkrnac/manucap/statuses/${GITHUB_SHA} > /dev/null
+    curl -L \
+      -X POST \
+      -H "Accept: application/vnd.github+json" \
+      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+      -H "X-GitHub-Api-Version: 2022-11-28" \
+      https://api.github.com/repos/lkrnac/manucap/check-runs \
+      -d '{"name":"ESLint","head_sha":"'${GITHUB_SHA}'","status":"completed","conclusion":"failure","output":{"title":"Found '${CONSOLE_PROBLEMS}' browser console issues!","summary":"","text":"'$CONSOLE_PROBLEMS'"}}'
+    echo $CONSOLE_PROBLEMS
 else
-  curl -H "Authorization: token $GITHUB_TOKEN" --request POST --data '{"state": "success", "context": "console-issues", "description": "Browser console issues check passed"}' https://api.github.com/repos/lkrnac/manucap/statuses/${GITHUB_SHA} > /dev/null
+#  curl -H "Authorization: token $GITHUB_TOKEN" --request POST --data '{"state": "success", "context": "console-issues", "description": "Browser console issues check passed"}' https://api.github.com/repos/lkrnac/manucap/statuses/${GITHUB_SHA} > /dev/null
+    curl -L \
+      -X POST \
+      -H "Accept: application/vnd.github+json" \
+      -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+      -H "X-GitHub-Api-Version: 2022-11-28" \
+      https://api.github.com/repos/lkrnac/manucap/check-runs \
+      -d '{"name":"ESLint","head_sha":"'${GITHUB_SHA}'","status":"completed","conclusion":"success","output":{"title":"Browser console issues check passed","summary":"","text":""}}'
   echo OK
 fi
