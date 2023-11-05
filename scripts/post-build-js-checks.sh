@@ -73,7 +73,7 @@ if (( CONSOLE_PROBLEMS > 0 )); then
       -H "Authorization: Bearer ${GITHUB_TOKEN}" \
       -H "X-GitHub-Api-Version: 2022-11-28" \
       https://api.github.com/repos/lkrnac/manucap/check-runs \
-      -d '{"name":"ESLint","head_sha":"'${GITHUB_SHA}'","status":"completed","conclusion":"failure","output":{"title":"Found '${CONSOLE_PROBLEMS}' browser console issues!","summary":"","text":"'$CONSOLE_PROBLEMS'"}}'
+      -d '{"name":"Console issues","head_sha":"'${GITHUB_SHA}'","status":"completed","conclusion":"failure","output":{"title":"Found '${CONSOLE_PROBLEMS}' browser console issues!","summary":"","text":"'$CONSOLE_PROBLEMS'"}}'
     echo $CONSOLE_PROBLEMS
 else
 #  curl -H "Authorization: token $GITHUB_TOKEN" --request POST --data '{"state": "success", "context": "console-issues", "description": "Browser console issues check passed"}' https://api.github.com/repos/lkrnac/manucap/statuses/${GITHUB_SHA} > /dev/null
@@ -83,6 +83,6 @@ else
       -H "Authorization: Bearer ${GITHUB_TOKEN}" \
       -H "X-GitHub-Api-Version: 2022-11-28" \
       https://api.github.com/repos/lkrnac/manucap/check-runs \
-      -d '{"name":"ESLint","head_sha":"'${GITHUB_SHA}'","status":"completed","conclusion":"success","output":{"title":"Browser console issues check passed","summary":"","text":""}}'
+      -d '{"name":"Console issues","head_sha":"'${GITHUB_SHA}'","status":"completed","conclusion":"success","output":{"title":"Browser console issues check passed","summary":"","text":""}}'
   echo OK
 fi
