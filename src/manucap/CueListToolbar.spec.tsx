@@ -31,7 +31,6 @@ describe("CueListToolbar", () => {
     });
 
     it("renders", () => {
-        console.log("ECONNREFUSED");
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
