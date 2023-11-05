@@ -31,7 +31,7 @@ describe("CueListToolbar", () => {
     });
 
     it("renders", () => {
-        console.log("Warning: Cannot update a component")
+        console.log("ECONNREFUSED");
         // GIVEN
         const expectedNode = mount(
             <Provider store={testingStore}>
