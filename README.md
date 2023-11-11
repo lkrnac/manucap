@@ -16,8 +16,8 @@ import ManuCap from "manucap";
 const Example = props => (
     <ManuCap.VideoPlayer
         id="testvpid"
-        poster="http://media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg"
-        mp4="http://media-encoded.s3.amazonaws.com/1/14/14.mp4"
+        poster="https://picfiles.alphacoders.com/124/124264.png"
+        mp4="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"
     />
 );
 ```
