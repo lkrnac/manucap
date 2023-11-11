@@ -353,7 +353,7 @@ const TestApp = (): ReactElement => {
     // const video = `https://media-encoded.s3.amazonaws.com/sample/${LONG_VIDEO_TESTING
     //     ? "my-long-movie"
     //     : "CHANGE ME AFTER REBRANDING"}`;
-    const video = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"
+    const video = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4";
 
     return (
         <ManuCap
