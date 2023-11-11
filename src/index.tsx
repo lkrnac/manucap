@@ -349,9 +349,11 @@ const TestApp = (): ReactElement => {
         );
     }, [dispatch]);
 
-    const video = `https://media-encoded.s3.amazonaws.com/sample/${LONG_VIDEO_TESTING
-        ? "my-long-movie"
-        : "CHANGE ME AFTER REBRANDING"}`;
+    // TODO: Find/host long video for testing?
+    // const video = `https://media-encoded.s3.amazonaws.com/sample/${LONG_VIDEO_TESTING
+    //     ? "my-long-movie"
+    //     : "CHANGE ME AFTER REBRANDING"}`;
+    const video = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"
 
     return (
         <ManuCap

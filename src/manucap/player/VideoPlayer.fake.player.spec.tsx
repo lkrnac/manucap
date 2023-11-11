@@ -982,8 +982,9 @@ describe("VideoPlayer tested with fake player", () => {
         // @ts-ignore - we are mocking the module
         videojs.mockImplementationOnce(() => playerMock);
         const properties = {
+            // TODO Provide thumbnail file
             poster: "http://media-encoded.s3.amazonaws.com/media/4/7/thumb.jpg",
-            mp4: "http://media-encoded.s3.amazonaws.com/1/14/14.mp4",
+            mp4: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
             tracks: initialTestingTracks,
             languageCuesArray: initialTestingLanguageCuesArray,
             lastCueChange: null
