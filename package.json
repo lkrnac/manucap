@@ -11,7 +11,7 @@
     "npm": ">=8"
   },
   "scripts": {
-    "test": "cross-env CI=1 react-scripts test --coverage --collectCoverageFrom=src/**/*.tsx --collectCoverageFrom=src/**/*.ts --collectCoverageFrom=!src/typings.d.ts --collectCoverageFrom=!src/@types/*.ts --collectCoverageFrom=!src/index.tsx | tee js-build.log",
+    "test": "cross-env CI=1 react-scripts test --coverage --collectCoverageFrom=src/**/*.tsx --collectCoverageFrom=src/**/*.ts --collectCoverageFrom=!src/typings.d.ts --collectCoverageFrom=!src/@types/*.ts --collectCoverageFrom=!src/index.tsx 2>&1 | tee js-build.log",
     "test:watch": "react-scripts test",
     "build": "rollup -c",
     "compile-with-tests": "npx tsc",
