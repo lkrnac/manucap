@@ -5,3 +5,5 @@ import { configure } from "enzyme";
 new JSDOM("<!doctype html><html lang=\"en\"><body><div id=\"root\"/></body></html>");
 
 configure({ adapter: new Adapter() });
+
+global.window.scrollTo = jest.fn();
