@@ -1,6 +1,7 @@
 // TODO Figure out what was using FA PRO? + remove it
 // import "@fortawesome/fontawesome-pro/css/fontawesome.min.css";
 // import "@fortawesome/fontawesome-pro/css/duotone.min.css";
+// import "font-awesome/css/font-awesome.min.css";
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.min.css";
 import "primereact/resources/themes/bootstrap4-light-blue/theme.css";
