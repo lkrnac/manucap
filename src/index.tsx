@@ -1,6 +1,7 @@
 // TODO Figure out what was using FA PRO? + remove it
 // import "@fortawesome/fontawesome-pro/css/fontawesome.min.css";
 // import "@fortawesome/fontawesome-pro/css/duotone.min.css";
+// import "font-awesome/css/font-awesome.min.css";
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.min.css";
 import "primereact/resources/themes/bootstrap4-light-blue/theme.css";
@@ -349,9 +350,11 @@ const TestApp = (): ReactElement => {
         );
     }, [dispatch]);
 
-    const video = `https://media-encoded.s3.amazonaws.com/sample/${LONG_VIDEO_TESTING
-        ? "my-long-movie"
-        : "CHANGE ME AFTER REBRANDING"}`;
+    // TODO: Find/host long video for testing?
+    // const video = `https://media-encoded.s3.amazonaws.com/sample/${LONG_VIDEO_TESTING
+    //     ? "my-long-movie"
+    //     : "CHANGE ME AFTER REBRANDING"}`;
+    const video = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4";
 
     return (
         <ManuCap
