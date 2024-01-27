@@ -157,6 +157,7 @@
     @apply border bg-gray-0 hover:bg-gray-100 text-gray-800 hover:shadow-md hover:shadow-gray-100-semi-transparent;
 }
 
+/* TODO: Remove this and optionally style buttons into light blue */
 .mc-btn.mc-btn-light .fa-duotone {
     @apply text-blue-light;
 }
