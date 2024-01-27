@@ -350,11 +350,9 @@ const TestApp = (): ReactElement => {
         );
     }, [dispatch]);
 
-    // TODO: Find/host long video for testing?
-    // const video = `https://media-encoded.s3.amazonaws.com/sample/${LONG_VIDEO_TESTING
-    //     ? "my-long-movie"
-    //     : "CHANGE ME AFTER REBRANDING"}`;
-    const video = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4";
+    const video = LONG_VIDEO_TESTING
+        ? "https://ia802904.us.archive.org/0/items/TpbAfkThePirateBayAwayFromKeyboard/TPB.AFK.2013.480p.vp8-SimonKlose"
+        : "https://ia801209.us.archive.org/17/items/ElephantsDream/ed_1024";
 
     return (
         <ManuCap
