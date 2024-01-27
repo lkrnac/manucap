@@ -7,6 +7,8 @@ import SearchReplaceButton from "./SearchReplaceButton";
 import { updateEditingTrack } from "../trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Language, Track } from "../model";
+import Icon from "@mdi/react";
+import { mdiSetMerge } from "@mdi/js";
 
 let testingStore = createTestingStore();
 
@@ -39,8 +41,8 @@ describe("MergeCuesButton", () => {
                 className="mc-merge-cues-button flex items-center"
                 title="Unlock timecodes to enable"
             >
-                <i className="w-7 fa-duotone fa-merge text-blue-primary" />
-                <span>Merge Cues</span>
+                <Icon path={mdiSetMerge} size={1.25} />
+                <span className="pl-4">Merge Cues</span>
             </button>
         );
 
@@ -62,8 +64,8 @@ describe("MergeCuesButton", () => {
                 className="mc-merge-cues-button flex items-center"
                 title="Unlock timecodes to enable"
             >
-                <i className="w-7 fa-duotone fa-merge text-blue-primary" />
-                <span>Merge Cues</span>
+                <Icon path={mdiSetMerge} size={1.25} />
+                <span className="pl-4">Merge Cues</span>
             </button>
         );
 
@@ -88,8 +90,8 @@ describe("MergeCuesButton", () => {
                 disabled
                 title="Unlock timecodes to enable"
             >
-                <i className="w-7 fa-duotone fa-merge text-blue-primary" />
-                <span>Merge Cues</span>
+                <Icon path={mdiSetMerge} size={1.25} />
+                <span className="pl-4">Merge Cues</span>
             </button>
         );
 

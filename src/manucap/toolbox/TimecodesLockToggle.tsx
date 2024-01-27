@@ -4,6 +4,8 @@ import { ManuCapState } from "../manuCapReducers";
 import ToggleButton from "./ToggleButton";
 import { Track } from "../model";
 import { updateEditingTrack } from "../trackSlices";
+import Icon from "@mdi/react";
+import { mdiClockOutline } from "@mdi/js";
 
 interface Props {
     onClick: (event: MouseEvent<HTMLElement>) => void
@@ -29,18 +31,18 @@ export const TimecodesLockToggle = (props: Props): ReactElement => {
                 toggle
                     ? (
                         <>
-                            <span>
-                                <i className="w-7 fa-duotone fa-clock text-blue-primary" />
-                                <span>Timecodes</span>
+                            <span className="flex items-center">
+                                <Icon path={mdiClockOutline} size={1.25} />
+                                <span className="pl-4">Timecodes</span>
                             </span>
                             <span className="mc-badge font-medium mc-badge-sm mc-badge-success">UNLOCKED</span>
                         </>
                     )
                     : (
                         <>
-                            <span>
-                                <i className="w-7 fa-duotone fa-clock text-blue-primary" />
-                                <span>Timecodes</span>
+                            <span className="flex items-center">
+                                <Icon path={mdiClockOutline} size={1.25} />
+                                <span className="pl-4">Timecodes</span>
                             </span>
                             <span className="mc-badge font-medium mc-badge-sm mc-badge-secondary">LOCKED</span>
                         </>

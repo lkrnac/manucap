@@ -1,5 +1,5 @@
 import "../../testUtils/initBrowserEnvironment";
-import { mount, shallow } from "enzyme";
+import { mount } from "enzyme";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { Provider } from "react-redux";
 import SyncCuesButton from "./SyncCuesButton";
@@ -8,6 +8,8 @@ import { AnyAction } from "redux";
 import { updateEditingTrack } from "../trackSlices";
 import { CueDto, Language, Track } from "../model";
 import { updateSourceCues } from "../cues/view/sourceCueSlices";
+import Icon from "@mdi/react";
+import { mdiSync } from "@mdi/js";
 
 let testingStore = createTestingStore();
 
@@ -28,10 +30,10 @@ describe("SyncCuesButton", () => {
     });
     it("renders", () => {
         // GIVEN
-        const expectedNode = shallow(
+        const expectedNode = mount(
             <button className="mc-sync-cues-button flex items-center">
-                <i className="w-7 fa-duotone fa-rotate text-blue-primary" />
-                <span>Sync Cues</span>
+                <Icon path={mdiSync} size={1.25} />
+                <span className="pl-4">Sync Cues</span>
             </button>
         );
 
@@ -50,10 +52,10 @@ describe("SyncCuesButton", () => {
         // GIVEN
         testingStore.dispatch(
             updateEditingTrack( { ...testTranslationTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
-        const expectedNode = shallow(
+        const expectedNode = mount(
             <button className="mc-sync-cues-button flex items-center" disabled>
-                <i className="w-7 fa-duotone fa-rotate text-blue-primary" />
-                <span>Sync Cues</span>
+                <Icon path={mdiSync} size={1.25} />
+                <span className="pl-4">Sync Cues</span>
             </button>
         );
 

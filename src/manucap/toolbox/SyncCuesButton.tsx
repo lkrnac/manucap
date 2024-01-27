@@ -4,6 +4,8 @@ import { syncCues } from "../cues/cuesList/cuesListActions";
 import { Track } from "../model";
 import { updateEditingTrack } from "../trackSlices";
 import { ManuCapState } from "../manuCapReducers";
+import Icon from "@mdi/react";
+import { mdiSync } from "@mdi/js";
 
 interface Props {
     onClick: (event: MouseEvent<HTMLElement>) => void
@@ -28,8 +30,8 @@ const SyncCuesButton = (props: Props): ReactElement => {
                 props.onClick(event);
             }}
         >
-            <i className="w-7 fa-duotone fa-rotate text-blue-primary" />
-            <span>Sync Cues</span>
+            <Icon path={mdiSync} size={1.25} />
+            <span className="pl-4">Sync Cues</span>
         </button>
     );
 };

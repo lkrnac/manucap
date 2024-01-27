@@ -6,6 +6,8 @@ import testingStore from "../../../testUtils/testingStore";
 import { updateEditingTrack } from "../../trackSlices";
 import { Language, Track } from "../../model";
 import { AnyAction } from "redux";
+import Icon from "@mdi/react";
+import { mdiArrowLeftRight } from "@mdi/js";
 
 const testTrack = {
     type: "CAPTION",
@@ -36,8 +38,8 @@ describe("ShiftTimeButton", () => {
                     className="mc-shift-time-button flex items-center"
                     title="Unlock timecodes to enable"
                 >
-                    <i className="w-7 fa-duotone fa-arrow-right-arrow-left text-blue-primary" />
-                    <span>Shift Track Time</span>
+                    <Icon path={mdiArrowLeftRight} size={1.25} />
+                    <span className="pl-4">Shift Track Time</span>
                 </button>
             </Provider>
         );
@@ -62,8 +64,8 @@ describe("ShiftTimeButton", () => {
                     className="mc-shift-time-button flex items-center"
                     title="Unlock timecodes to enable"
                 >
-                    <i className="w-7 fa-duotone fa-arrow-right-arrow-left text-blue-primary" />
-                    <span>Shift Track Time</span>
+                    <Icon path={mdiArrowLeftRight} size={1.25} />
+                    <span className="pl-4">Shift Track Time</span>
                 </button>
             </Provider>
         );
@@ -90,8 +92,8 @@ describe("ShiftTimeButton", () => {
                     disabled
                     title="Unlock timecodes to enable"
                 >
-                    <i className="w-7 fa-duotone fa-arrow-right-arrow-left text-blue-primary" />
-                    <span>Shift Track Time</span>
+                    <Icon path={mdiArrowLeftRight} size={1.25} />
+                    <span className="pl-4">Shift Track Time</span>
                 </button>
             </Provider>
         );

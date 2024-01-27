@@ -1,6 +1,8 @@
 import { ReactElement, useEffect, Dispatch, SetStateAction } from "react";
 import { KeyCombination } from "../../utils/shortcutConstants";
 import Mousetrap from "mousetrap";
+import Icon from "@mdi/react";
+import { mdiKeyboard } from "@mdi/js";
 
 interface Props {
     setShow: Dispatch<SetStateAction<boolean>>,
@@ -16,14 +18,13 @@ const KeyboardShortcuts = ({ setShow, show }: Props): ReactElement => {
         };
         registerShortcuts();
     }, [setShow, show]);
-
     return (
         <button
             onClick={() => setShow(true)}
             className="mc-keyboard-shortcuts-button flex items-center"
         >
-            <i className="w-7 fa-duotone fa-keyboard text-blue-primary" />
-            <span>Keyboard Shortcuts</span>
+            <Icon path={mdiKeyboard} size={1.25} />
+            <span className="pl-4">Keyboard Shortcuts</span>
         </button>
     );
 };

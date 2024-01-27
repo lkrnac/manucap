@@ -5,6 +5,8 @@ import { playVideoSection } from "../../player/playbackSlices";
 import { useDispatch } from "react-redux";
 import { getShortcutAsText } from "../../utils/shortcutConstants";
 import { Tooltip } from "primereact/tooltip";
+import { mdiPlay } from "@mdi/js";
+import Icon from "@mdi/react";
 
 interface Props {
     cue: CueDto;
@@ -27,7 +29,7 @@ const PlayCueButton = (props: Props): ReactElement => {
                 onClick={(): AppThunk =>
                     dispatch(playVideoSection(props.cue.vttCue.startTime, props.cue.vttCue.endTime))}
             >
-                <i className="fa-duotone fa-play" />
+                <Icon path={mdiPlay} size={1} />
             </button>
             <Tooltip
                 id={buttonId + "-Tooltip"}
