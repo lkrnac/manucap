@@ -10,6 +10,7 @@ jobs:
               with:
                   node-version: 18
                   cache: 'npm'
+                  registry-url: 'https://registry.npmjs.org'
             - run: npm ci --legacy-peer-deps
 #            - run:   run build
             - run: npm run compile-with-tests
