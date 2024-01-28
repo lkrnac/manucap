@@ -24,7 +24,7 @@ jobs:
             - name: Post build checks
               run: ./scripts/post-build-js-checks.sh
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - run: npm set //registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN
               env:
                   NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
