@@ -29,20 +29,20 @@ describe("CaptionOverlapToggle", () => {
         // GIVEN
         const expectedNode = render(
             <button type="button" className="flex items-center justify-between">
-               <span className="flex items-center">
-                    <Icon path={mdiSetCenter} size={1.25}/>
+                <span className="flex items-center">
+                    <Icon path={mdiSetCenter} size={1.25} />
                     <span className="pl-4">Overlapping</span>
-               </span>
+                </span>
                 <span className="mc-badge font-medium mc-badge-sm mc-badge-secondary">
-                   NOT ALLOWED
-               </span>
+                    NOT ALLOWED
+                </span>
             </button>
         );
 
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CaptionOverlapToggle onClick={jest.fn()} saveState="NONE"/>
+                <CaptionOverlapToggle onClick={jest.fn()} saveState="NONE" />
             </Provider>
         );
 
@@ -57,9 +57,9 @@ describe("CaptionOverlapToggle", () => {
                 type="button"
                 className="flex items-center justify-between outline-0 active"
             >
-               <span className="flex items-center">
-                   <Icon path={mdiSetCenter} size={1.25}/>
-                   <span className="pl-4">Overlapping</span>
+                <span className="flex items-center">
+                    <Icon path={mdiSetCenter} size={1.25} />
+                    <span className="pl-4">Overlapping</span>
                 </span>
                 <span className="mc-badge font-medium mc-badge-sm mc-badge-success">ALLOWED</span>
             </button>
@@ -68,7 +68,7 @@ describe("CaptionOverlapToggle", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CaptionOverlapToggle onClick={jest.fn()} saveState="NONE"/>
+                <CaptionOverlapToggle onClick={jest.fn()} saveState="NONE" />
             </Provider>
         );
         fireEvent.click(actualNode.container.querySelector("button") as Element);
@@ -81,7 +81,7 @@ describe("CaptionOverlapToggle", () => {
         // GIVEN
         const testingTrack = {
             type: "CAPTION",
-            language: {id: "en-US"},
+            language: { id: "en-US" },
             default: true,
             overlapEnabled: false
         } as Track;
@@ -90,9 +90,9 @@ describe("CaptionOverlapToggle", () => {
 
         const expectedNode = render(
             <button type="button" className="flex items-center justify-between">
-               <span className="flex items-center">
-                   <Icon path={mdiSetCenter} size={1.25}/>
-                   <span className="pl-4">Overlapping</span>
+                <span className="flex items-center">
+                    <Icon path={mdiSetCenter} size={1.25} />
+                    <span className="pl-4">Overlapping</span>
                 </span>
                 <span className="mc-badge font-medium mc-badge-sm mc-badge-secondary">
                     NOT ALLOWED
@@ -103,7 +103,7 @@ describe("CaptionOverlapToggle", () => {
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CaptionOverlapToggle onClick={jest.fn()} saveState="NONE"/>
+                <CaptionOverlapToggle onClick={jest.fn()} saveState="NONE" />
             </Provider>
         );
 
@@ -118,14 +118,14 @@ describe("CaptionOverlapToggle", () => {
         // GIVEN
         const testingTrack = {
             type: "CAPTION",
-            language: {id: "en-US"},
+            language: { id: "en-US" },
             default: true,
             overlapEnabled: false
         } as Track;
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
-                <CaptionOverlapToggle onClick={jest.fn()} saveState="NONE"/>
+                <CaptionOverlapToggle onClick={jest.fn()} saveState="NONE" />
             </Provider>
         );
 
@@ -138,13 +138,13 @@ describe("CaptionOverlapToggle", () => {
 
     it("disables button while saving", () => {
         // GIVEN
-        const testingTrack = {type: "CAPTION", language: {id: "en-US"}, default: true} as Track;
+        const testingTrack = { type: "CAPTION", language: { id: "en-US" }, default: true } as Track;
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CaptionOverlapToggle onClick={jest.fn()} saveState="TRIGGERED"/>
+                <CaptionOverlapToggle onClick={jest.fn()} saveState="TRIGGERED" />
             </Provider>
         );
 
@@ -154,13 +154,13 @@ describe("CaptionOverlapToggle", () => {
 
     it("enables button after successful save", () => {
         // GIVEN
-        const testingTrack = {type: "CAPTION", language: {id: "en-US"}, default: true} as Track;
+        const testingTrack = { type: "CAPTION", language: { id: "en-US" }, default: true } as Track;
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CaptionOverlapToggle onClick={jest.fn()} saveState="SAVED"/>
+                <CaptionOverlapToggle onClick={jest.fn()} saveState="SAVED" />
             </Provider>
         );
 
@@ -170,13 +170,13 @@ describe("CaptionOverlapToggle", () => {
 
     it("enables button after failed save", () => {
         // GIVEN
-        const testingTrack = {type: "CAPTION", language: {id: "en-US"}, default: true} as Track;
+        const testingTrack = { type: "CAPTION", language: { id: "en-US" }, default: true } as Track;
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
         // WHEN
         const actualNode = render(
             <Provider store={testingStore}>
-                <CaptionOverlapToggle onClick={jest.fn()} saveState="ERROR"/>
+                <CaptionOverlapToggle onClick={jest.fn()} saveState="ERROR" />
             </Provider>
         );
 
