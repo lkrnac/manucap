@@ -265,8 +265,7 @@ class VideoPlayer extends React.Component<Props> {
     private loadWaveform() {
         const mediaLength = this.props.mediaLength;
         if (this.props.waveform && mediaLength !== undefined) {
-            fetch(this.props.waveform,
-                { headers: { "Content-Type": "application/json", "Accept": "application/json" }})
+            fetch(this.props.waveform)
                 .then((response) => response.json())
                 .then((peaksData) => {
                     if (this.waveformRef?.current) {
