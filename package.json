@@ -3,7 +3,10 @@
   "version": "3.0.1",
   "description": "",
   "license": "",
-  "repository": "manucap",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lkrnac/manucap"
+  },
   "main": "dist/index.js",
   "types": "dist/@types/index.d.ts",
   "engines": {
