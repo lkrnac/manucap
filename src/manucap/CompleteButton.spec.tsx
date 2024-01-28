@@ -8,6 +8,8 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto, Track } from "./model";
 import { updateCues } from "./cues/cuesList/cuesListActions";
 import { setSaveTrack } from "./cues/saveSlices";
+import { mdiAlertOutline, mdiCheckCircleOutline, mdiLoading } from "@mdi/js";
+import Icon from "@mdi/react";
 
 const testingTrack = {
     type: "CAPTION",
@@ -40,8 +42,8 @@ describe("CompleteButton", () => {
                 <div className="space-x-4 flex items-center">
                     <div className="font-medium">
                         <span hidden className="flex items-center ">
-                            <span className="leading-none" />
-                            <i className="ml-2" />
+                            <span className="leading-none pr-4" />
+                            <Icon path="" size={1.5} />
                         </span>
                     </div>
                     <button type="button" className="mc-btn mc-btn-primary mc-complete-caption-mc-btn">
@@ -101,8 +103,8 @@ describe("CompleteButton", () => {
                 <div className="space-x-4 flex items-center">
                     <div className="font-medium">
                         <span className="flex items-center ">
-                            <span className="leading-none">Saving changes</span>
-                            <i className="ml-2 fa-duotone fa-sync fa-spin" />
+                            <span className="leading-none pr-4">Saving changes</span>
+                            <Icon path={mdiLoading} size={1.5} spin />
                         </span>
                     </div>
                     <button
@@ -134,8 +136,8 @@ describe("CompleteButton", () => {
                 <div className="space-x-4 flex items-center">
                     <div className="font-medium">
                         <span className="flex items-center ">
-                            <span className="leading-none">Saving changes</span>
-                            <i className="ml-2 fa-duotone fa-sync fa-spin" />
+                            <span className="leading-none pr-4">Saving changes</span>
+                            <Icon path={mdiLoading} size={1.5} spin />
                         </span>
                     </div>
                     <button
@@ -167,8 +169,8 @@ describe("CompleteButton", () => {
                 <div className="space-x-4 flex items-center">
                     <div className="font-medium">
                         <span className="flex items-center text-green-light">
-                            <span className="leading-none">All changes saved to server</span>
-                            <i className="ml-2 fa-duotone fa-check-circle" />
+                            <span className="leading-none pr-4">All changes saved to server</span>
+                            <Icon path={mdiCheckCircleOutline} size={1.5} />
                         </span>
                     </div>
                     <button type="button" className="mc-btn mc-btn-primary mc-complete-caption-mc-btn">
@@ -196,8 +198,8 @@ describe("CompleteButton", () => {
                 <div className="space-x-4 flex items-center">
                     <div className="font-medium">
                         <span className="flex items-center text-danger">
-                            <span className="leading-none">Error saving latest changes</span>
-                            <i className="ml-2 fa-duotone fa-exclamation-triangle" />
+                            <span className="leading-none pr-4">Error saving latest changes</span>
+                            <Icon path={mdiAlertOutline} size={1.5} />
                         </span>
                     </div>
                     <button type="button" className="mc-btn mc-btn-primary mc-complete-caption-mc-btn">

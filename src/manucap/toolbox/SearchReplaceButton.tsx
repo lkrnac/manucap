@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux";
 import { showSearchReplace } from "../cues/searchReplace/searchReplaceSlices";
 import { showMerge } from "../cues/merge/mergeSlices";
 import { Tooltip } from "primereact/tooltip";
+import Icon from "@mdi/react";
+import { mdiFindReplace } from "@mdi/js";
 
 const SearchReplaceButton = (): ReactElement => {
     const dispatch = useDispatch();
@@ -19,7 +21,7 @@ const SearchReplaceButton = (): ReactElement => {
                 data-pr-position="top"
                 data-pr-at="center+2 top-2"
             >
-                <i className="fa-duotone fa-search-plus fa-lg" />
+                <Icon path={mdiFindReplace} size={1.25} />
             </button>
             <Tooltip
                 id="searchReplaceBtnTooltip"

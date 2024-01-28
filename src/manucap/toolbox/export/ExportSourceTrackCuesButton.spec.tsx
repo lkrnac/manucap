@@ -3,6 +3,8 @@ import { createTestingStore } from "../../../testUtils/testingStore";
 import { Provider } from "react-redux";
 import ExportSourceTrackCuesButton from "./ExportSourceTrackCuesButton";
 import { fireEvent, render } from "@testing-library/react";
+import { mdiExport } from "@mdi/js";
+import Icon from "@mdi/react";
 
 let testingStore = createTestingStore();
 
@@ -22,7 +24,7 @@ describe("ExportSourceTrackCuesButton", () => {
                data-pr-position="top"
                data-pr-at="center+2 top-2"
            >
-               <i className="fa-duotone fa-file-export fa-lg" />
+               <Icon path={mdiExport} size={1.25} />
            </button>
        );
 

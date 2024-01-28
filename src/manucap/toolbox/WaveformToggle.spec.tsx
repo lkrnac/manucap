@@ -3,6 +3,8 @@ import { Provider } from "react-redux";
 import { fireEvent, render } from "@testing-library/react";
 import { createTestingStore } from "../../testUtils/testingStore";
 import WaveformToggle from "./WaveformToggle";
+import Icon from "@mdi/react";
+import { mdiWaveform } from "@mdi/js";
 
 let testingStore = createTestingStore();
 
@@ -15,9 +17,9 @@ describe("WaveformToggle", () => {
         // GIVEN
         const expectedNode = render(
             <button type="button" className="flex items-center justify-between outline-0 active">
-                <span>
-                    <i className="w-7 fa-duotone fa-waveform-lines text-blue-primary" />
-                    <span>Waveform</span>
+                <span className="flex items-center">
+                    <Icon path={mdiWaveform} size={1.25} />
+                    <span className="pl-4">Waveform</span>
                 </span>
                 <span className="mc-badge font-medium mc-badge-sm mc-badge-success">SHOWN</span>
             </button>
@@ -41,9 +43,9 @@ describe("WaveformToggle", () => {
                 type="button"
                 className="flex items-center justify-between"
             >
-                <span>
-                    <i className="w-7 fa-duotone fa-waveform-lines text-blue-primary" />
-                    <span>Waveform</span>
+                <span className="flex items-center">
+                    <Icon path={mdiWaveform} size={1.25} />
+                    <span className="pl-4">Waveform</span>
                 </span>
                 <span className="mc-badge font-medium mc-badge-sm mc-badge-secondary">HIDDEN</span>
             </button>

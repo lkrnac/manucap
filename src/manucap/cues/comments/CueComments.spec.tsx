@@ -10,6 +10,8 @@ import { userSlice } from "../../userSlices";
 import { Character } from "../../utils/shortcutConstants";
 import DateTime from "../../common/DateTime";
 import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
+import { mdiDelete } from "@mdi/js";
+import Icon from "@mdi/react";
 
 const testComments = [
     {
@@ -121,9 +123,9 @@ describe("CueComments", () => {
                             className="mc-btn mc-btn-primary mc-btn-xs mc-delete-cue-comment-button"
                             data-pr-tooltip="Delete comment"
                             data-pr-position="left"
-                            data-pr-at="left top+10"
+                            data-pr-at="left top+15"
                         >
-                            <i className="fa-duotone fa-trash" />
+                            <Icon path={mdiDelete} size={1} />
                         </button>
                     </div>
                 </div>

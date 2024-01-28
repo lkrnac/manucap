@@ -1,7 +1,9 @@
+import Icon from "@mdi/react";
 import { ReactElement } from "react";
 import { useSelector } from "react-redux";
 import { ManuCapState } from "./manuCapReducers";
 import { SaveState, TrackCues } from "./model";
+import { mdiAlertOutline, mdiCheckCircleOutline, mdiLoading } from "@mdi/js";
 
 interface Props {
     onComplete: (trackCues: TrackCues) => void;
@@ -19,11 +21,11 @@ const stateMessages = new Map<SaveState, string>([
     [ "ERROR", "Error saving latest changes" ],
 ]);
 
-const stateIconCssClasses = new Map<SaveState, string>([
+const stateIcons = new Map<SaveState, string>([
     [ "NONE", "" ],
-    [ "TRIGGERED", "fa-duotone fa-sync fa-spin" ],
-    [ "SAVED", "fa-duotone fa-check-circle" ],
-    [ "ERROR", "fa-duotone fa-exclamation-triangle" ],
+    [ "TRIGGERED", mdiLoading ],
+    [ "SAVED", mdiCheckCircleOutline ],
+    [ "ERROR", mdiAlertOutline ],
 ]);
 
 const stateCssClasses = new Map<SaveState, string>([
@@ -36,20 +38,26 @@ const stateCssClasses = new Map<SaveState, string>([
 const CompleteButton = (props: Props): ReactElement => {
     const editingTrack = useSelector((state: ManuCapState) => state.editingTrack);
     const cues = useSelector((state: ManuCapState) => state.cues);
-    const stateIconClass = stateIconCssClasses.get(props.saveState);
+    const stateIcon = stateIcons.get(props.saveState);
     return (
         <div className="space-x-4 flex items-center">
             <div className="font-medium">
                 {
-                    props.disabled && props.saveState !== "TRIGGERED" ?
-                        <span className="text-green-primary">{TASK_COMPLETE_MSG}</span> :
-                        <span
-                            hidden={props.saveState === "NONE"}
-                            className={`flex items-center ${stateCssClasses.get(props.saveState)}`}
-                        >
-                            <span className="leading-none">{stateMessages.get(props.saveState)}</span>
-                            <i className={`ml-2${stateIconClass ? ` ${stateIconClass}` : ""}`} />
-                        </span>
+                    props.disabled && props.saveState !== "TRIGGERED"
+                        ? <span className="text-green-primary">{TASK_COMPLETE_MSG}</span>
+                        : (
+                            <span
+                                hidden={props.saveState === "NONE"}
+                                className={`flex items-center ${stateCssClasses.get(props.saveState)}`}
+                            >
+                                <span className="leading-none pr-4">{stateMessages.get(props.saveState)}</span>
+                                <Icon
+                                    path={`${stateIcon}`}
+                                    size={1.5}
+                                    spin={stateIcon === mdiLoading}
+                                />
+                            </span>
+                        )
                 }
             </div>
             <button

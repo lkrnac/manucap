@@ -3,6 +3,8 @@ import { ReactElement } from "react";
 import { splitCue } from "../cuesList/cuesListActions";
 import { useDispatch, useSelector } from "react-redux";
 import { Tooltip } from "primereact/tooltip";
+import Icon from "@mdi/react";
+import { mdiSetSplit } from "@mdi/js";
 
 interface Props {
     cueIndex: number;
@@ -26,7 +28,7 @@ const SplitCueLineButton = (props: Props): ReactElement => {
                 data-pr-at="left center"
                 onClick={(): AppThunk => dispatch(splitCue(props.cueIndex))}
             >
-                <i className="fa-duotone fa-cut" />
+                <Icon path={mdiSetSplit} size={1} />
             </button>
             <Tooltip
                 id={buttonId + "-Tooltip"}

@@ -14,6 +14,8 @@ import ToggleButton from "../../toolbox/ToggleButton";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { matchedCuesSlice } from "../cuesList/cuesListSlices";
 import { createTestingMatchedCues } from "../cuesList/cuesListTestUtils";
+import Icon from "@mdi/react";
+import { mdiChevronDown, mdiChevronUp, mdiCloseCircleOutline } from "@mdi/js";
 
 let testingStore = createTestingStore();
 
@@ -77,7 +79,7 @@ describe("SearchReplaceEditor", () => {
                     style={{ marginLeft: "5px" }}
                     data-testid="mc-search-next"
                 >
-                    <i className="fa-duotone fa-arrow-down" />
+                    <Icon path={mdiChevronDown} size={1} />
                 </button>
                 <button
                     className="mc-btn mc-btn-light mc-btn-sm mc-search-prev"
@@ -85,7 +87,7 @@ describe("SearchReplaceEditor", () => {
                     style={{ marginLeft: "5px" }}
                     data-testid="mc-search-prev"
                 >
-                    <i className="fa-duotone fa-arrow-up" />
+                    <Icon path={mdiChevronUp} size={1} />
                 </button>
                 <button
                     className="mc-btn mc-btn-light mc-btn-sm !text-blue-light"
@@ -116,7 +118,7 @@ describe("SearchReplaceEditor", () => {
                     style={{ marginLeft: "5px" }}
                     data-testid="mc-close-search-replace-mc-btn"
                 >
-                    <i className="fa-duotone fa-times-circle" />
+                    <Icon path={mdiCloseCircleOutline} size={1} />
                 </button>
             </div>
         );

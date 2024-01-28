@@ -7,6 +7,8 @@ import { fireEvent, render } from "@testing-library/react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { showMerge } from "../merge/mergeSlices";
 import { addCuesToMergeList } from "../cuesList/cuesListActions";
+import Icon from "@mdi/react";
+import { mdiAlertOutline, mdiCheck, mdiCommentText, mdiLock } from "@mdi/js";
 
 let testingStore = createTestingStore();
 
@@ -41,6 +43,7 @@ describe("CueLineFlap", () => {
                         1
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -52,6 +55,7 @@ describe("CueLineFlap", () => {
                         }}
                     />
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -63,6 +67,7 @@ describe("CueLineFlap", () => {
                         }}
                     />
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -121,6 +126,7 @@ describe("CueLineFlap", () => {
                         1
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -132,6 +138,7 @@ describe("CueLineFlap", () => {
                         }}
                     />
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -143,6 +150,7 @@ describe("CueLineFlap", () => {
                         }}
                     />
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -153,7 +161,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-check" />
+                        <Icon path={mdiCheck} size={0.75} />
                     </div>
                 </div>
             </div>
@@ -202,6 +210,7 @@ describe("CueLineFlap", () => {
                         1
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -212,9 +221,10 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-lock" />
+                        <Icon path={mdiLock} size={0.75} />
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -226,6 +236,7 @@ describe("CueLineFlap", () => {
                         }}
                     />
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -236,7 +247,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-check" />
+                        <Icon path={mdiCheck} size={0.75} />
                     </div>
                 </div>
             </div>
@@ -286,6 +297,7 @@ describe("CueLineFlap", () => {
                         1
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -297,6 +309,7 @@ describe("CueLineFlap", () => {
                         }}
                     />
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -308,6 +321,7 @@ describe("CueLineFlap", () => {
                         }}
                     />
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -318,7 +332,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-exclamation-triangle" />
+                        <Icon path={mdiAlertOutline} size={0.75} />
                     </div>
                 </div>
             </div>
@@ -368,6 +382,7 @@ describe("CueLineFlap", () => {
                         1
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -378,9 +393,10 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-lock" />
+                        <Icon path={mdiLock} size={0.75} />
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -392,6 +408,7 @@ describe("CueLineFlap", () => {
                         }}
                     />
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -402,7 +419,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-exclamation-triangle" />
+                        <Icon path={mdiAlertOutline} size={0.75} />
                     </div>
                 </div>
             </div>
@@ -457,6 +474,7 @@ describe("CueLineFlap", () => {
                         1
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -468,6 +486,7 @@ describe("CueLineFlap", () => {
                         }}
                     />
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -479,6 +498,7 @@ describe("CueLineFlap", () => {
                         }}
                     />
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -489,7 +509,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-check" />
+                        <Icon path={mdiCheck} size={0.75} />
                     </div>
                 </div>
             </div>
@@ -544,6 +564,7 @@ describe("CueLineFlap", () => {
                         1
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -554,9 +575,10 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-lock" />
+                        <Icon path={mdiLock} size={0.75} />
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -568,6 +590,7 @@ describe("CueLineFlap", () => {
                         }}
                     />
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -578,7 +601,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-check" />
+                        <Icon path={mdiCheck} size={0.75} />
                     </div>
                 </div>
             </div>
@@ -635,6 +658,7 @@ describe("CueLineFlap", () => {
                         1
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -647,6 +671,7 @@ describe("CueLineFlap", () => {
                     >
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -658,6 +683,7 @@ describe("CueLineFlap", () => {
                         }}
                     />
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -668,7 +694,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-check" />
+                        <Icon path={mdiCheck} size={0.75} />
                     </div>
                 </div>
             </div>
@@ -723,6 +749,7 @@ describe("CueLineFlap", () => {
                         1
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -735,6 +762,7 @@ describe("CueLineFlap", () => {
                     >
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -746,6 +774,7 @@ describe("CueLineFlap", () => {
                         }}
                     />
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -756,7 +785,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-check" />
+                        <Icon path={mdiCheck} size={0.75} />
                     </div>
                 </div>
             </div>
@@ -812,6 +841,7 @@ describe("CueLineFlap", () => {
                         1
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -824,6 +854,7 @@ describe("CueLineFlap", () => {
                     >
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -835,6 +866,7 @@ describe("CueLineFlap", () => {
                         }}
                     />
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -845,7 +877,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-check" />
+                        <Icon path={mdiCheck} size={0.75} />
                     </div>
                 </div>
             </div>
@@ -940,6 +972,7 @@ describe("CueLineFlap", () => {
                         1
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -952,6 +985,7 @@ describe("CueLineFlap", () => {
                     >
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -964,6 +998,7 @@ describe("CueLineFlap", () => {
                     >
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -974,7 +1009,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-check" />
+                        <Icon path={mdiCheck} size={0.75} />
                     </div>
                 </div>
             </div>
@@ -1029,6 +1064,7 @@ describe("CueLineFlap", () => {
                         1
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -1040,6 +1076,7 @@ describe("CueLineFlap", () => {
                         }}
                     />
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -1050,17 +1087,17 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <div>
-                            <i
-                                id="cuelineComment-0"
-                                className="fa-duotone fa-comments"
-                                data-pr-tooltip="Caption(s) has comments"
-                                data-pr-position="right"
-                                data-pr-at="right+10 top+10"
-                            />
+                        <div
+                            id="cuelineComment-0"
+                            data-pr-tooltip="Caption(s) has comments"
+                            data-pr-position="right"
+                            data-pr-at="right+10 top+10"
+                        >
+                            <Icon path={mdiCommentText} size={0.75} />
                         </div>
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -1071,7 +1108,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-check" />
+                        <Icon path={mdiCheck} size={0.75} />
                     </div>
                 </div>
             </div>
@@ -1127,6 +1164,7 @@ describe("CueLineFlap", () => {
                         1
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -1137,9 +1175,10 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-lock" />
+                        <Icon path={mdiLock} size={0.75} />
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -1150,17 +1189,17 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <div>
-                            <i
-                                id="cuelineComment-0"
-                                className="fa-duotone fa-comments"
-                                data-pr-tooltip="Caption(s) has comments"
-                                data-pr-position="right"
-                                data-pr-at="right+10 top+10"
-                            />
+                        <div
+                            id="cuelineComment-0"
+                            data-pr-tooltip="Caption(s) has comments"
+                            data-pr-position="right"
+                            data-pr-at="right+10 top+10"
+                        >
+                            <Icon path={mdiCommentText} size={0.75} />
                         </div>
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -1171,7 +1210,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-check" />
+                        <Icon path={mdiCheck} size={0.75} />
                     </div>
                 </div>
             </div>
@@ -1228,6 +1267,7 @@ describe("CueLineFlap", () => {
                         1
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -1238,9 +1278,10 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-lock" />
+                        <Icon path={mdiLock} size={0.75} />
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -1251,17 +1292,17 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <div>
-                            <i
-                                id="cuelineComment-0"
-                                className="fa-duotone fa-comments"
-                                data-pr-tooltip="Caption(s) has comments"
-                                data-pr-position="right"
-                                data-pr-at="right+10 top+10"
-                            />
+                        <div
+                            id="cuelineComment-0"
+                            data-pr-tooltip="Caption(s) has comments"
+                            data-pr-position="right"
+                            data-pr-at="right+10 top+10"
+                        >
+                            <Icon path={mdiCommentText} size={0.75} />
                         </div>
                     </div>
                     <div
+                        className="pl-2"
                         style={{
                             position: "absolute",
                             marginLeft: "auto",
@@ -1272,7 +1313,7 @@ describe("CueLineFlap", () => {
                             fontSize: "14px"
                         }}
                     >
-                        <i className="fa-duotone fa-exclamation-triangle" />
+                        <Icon path={mdiAlertOutline} size={0.75} />
                     </div>
                 </div>
             </div>

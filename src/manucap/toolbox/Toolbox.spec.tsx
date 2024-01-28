@@ -14,6 +14,8 @@ import SearchReplaceButton from "./SearchReplaceButton";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
 import { renderWithPortal } from "../../testUtils/testUtils";
+import { mdiDotsHorizontal } from "@mdi/js";
+import Icon from "@mdi/react";
 
 describe("Toolbox", () => {
     afterEach(() => {
@@ -39,7 +41,7 @@ describe("Toolbox", () => {
                         aria-controls="toolboxMenu"
                         aria-haspopup="true"
                     >
-                        <i className="fa-duotone fa-ellipsis-h" />
+                        <Icon path={mdiDotsHorizontal} size={1.25} />
                     </button>
                 </div>
             </Provider>
@@ -92,7 +94,7 @@ describe("Toolbox", () => {
                         aria-controls="toolboxMenu"
                         aria-haspopup="true"
                     >
-                        <i className="fa-duotone fa-ellipsis-h" />
+                        <Icon path={mdiDotsHorizontal} size={1.25} />
                     </button>
                 </div>
             </Provider>
