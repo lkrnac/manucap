@@ -22,7 +22,7 @@ const trackType = "TRANSLATION";
 // const trackType = "CAPTION";
 
 const TIME_MATCH_TESTING = false;
-const LONG_VIDEO_TESTING = false;
+const LONG_VIDEO_TESTING = true;
 
 const mediaChunkStart = undefined;
 const mediaChunkEnd = undefined;
@@ -347,14 +347,26 @@ const TestApp = (): ReactElement => {
     }, [dispatch]);
 
     const video = LONG_VIDEO_TESTING
-        ? "https://ia802904.us.archive.org/0/items/TpbAfkThePirateBayAwayFromKeyboard/TPB.AFK.2013.480p.vp8-SimonKlose"
-        : "https://ia801209.us.archive.org/17/items/ElephantsDream/ed_1024";
+        ? "https://ia802904.us.archive.org/0/items/TpbAfkThePirateBayAwayFromKeyboard/" +
+            "TPB.AFK.2013.480p.vp8-SimonKlose.mp4"
+        : "https://ia801209.us.archive.org/17/items/ElephantsDream/ed_1024.mp4";
+
+    const waveform = LONG_VIDEO_TESTING
+        ? "https://raw.githubusercontent.com/lkrnac/manucap/be95aaf9346d63a3424cdf94bd5c9f4660964bbf/test-data/" +
+            "TPB.AFK.2013.480p.vp8-SimonKlose.waveform.json"
+        : "https://raw.githubusercontent.com/lkrnac/manucap/b4513cf6751905f68efcce14655ded78b43acd8a/test-data/" +
+            "ed_1024.waveform.json";
+
+    const poster = LONG_VIDEO_TESTING
+        ? "https://archive.org/download/TpbAfkThePirateBayAwayFromKeyboard/TpbAfkThePirateBayAwayFromKeyboard.thumbs/" +
+            "TPB.AFK.2013.480p.vp8-SimonKlose_002670.jpg"
+        : "https://archive.org/download/ElephantsDream/ElephantsDream.thumbs/ed_1024_000090.jpg";
 
     return (
         <ManuCap
-            poster={`${video}.jpeg`}
-            mp4={`${video}.mp4`}
-            waveform={`${video}.json`}
+            poster={poster}
+            mp4={video}
+            waveform={waveform}
             onViewTrackHistory={(): void => undefined}
             onSave={(): void => {
                 setTimeout(() => setSaveState("TRIGGERED"), 1);
