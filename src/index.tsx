@@ -22,7 +22,7 @@ const trackType = "TRANSLATION";
 // const trackType = "CAPTION";
 
 const TIME_MATCH_TESTING = false;
-const LONG_VIDEO_TESTING = false;
+const LONG_VIDEO_TESTING = true;
 
 const mediaChunkStart = undefined;
 const mediaChunkEnd = undefined;
@@ -357,9 +357,14 @@ const TestApp = (): ReactElement => {
         : "https://raw.githubusercontent.com/lkrnac/manucap/b4513cf6751905f68efcce14655ded78b43acd8a/test-data/" +
             "ed_1024.waveform.json";
 
+    const poster = LONG_VIDEO_TESTING
+        ? "https://archive.org/download/TpbAfkThePirateBayAwayFromKeyboard/TpbAfkThePirateBayAwayFromKeyboard.thumbs/" +
+            "TPB.AFK.2013.480p.vp8-SimonKlose_002670.jpg"
+        : "https://archive.org/download/ElephantsDream/ElephantsDream.thumbs/ed_1024_000090.jpg";
+
     return (
         <ManuCap
-            poster={`${video}.jpeg`}
+            poster={poster}
             mp4={video}
             waveform={waveform}
             onViewTrackHistory={(): void => undefined}
