@@ -23,15 +23,15 @@ fi
 # Check console outputs from JS test suite
 CONSOLE_PROBLEMS=$(cat js-build.log | \
   # TODO: Try to fix/remove these console errors
-  pcre2grep -Mv 'console.error.*\n.*Warning: An update to.*inside a test'| \
-  pcre2grep -Mv 'console.error.*\n.*Warning: You provided a' | \
-  pcre2grep -Mv 'console.error.*\n.*Warning: render\(\): Rendering components directly into document.body is discouraged' | \
-  pcre2grep -Mv 'console.error.*\n.*Warning: render\(\.\.\.\): Replacing React-rendered children with a new root component' | \
-  pcre2grep -Mv 'console.error.*\n.*Warning: Each child in a list should have a unique' | \
-  pcre2grep -Mv 'console.error.*\n.*VIDEOJS: ERROR: \(CODE:4 MEDIA_ERR_SRC_NOT_SUPPORTED\) No compatible source was found for this media' | \
-  pcre2grep -Mv 'console.warn.*\n.*VIDEOJS: WARN: The element supplied is not included in the DOM' | \
-  pcre2grep -Mv 'console.warn.*\n.*Preload parameter of wavesurfer.load will be ignored because' | \
-  pcre2grep -Mv 'console.error.*\n.*Error: Not implemented: HTMLMediaElement\.prototype\.pause' | \
+#  pcre2grep -Mv 'console.error.*\n.*Warning: An update to.*inside a test'| \
+#  pcre2grep -Mv 'console.error.*\n.*Warning: You provided a' | \
+#  pcre2grep -Mv 'console.error.*\n.*Warning: render\(\): Rendering components directly into document.body is discouraged' | \
+#  pcre2grep -Mv 'console.error.*\n.*Warning: render\(\.\.\.\): Replacing React-rendered children with a new root component' | \
+#  pcre2grep -Mv 'console.error.*\n.*Warning: Each child in a list should have a unique' | \
+#  pcre2grep -Mv 'console.error.*\n.*VIDEOJS: ERROR: \(CODE:4 MEDIA_ERR_SRC_NOT_SUPPORTED\) No compatible source was found for this media' | \
+#  pcre2grep -Mv 'console.warn.*\n.*VIDEOJS: WARN: The element supplied is not included in the DOM' | \
+#  pcre2grep -Mv 'console.warn.*\n.*Preload parameter of wavesurfer.load will be ignored because' | \
+#  pcre2grep -Mv 'console.error.*\n.*Error: Not implemented: HTMLMediaElement\.prototype\.pause' | \
 
   # Remove `c` from following command to troubleshoot which issue was not caught by above suppressions
   pcre2grep -Mc '(\A\s*console\..*\n.*)|(Network Error)|(ECONNREFUSED)|(UnhandledPromiseRejectionWarning)')
