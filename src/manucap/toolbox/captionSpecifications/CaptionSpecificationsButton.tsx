@@ -3,6 +3,8 @@ import CaptionSpecificationsModal from "./CaptionSpecificationsModal";
 import { useSelector } from "react-redux";
 import { ManuCapState } from "../../manuCapReducers";
 import { Tooltip } from "primereact/tooltip";
+import Icon from "@mdi/react";
+import { mdiClipboardText } from "@mdi/js";
 
 const CaptionSpecificationsButton = (): ReactElement => {
     const captionSpecifications = useSelector((state: ManuCapState) => state.captionSpecifications);
@@ -27,7 +29,7 @@ const CaptionSpecificationsButton = (): ReactElement => {
                 data-pr-position="top"
                 data-pr-at="center+2 top-2"
             >
-                <i className="fa-duotone fa-clipboard-list fa-lg" />
+                <Icon path={mdiClipboardText} size={1.25} />
             </button>
             <Tooltip
                 id="captionSpecsBtnTooltip"

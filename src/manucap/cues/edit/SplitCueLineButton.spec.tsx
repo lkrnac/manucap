@@ -11,6 +11,8 @@ import { updateEditingTrack } from "../../trackSlices";
 import { updateCues } from "../cuesList/cuesListActions";
 import { lastCueChangeSlice } from "./cueEditorSlices";
 import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
+import { mdiSetSplit } from "@mdi/js";
+import Icon from "@mdi/react";
 
 let testingStore = createTestingStore();
 const testTrack = {
@@ -51,7 +53,7 @@ describe("SplitCueLineButton", () => {
                     data-pr-position="left"
                     data-pr-at="left center"
                 >
-                    <i className="fa-duotone fa-cut" />
+                    <Icon path={mdiSetSplit} size={1} />
                 </button>
             </div>
         );
@@ -82,7 +84,7 @@ describe("SplitCueLineButton", () => {
                     data-pr-position="left"
                     data-pr-at="left center"
                 >
-                    <i className="fa-duotone fa-cut" />
+                    <Icon path={mdiSetSplit} size={1} />
                 </button>
             </div>
         );
@@ -116,7 +118,7 @@ describe("SplitCueLineButton", () => {
                     data-pr-position="left"
                     data-pr-at="left center"
                 >
-                    <i className="fa-duotone fa-cut" />
+                    <Icon path={mdiSetSplit} size={1} />
                 </button>
             </div>
         );

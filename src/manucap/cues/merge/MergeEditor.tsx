@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { ManuCapState } from "../../manuCapReducers";
 import { showMerge } from "./mergeSlices";
 import { mergeCues } from "../cuesList/cuesListActions";
+import Icon from "@mdi/react";
+import { mdiCloseCircleOutline } from "@mdi/js";
 
 const MergeEditor = (): ReactElement | null => {
     const dispatch = useDispatch();
@@ -34,7 +36,7 @@ const MergeEditor = (): ReactElement | null => {
                     dispatch(showMerge(false));
                 }}
             >
-                <i className="fa-duotone fa-times-circle" />
+                <Icon path={mdiCloseCircleOutline} size={1} />
             </button>
         </div>
     ) : null;

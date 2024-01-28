@@ -3,6 +3,8 @@ import { Provider } from "react-redux";
 import { fireEvent, render } from "@testing-library/react";
 import { createTestingStore } from "../../testUtils/testingStore";
 import CueCommentsToggle from "./CueCommentsToggle";
+import Icon from "@mdi/react";
+import { mdiCommentTextOutline } from "@mdi/js";
 
 let testingStore = createTestingStore();
 
@@ -15,9 +17,9 @@ describe("CueCommentsToggle", () => {
         // GIVEN
         const expectedNode = render(
             <button type="button" className="flex items-center justify-between">
-                <span>
-                    <i className="w-7 fa-duotone fa-comments text-blue-primary" />
-                    <span>Comments</span>
+                <span className="flex items-center">
+                    <Icon path={mdiCommentTextOutline} size={1.25} />
+                    <span className="pl-4">Comments</span>
                 </span>
                 <span className="mc-badge font-medium mc-badge-sm mc-badge-secondary">HIDDEN</span>
             </button>
@@ -41,9 +43,9 @@ describe("CueCommentsToggle", () => {
                 type="button"
                 className="flex items-center justify-between outline-0 active"
             >
-                <span>
-                    <i className="w-7 fa-duotone fa-comments text-blue-primary" />
-                    <span>Comments</span>
+                <span className="flex items-center">
+                    <Icon path={mdiCommentTextOutline} size={1.25} />
+                    <span className="pl-4">Comments</span>
                 </span>
                 <span className="mc-badge font-medium mc-badge-sm mc-badge-success">SHOWN</span>
             </button>

@@ -3,6 +3,8 @@ import { deleteCue } from "../cuesList/cuesListActions";
 import { useDispatch } from "react-redux";
 import { AppThunk } from "../../manuCapReducers";
 import { Tooltip } from "primereact/tooltip";
+import { mdiDelete } from "@mdi/js";
+import Icon from "@mdi/react";
 
 interface Props {
     cueIndex: number;
@@ -22,7 +24,7 @@ const DeleteCueLineButton = (props: Props): ReactElement => {
                 data-pr-position="left"
                 data-pr-at="left center"
             >
-                <i className="fa-duotone fa-trash" />
+                <Icon path={mdiDelete} size={1} />
             </button>
             <Tooltip
                 id={buttonId + "-Tooltip"}

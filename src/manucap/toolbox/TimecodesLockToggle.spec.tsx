@@ -6,6 +6,8 @@ import TimecodesLockToggle from "./TimecodesLockToggle";
 import { Track } from "../model";
 import { updateEditingTrack } from "../trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
+import Icon from "@mdi/react";
+import { mdiClockOutline } from "@mdi/js";
 
 let testingStore = createTestingStore();
 
@@ -18,9 +20,9 @@ describe("TimecodesLockToggle", () => {
         // GIVEN
         const expectedNode = render(
             <button type="button" className="flex items-center justify-between">
-                <span>
-                    <i className="w-7 fa-duotone fa-clock text-blue-primary" />
-                    <span>Timecodes</span>
+                <span className="flex items-center">
+                    <Icon path={mdiClockOutline} size={1.25} />
+                    <span className="pl-4">Timecodes</span>
                 </span>
                 <span className="mc-badge font-medium mc-badge-sm mc-badge-secondary">LOCKED</span>
             </button>
@@ -44,9 +46,9 @@ describe("TimecodesLockToggle", () => {
                 type="button"
                 className="flex items-center justify-between outline-0 active"
             >
-                <span>
-                    <i className="w-7 fa-duotone fa-clock text-blue-primary" />
-                    <span>Timecodes</span>
+                <span className="flex items-center">
+                    <Icon path={mdiClockOutline} size={1.25} />
+                    <span className="pl-4">Timecodes</span>
                 </span>
                 <span className="mc-badge font-medium mc-badge-sm mc-badge-success">UNLOCKED</span>
             </button>

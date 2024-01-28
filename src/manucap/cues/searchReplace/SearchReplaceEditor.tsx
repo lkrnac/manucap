@@ -18,6 +18,8 @@ import { replaceVttCueContent } from "../edit/editUtils";
 import ToggleButton from "../../toolbox/ToggleButton";
 import { SearchReplace } from "./model";
 import { editingCueIndexSlice } from "../edit/cueEditorSlices";
+import Icon from "@mdi/react";
+import { mdiChevronDown, mdiChevronUp, mdiCloseCircleOutline } from "@mdi/js";
 
 const replaceAllInVttCue = (
     vttCue: VTTCue,
@@ -109,7 +111,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                     dispatch(searchNextCues());
                 }}
             >
-                <i className="fa-duotone fa-arrow-down" />
+                <Icon path={mdiChevronDown} size={1} />
             </button>
             <button
                 className="mc-btn mc-btn-light mc-btn-sm mc-search-prev"
@@ -120,7 +122,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                     dispatch(searchPreviousCues());
                 }}
             >
-                <i className="fa-duotone fa-arrow-up" />
+                <Icon path={mdiChevronUp} size={1} />
             </button>
             <button
                 className="mc-btn mc-btn-light mc-btn-sm !text-blue-light"
@@ -160,7 +162,7 @@ const SearchReplaceEditor = (): ReactElement | null => {
                     dispatch(showSearchReplace(false));
                 }}
             >
-                <i className="fa-duotone fa-times-circle" />
+                <Icon path={mdiCloseCircleOutline} size={1} />
             </button>
         </div>
     ) : null;
