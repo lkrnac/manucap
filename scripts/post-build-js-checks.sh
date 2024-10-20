@@ -1,5 +1,5 @@
 #!/bin/bash
-check for ESLint violations
+# check for ESLint violations
 if (grep '<error' build/eslint.xml 1> /dev/null 2>&1) then
     sumEslint=$(cat build/eslint.xml | grep -o '<error' | wc -l)
     echo "ESLint found ${sumEslint} issues!";

@@ -119,8 +119,8 @@ describe("CueListToolbar", () => {
                     <div className="space-x-4 flex items-center">
                         <div className="font-medium">
                             <span hidden className="flex items-center ">
-                                <span className="leading-none" />
-                                <i className="ml-2" />
+                                <span className="leading-none pr-4" />
+                                <Icon path="" size={1.5} />
                             </span>
                         </div>
                         <button

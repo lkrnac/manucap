@@ -1,9 +1,12 @@
 {
   "name": "manucap",
-  "version": "3.0.0",
+  "version": "3.0.2",
   "description": "",
   "license": "",
-  "repository": "manucap",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lkrnac/manucap"
+  },
   "main": "dist/index.js",
   "types": "dist/@types/index.d.ts",
   "engines": {
@@ -11,7 +14,7 @@
     "npm": ">=8"
   },
   "scripts": {
-    "test": "cross-env CI=1 react-scripts test --coverage --collectCoverageFrom=src/**/*.tsx --collectCoverageFrom=src/**/*.ts --collectCoverageFrom=!src/typings.d.ts --collectCoverageFrom=!src/@types/*.ts --collectCoverageFrom=!src/index.tsx 2>&1 | tee js-build.log",
+    "test": "bash -c 'cross-env CI=1 react-scripts test --coverage --collectCoverageFrom=src/**/*.tsx --collectCoverageFrom=src/**/*.ts --collectCoverageFrom=!src/typings.d.ts --collectCoverageFrom=!src/@types/*.ts --collectCoverageFrom=!src/index.tsx 2> >(tee -a js-build.log >&2)'",
     "test:watch": "react-scripts test",
     "build": "rollup -c",
     "compile-with-tests": "npx tsc",
@@ -102,7 +105,7 @@
     "eslint": "^8.23.1",
     "eslint-plugin-react": "^7.31.8",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "gh-pages": "^4.0.0",
+    "gh-pages": "^5.0.0",
     "jest-canvas-mock": "^2.4.0",
     "jest-each": "^29.0.3",
     "jest-environment-jsdom": "^29.0.3",
