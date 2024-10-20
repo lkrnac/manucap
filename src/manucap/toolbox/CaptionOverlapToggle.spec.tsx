@@ -2,6 +2,8 @@ import "../../testUtils/initBrowserEnvironment";
 import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
 import { fireEvent, render } from "@testing-library/react";
+import Icon from "@mdi/react";
+import { mdiSetCenter } from "@mdi/js";
 
 import { Track } from "../model";
 import CaptionOverlapToggle from "./CaptionOverlapToggle";
@@ -23,30 +25,30 @@ describe("CaptionOverlapToggle", () => {
         jest.resetAllMocks();
     });
 
-   it("renders", () => {
-       // GIVEN
-       const expectedNode = render(
-           <button type="button" className="flex items-center justify-between">
-               <span>
-                   <i className="w-7 fa-duotone fa-arrow-down-square-triangle text-blue-primary" />
-                   <span>Overlapping</span>
-               </span>
-               <span className="mc-badge font-medium mc-badge-sm mc-badge-secondary">
-                   NOT ALLOWED
-               </span>
-           </button>
-       );
+    it("renders", () => {
+        // GIVEN
+        const expectedNode = render(
+            <button type="button" className="flex items-center justify-between">
+                <span className="flex items-center">
+                    <Icon path={mdiSetCenter} size={1.25} />
+                    <span className="pl-4">Overlapping</span>
+                </span>
+                <span className="mc-badge font-medium mc-badge-sm mc-badge-secondary">
+                    NOT ALLOWED
+                </span>
+            </button>
+        );
 
-       // WHEN
-       const actualNode = render(
-           <Provider store={testingStore}>
-               <CaptionOverlapToggle onClick={jest.fn()} saveState="NONE" />
-           </Provider>
-       );
+        // WHEN
+        const actualNode = render(
+            <Provider store={testingStore}>
+                <CaptionOverlapToggle onClick={jest.fn()} saveState="NONE" />
+            </Provider>
+        );
 
-       // THEN
-       expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
-   });
+        // THEN
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+    });
 
     it("changes icon on toggle", () => {
         // GIVEN
@@ -55,9 +57,9 @@ describe("CaptionOverlapToggle", () => {
                 type="button"
                 className="flex items-center justify-between outline-0 active"
             >
-                <span>
-                    <i className="w-7 fa-duotone fa-arrow-down-square-triangle text-blue-primary" />
-                    <span>Overlapping</span>
+                <span className="flex items-center">
+                    <Icon path={mdiSetCenter} size={1.25} />
+                    <span className="pl-4">Overlapping</span>
                 </span>
                 <span className="mc-badge font-medium mc-badge-sm mc-badge-success">ALLOWED</span>
             </button>
@@ -88,9 +90,9 @@ describe("CaptionOverlapToggle", () => {
 
         const expectedNode = render(
             <button type="button" className="flex items-center justify-between">
-                <span>
-                    <i className="w-7 fa-duotone fa-arrow-down-square-triangle text-blue-primary" />
-                    <span>Overlapping</span>
+                <span className="flex items-center">
+                    <Icon path={mdiSetCenter} size={1.25} />
+                    <span className="pl-4">Overlapping</span>
                 </span>
                 <span className="mc-badge font-medium mc-badge-sm mc-badge-secondary">
                     NOT ALLOWED

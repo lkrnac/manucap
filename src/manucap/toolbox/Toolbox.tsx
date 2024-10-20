@@ -1,4 +1,4 @@
-import { ReactElement, MouseEvent, useRef, useState } from "react";
+import { MouseEvent, ReactElement, useRef, useState } from "react";
 import KeyboardShortcuts from "./keyboardShortcuts/KeyboardShortcuts";
 import ShiftTimeButton from "./shift/ShiftTimeButton";
 import CaptionSpecificationsButton from "./captionSpecifications/CaptionSpecificationsButton";
@@ -18,6 +18,8 @@ import { Menu } from "primereact/menu";
 import KeyboardShortcutsModal from "./keyboardShortcuts/KeyboardShortcutsModal";
 import ShiftTimeModal from "./shift/ShiftTimeModal";
 import { SaveState, Track } from "../model";
+import { mdiDotsHorizontal } from "@mdi/js";
+import Icon from "@mdi/react";
 
 interface Props {
     handleExportFile: (trackVersionExport: Track | null) => void;
@@ -72,7 +74,7 @@ const Toolbox = (props: Props): ReactElement => {
                 aria-controls="toolboxMenu"
                 aria-haspopup
             >
-                <i className="fa-duotone fa-ellipsis-h" />
+                <Icon path={mdiDotsHorizontal} size={1.25} />
             </button>
             <Menu
                 id="toolboxMenu"

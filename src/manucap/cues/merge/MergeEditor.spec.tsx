@@ -11,6 +11,8 @@ import { showMerge } from "./mergeSlices";
 import MergeEditor from "./MergeEditor";
 import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
 import { saveCueDeleteSlice } from "../saveCueDeleteSlices";
+import { mdiCloseCircleOutline } from "@mdi/js";
+import Icon from "@mdi/react";
 
 let testingStore = createTestingStore();
 
@@ -49,7 +51,7 @@ describe("MergeEditor", () => {
                     style={{ marginLeft: "5px" }}
                     data-testid="mc-close-merge-mc-btn"
                 >
-                    <i className="fa-duotone fa-times-circle" />
+                    <Icon path={mdiCloseCircleOutline} size={1} />
                 </button>
             </div>
         );

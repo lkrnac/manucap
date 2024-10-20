@@ -10,6 +10,8 @@ import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { saveCueDeleteSlice } from "../saveCueDeleteSlices";
+import { mdiDelete } from "@mdi/js";
+import Icon from "@mdi/react";
 
 let testingStore = createTestingStore();
 
@@ -34,7 +36,7 @@ describe("DeleteCueLineButton", () => {
                     data-pr-position="left"
                     data-pr-at="left center"
                 >
-                    <i className="fa-duotone fa-trash" />
+                    <Icon path={mdiDelete} size={1} />
                 </button>
             </div>
         );

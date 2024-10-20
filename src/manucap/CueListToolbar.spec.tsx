@@ -6,6 +6,15 @@ import { mount } from "enzyme";
 import { Provider } from "react-redux";
 import CueListToolbar from "./CueListToolbar";
 import { Language, Track } from "./model";
+import Icon from "@mdi/react";
+import {
+    mdiChevronDoubleDown,
+    mdiChevronDownBoxOutline,
+    mdiChevronRightBoxOutline,
+    mdiDebugStepInto,
+    mdiPageFirst,
+    mdiPageLast
+} from "@mdi/js";
 
 const testingTrack = {
     type: "CAPTION",
@@ -49,7 +58,7 @@ describe("CueListToolbar", () => {
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
-                        <i className="fa-duotone fa-angle-double-up" />
+                        <Icon path={mdiPageFirst} size={1} />
                     </button>
                     <button
                         id="jumpToLastButton"
@@ -59,7 +68,7 @@ describe("CueListToolbar", () => {
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
-                        <i className="fa-duotone fa-angle-double-down" />
+                        <Icon path={mdiPageLast} size={1} />
                     </button>
                     <button
                         id="editCueButton"
@@ -70,7 +79,7 @@ describe("CueListToolbar", () => {
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
-                        <i className="fa-duotone fa-edit" />
+                        <Icon path={mdiChevronDownBoxOutline} size={1} />
                     </button>
                     <button
                         id="playbackCueButton"
@@ -81,7 +90,7 @@ describe("CueListToolbar", () => {
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
-                        <i className="fa-duotone fa-video" />
+                        <Icon path={mdiChevronRightBoxOutline} size={1} />
                     </button>
                     <button
                         hidden
@@ -93,7 +102,7 @@ describe("CueListToolbar", () => {
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
-                        <i className="fa-duotone fa-language" />
+                        <Icon path={mdiChevronDoubleDown} size={1} />
                     </button>
                     <button
                         id="cueErrorButton"
@@ -104,14 +113,14 @@ describe("CueListToolbar", () => {
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
-                        <i className="fa-duotone fa-bug" />
+                        <Icon path={mdiDebugStepInto} size={1} />
                     </button>
                     <span style={{ flexGrow: 2 }} />
                     <div className="space-x-4 flex items-center">
                         <div className="font-medium">
                             <span hidden className="flex items-center ">
-                                <span className="leading-none" />
-                                <i className="ml-2" />
+                                <span className="leading-none pr-4" />
+                                <Icon path="" size={1.5} />
                             </span>
                         </div>
                         <button
@@ -160,7 +169,7 @@ describe("CueListToolbar", () => {
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
-                        <i className="fa-duotone fa-angle-double-up" />
+                        <Icon path={mdiPageFirst} size={1} />
                     </button>
                     <button
                         id="jumpToLastButton"
@@ -170,7 +179,7 @@ describe("CueListToolbar", () => {
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
-                        <i className="fa-duotone fa-angle-double-down" />
+                        <Icon path={mdiPageLast} size={1} />
                     </button>
                     <button
                         id="editCueButton"
@@ -181,7 +190,7 @@ describe("CueListToolbar", () => {
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
-                        <i className="fa-duotone fa-edit" />
+                        <Icon path={mdiChevronDownBoxOutline} size={1} />
                     </button>
                     <button
                         id="playbackCueButton"
@@ -192,7 +201,7 @@ describe("CueListToolbar", () => {
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
-                        <i className="fa-duotone fa-video" />
+                        <Icon path={mdiChevronRightBoxOutline} size={1} />
                     </button>
                     <button
                         hidden
@@ -204,7 +213,7 @@ describe("CueListToolbar", () => {
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
-                        <i className="fa-duotone fa-language" />
+                        <Icon path={mdiChevronDoubleDown} size={1} />
                     </button>
                     <button
                         id="cueErrorButton"
@@ -215,7 +224,7 @@ describe("CueListToolbar", () => {
                         data-pr-position="top"
                         data-pr-at="center top-2"
                     >
-                        <i className="fa-duotone fa-bug" />
+                        <Icon path={mdiDebugStepInto} size={1} />
                     </button>
                     <span style={{ flexGrow: 2 }} />
                     <div className="space-x-4 flex items-center">

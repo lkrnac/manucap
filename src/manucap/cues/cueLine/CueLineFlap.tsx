@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { ManuCapState } from "../../manuCapReducers";
 import { addCuesToMergeList, removeCuesToMergeList } from "../cuesList/cuesListActions";
 import { Tooltip } from "primereact/tooltip";
+import { mdiAlertOutline, mdiCheck, mdiCommentText, mdiLock } from "@mdi/js";
+import Icon from "@mdi/react";
 
 interface Props {
     rowIndex: number;
@@ -18,19 +20,21 @@ interface Props {
 const getCommentIcon = (index: number): ReactElement => {
     const commentIconId = `cuelineComment-${index}`;
     return (
-        <div key={index}>
-            <i
+        <>
+            <div
                 id={commentIconId}
-                className="fa-duotone fa-comments"
+                key={index}
                 data-pr-tooltip="Caption(s) has comments"
                 data-pr-position="right"
                 data-pr-at="right+10 top+10"
-            />
+            >
+                <Icon path={mdiCommentText} size={0.75} />
+            </div>
             <Tooltip
                 id={commentIconId + "-Tooltip"}
                 target={`#${commentIconId}`}
             />
-        </div>
+        </>
     );
 };
 
@@ -106,29 +110,29 @@ const CueLineFlap = (props: Props): ReactElement => {
                 <div style={{ paddingTop: "10px", fontSize: "11px", fontWeight: "bold" }}>
                     {props.rowIndex + 1}
                 </div>
-                <div style={getIconStyle(showCommentsIcon ? "55px" : "30px")}>
+                <div className="pl-2" style={getIconStyle(showCommentsIcon ? "55px" : "30px")}>
                     {
                         props.editDisabled
-                            ? <i className="fa-duotone fa-lock" />
+                            ? <Icon path={mdiLock} size={0.75} />
                             : null
                     }
                 </div>
-                <div style={getIconStyle("30px")}>
+                <div className="pl-2" style={getIconStyle("30px")}>
                     {
                         showCommentsIcon
                             ? getCommentIcon(props.rowIndex)
                             : null
                     }
                 </div>
-                <div style={getIconStyle("10px")}>
+                <div className="pl-2" style={getIconStyle("10px")}>
                     {
                         props.cueLineState === CueLineState.ERROR
-                            ? <i className="fa-duotone fa-exclamation-triangle" />
+                            ? <Icon path={mdiAlertOutline} size={0.75} />
                             : null
                     }
                     {
                         props.cueLineState === CueLineState.GOOD
-                            ? <i className="fa-duotone fa-check" />
+                            ? <Icon path={mdiCheck} size={0.75} />
                             : null
                     }
                 </div>

@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { ManuCapState } from "../manuCapReducers";
 import ToggleButton from "./ToggleButton";
 import { commentsVisibleSlice } from "../cues/comments/commentsSlices";
+import Icon from "@mdi/react";
+import { mdiCommentTextOutline } from "@mdi/js";
 
 interface Props {
     onClick: (event: MouseEvent<HTMLElement>) => void
@@ -23,18 +25,18 @@ export const CueCommentsToggle = (props: Props): ReactElement => {
                 toggle
                     ? (
                         <>
-                            <span>
-                                <i className="w-7 fa-duotone fa-comments text-blue-primary" />
-                                <span>Comments</span>
+                            <span className="flex items-center">
+                                <Icon path={mdiCommentTextOutline} size={1.25} />
+                                <span className="pl-4">Comments</span>
                             </span>
                             <span className="mc-badge font-medium mc-badge-sm mc-badge-success">SHOWN</span>
                         </>
                     )
                     : (
                         <>
-                            <span>
-                                <i className="w-7 fa-duotone fa-comments text-blue-primary" />
-                                <span>Comments</span>
+                            <span className="flex items-center">
+                                <Icon path={mdiCommentTextOutline} size={1.25} />
+                                <span className="pl-4">Comments</span>
                             </span>
                             <span className="mc-badge font-medium mc-badge-sm mc-badge-secondary">HIDDEN</span>
                         </>

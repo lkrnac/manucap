@@ -1,5 +1,7 @@
 import { ReactElement } from "react";
 import { Tooltip } from "primereact/tooltip";
+import { mdiExport } from "@mdi/js";
+import Icon from "@mdi/react";
 
 interface Props {
     handleExport: () => void;
@@ -17,7 +19,7 @@ const ExportSourceTrackCuesButton = (props: Props): ReactElement => {
                 data-pr-position="top"
                 data-pr-at="center+2 top-2"
             >
-                <i className="fa-duotone fa-file-export fa-lg" />
+                <Icon path={mdiExport} size={1.25} />
             </button>
             <Tooltip
                 id="exportSourceFileBtn"

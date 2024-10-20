@@ -1,5 +1,7 @@
 import { ReactElement } from "react";
 import { Tooltip } from "primereact/tooltip";
+import Icon from "@mdi/react";
+import { mdiImport } from "@mdi/js";
 
 interface Props {
     handleImport: () => void;
@@ -18,7 +20,7 @@ const ImportTrackCuesButton = (props: Props): ReactElement => {
                 data-pr-position="top"
                 data-pr-at="center+2 top-2"
             >
-                <i className="fa-duotone fa-file-import fa-lg" />
+                <Icon path={mdiImport} size={1.25} />
             </button>
             <Tooltip
                 id="importFileBtnTooltip"

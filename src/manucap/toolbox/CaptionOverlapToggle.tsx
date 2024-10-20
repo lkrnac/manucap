@@ -5,6 +5,8 @@ import ToggleButton from "./ToggleButton";
 import { updateEditingTrack } from "../trackSlices";
 import { SaveState, Track } from "../model";
 import { saveTrack, updateCues } from "../cues/cuesList/cuesListActions";
+import Icon from "@mdi/react";
+import { mdiSetCenter } from "@mdi/js";
 
 interface Props {
     onClick: (event: MouseEvent<HTMLElement>) => void
@@ -35,17 +37,17 @@ export const CaptionOverlapToggle = (props: Props): ReactElement => {
                 toggle
                     ? (
                         <>
-                            <span>
-                                <i className="w-7 fa-duotone fa-arrow-down-square-triangle text-blue-primary" />
-                                <span>Overlapping</span>
+                            <span className="flex items-center">
+                                <Icon path={mdiSetCenter} size={1.25} />
+                                <span className="pl-4">Overlapping</span>
                             </span>
                             <span className="mc-badge font-medium mc-badge-sm mc-badge-success">ALLOWED</span>
                         </>
                     ) : (
                         <>
-                            <span>
-                                <i className="w-7 fa-duotone fa-arrow-down-square-triangle text-blue-primary" />
-                                <span>Overlapping</span>
+                            <span className="flex items-center">
+                                <Icon path={mdiSetCenter} size={1.25} />
+                                <span className="pl-4">Overlapping</span>
                             </span>
                             <span className="mc-badge font-medium mc-badge-sm mc-badge-secondary">
                                 NOT ALLOWED

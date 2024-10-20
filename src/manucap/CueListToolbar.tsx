@@ -3,8 +3,16 @@ import CompleteButton from "./CompleteButton";
 import { Tooltip } from "primereact/tooltip";
 import { useDispatch } from "react-redux";
 import { changeScrollPosition } from "./cues/cuesList/cuesListScrollSlice";
-import { TrackCues, ScrollPosition, SaveState } from "./model";
-import { Track } from "./model";
+import { SaveState, ScrollPosition, Track, TrackCues } from "./model";
+import {
+    mdiChevronDoubleDown,
+    mdiChevronDownBoxOutline,
+    mdiChevronRightBoxOutline,
+    mdiDebugStepInto,
+    mdiPageFirst,
+    mdiPageLast
+} from "@mdi/js";
+import Icon from "@mdi/react";
 
 export interface Props {
     onViewTrackHistory: () => void;
@@ -36,7 +44,7 @@ const CueListToolbar = (props: Props): ReactElement => {
                 data-pr-position="top"
                 data-pr-at="center top-2"
             >
-                <i className="fa-duotone fa-angle-double-up" />
+                <Icon path={mdiPageFirst} size={1} />
             </button>
             <Tooltip
                 id="jumpToFirstButtonTooltip"
@@ -53,7 +61,7 @@ const CueListToolbar = (props: Props): ReactElement => {
                 data-pr-position="top"
                 data-pr-at="center top-2"
             >
-                <i className="fa-duotone fa-angle-double-down" />
+                <Icon path={mdiPageLast} size={1} />
             </button>
             <Tooltip
                 id="jumpToLastButtonTooltip"
@@ -71,7 +79,7 @@ const CueListToolbar = (props: Props): ReactElement => {
                 data-pr-position="top"
                 data-pr-at="center top-2"
             >
-                <i className="fa-duotone fa-edit" />
+                <Icon path={mdiChevronDownBoxOutline} size={1} />
             </button>
             <Tooltip
                 id="editCueButtonTooltip"
@@ -89,7 +97,7 @@ const CueListToolbar = (props: Props): ReactElement => {
                 data-pr-position="top"
                 data-pr-at="center top-2"
             >
-                <i className="fa-duotone fa-video" />
+                <Icon path={mdiChevronRightBoxOutline} size={1} />
             </button>
             <Tooltip
                 id="playbackCueButtonTooltip"
@@ -108,7 +116,7 @@ const CueListToolbar = (props: Props): ReactElement => {
                 data-pr-position="top"
                 data-pr-at="center top-2"
             >
-                <i className="fa-duotone fa-language" />
+                <Icon path={mdiChevronDoubleDown} size={1} />
             </button>
             <Tooltip
                 id="translatedCueButtonTooltip"
@@ -126,7 +134,7 @@ const CueListToolbar = (props: Props): ReactElement => {
                 data-pr-position="top"
                 data-pr-at="center top-2"
             >
-                <i className="fa-duotone fa-bug" />
+                <Icon path={mdiDebugStepInto} size={1} />
             </button>
             <Tooltip
                 id="cueErrorButtonTooltip"

@@ -3,6 +3,8 @@ import ImportTrackCuesButton from "./ImportTrackCuesButton";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { Provider } from "react-redux";
 import { fireEvent, render } from "@testing-library/react";
+import { mdiImport } from "@mdi/js";
+import Icon from "@mdi/react";
 
 let testingStore = createTestingStore();
 
@@ -20,7 +22,7 @@ describe("ImportTrackCuesButton", () => {
                data-pr-position="top"
                data-pr-at="center+2 top-2"
            >
-               <i className="fa-duotone fa-file-import fa-lg" />
+               <Icon path={mdiImport} size={1.25} />
            </button>
        );
 
@@ -46,7 +48,7 @@ describe("ImportTrackCuesButton", () => {
                 data-pr-position="top"
                 data-pr-at="center+2 top-2"
             >
-                <i className="fa-duotone fa-file-import fa-lg" />
+                <Icon path={mdiImport} size={1.25} />
             </button>
         );
 

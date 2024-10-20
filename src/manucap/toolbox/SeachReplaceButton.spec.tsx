@@ -4,6 +4,8 @@ import { Provider } from "react-redux";
 import SearchReplaceButton from "./SearchReplaceButton";
 import { fireEvent, render } from "@testing-library/react";
 import MergeCuesButton from "./MergeCuesButton";
+import { mdiFindReplace } from "@mdi/js";
+import Icon from "@mdi/react";
 
 let testingStore = createTestingStore();
 
@@ -22,7 +24,7 @@ describe("SeachReplaceButton", () => {
                 data-pr-position="top"
                 data-pr-at="center+2 top-2"
             >
-                <i className="fa-duotone fa-search-plus fa-lg" />
+                <Icon path={mdiFindReplace} size={1.25} />
             </button>
         );
 

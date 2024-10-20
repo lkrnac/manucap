@@ -1,5 +1,5 @@
-import { ReactElement, useCallback, useState } from "react";
 import * as React from "react";
+import { ReactElement, useCallback, useState } from "react";
 import { CueComment, CueDto } from "../../model";
 import { useDispatch, useSelector } from "react-redux";
 import { addCueComment, deleteCueComment } from "../cuesList/cuesListActions";
@@ -7,6 +7,8 @@ import { AppThunk, ManuCapState } from "../../manuCapReducers";
 import { Character } from "../../utils/shortcutConstants";
 import { Tooltip } from "primereact/tooltip";
 import DateTime from "../../common/DateTime";
+import { mdiDelete } from "@mdi/js";
+import Icon from "@mdi/react";
 
 interface Props {
     index: number;
@@ -40,10 +42,10 @@ const CueComments = (props: Props): ReactElement => {
                 className="mc-btn mc-btn-primary mc-btn-xs mc-delete-cue-comment-button"
                 data-pr-tooltip="Delete comment"
                 data-pr-position="left"
-                data-pr-at="left top+10"
+                data-pr-at="left top+15"
                 onClick={(): AppThunk => dispatch(deleteCueComment(cueIndex, commentIndex))}
             >
-                <i className="fa-duotone fa-trash" />
+                <Icon path={mdiDelete} size={1} />
             </button>
             <Tooltip
                 id={`deleteCueCommentButtonTooltip-${cueIndex}-${commentIndex}`}

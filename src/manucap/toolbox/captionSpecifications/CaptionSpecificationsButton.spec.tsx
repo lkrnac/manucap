@@ -13,6 +13,8 @@ import { updateCues } from "../../cues/cuesList/cuesListActions";
 import { CueDto } from "../../model";
 import "video.js";
 import { act } from "react-dom/test-utils";
+import { mdiClipboardText } from "@mdi/js";
+import Icon from "@mdi/react";
 
 jest.mock("./CaptionSpecificationsModal");
 
@@ -40,7 +42,7 @@ describe("CaptionSpecificationsButton", () => {
                     data-pr-position="top"
                     data-pr-at="center+2 top-2"
                 >
-                    <i className="fa-duotone fa-clipboard-list fa-lg" />
+                    <Icon path={mdiClipboardText} size={1.25} />
                 </button>
                 <div>shown</div>
             </Provider>
@@ -75,7 +77,7 @@ describe("CaptionSpecificationsButton", () => {
                     data-pr-position="top"
                     data-pr-at="center+2 top-2"
                 >
-                    <i className="fa-duotone fa-clipboard-list fa-lg" />
+                    <Icon path={mdiClipboardText} size={1.25} />
                 </button>
                 <div />
             </Provider>

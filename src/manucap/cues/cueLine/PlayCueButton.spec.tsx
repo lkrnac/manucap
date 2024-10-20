@@ -5,6 +5,8 @@ import PlayCueButton from "./PlayCueButton";
 import { Provider } from "react-redux";
 import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
+import { mdiPlay } from "@mdi/js";
+import Icon from "@mdi/react";
 
 const testCue = { vttCue: new VTTCue(2, 3, "some text"), cueCategory: "DIALOGUE" } as CueDto;
 
@@ -21,7 +23,7 @@ describe("PlayCueButton", () => {
                     data-pr-position="left"
                     data-pr-at="left center"
                 >
-                    <i className="fa-duotone fa-play" />
+                    <Icon path={mdiPlay} size={1} />
                 </button>
             </div>
         );

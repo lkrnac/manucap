@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import { ManuCapState } from "../../manuCapReducers";
 import { Track } from "../../model";
 import { Tooltip } from "primereact/tooltip";
+import { mdiDownload } from "@mdi/js";
+import Icon from "@mdi/react";
 
 interface Props {
     handleExport: (editingTrack: Track | null) => void;
@@ -20,7 +22,7 @@ const ExportTrackCuesButton = (props: Props): ReactElement => {
                 data-pr-position="top"
                 data-pr-at="center+2 top-2"
             >
-                <i className="fa-duotone fa-file-download fa-lg" />
+                <Icon path={mdiDownload} size={1.25} />
             </button>
             <Tooltip
                 id="exportFileBtnTooltip"

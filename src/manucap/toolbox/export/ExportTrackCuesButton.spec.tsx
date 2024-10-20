@@ -6,6 +6,8 @@ import { updateEditingTrack } from "../../trackSlices";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Track } from "../../model";
 import { fireEvent, render } from "@testing-library/react";
+import { mdiDownload } from "@mdi/js";
+import Icon from "@mdi/react";
 
 const testingTrack = {
     type: "CAPTION",
@@ -30,7 +32,7 @@ describe("ExportTrackCuesButton", () => {
                data-pr-position="top"
                data-pr-at="center+2 top-2"
            >
-               <i className="fa-duotone fa-file-download fa-lg" />
+               <Icon path={mdiDownload} size={1.25} />
            </button>
        );
 
