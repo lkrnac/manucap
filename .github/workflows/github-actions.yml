@@ -1,8 +1,9 @@
 name: manucap CI/CD
 run-name: ${{ github.actor }} manucap CI/CD
 on: [push]
+permissions: write-all
 jobs:
-    test:
+    test-deploy:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
@@ -25,3 +26,8 @@ jobs:
               run: ./scripts/post-build-js-checks.sh
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - run: npm set //registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN
+              env:
+                  NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+            - run: npm publish
+              if: github.ref == 'refs/heads/master'
