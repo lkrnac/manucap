@@ -1,6 +1,9 @@
 name: manucap CI/CD
 run-name: ${{ github.actor }} manucap CI/CD
-on: [push]
+on:
+    push:
+        branches:
+            - "*"
 permissions: write-all
 jobs:
     test-deploy:
