@@ -44,7 +44,7 @@
     "crypto-js": "^4.2.0",
     "draft-js": "^0.11.7",
     "draft-js-export-html": "^1.4.1",
-    "immer": "^10.1.1",
+    "immer": "^9.0.17",
     "immutable": "^4.1.0",
     "joi": "^17.6.0",
     "lodash": "^4.17.21",
