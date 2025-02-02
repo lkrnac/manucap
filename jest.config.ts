@@ -12,6 +12,7 @@ const config: JestConfigWithTsJest = {
         "!node_modules/**"
     ],
     resetMocks: false,
+    setupFilesAfterEnv: ["@testing-library/jest-dom"],
     // TODO: remove unused config
     // transform: {
     //     "^.+\\.(ts|tsx)$": "ts-jest", // Ensures TS files are transpiled
@@ -29,7 +30,6 @@ const config: JestConfigWithTsJest = {
     //     ],
     // },
     // moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-    // setupFilesAfterEnv: ["@testing-library/jest-dom"],
     // transformIgnorePatterns: [
     //     "/node_modules/(?!(@hookform/resolvers/joi|react-hook-form)/)", // Add primereact here
     // ],
