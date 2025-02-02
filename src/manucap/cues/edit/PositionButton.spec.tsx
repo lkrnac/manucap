@@ -4,6 +4,7 @@ import { Position } from "../cueUtils";
 import PositionButton from "./PositionButton";
 import { mount } from "enzyme";
 import { fireEvent, render } from "@testing-library/react";
+import { removeNewlines } from "../../../testUtils/testUtils";
 
 describe("PositionButton", () => {
     it("renders button", () => {
@@ -196,7 +197,7 @@ describe("PositionButton", () => {
         fireEvent.click(actualNode.container.querySelector("button") as Element);
 
         // THEN
-        expect(actualNode.container.innerHTML).toEqual(expectedNode.container.innerHTML);
+        expect(actualNode.container.innerHTML).toEqual(removeNewlines(expectedNode.container.innerHTML));
     });
 
     it("changes position", () => {

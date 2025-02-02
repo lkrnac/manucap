@@ -19,6 +19,7 @@ import { updateSourceCues } from "../view/sourceCueSlices";
 import { updateCues } from "../cuesList/cuesListActions";
 import CueComments from "../comments/CueComments";
 import { commentsVisibleSlice } from "../comments/commentsSlices";
+import { removeNewlines } from "../../../testUtils/testUtils";
 
 // eslint-disable-next-line react/display-name
 jest.mock("../edit/CueEdit", () => (props: CueEditProps): ReactElement => <div>CueEdit: {JSON.stringify(props)}</div>);
@@ -501,7 +502,7 @@ describe("CueLine", () => {
             );
 
             // THEN
-            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+            expect(actualNode.container.outerHTML).toEqual(removeNewlines(expectedNode.container.outerHTML));
         });
     });
 
@@ -742,7 +743,7 @@ describe("CueLine", () => {
             );
 
             // THEN
-            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+            expect(actualNode.container.outerHTML).toEqual(removeNewlines(expectedNode.container.outerHTML));
         });
 
         it("renders view line that doesn't have target", () => {
@@ -838,7 +839,7 @@ describe("CueLine", () => {
             );
 
             // THEN
-            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+            expect(actualNode.container.outerHTML).toEqual(removeNewlines(expectedNode.container.outerHTML));
         });
 
         it("renders view line where following lines doesn't have any target anymore", () => {
@@ -933,7 +934,7 @@ describe("CueLine", () => {
             );
 
             // THEN
-            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+            expect(actualNode.container.outerHTML).toEqual(removeNewlines(expectedNode.container.outerHTML));
         });
 
         it("renders view + translation without target", () => {
@@ -1013,7 +1014,7 @@ describe("CueLine", () => {
             );
 
             // THEN
-            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+            expect(actualNode.container.outerHTML).toEqual(removeNewlines(expectedNode.container.outerHTML));
         });
 
         it("renders view + translation without source", () => {
@@ -1091,7 +1092,7 @@ describe("CueLine", () => {
             );
 
             // THEN
-            expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+            expect(actualNode.container.outerHTML).toEqual(removeNewlines(expectedNode.container.outerHTML));
         });
 
         it("renders translation view line with 3 source cues", () => {

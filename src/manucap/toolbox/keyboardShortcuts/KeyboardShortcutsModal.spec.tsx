@@ -1,7 +1,7 @@
 import { fireEvent, render } from "@testing-library/react";
 import KeyboardShortcutsModal from "./KeyboardShortcutsModal";
 import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
-import { removeIds, renderWithPortal } from "../../../testUtils/testUtils";
+import { removeIds, removeNewlines, renderWithPortal } from "../../../testUtils/testUtils";
 import { ReactElement } from "react";
 
 // We are mocking here.
@@ -84,7 +84,7 @@ describe("KeyboardShortcutsModal", () => {
 
         // THEN
         const actual = removeIds(actualNode.container.innerHTML).replace(/ style=""/g, "");
-        expect(actual).toEqual(expectedNode.container.innerHTML);
+        expect(actual).toEqual(removeNewlines(expectedNode.container.innerHTML));
     });
 
     it("calls onClose on modal close", () => {

@@ -13,7 +13,7 @@ import { updateEditingTrack } from "../trackSlices";
 import SearchReplaceButton from "./SearchReplaceButton";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import ExportSourceTrackCuesButton from "./export/ExportSourceTrackCuesButton";
-import { renderWithPortal } from "../../testUtils/testUtils";
+import { removeNewlines, renderWithPortal } from "../../testUtils/testUtils";
 import { mdiDotsHorizontal } from "@mdi/js";
 import Icon from "@mdi/react";
 
@@ -63,7 +63,7 @@ describe("Toolbox", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        expect(removeNewlines(actualNode.container.outerHTML)).toEqual(removeNewlines(expectedNode.container.outerHTML));
     });
 
     it("renders for translation track", () => {
@@ -113,7 +113,7 @@ describe("Toolbox", () => {
         );
 
         // THEN
-        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        expect(removeNewlines(actualNode.container.outerHTML)).toEqual(removeNewlines(expectedNode.container.outerHTML));
     });
 
     it("passes exportFile function to export file button", () => {

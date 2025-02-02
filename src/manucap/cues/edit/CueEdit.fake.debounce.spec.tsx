@@ -16,7 +16,7 @@ import CueTextEditor from "./CueTextEditor";
 import { Position } from "../cueUtils";
 import PositionButton from "./PositionButton";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { MockedDebouncedFunction, removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
+import { MockedDebouncedFunction, removeDraftJsDynamicValues, removeNewlines } from "../../../testUtils/testUtils";
 import { updateCues, updateMatchedCues } from "../cuesList/cuesListActions";
 import { CaptionSpecification } from "../../toolbox/model";
 import { readCaptionSpecification } from "../../toolbox/captionSpecifications/captionSpecificationSlice";
@@ -182,7 +182,7 @@ describe("CueEdit", () => {
 
             // THEN
             const actual = removeDraftJsDynamicValues(actualNode.html());
-            const expected = removeDraftJsDynamicValues(expectedNode.html());
+            const expected = removeNewlines(removeDraftJsDynamicValues(expectedNode.html()));
             expect(actual).toEqual(expected);
         });
 
@@ -286,8 +286,8 @@ describe("CueEdit", () => {
             );
 
             // THEN
-            const actual = removeDraftJsDynamicValues(actualNode.html());
-            const expected = removeDraftJsDynamicValues(expectedNode.html());
+            const actual = removeNewlines(removeDraftJsDynamicValues(actualNode.html()));
+            const expected = removeNewlines(removeDraftJsDynamicValues(expectedNode.html()));
             expect(actual).toEqual(expected);
         });
 
@@ -388,7 +388,7 @@ describe("CueEdit", () => {
 
             // THEN
             const actual = removeDraftJsDynamicValues(actualNode.html());
-            const expected = removeDraftJsDynamicValues(expectedNode.html());
+            const expected = removeNewlines(removeDraftJsDynamicValues(expectedNode.html()));
             expect(actual).toEqual(expected);
         });
 
