@@ -10,7 +10,7 @@ const JoiError = (props: ErrorProps): ReactElement | null => props.errors && pro
     ? (
         <div className="text-red-light mt-2 text-sm">
             {
-                props.errors[props.field].message
+                props.errors[props.field]?.message
             }
         </div>
     ) : null;
