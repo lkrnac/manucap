@@ -3,5 +3,5 @@ coverage:
         project:
             default:
                 target: auto
-                threshold: 0.0%  # Strict coverage enforcement with no drop allowed
-                warn: 0.0%  # This will give you a warning if there's a tiny drop
+                threshold: 0.01%  # Avoid Codecov false positive -0.0%
+
