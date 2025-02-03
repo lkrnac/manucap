@@ -1,3 +1,7 @@
 coverage:
-  precision: 1
-  round: up
+    status:
+        project:
+            default:
+                target: auto  # Maintain the current coverage
+                threshold: "0"  # No tolerance for reduction
+                ignore: "-0.0%"  # Ignore insignificant changes
