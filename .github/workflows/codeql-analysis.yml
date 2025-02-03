@@ -1,4 +1,5 @@
-name: "CodeQL"
+name: manucap CodeQL
+run-name: ${{ github.actor }} manucap CodeQL
 
 on:
     push:
