@@ -16,11 +16,6 @@ const isShiftTimeInvalid = (value: string, position: ShiftPosition, firstCueTime
     : boolean =>
     !isMediaChunk && position != ShiftPosition.AFTER ? (parseFloat(value) + firstCueTime) < 0 : false;
 
-interface ShiftTimeValues {
-    shiftTime: string;
-    shiftPosition: ShiftPosition;
-}
-
 interface Props {
     show: boolean;
     onClose: () => void;
@@ -53,9 +48,9 @@ const ShiftTimeModal = (props: Props): ReactElement => {
             .required()
     }).messages(validationMessage);
 
-    const { errors, handleSubmit, register } = useForm({ resolver: joiResolver(validationSchema) });
+    const { formState: { errors }, handleSubmit, register } = useForm({ resolver: joiResolver(validationSchema) });
 
-    const onSubmit = (values: ShiftTimeValues): void => {
+    const onSubmit = (values:  Record<string, any>): void => {
         const shiftValue = parseFloat(values.shiftTime);
         try {
             dispatch(applyShiftTimeByPosition(values.shiftPosition, editCueIndex, shiftValue));
@@ -105,13 +100,12 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                 <div>
                     <label>Time Shift in Seconds.Milliseconds</label>
                     <input
-                        name="shiftTime"
+                        {...register("shiftTime")}
                         type="number"
                         className="mc-form-control mc-track-line-shift mt-2"
                         style={{ width: "120px" }}
                         placeholder="0.000"
                         step={"0.100"}
-                        ref={register}
                     />
                     <JoiError errors={errors} field="shiftTime" />
                 </div>
@@ -119,30 +113,28 @@ const ShiftTimeModal = (props: Props): ReactElement => {
                     <div className="form-check">
                         <label>
                             <input
-                                name="shiftPosition"
+                                {...register("shiftPosition")}
                                 type="radio"
                                 value={ShiftPosition.ALL}
-                                ref={register}
                             /> Shift all
                         </label>
                     </div>
                     <div className="form-check">
                         <label>
                             <input
+                                {...register("shiftPosition")}
                                 name="shiftPosition"
                                 type="radio"
                                 value={ShiftPosition.BEFORE}
-                                ref={register}
                             /> Shift all before editing cue
                         </label>
                     </div>
                     <div className="form-check">
                         <label>
                             <input
-                                name="shiftPosition"
+                                {...register("shiftPosition")}
                                 type="radio"
                                 value={ShiftPosition.AFTER}
-                                ref={register}
                             /> Shift all after editing cue
                         </label>
                     </div>

@@ -3,16 +3,16 @@ import "primereact/resources/primereact.min.css";
 import "primereact/resources/themes/bootstrap4-light-blue/theme.css";
 import { Provider, useDispatch } from "react-redux";
 import { ReactElement, useEffect, useState } from "react";
-import { updateCues } from "./manucap/cues/cuesList/cuesListActions";
-import { updateEditingTrack } from "./manucap/trackSlices";
-import { updateCaptionUser } from "./manucap/userSlices";
-import { CueDto, Language, SaveState, Track, User } from "./manucap/model";
+import { updateCues } from "../src/manucap/cues/cuesList/cuesListActions";
+import { updateEditingTrack } from "../src/manucap/trackSlices";
+import { updateCaptionUser } from "../src/manucap/userSlices";
+import { CueDto, Language, SaveState, Track, User } from "../src/manucap/model";
 import ReactDOM from "react-dom";
-import ManuCap from "./manucap/ManuCap";
-import { readCaptionSpecification } from "./manucap/toolbox/captionSpecifications/captionSpecificationSlice";
-import testingStore from "./testUtils/testingStore";
+import ManuCap from "../src/manucap/ManuCap";
+import { readCaptionSpecification } from "../src/manucap/toolbox/captionSpecifications/captionSpecificationSlice";
+import testingStore from "../src/testUtils/testingStore";
 import "draft-js/dist/Draft.css";
-import { updateSourceCues } from "./manucap/cues/view/sourceCueSlices";
+import { updateSourceCues } from "../src/manucap/cues/view/sourceCueSlices";
 
 // ################## TESTING DATA TWEAKS ##############################
 const language = { id: "en-US", name: "English (US)", direction: "LTR" } as Language;

@@ -1,3 +1,7 @@
 coverage:
-  precision: 1
-  round: up
+    status:
+        project:
+            default:
+                target: auto
+                threshold: 0.01%  # Avoid Codecov false positive -0.0%
+

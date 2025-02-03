@@ -7,7 +7,7 @@ import { createTestingStore } from "../../testUtils/testingStore";
 import { setValidationErrors } from "./edit/cueEditorSlices";
 import CueErrorAlert from "./CueErrorAlert";
 import { act } from "react-dom/test-utils";
-import { removeIds } from "../../testUtils/testUtils";
+import { removeIds, removeNewlines } from "../../testUtils/testUtils";
 
 let testingStore = createTestingStore();
 
@@ -70,7 +70,7 @@ describe("CueErrorAlert", () => {
         // THEN
         //@ts-ignore value should not be null
         await waitFor(async () => {
-            expect(removeIds(actualNode.container.outerHTML)).toEqual(expectedNode.container.outerHTML);
+            expect(removeIds(actualNode.container.outerHTML)).toEqual(removeNewlines(expectedNode.container.outerHTML));
         });
     });
 
@@ -103,7 +103,7 @@ describe("CueErrorAlert", () => {
 
         // THEN
         await waitFor(() => {
-            expect(removeIds(actualNode.container.outerHTML)).toEqual(expectedNode.container.outerHTML);
+            expect(removeIds(actualNode.container.outerHTML)).toEqual(removeNewlines(expectedNode.container.outerHTML));
         });
     });
 
@@ -139,7 +139,7 @@ describe("CueErrorAlert", () => {
 
         // THEN
         await waitFor(() => {
-            expect(removeIds(actualNode.container.outerHTML)).toEqual(expectedNode.container.outerHTML);
+            expect(removeIds(actualNode.container.outerHTML)).toEqual(removeNewlines(expectedNode.container.outerHTML));
         });
     });
 
@@ -201,8 +201,7 @@ describe("CueErrorAlert", () => {
         );
 
         // THEN
-        expect(container.outerHTML.replace(/ ?style=""/g, ""))
-            .toEqual(expectedNode.container.outerHTML);
+        expect(container.outerHTML.replace(/ ?style=""/g, "")).toEqual(removeNewlines(expectedNode.container.outerHTML));
     });
 
     it("auto sets validation error to false after receiving it", (done) => {
