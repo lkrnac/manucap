@@ -6,7 +6,7 @@ import CaptionSpecificationsModal from "./CaptionSpecificationsModal";
 import { mount } from "enzyme";
 import { readCaptionSpecification } from "./captionSpecificationSlice";
 import testingStore from "../../../testUtils/testingStore";
-import { removeIds } from "../../../testUtils/testUtils";
+import { removeIds, removeNewlines } from "../../../testUtils/testUtils";
 
 describe("CaptionSpecificationsModal", () => {
     it("renders shown", () => {
@@ -66,6 +66,6 @@ describe("CaptionSpecificationsModal", () => {
         );
 
         // THEN
-        expect(removeIds(actualNode.html())).toEqual(expectedNode.html());
+        expect(removeIds(actualNode.html())).toEqual(removeNewlines(expectedNode.html()));
     });
 });

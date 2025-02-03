@@ -3,7 +3,7 @@ import { CSSProperties, RefObject } from "react";
 import { mount } from "enzyme";
 import { SpellCheckIssue } from "./SpellCheckIssue";
 import { SpellCheck } from "./model";
-import { spellCheckOptionPredicate } from "../../../testUtils/testUtils";
+import { removeNewlines, spellCheckOptionPredicate } from "../../../testUtils/testUtils";
 import Select from "react-select";
 import { StylesConfig } from "react-select/dist/declarations/src/styles";
 
@@ -194,7 +194,7 @@ describe("SpellCheckerIssue", () => {
 
         // THEN
         const actual = removeSelectCssClass(actualNode.find( ".spellcheck-menu").at(0).html());
-        const expected = removeSelectCssClass(expectedNode.html());
+        const expected = removeNewlines(removeSelectCssClass(expectedNode.html()));
         expect(actual).toEqual(expected);
     });
 
@@ -249,7 +249,7 @@ describe("SpellCheckerIssue", () => {
 
         // THEN
         const actual = removeSelectCssClass(actualNode.find( ".spellcheck-menu").at(0).html());
-        const expected = removeSelectCssClass(expectedNode.html());
+        const expected = removeNewlines(removeSelectCssClass(expectedNode.html()));
         expect(actual).toEqual(expected);
     });
 

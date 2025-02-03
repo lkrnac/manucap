@@ -30,6 +30,8 @@ export const removeIds = (html: string): string => {
         .replace(/ ?style=""/g, "");
 };
 
+export const removeNewlines = (html: string): string => (html.replace(/\s+/g, ' '));
+
 export const renderWithPortal = (element: ReactElement): RenderResult => {
     const holder = document.createElement("div");
     holder.setAttribute("id", "prime-react-dialogs");
