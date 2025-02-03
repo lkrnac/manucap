@@ -10,8 +10,8 @@
   "main": "dist/index.js",
   "types": "dist/@types/index.d.ts",
   "engines": {
-    "node": ">=18",
-    "npm": ">=8"
+    "node": ">=20",
+    "npm": ">=10"
   },
   "scripts": {
     "test": "bash -c 'jest --coverage 2> >(tee -a js-build.log >&2)'",
