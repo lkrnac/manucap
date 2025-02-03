@@ -14,8 +14,7 @@
     "npm": ">=8"
   },
   "scripts": {
-    "test1": "bash -c 'jest --coverage 2> >(tee -a js-build.log >&2)'",
-    "test": "jest --coverage",
+    "test": "bash -c 'jest --coverage 2> >(tee -a js-build.log >&2)'",
     "compile-with-tests": "npx tsc",
     "lint": "eslint --ext .tsx --ext .ts --ext .js --ext .jsx src/ -o build/eslint.xml -f checkstyle || true",
     "lintfix": "eslint --fix --ext .tsx --ext .ts --ext .js --ext .jsx src/",
