@@ -5,7 +5,6 @@ const config: JestConfigWithTsJest = {
     testEnvironment: 'jsdom',
     moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/src/$1',
-        "\\.(css|scss|sass)$": "identity-obj-proxy",
     },
     collectCoverageFrom: [
         "src/**/*.{js,jsx,ts,tsx}",
