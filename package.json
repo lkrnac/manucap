@@ -2,7 +2,7 @@
   "name": "manucap",
   "version": "4.0.0",
   "description": "",
-  "license": "",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/lkrnac/manucap"
