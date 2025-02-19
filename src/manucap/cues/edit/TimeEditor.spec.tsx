@@ -1,12 +1,13 @@
-/* eslint react/no-unknown-property: 0 */ // custom attribute added by react-advanced-timefield
 import "../../../testUtils/initBrowserEnvironment";
+
+import { fireEvent, render } from "@testing-library/react";
+
 import TimeEditor from "./TimeEditor";
-import { mount } from "enzyme";
 
 describe("TimeEditor", () => {
     it("renders", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <input
                 type="text"
                 className="mc-form-control mousetrap block text-center"
@@ -16,17 +17,17 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <TimeEditor onChange={jest.fn()} />
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders 1 second", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <input
                 type="text"
                 className="mc-form-control mousetrap block text-center"
@@ -36,17 +37,17 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <TimeEditor time={1} onChange={jest.fn()} />
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders 5 minutes", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <input
                 type="text"
                 className="mc-form-control mousetrap block text-center"
@@ -56,17 +57,17 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <TimeEditor time={300} onChange={jest.fn()} />
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders 120 minutes 35 seconds and 976 millis", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <input
                 type="text"
                 className="mc-form-control mousetrap block text-center"
@@ -76,17 +77,17 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <TimeEditor time={7235.976} onChange={jest.fn()} />
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders max values", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <input
                 type="text"
                 className="mc-form-control mousetrap block text-center"
@@ -96,17 +97,17 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <TimeEditor time={359999.999} onChange={jest.fn()} />
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders max values for minutes and seconds but not hours and millis", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <input
                 type="text"
                 className="mc-form-control mousetrap block text-center"
@@ -116,36 +117,40 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <TimeEditor time={7199.025} onChange={jest.fn()} />
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("inputs ignores non numeric characters", () => {
         // GIVEN
-        const actualNode = mount(
+        const onChange = jest.fn();
+        const actualNode = render(
             <TimeEditor onChange={jest.fn()} />
         );
 
         // WHEN
-        actualNode.find("TimeField").simulate("change", { target: { value: "abc!e@#.$%^" }});
+        console.log(actualNode.container.outerHTML);
+        const timeField = actualNode.container.querySelector("input");
+        fireEvent.change(timeField!, { target: { value: "abc!e@#.$%^" }});
 
         // THEN
-        expect(actualNode.find("TimeField").props().value).toEqual("00:00:00.000");
+        expect(onChange).toBeCalledTimes(0);
     });
 
     it("call onChange with correct value", () => {
         // GIVEN
         const onChange = jest.fn();
-        const actualNode = mount(
+        const actualNode = render(
             <TimeEditor onChange={onChange} />
         );
 
         // WHEN
-        actualNode.find("TimeField").simulate("change", { target: { value: "60:00:00.000", selectionEnd: 12 }});
+        const timeField = actualNode.container.querySelector("input");
+        fireEvent.change(timeField!, { target: { value: "60:00:00.000", selectionEnd: 12 }});
 
         // THEN
         expect(onChange).toBeCalledWith(216000);

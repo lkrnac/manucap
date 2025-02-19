@@ -118,7 +118,7 @@ describe("CueActionsPanel", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".mc-add-cue-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-add-cue-button")!);
 
         // THEN
         expect(testingStore.getState().editingCueIndex).toEqual(2);
@@ -139,7 +139,7 @@ describe("CueActionsPanel", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".mc-delete-cue-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-delete-cue-button")!);
 
         // THEN
         expect(testingStore.getState().cues.length).toEqual(1);
@@ -167,7 +167,7 @@ describe("CueActionsPanel", () => {
         testingStore.dispatch(saveCueDeleteSlice.actions.setDeleteCueCallback(deleteCueCallback));
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".mc-delete-cue-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-delete-cue-button")!);
 
         // THEN
         expect(deleteCueCallback).toHaveBeenCalledWith(
@@ -187,7 +187,7 @@ describe("CueActionsPanel", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".mc-split-cue-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-split-cue-button")!);
 
         // THEN
         expect(testingStore.getState().cues.length).toEqual(3);

@@ -2,9 +2,7 @@ import "../testUtils/initBrowserEnvironment";
 import { createRef, ReactElement } from "react";
 import { Provider } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
-import { mount } from "enzyme";
 import { fireEvent, render, waitFor } from "@testing-library/react";
-import ReactDOM from "react-dom";
 
 import { CueDto, Language, ScrollPosition, Track, CueError } from "./model";
 import {
@@ -181,6 +179,11 @@ describe("ManuCap", () => {
         );
 
         // WHEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
                 <ManuCap
@@ -198,23 +201,16 @@ describe("ManuCap", () => {
                 />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(
-            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // THEN
-        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            actualNode.container.outerHTML));
-        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            expectedNode.container.outerHTML));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML));
         expect(actual).toEqual(expected);
     });
 
     it("renders with no cues and add cue button for CAPTION track", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <div
                     className="mc-manucap"
@@ -284,7 +280,12 @@ describe("ManuCap", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
+        testingStore.dispatch(
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues([]) as {} as AnyAction);
+        const actualNode = render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"
@@ -301,23 +302,16 @@ describe("ManuCap", () => {
                 />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack({ ...testingTrack, progress: 0 }) as {} as AnyAction);
-        testingStore.dispatch(
-            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
-        );
-        testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         // THEN
-        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            actualNode.html()));
-        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            expectedNode.html()));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML));
         expect(actual).toEqual(expected);
     });
 
     it("renders loading data when data is pending load for CAPTION", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <div
                     className="mc-manucap"
@@ -343,7 +337,7 @@ describe("ManuCap", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"
@@ -367,16 +361,14 @@ describe("ManuCap", () => {
         );
 
         // THEN
-        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            actualNode.html()));
-        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            expectedNode.html()));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML));
         expect(actual).toEqual(expected);
     });
 
     it("renders loading data when data is pending load for TRANSLATION source cues", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <div
                     className="mc-manucap"
@@ -402,7 +394,7 @@ describe("ManuCap", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"
@@ -426,10 +418,8 @@ describe("ManuCap", () => {
         testingStore.dispatch(updateCues([]) as {} as AnyAction);
 
         // THEN
-        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            actualNode.html()));
-        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            expectedNode.html()));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML));
         expect(actual).toEqual(expected);
     });
 
@@ -524,6 +514,13 @@ describe("ManuCap", () => {
         );
 
         // WHEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
+        testingStore.dispatch(
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
                 <ManuCap
@@ -541,19 +538,10 @@ describe("ManuCap", () => {
                 />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-
-        testingStore.dispatch(
-            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
 
         // THEN
-        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            actualNode.container.outerHTML));
-        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            expectedNode.container.outerHTML));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML));
         expect(actual).toEqual(expected);
     });
 
@@ -648,6 +636,13 @@ describe("ManuCap", () => {
         );
 
         // WHEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
+        testingStore.dispatch(
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(showMerge(true) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
                 <ManuCap
@@ -665,25 +660,16 @@ describe("ManuCap", () => {
                 />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-
-        testingStore.dispatch(
-            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(showMerge(true) as {} as AnyAction);
 
         // THEN
-        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            actualNode.container.outerHTML));
-        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            expectedNode.container.outerHTML));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML));
         expect(actual).toEqual(expected);
     });
 
     it("renders for task with edit disabled", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <div
                     className="mc-manucap"
@@ -775,7 +761,12 @@ describe("ManuCap", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const actualNode = render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"
@@ -793,17 +784,10 @@ describe("ManuCap", () => {
                 />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        testingStore.dispatch(
-            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
 
         // THEN
-        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            actualNode.html()));
-        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(
-            expectedNode.html()));
+        const actual = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(actualNode.container.outerHTML));
+        const expected = removeDraftJsDynamicValues(removeVideoPlayerDynamicValue(expectedNode.container.outerHTML));
         expect(actual).toEqual(expected);
     });
 
@@ -947,7 +931,13 @@ describe("ManuCap", () => {
     it("calls onViewAllTrack callback when button is clicked", () => {
         // GIVEN
         const mockonViewTrackHistory = jest.fn();
-        const actualNode = mount(
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
+        );
+
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const actualNode = render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"
@@ -964,16 +954,10 @@ describe("ManuCap", () => {
                 />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-
-        testingStore.dispatch(
-            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        actualNode.update();
 
         // WHEN
-        actualNode.find("button.mc-view-all-tracks-mc-btn").simulate("click");
+        const button = actualNode.container.querySelector("button.mc-view-all-tracks-mc-btn");
+        fireEvent.click(button!);
 
         // THEN
         expect(mockonViewTrackHistory.mock.calls.length).toBe(1);
@@ -982,7 +966,13 @@ describe("ManuCap", () => {
     it("calls onComplete callback when button is clicked", () => {
         // GIVEN
         const mockOnComplete = jest.fn();
-        const actualNode = mount(
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
+        );
+
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const actualNode = render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"
@@ -999,16 +989,10 @@ describe("ManuCap", () => {
                 />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-
-        testingStore.dispatch(
-            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        actualNode.update();
 
         // WHEN
-        actualNode.find("button.mc-complete-caption-mc-btn").simulate("click");
+        let button = actualNode.container.querySelector("button.mc-complete-caption-mc-btn");
+        fireEvent.click(button!);
 
         // THEN
         expect(mockOnComplete).toHaveBeenCalledWith(
@@ -1018,7 +1002,13 @@ describe("ManuCap", () => {
     it("calls onExportFile callback when button is clicked", () => {
         // GIVEN
         const mockOnExportFile = jest.fn();
-        const actualNode = mount(
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
+        testingStore.dispatch(
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const actualNode = render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"
@@ -1035,16 +1025,10 @@ describe("ManuCap", () => {
                 />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
 
-        testingStore.dispatch(
-            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        actualNode.update();
-
-        // WHE
-        actualNode.find(".mc-export-button").simulate("click");
+        // WHEN
+        let button = actualNode.container.querySelector(".mc-export-button");
+        fireEvent.click(button!);
 
         // THEN
         expect(mockOnExportFile).toHaveBeenCalled();
@@ -1053,6 +1037,13 @@ describe("ManuCap", () => {
     it("calls onExportSourceFile callback when button is clicked", () => {
         // GIVEN
         const mockOnExportSourceFile = jest.fn();
+        testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
+        testingStore.dispatch(
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
+        );
+
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
         const actualNode = render(
             <Provider store={testingStore}>
                 <ManuCap
@@ -1070,16 +1061,9 @@ describe("ManuCap", () => {
                 />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
-
-        testingStore.dispatch(
-            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        testingStore.dispatch(updateSourceCues(cues) as {} as AnyAction);
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".mc-export-source-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-export-source-button")!);
 
         // THEN
         expect(mockOnExportSourceFile).toHaveBeenCalled();
@@ -1088,7 +1072,13 @@ describe("ManuCap", () => {
     it("calls onImportFile callback when button is clicked", () => {
         // GIVEN
         const mockOnImportFile = jest.fn();
-        const actualNode = mount(
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+
+        testingStore.dispatch(
+            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
+        );
+        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
+        const actualNode = render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"
@@ -1105,16 +1095,10 @@ describe("ManuCap", () => {
                 />
             </Provider>
         );
-        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-
-        testingStore.dispatch(
-            readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
-        );
-        testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        actualNode.update();
 
         // WHEN
-        actualNode.find(".mc-import-button").simulate("click");
+        const button = actualNode.container.querySelector(".mc-import-button");
+        fireEvent.click(button!);
 
         // THEN
         expect(mockOnImportFile).toHaveBeenCalled();
@@ -1131,7 +1115,7 @@ describe("ManuCap", () => {
         ] as CueDto[];
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"
@@ -1152,7 +1136,8 @@ describe("ManuCap", () => {
         changeScrollPositionSpy.mockClear();
 
         // WHEN
-        actualNode.find(".mc-jump-to-last-button").simulate("click");
+        const button = actualNode.container.querySelector(".mc-jump-to-last-button")
+        fireEvent.click(button!);
 
         // THEN
         expect(changeScrollPositionSpy).toBeCalledTimes(1);
@@ -1174,7 +1159,7 @@ describe("ManuCap", () => {
         testingStore.dispatch(updateEditingTrack(testingTranslationTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
         testingStore.dispatch(updateSourceCues(sourceCues) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"
@@ -1195,7 +1180,8 @@ describe("ManuCap", () => {
         changeScrollPositionSpy.mockClear();
 
         // WHEN
-        actualNode.find(".mc-jump-to-last-button").simulate("click");
+        const button = actualNode.container.querySelector(".mc-jump-to-last-button");
+        fireEvent.click(button!);
 
         // THEN
         expect(changeScrollPositionSpy).toBeCalledTimes(1);
@@ -1210,7 +1196,7 @@ describe("ManuCap", () => {
         ] as CueDto[];
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"
@@ -1227,12 +1213,13 @@ describe("ManuCap", () => {
                 />
             </Provider>
         );
-        actualNode.find(".mc-jump-to-last-button").simulate("click");
+        const button = actualNode.container.querySelector(".mc-jump-to-first-button");
+        fireEvent.click(button!);
         const changeScrollPositionSpy = jest.spyOn(cuesListScrollSlice, "changeScrollPosition");
         changeScrollPositionSpy.mockClear();
 
         // WHEN
-        actualNode.find(".mc-jump-to-first-button").simulate("click");
+        fireEvent.click(button!);
 
         // THEN
         expect(changeScrollPositionSpy).toBeCalledTimes(1);
@@ -1251,7 +1238,7 @@ describe("ManuCap", () => {
         changeScrollPositionSpy.mockClear();
 
         // WHEN
-        mount(
+        render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"
@@ -1560,7 +1547,7 @@ describe("ManuCap", () => {
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         testingStore.dispatch(updateEditingTrack({} as Track) as {} as AnyAction);
 
-        mount(
+        render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"
@@ -1594,7 +1581,7 @@ describe("ManuCap", () => {
             { changeType: "EDIT", index: 0, vttCue: new VTTCue(0, 3, "blabla") }
         ));
 
-        const { container } = render(
+        const { unmount } = render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"
@@ -1613,7 +1600,7 @@ describe("ManuCap", () => {
         );
 
         // WHEN
-        ReactDOM.unmountComponentAtNode(container);
+        unmount()
 
         // THEN
         await waitFor(() => {
@@ -1629,7 +1616,7 @@ describe("ManuCap", () => {
 
     it("sets saveTrack when mounted", () => {
         // WHEN
-        mount(
+        render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"
@@ -1656,7 +1643,7 @@ describe("ManuCap", () => {
         const onUpdateCueCallback = jest.fn();
 
         // WHEN
-        mount(
+        render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"
@@ -1683,7 +1670,7 @@ describe("ManuCap", () => {
         const onDeleteCueCallback = jest.fn();
 
         // WHEN
-        mount(
+        render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"
@@ -1707,7 +1694,7 @@ describe("ManuCap", () => {
 
     it("sets spell checker domain when mounted", () => {
         // WHEN
-        mount(
+        render(
             <Provider store={testingStore}>
                 <ManuCap
                     mp4="dummyMp4"

@@ -152,7 +152,7 @@ describe("SplitCueLineButton", () => {
         );
 
         // WHEN
-        fireEvent.click(actualNode.container.querySelector(".mc-split-cue-button") as Element);
+        fireEvent.click(actualNode.container.querySelector(".mc-split-cue-button")!);
 
         // THEN
         expect(testingStore.getState().cues.length).toEqual(3);

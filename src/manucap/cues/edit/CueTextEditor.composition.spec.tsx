@@ -1,9 +1,11 @@
 import "../../../testUtils/initBrowserEnvironment";
+
 import "video.js"; // VTTCue definition
 import { ReactElement } from "react";
 import { AnyAction, Store } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import { mount, ReactWrapper } from "enzyme";
+import { fireEvent, render } from "@testing-library/react";
+
 import { createTestingStore } from "../../../testUtils/testingStore";
 import {
     MockedDebouncedFunction,
@@ -97,9 +99,9 @@ describe("CueTextEditor", () => {
             "<span data-offset-key=\"\"><span data-text=\"true\">d</span></span>";
 
         // WHEN
-        let actualNode = {} as ReactWrapper;
-        await act(async () => {
-            actualNode = mount(
+        // let actualNode: HTMLDivElement;
+        // await act(async () => {
+        const actualNode = render(
                 <ReduxTestWrapper
                     store={testingStore}
                     props={
@@ -115,16 +117,16 @@ describe("CueTextEditor", () => {
                         }
                     }
                 />);
-        });
+        // });
 
         // THEN
-        let actual = removeDraftJsDynamicValues(actualNode.html());
+        let actual = removeDraftJsDynamicValues(actualNode.container.outerHTML);
         expect(actual).toContain(expectedContent);
 
         // WHEN
-        const editor = actualNode.find(".public-DraftEditor-content");
-        editor.simulate("compositionStart");
-        editor.getDOMNode().querySelectorAll("span[data-text='true']")
+        const editor = actualNode.container.querySelector(".public-DraftEditor-content");
+        fireEvent.compositionStart(editor!);
+        actualNode.container.querySelectorAll("span[data-text='true']")
             .item(1).appendChild(document.createTextNode("â"));
 
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
@@ -137,7 +139,24 @@ describe("CueTextEditor", () => {
                     rule: { id: ruleId }},
             ]
         } as SpellCheck;
-        actualNode.setProps({ props: { index: 0, vttCue, editUuid, spellCheck: newSpellCheck }});
+        actualNode.rerender(
+            <ReduxTestWrapper
+                store={testingStore}
+                props={
+                    {
+                        index: 0,
+                        vttCue,
+                        autoFocus: true,
+                        editUuid,
+                        spellCheck: newSpellCheck,
+                        bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                        setGlossaryTerm: jest.fn()
+                    }
+                }
+            />
+        );
+
         await act(async () => new Promise(resolve => setTimeout(resolve, 500)));
 
         // THEN
@@ -146,11 +165,11 @@ describe("CueTextEditor", () => {
             "<span data-text=\"true\">dd</span></span></span>" +
             "<span data-offset-key=\"\"><span data-text=\"true\">dâ</span></span>";
 
-        actual = removeDraftJsDynamicValues(actualNode.html());
+        actual = removeDraftJsDynamicValues(actualNode.container.outerHTML);
         expect(actual).toContain(expectedCompContent);
 
         // WHEN
-        editor.simulate("compositionEnd");
+        fireEvent.compositionEnd(editor!);
         await act(async () => new Promise(resolve => setTimeout(resolve, 600)));
 
         testingStore.dispatch(setSpellCheckDomain("testing-domain") as {} as AnyAction);
@@ -164,13 +183,29 @@ describe("CueTextEditor", () => {
                     rule: { id: ruleId }},
             ]
         } as SpellCheck;
-        actualNode.setProps({ props: { index: 0, vttCue, editUuid, spellCheck: afterCompSpellCheck }});
+        actualNode.rerender(
+            <ReduxTestWrapper
+                store={testingStore}
+                props={
+                    {
+                        index: 0,
+                        vttCue,
+                        autoFocus: true,
+                        editUuid,
+                        spellCheck: afterCompSpellCheck,
+                        bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                        setGlossaryTerm: jest.fn()
+                    }
+                }
+            />
+        );
         await act(async () => new Promise(resolve => setTimeout(resolve, 500)));
 
         // THEN
         const expectedContentAfterComp = "<span class=\"mc-text-with-error\" " +
             "aria-controls=\"spellcheckIssue-undefined-0-4\" aria-haspopup=\"true\">" +
             "<span data-offset-key=\"\"><span data-text=\"true\">dddâ</span></span></span>";
-        expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContentAfterComp);
+        expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).toContain(expectedContentAfterComp);
     });
 });

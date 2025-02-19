@@ -1,16 +1,17 @@
 import "../../../testUtils/initBrowserEnvironment";
+
 import "video.js"; // VTTCue type
+import { fireEvent, render } from "@testing-library/react";
+
 import { Position } from "../cueUtils";
 import PositionButton from "./PositionButton";
-import { mount } from "enzyme";
-import { fireEvent, render } from "@testing-library/react";
 import { removeNewlines } from "../../../testUtils/testUtils";
 
 describe("PositionButton", () => {
     it("renders button", () => {
         // GIVEN
         const vttCue = new VTTCue(0, 1, "some text");
-        const expectedNode = mount(
+        const expectedNode = render(
             <button
                 className="mc-position-toggle-button mc-dropdown-toggle mc-btn mc-btn-light"
                 aria-controls="positionButtonMenu"
@@ -22,10 +23,10 @@ describe("PositionButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={(): void => undefined} />);
+        const actualNode = render(<PositionButton vttCue={vttCue} changePosition={(): void => undefined} />);
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders with dropdown", () => {
@@ -194,7 +195,7 @@ describe("PositionButton", () => {
             container: document.body
         });
 
-        fireEvent.click(actualNode.container.querySelector("button") as Element);
+        fireEvent.click(actualNode.container.querySelector("button")!);
 
         // THEN
         expect(actualNode.container.innerHTML).toEqual(removeNewlines(expectedNode.container.innerHTML));
@@ -206,9 +207,13 @@ describe("PositionButton", () => {
         const changePosition = jest.fn();
 
         // WHEN
-        const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={changePosition} />);
-        actualNode.find("button").simulate("click");
-        actualNode.find("li").at(3).find("span").simulate("click");
+        const actualNode = render(<PositionButton vttCue={vttCue} changePosition={changePosition} />, {
+            container: document.body
+        });
+        const button = actualNode.container.querySelector("button");
+        fireEvent.click(button!);
+        const row1Column4Button = actualNode.container.querySelectorAll("li")[3].querySelector("span");
+        fireEvent.click(row1Column4Button!);
 
         // THEN
         expect(changePosition).toBeCalledWith(Position.Row1Column4);
@@ -223,9 +228,10 @@ describe("PositionButton", () => {
         vttCue.position = 65;
 
         // WHEN
-        const actualNode = mount(<PositionButton vttCue={vttCue} changePosition={(): void => undefined} />);
+        const actualNode = render(<PositionButton vttCue={vttCue} changePosition={(): void => undefined} />);
 
         // THEN
-        expect(actualNode.find(".mc-dropdown-toggle").text()).toEqual("↖");
+        const buttonLabel = actualNode.container.querySelector(".mc-dropdown-toggle")?.textContent
+        expect(buttonLabel).toEqual("↖");
     });
 });

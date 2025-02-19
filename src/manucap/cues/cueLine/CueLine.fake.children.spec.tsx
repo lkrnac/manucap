@@ -1816,7 +1816,7 @@ describe("CueLine", () => {
             );
 
             // WHEN
-            fireEvent.click(actualNode.container.querySelector(".mc-edit-disabled") as Element);
+            fireEvent.click(actualNode.container.querySelector(".mc-edit-disabled")!);
 
             // THEN
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
@@ -1857,7 +1857,7 @@ describe("CueLine", () => {
             );
 
             // THEN
-            const insertCueButton = actualNode.container.querySelector(".mc-add-cue-button") as Element;
+            const insertCueButton = actualNode.container.querySelector(".mc-add-cue-button");
             expect(insertCueButton).toBeNull();
         });
 
@@ -1894,7 +1894,7 @@ describe("CueLine", () => {
             );
 
             // WHEN
-            fireEvent.click(actualNode.container.querySelector(".mc-click-cue-wrapper") as Element);
+            fireEvent.click(actualNode.container.querySelector(".mc-click-cue-wrapper")!);
 
             // THEN
             expect(testingStore.getState().editingCueIndex).toEqual(1);
@@ -1933,7 +1933,7 @@ describe("CueLine", () => {
             );
 
             // WHEN
-            fireEvent.click(actualNode.container.querySelector(".mc-add-cue-button") as Element);
+            fireEvent.click(actualNode.container.querySelector(".mc-add-cue-button")!);
 
             // THEN
             expect(testingStore.getState().editingCueIndex).toEqual(1);
@@ -1974,7 +1974,7 @@ describe("CueLine", () => {
             );
 
             // WHEN
-            fireEvent.click(actualNode.container.querySelector(".mc-click-cue-wrapper") as Element);
+            fireEvent.click(actualNode.container.querySelector(".mc-click-cue-wrapper")!);
 
             // THEN
             expect(testingStore.getState().editingCueIndex).toEqual(1);

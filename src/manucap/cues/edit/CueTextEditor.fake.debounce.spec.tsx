@@ -8,7 +8,6 @@ import Draft, { ContentState, convertFromHTML, Editor, EditorState, SelectionSta
 import { Options, stateToHTML } from "draft-js-export-html";
 import Mousetrap from "mousetrap";
 
-import { mount, ReactWrapper } from "enzyme";
 import each from "jest-each";
 
 import { Character, KeyCombination } from "../../utils/shortcutConstants";
@@ -94,7 +93,7 @@ const createExpectedNode = (
     chars: number[],
     words: number[],
     cps: number[]
-): ReactWrapper => mount(
+) => render(
     <div style={{ display: "flex", flexDirection: "column", height: "100%", flex: "1 1 auto" }}>
         <div
             className="border-b border-blue-light-mostly-transparent"
@@ -208,11 +207,11 @@ const createEditorNode = (text = "someText", spellcheck?: SpellCheck): React.Rea
 };
 
 
-const mountEditorNode = (text = "someText"): ReactWrapper => {
-    const actualNode = mount(
+const mountEditorNode = (text = "someText") => {
+    const actualNode = render(
         createEditorNode(text)
     );
-    return actualNode.find(".public-DraftEditor-content");
+    return actualNode.container.querySelector(".public-DraftEditor-content");
 };
 
 const renderEditorNode = (text = "someText", spellCheck?: SpellCheck): HTMLElement => {
@@ -236,7 +235,7 @@ const convertToHtmlOptions = {
 const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: string): void => {
     // GIVEN
     const editUuid = testingStore.getState().cues[0].editUuid;
-    const actualNode = mount(
+    const actualNode = render(
         <Provider store={testingStore}>
             <CueTextEditor
                 bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
@@ -249,14 +248,14 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
             />
         </Provider>
     );
-    const editorState = actualNode.find(Editor).props().editorState;
+    const editorState = actualNode.container.querySelector(Editor).props().editorState;
     const selectionState = editorState.getSelection();
     // select first 5 characters
     const newSelectionState = selectionState.set("anchorOffset", 0).set("focusOffset", 5) as SelectionState;
 
     // WHEN
     setEditorStateFOR_TESTING(EditorState.acceptSelection(editorState, newSelectionState));
-    actualNode.find("button").at(buttonIndex).simulate("click");
+    actualNode.container.querySelector("button").at(buttonIndex).simulate("click");
 
     // THEN
     expect(testingStore.getState().cues[0].vttCue.text).toEqual(expectedText);
@@ -279,7 +278,7 @@ const testForContentState = (
     const editUuid = testingStore.getState().cues[0].editUuid;
 
     // WHEN
-    const actualNode = mount(
+    const actualNode = render(
         <Provider store={testingStore}>
             <CueTextEditor
                 bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
@@ -294,8 +293,8 @@ const testForContentState = (
     );
 
     // THEN
-    const actual = removeDraftJsDynamicValues(actualNode.html());
-    const expected = removeDraftJsDynamicValues(expectedNode.html());
+    const actual = removeDraftJsDynamicValues(actualNode.container.outerHTML);
+    const expected = removeDraftJsDynamicValues(expectedNode.container.outerHTML);
     expect(actual).toEqual(expected);
     const currentContent = editorStateFOR_TESTING.getCurrentContent();
     expect(stateToHTML(currentContent, convertToHtmlOptions)).toEqual(expectedStateHtml);
@@ -377,7 +376,7 @@ describe("CueTextEditor", () => {
             const editor = mountEditorNode();
 
             // WHEN
-            editor.simulate("paste", {
+            fireEvent.paste(editor!, {
                 clipboardData: {
                     types: [ "text/plain" ],
                     getData: (): string => " Paste text to end",
@@ -396,7 +395,7 @@ describe("CueTextEditor", () => {
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             const vttCue = new VTTCue(0, 1, "some text");
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
@@ -574,7 +573,7 @@ describe("CueTextEditor", () => {
             vttCue.position = 60;
             vttCue.align = "end";
             const editUuid = testingStore.getState().cues[0].editUuid;
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
@@ -624,7 +623,7 @@ describe("CueTextEditor", () => {
             vttCue.position = 3;
             const editUuid = testingStore.getState().cues[0].editUuid;
 
-            const actualNode = mount(
+            const actualNode = render(
                 <ReduxTestWrapper
                     store={testingStore}
                     props={
@@ -654,7 +653,7 @@ describe("CueTextEditor", () => {
             vttCue.align = "left";
             const editUuid = testingStore.getState().cues[0].editUuid;
 
-            const actualNode = mount(
+            const actualNode = render(
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
@@ -682,7 +681,7 @@ describe("CueTextEditor", () => {
             vttCue.lineAlign = "start";
             const editUuid = testingStore.getState().cues[0].editUuid;
 
-            const actualNode = mount(
+            const actualNode = render(
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
@@ -710,7 +709,7 @@ describe("CueTextEditor", () => {
             vttCue.positionAlign = "line-left";
             const editUuid = testingStore.getState().cues[0].editUuid;
 
-            const actualNode = mount(
+            const actualNode = render(
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
@@ -738,7 +737,7 @@ describe("CueTextEditor", () => {
             vttCue.snapToLines = false;
             const editUuid = testingStore.getState().cues[0].editUuid;
 
-            const actualNode = mount(
+            const actualNode = render(
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
@@ -765,7 +764,7 @@ describe("CueTextEditor", () => {
             const vttCue = new VTTCue(0, 1, "someText");
             vttCue.size = 80;
             const editUuid = testingStore.getState().cues[0].editUuid;
-            const actualNode = mount(
+            const actualNode = render(
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
@@ -792,7 +791,7 @@ describe("CueTextEditor", () => {
             const vttCue = new VTTCue(0, 1, "someText");
             vttCue.line = 3;
             const editUuid = testingStore.getState().cues[0].editUuid;
-            const actualNode = mount(
+            const actualNode = render(
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
@@ -819,7 +818,7 @@ describe("CueTextEditor", () => {
             const vttCue = new VTTCue(0, 1, "someText");
             vttCue.vertical = "rl";
             const editUuid = testingStore.getState().cues[0].editUuid;
-            const actualNode = mount(
+            const actualNode = render(
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
@@ -846,7 +845,7 @@ describe("CueTextEditor", () => {
             const vttCue = new VTTCue(0, 1, "someText");
             vttCue.id = "id";
             const editUuid = testingStore.getState().cues[0].editUuid;
-            const actualNode = mount(
+            const actualNode = render(
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
@@ -873,7 +872,7 @@ describe("CueTextEditor", () => {
             const vttCue = new VTTCue(0, 1, "someText");
             vttCue.pauseOnExit = false;
             const editUuid = testingStore.getState().cues[0].editUuid;
-            const actualNode = mount(
+            const actualNode = render(
                 <ReduxTestWrapper
                     store={testingStore}
                     props={{
@@ -961,7 +960,7 @@ describe("CueTextEditor", () => {
                 "<span data-text=\"true\">sample</span></span>";
 
             // WHEN
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
@@ -1008,7 +1007,7 @@ describe("CueTextEditor", () => {
                     "aria-haspopup=\"true\"><span data-offset-key=\"\">" +
                     "<span data-text=\"true\">ffff</span></span></span>";
 
-                const actualNode = mount(
+                const actualNode = render(
                     <Provider store={testingStore}>
                         <CueTextEditor
                             bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
@@ -1067,7 +1066,7 @@ describe("CueTextEditor", () => {
                     "aria-haspopup=\"true\"><span data-offset-key=\"\" style=\"font-style: italic;\">" +
                     "<span data-text=\"true\">ffff</span></span></span>";
 
-                const actualNode = mount(
+                const actualNode = render(
                     <Provider store={testingStore}>
                         <CueTextEditor
                             bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
@@ -1117,7 +1116,7 @@ describe("CueTextEditor", () => {
             } as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some <u><i>hTm</i></u> <b>Text</b> sample");
             const editUuid = testingStore.getState().cues[0].editUuid;
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
@@ -1867,7 +1866,7 @@ describe("CueTextEditor", () => {
                 "<span data-offset-key=\"\"><span data-text=\"true\">y long text sample</span></span>";
 
             // WHEN
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         index={0}
@@ -1909,7 +1908,7 @@ describe("CueTextEditor", () => {
                 "<span data-text=\"true\">y long text sample</span></span></span>";
 
             // WHEN
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         index={0}
@@ -1937,7 +1936,7 @@ describe("CueTextEditor", () => {
                 "<span data-text=\"true\">some very long text sample very long text sample</span></span>";
 
             // WHEN
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         index={0}
@@ -2091,7 +2090,7 @@ describe("CueTextEditor", () => {
                 "<span data-offset-key=\"\"><span data-text=\"true\">ry long text sample</span></span></span>";
 
             // WHEN
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         index={0}
@@ -2145,7 +2144,7 @@ describe("CueTextEditor", () => {
                 "<span data-offset-key=\"\"><span data-text=\"true\">text sample</span></span>";
 
             // WHEN
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         index={0}
@@ -2192,7 +2191,7 @@ describe("CueTextEditor", () => {
                 "<span data-text=\"true\">sample</span></span></span>";
 
             // WHEN
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         index={0}
@@ -2220,7 +2219,7 @@ describe("CueTextEditor", () => {
                 "<span data-text=\"true\">some very long\ntext sample very long\ntext sample</span></span>";
 
             // WHEN
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         index={0}
@@ -2374,7 +2373,7 @@ describe("CueTextEditor", () => {
                 "<span data-offset-key=\"\"><span data-text=\"true\">text sample</span></span></span>";
 
             // WHEN
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         index={0}
@@ -2477,7 +2476,7 @@ describe("CueTextEditor", () => {
             testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
 
             const vttCue = new VTTCue(0, 1, "some text");
-            const actualNode = mount(
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
@@ -2527,7 +2526,7 @@ describe("CueTextEditor", () => {
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "initial text");
         const editUuid = testingStore.getState().cues[0].editUuid;
-        const actualNode = mount(
+        const actualNode = render(
             <ReduxTestWrapper
                 store={testingStore}
                 props={
@@ -2569,7 +2568,7 @@ describe("CueTextEditor", () => {
         testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
         const vttCue = new VTTCue(0, 1, "initial text");
         const editUuid = testingStore.getState().cues[0].editUuid;
-        const actualNode = mount(
+        const actualNode = render(
             <ReduxTestWrapper
                 store={testingStore}
                 props={
@@ -2617,7 +2616,7 @@ describe("CueTextEditor", () => {
         const editUuid = testingStore.getState().cues[0].editUuid;
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CueTextEditor
                     index={0}
@@ -2644,7 +2643,7 @@ describe("CueTextEditor", () => {
         const editUuid = testingStore.getState().cues[0].editUuid;
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CueTextEditor
                     index={0}
