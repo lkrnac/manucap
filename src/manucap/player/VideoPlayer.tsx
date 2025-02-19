@@ -133,12 +133,12 @@ const updateVideoJsTrackIfNeeded = (
 
 class VideoPlayer extends React.Component<Props> {
     public player: VideoJsPlayer;
-    private readonly videoNode?: RefObject<HTMLVideoElement>;
+    private readonly videoNode?: RefObject<HTMLVideoElement | null>;
     playSegmentPauseTimeout?: number;
     playPromise: Promise<void> | undefined;
     public wavesurfer: WaveSurfer;
-    private readonly waveformRef?: RefObject<HTMLDivElement>;
-    private readonly waveformTimelineRef?: RefObject<HTMLDivElement>;
+    private readonly waveformRef?: RefObject<HTMLDivElement | null>;
+    private readonly waveformTimelineRef?: RefObject<HTMLDivElement | null>;
 
 
     constructor(props: Props) {
