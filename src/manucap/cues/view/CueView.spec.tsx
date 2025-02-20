@@ -914,7 +914,7 @@ describe("CueView", () => {
         } as CueDto;
 
         const expectedSourceCueContent = "<i>Source <b><span style=\"background-color:#D9E9FF\"" +
-            " data-reactroot=\"\">Line</span></b></i> <br>Wrapped text Line";
+            ">Line</span></b></i> <br>Wrapped text Line";
 
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         testingStore.dispatch(setFind("Line") as {} as AnyAction);
@@ -957,7 +957,7 @@ describe("CueView", () => {
         } as CueDto;
 
         const expectedSourceCueContent = "<i>Source <b><span style=\"background-color:#D9E9FF\"" +
-            " data-reactroot=\"\">Line</span></b></i> <br>Wrapped text Line";
+            ">Line</span></b></i> <br>Wrapped text Line";
 
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         testingStore.dispatch(setFind("Line") as {} as AnyAction);
@@ -1000,7 +1000,7 @@ describe("CueView", () => {
         } as CueDto;
 
         const expectedSourceCueContent = "<i>Source <b>Line</b></i> <br>Wrapped text " +
-            "<span style=\"background-color:#D9E9FF\" data-reactroot=\"\">Line</span>";
+            "<span style=\"background-color:#D9E9FF\">Line</span>";
 
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         testingStore.dispatch(setFind("Line") as {} as AnyAction);
