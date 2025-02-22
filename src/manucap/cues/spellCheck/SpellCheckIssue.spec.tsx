@@ -1,13 +1,14 @@
 import "../../../testUtils/initBrowserEnvironment";
+
 import { CSSProperties, RefObject } from "react";
-import { mount } from "enzyme";
-import { SpellCheckIssue } from "./SpellCheckIssue";
-import { SpellCheck } from "./model";
-import { removeNewlines, spellCheckOptionPredicate } from "../../../testUtils/testUtils";
 import Select from "react-select";
+import { fireEvent, render } from "@testing-library/react";
 import { StylesConfig } from "react-select/dist/declarations/src/styles";
 
-jest.mock("react-redux");
+import { SpellCheckIssue } from "./SpellCheckIssue";
+import { SpellCheck } from "./model";
+
+jest.mock("react-redux"); // TODO: It looks like Redux interactions are untested
 
 const removeSelectCssClass = (htmlString: string): string =>
     htmlString.replace(/react-select-\d{1,4}-+/g, "")
@@ -43,7 +44,7 @@ describe("SpellCheckerIssue", () => {
 
     it("renders without popup", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <span
                 className="mc-text-with-error"
                 aria-controls="spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-15-18"
@@ -54,7 +55,7 @@ describe("SpellCheckerIssue", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <SpellCheckIssue
                 trackId={trackId}
                 spellCheck={spellCheck}
@@ -72,15 +73,15 @@ describe("SpellCheckerIssue", () => {
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("does not render issue if start doesn't match", () => {
         // GIVEN
-        const expectedNode = mount(<div className="text" />);
+        const expectedNode = render(<div className="text" />);
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <SpellCheckIssue
                 trackId={trackId}
                 spellCheck={spellCheck}
@@ -98,15 +99,15 @@ describe("SpellCheckerIssue", () => {
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("does not render issue if end doesn't match", () => {
         // GIVEN
-        const expectedNode = mount(<div className="text" />);
+        const expectedNode = render(<div className="text" />);
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <SpellCheckIssue
                 trackId={trackId}
                 spellCheck={spellCheck}
@@ -124,12 +125,12 @@ describe("SpellCheckerIssue", () => {
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders popup with options when clicked", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <div
                 id="spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-15-18"
                 className="p-menu p-component p-menu-overlay spellcheck-menu mc-big-menu
@@ -172,7 +173,7 @@ describe("SpellCheckerIssue", () => {
             ]
         } as SpellCheck;
 
-        const actualNode = mount(
+        const actualNode = render(
             <SpellCheckIssue
                 trackId={trackId}
                 spellCheck={spellCheck}
@@ -190,17 +191,18 @@ describe("SpellCheckerIssue", () => {
         );
 
         // WHEN
-        actualNode.find(".mc-text-with-error").simulate("click");
+        const errorButton = actualNode.container.querySelector(".mc-text-with-error")!;
+        fireEvent.click(errorButton);
 
         // THEN
-        const actual = removeSelectCssClass(actualNode.find( ".spellcheck-menu").at(0).html());
-        const expected = removeNewlines(removeSelectCssClass(expectedNode.html()));
+        const actual = removeSelectCssClass(document.querySelectorAll(".spellcheck-menu")[0].outerHTML);
+        const expected = removeSelectCssClass(expectedNode.container.innerHTML);
         expect(actual).toEqual(expected);
     });
 
     it("renders popup without options when clicked", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <div
                 id="spellcheckIssue-0fd7af04-6c87-4793-8d66-fdb19b5fd04d-15-18"
                 className="p-menu p-component p-menu-overlay spellcheck-menu mc-big-menu
@@ -227,7 +229,7 @@ describe("SpellCheckerIssue", () => {
                 </ul>
             </div>
         );
-        const actualNode = mount(
+        const actualNode = render(
             <SpellCheckIssue
                 trackId={trackId}
                 spellCheck={spellCheck}
@@ -245,11 +247,12 @@ describe("SpellCheckerIssue", () => {
         );
 
         // WHEN
-        actualNode.find(".mc-text-with-error").simulate("click");
+        const errorButton = actualNode.container.querySelector(".mc-text-with-error")!;
+        fireEvent.click(errorButton);
 
         // THEN
-        const actual = removeSelectCssClass(actualNode.find( ".spellcheck-menu").at(0).html());
-        const expected = removeNewlines(removeSelectCssClass(expectedNode.html()));
+        const actual = removeSelectCssClass(document.querySelectorAll(".spellcheck-menu")[0].outerHTML);
+        const expected = removeSelectCssClass(expectedNode.container.innerHTML);
         expect(actual).toEqual(expected);
     });
 
@@ -270,7 +273,7 @@ describe("SpellCheckerIssue", () => {
             ]
         } as SpellCheck;
 
-        const actualNode = mount(
+        const actualNode = render(
             <SpellCheckIssue
                 trackId={trackId}
                 spellCheck={spellCheck}
@@ -288,8 +291,10 @@ describe("SpellCheckerIssue", () => {
         );
 
         // WHEN
-        actualNode.find(".mc-text-with-error").simulate("click");
-        actualNode.findWhere(spellCheckOptionPredicate(2)).simulate("click");
+        const errorButton = actualNode.container.querySelector(".mc-text-with-error")!;
+        fireEvent.click(errorButton);
+        const option = document.querySelector(`[id$="-option-2"]`)!;
+        fireEvent.click(option);
 
         // THEN
         expect(handler).toBeCalledWith("repl2", 15, 18);
