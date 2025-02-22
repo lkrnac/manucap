@@ -1,13 +1,14 @@
 import "../../../testUtils/initBrowserEnvironment";
-import CueCategoryButton from "./CueCategoryButton";
+
 import each from "jest-each";
-import { mount } from "enzyme";
 import { fireEvent, render } from "@testing-library/react";
+
+import CueCategoryButton from "./CueCategoryButton";
 
 describe("CueCategoryButton", () => {
     it("renders button for undefined category", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <button
                 className="mc-dropdown-toggle mc-btn mc-btn-light !font-normal"
                 aria-controls="cueCategoryMenu"
@@ -18,17 +19,17 @@ describe("CueCategoryButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <CueCategoryButton onChange={jest.fn()} />
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders button for already defined category", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <button
                 className="mc-dropdown-toggle mc-btn mc-btn-light !font-normal"
                 aria-controls="cueCategoryMenu"
@@ -39,12 +40,12 @@ describe("CueCategoryButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <CueCategoryButton onChange={jest.fn()} category={"AUDIO_DESCRIPTION"} />
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders with dropdown", () => {
@@ -104,9 +105,12 @@ describe("CueCategoryButton", () => {
                 expectedValue: string
             ) => {
                 // WHEN
-                const actualNode = mount(<CueCategoryButton onChange={onChange} />);
-                actualNode.find("button").simulate("click");
-                actualNode.find("li").at(index).find("span").simulate("click");
+                const actualNode = render(<CueCategoryButton onChange={onChange} />);
+                const button = actualNode.container.querySelector("button")!;
+                fireEvent.click(button);
+                console.log(document.documentElement.outerHTML);
+                const span = document.querySelectorAll("#cueCategoryMenu li")[index].querySelector("span")!;
+                fireEvent.click(span);
 
                 // THEN
                 expect(onChange).toHaveBeenCalledWith(expectedValue);
