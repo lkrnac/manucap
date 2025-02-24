@@ -1,20 +1,21 @@
 import "../../testUtils/initBrowserEnvironment";
-import { mount, shallow } from "enzyme";
+
 import { ReactElement } from "react";
+import { fireEvent, render } from "@testing-library/react";
+
 import ToggleButton from "./ToggleButton";
-import { render } from "@testing-library/react";
 
 describe("ToggleButton", () => {
     it("renders", () => {
         // GIVEN
-        const expectedNode = shallow(
+        const expectedNode = render(
             <button type="button" className="">
                 Click me!
             </button>
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <ToggleButton
                 render={(): ReactElement => (
                     <>Click me!</>
@@ -23,19 +24,19 @@ describe("ToggleButton", () => {
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders toggled", () => {
         // GIVEN
-        const expectedNode = shallow(
+        const expectedNode = render(
             <button type="button" className="mc-btn-secondary outline-0 active">
                 Click me!
             </button>
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <ToggleButton
                 className="mc-btn-secondary"
                 toggled
@@ -46,19 +47,19 @@ describe("ToggleButton", () => {
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders with class", () => {
         // GIVEN
-        const expectedNode = shallow(
+        const expectedNode = render(
             <button type="button" className="mc-btn-secondary">
                 Click me!
             </button>
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <ToggleButton
                 className="mc-btn-secondary"
                 render={(): ReactElement => (
@@ -68,7 +69,7 @@ describe("ToggleButton", () => {
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders with title", () => {
@@ -95,14 +96,14 @@ describe("ToggleButton", () => {
 
     it("renders disabled", () => {
         // GIVEN
-        const expectedNode = shallow(
+        const expectedNode = render(
             <button type="button" className="mc-btn-secondary" disabled>
                 Click me!
             </button>
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <ToggleButton
                 className="mc-btn-secondary"
                 disabled
@@ -113,13 +114,13 @@ describe("ToggleButton", () => {
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("calls onClick on click", () => {
         // GIVEN
         const mockOnClick = jest.fn();
-        const actualNode = mount(
+        const actualNode = render(
             <ToggleButton
                 onClick={mockOnClick}
                 className="mc-btn-secondary"
@@ -130,7 +131,8 @@ describe("ToggleButton", () => {
         );
 
         // WHEN
-        actualNode.find("ToggleButton").simulate("click");
+        const button = actualNode.container.querySelector("button")!;
+        fireEvent.click(button);
 
         // THEN
         expect(mockOnClick).toBeCalled();
@@ -139,7 +141,7 @@ describe("ToggleButton", () => {
     it("appends toggle class on toggle", () => {
         // GIVEN
         const mockOnClick = jest.fn();
-        const actualNode = mount(
+        const actualNode = render(
             <ToggleButton
                 onClick={mockOnClick}
                 className="mc-btn-secondary"
@@ -150,26 +152,54 @@ describe("ToggleButton", () => {
         );
 
         // WHEN
-        actualNode.find("ToggleButton").simulate("click");
+        const button = actualNode.container.querySelector("button")!;
+        fireEvent.click(button);
 
         // THEN
-        expect(actualNode.find("button").props().className)
-            .toEqual("mc-btn-secondary outline-0 active");
+        // const button = actualNode.container.querySelector("button")!;
+        expect(button.classList.contains("mc-btn-secondary")).toBe(true);
+        expect(button.classList.contains("outline-0")).toBe(true);
+        expect(button.classList.contains("active")).toBe(true);
     });
 
     it("passes toggle state to render prop", () => {
         // GIVEN
-        const render = jest.fn();
-        const actualNode = mount(
+        const actualNode = render(
             <ToggleButton
-                render={render}
+                render={(toggle): ReactElement => (
+                    toggle
+                        ? <span>ON</span>
+                        : <span>OFF</span>
+                )}
             />
         );
 
         // WHEN
-        actualNode.find("ToggleButton").simulate("click");
+        const button = actualNode.container.querySelector("button")!;
+        fireEvent.click(button);
 
         // THEN
-        expect(render).toHaveBeenCalledWith(true);
+        expect(actualNode.container.querySelector("span")!.innerHTML).toEqual("ON");
+    });
+
+    it("passes toggle state back", () => {
+        // GIVEN
+        const actualNode = render(
+            <ToggleButton
+                render={(toggle): ReactElement => (
+                    toggle
+                        ? <span>ON</span>
+                        : <span>OFF</span>
+                )}
+            />
+        );
+
+        // WHEN
+        const button = actualNode.container.querySelector("button")!;
+        fireEvent.click(button);
+        fireEvent.click(button);
+
+        // THEN
+        expect(actualNode.container.querySelector("span")!.innerHTML).toEqual("OFF");
     });
 });

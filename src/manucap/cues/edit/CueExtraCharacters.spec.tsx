@@ -1,24 +1,26 @@
 import "../../../testUtils/initBrowserEnvironment";
-import { mount } from "enzyme";
+
+import { render } from "@testing-library/react";
+
 import { CueExtraCharacters } from "./CueExtraCharacters";
 
 describe("CueExtraCharacters", () => {
     it("renders", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <span className="text-red-primary">
                 <div className="text">sample text</div>
             </span>
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <CueExtraCharacters>
                 <div className="text">sample text</div>
             </CueExtraCharacters>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 });
