@@ -1,15 +1,17 @@
 import "../../testUtils/initBrowserEnvironment";
-import { mount } from "enzyme";
-import { createTestingStore } from "../../testUtils/testingStore";
+
+import { AnyAction } from "redux";
 import { Provider } from "react-redux";
+import Icon from "@mdi/react";
+import { mdiSync } from "@mdi/js";
+import { fireEvent, render } from "@testing-library/react";
+
+import { createTestingStore } from "../../testUtils/testingStore";
 import SyncCuesButton from "./SyncCuesButton";
 import { setSaveTrack } from "../cues/saveSlices";
-import { AnyAction } from "redux";
 import { updateEditingTrack } from "../trackSlices";
 import { CueDto, Language, Track } from "../model";
 import { updateSourceCues } from "../cues/view/sourceCueSlices";
-import Icon from "@mdi/react";
-import { mdiSync } from "@mdi/js";
 
 let testingStore = createTestingStore();
 
@@ -30,7 +32,7 @@ describe("SyncCuesButton", () => {
     });
     it("renders", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <button className="mc-sync-cues-button flex items-center">
                 <Icon path={mdiSync} size={1.25} />
                 <span className="pl-4">Sync Cues</span>
@@ -38,21 +40,21 @@ describe("SyncCuesButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <SyncCuesButton onClick={jest.fn()} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders disabled if timecodes are unlocked", () => {
         // GIVEN
         testingStore.dispatch(
             updateEditingTrack( { ...testTranslationTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
-        const expectedNode = mount(
+        const expectedNode = render(
             <button className="mc-sync-cues-button flex items-center" disabled>
                 <Icon path={mdiSync} size={1.25} />
                 <span className="pl-4">Sync Cues</span>
@@ -60,31 +62,32 @@ describe("SyncCuesButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <SyncCuesButton onClick={jest.fn()} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
-    it("syncs ues when button is clicked", () => {
+    it("syncs sues when button is clicked", () => {
         // GIVEN
         const saveTrack = jest.fn();
         testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
         const testingCues = [{ vttCue: new VTTCue(0, 2, "Caption Line 1"), cueCategory: "DIALOGUE" }] as CueDto[];
         testingStore.dispatch(updateSourceCues(testingCues) as {} as AnyAction);
 
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <SyncCuesButton onClick={jest.fn()} />
             </Provider>
         );
 
         // WHEN
-        actualNode.find(".mc-sync-cues-button").simulate("click");
+        const button = actualNode.container.querySelector(".mc-sync-cues-button")!;
+        fireEvent.click(button);
 
         // THEN
         expect(saveTrack).toHaveBeenCalledTimes(1);
@@ -92,14 +95,15 @@ describe("SyncCuesButton", () => {
 
     it("unsets the track id on button click", () => {
         // GIVEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <SyncCuesButton onClick={jest.fn()} />
             </Provider>
         );
 
         // WHEN
-        actualNode.find(".mc-sync-cues-button").simulate("click");
+        const button = actualNode.container.querySelector(".mc-sync-cues-button")!;
+        fireEvent.click(button);
 
         // THEN
         expect(testingStore.getState().editingTrack.id).not.toBeDefined();
