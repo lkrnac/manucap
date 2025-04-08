@@ -1,22 +1,20 @@
 import "../../../testUtils/initBrowserEnvironment";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
+import { render } from "@testing-library/react";
+
 import { CaptionSpecification } from "../model";
 import CaptionSpecificationsModal from "./CaptionSpecificationsModal";
-import { mount } from "enzyme";
 import { readCaptionSpecification } from "./captionSpecificationSlice";
 import testingStore from "../../../testUtils/testingStore";
-import { removeIds, removeNewlines } from "../../../testUtils/testUtils";
+import { removeIds } from "../../../testUtils/testUtils";
 
 describe("CaptionSpecificationsModal", () => {
     it("renders shown", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
-                <div
-                    className="p-dialog-mask p-dialog-center p-component-overlay
-                        p-component-overlay-enter p-dialog-visible"
-                >
+                <div className="p-dialog-mask p-dialog-center p-component-overlay p-component-overlay-enter p-dialog-visible">
                     <div
                         className="p-dialog p-component max-w-3xl p-dialog-enter p-dialog-enter-active"
                         role="dialog"
@@ -59,13 +57,14 @@ describe("CaptionSpecificationsModal", () => {
         testingStore.dispatch(
             readCaptionSpecification({ enabled: false } as CaptionSpecification) as {} as AnyAction
         );
-        const actualNode = mount(
+        render(
             <Provider store={testingStore}>
                 <CaptionSpecificationsModal show onClose={(): void => undefined} />
             </Provider>
         );
 
         // THEN
-        expect(removeIds(actualNode.html())).toEqual(removeNewlines(expectedNode.html()));
+        const actualNode = document.documentElement.querySelector(".p-dialog-mask")!;
+        expect(removeIds(actualNode.outerHTML)).toEqual(expectedNode.container.innerHTML);
     });
 });
