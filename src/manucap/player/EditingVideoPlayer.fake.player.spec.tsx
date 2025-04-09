@@ -1,23 +1,24 @@
 import "../../testUtils/initBrowserEnvironment";
 import { AnyAction } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import "@testing-library/jest-dom/extend-expect";
 
 import EditingVideoPlayer from "./EditingVideoPlayer";
-import { CueChange, CueDto, Track } from "../model";
-import VideoPlayer from "./VideoPlayer";
+import { CueDto, Track } from "../model";
 import { playVideoSection } from "./playbackSlices";
-import { mount } from "enzyme";
 import { createTestingStore } from "../../testUtils/testingStore";
 import { updateEditingTrack } from "../trackSlices";
 import { updateCues, updateVttCue, } from "../cues/cuesList/cuesListActions";
 import { render } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
-import { ReactElement } from "react";
+import { act, ReactElement } from "react";
 import { saveCueUpdateSlice } from "../cues/saveCueUpdateSlices";
+import { VideoPlayerProps } from "./VideoPlayer";
 
-// eslint-disable-next-line react/display-name
-jest.mock("./VideoPlayer", () => (): ReactElement => <div>VideoPlayer</div>);
+// I know this is anti-pattern, but it is very hard to test video.js with such old implementation of React integration
+let videoPlayerPropsHistory: VideoPlayerProps[] = [];
+jest.mock("./VideoPlayer", () => (videoPlayerProps: VideoPlayerProps): ReactElement => {
+    videoPlayerPropsHistory.push(videoPlayerProps);
+    return <div>VideoPlayer</div>
+});
 
 let testingStore = createTestingStore();
 
@@ -36,6 +37,7 @@ const updateCueMock = jest.fn();
 
 describe("EditingVideoPlayer", () => {
     beforeEach(() => {
+        videoPlayerPropsHistory = [];
         testingStore = createTestingStore();
         testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueMock));
     });
@@ -43,51 +45,59 @@ describe("EditingVideoPlayer", () => {
         jest.resetAllMocks();
     });
 
-    it("passes down new video section to play", () => {
+    it("passes down new video section to play", async () => {
         // GIVEN
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
-        const actualNode = mount(
+        const component = (
             <Provider store={testingStore} >
                 <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" />
             </Provider>
-        );
+        )
+        const actualNode = render(component);
 
         // WHEN
-        testingStore.dispatch(playVideoSection(2, 3) as {} as AnyAction);
-        actualNode.update();
+        await act(async () => {
+            testingStore.dispatch(playVideoSection(2, 3) as {} as AnyAction);
+            actualNode.rerender(component);
+        });
 
         // THEN
-        expect(actualNode.find(VideoPlayer).props().playSection).toEqual({ startTime: 2, endTime: 3 });
+        expect(videoPlayerPropsHistory.length).toBe(2);
+        expect(videoPlayerPropsHistory[1].playSection).toEqual({ startTime: 2, endTime: 3 });
     });
 
-    it("passes down last cue change when updated", () => {
+    it("passes down last cue change when updated", async () => {
         // GIVEN
         const handleTimeChange = jest.fn();
-        const actualNode = mount(
+        const component = (
             <Provider store={testingStore} >
                 <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" onTimeChange={handleTimeChange} />
             </Provider>
         );
+        const actualNode = render(component);
 
         // WHEN
-        act(() => {
+        await act(async () => {
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             const editUuid = testingStore.getState().cues[0].editUuid;
             testingStore.dispatch(updateVttCue(0, new VTTCue(0, 1, "Cue"), editUuid) as {} as AnyAction);
-            actualNode.setProps({}); // trigger update + re-render
+            actualNode.rerender(component);
         });
 
         // THEN
-        const lastCueChange = actualNode.find(VideoPlayer).props().lastCueChange as CueChange;
-        expect(lastCueChange.changeType).toEqual("EDIT");
-        expect(lastCueChange.index).toEqual(0);
-        expect(lastCueChange.vttCue?.text).toEqual("Cue");
-        expect(lastCueChange.vttCue?.startTime).toEqual(0);
-        expect(lastCueChange.vttCue?.endTime).toEqual(1);
+        const cueChange = videoPlayerPropsHistory[videoPlayerPropsHistory.length - 2].lastCueChange!;
+        expect(cueChange.changeType).toEqual("EDIT");
+        expect(cueChange.index).toEqual(0);
+        expect(cueChange.vttCue?.text).toEqual("Cue");
+        expect(cueChange.vttCue?.startTime).toEqual(0);
+        expect(cueChange.vttCue?.endTime).toEqual(1);
+
+        const lastCueChange = videoPlayerPropsHistory[videoPlayerPropsHistory.length - 1].lastCueChange!;
+        expect(lastCueChange).toEqual(null);
     });
 
-    it("clears last editing change state after it is updated in video player", () => {
+    it("clears last editing change state after it is updated in video player", async () => {
         // GIVEN
         const handleTimeChange = jest.fn();
         render(
@@ -97,7 +107,7 @@ describe("EditingVideoPlayer", () => {
         );
 
         // WHEN
-        act(() => {
+        await act(async () => {
             testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
             testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
             const editUuid = testingStore.getState().cues[0].editUuid;
