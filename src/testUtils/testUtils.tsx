@@ -1,3 +1,4 @@
+import { ReactWrapper } from "enzyme";
 import { render, RenderResult } from "@testing-library/react";
 import { ReactElement } from "react";
 
@@ -15,6 +16,11 @@ export const fixVideoPlayerInvalidTime =
 
 export const removeBackgroundColorStyle =
     (htmlString: string): string => htmlString.replace(/(background-color: rgba\(.*\));/g, "");
+
+export const spellCheckOptionPredicate = (optionIndex: number) => (wrapper: ReactWrapper): boolean =>
+    wrapper.hasClass(/css-[\s\S]*?-option/)
+    // @ts-ignore Couldn't figure this out, there would need to be a lot of additional null checks
+    && wrapper.getDOMNode().getAttribute("id").endsWith("-option-" + optionIndex);
 
 export const removeIds = (html: string): string => {
     return html.replace(/id="\w+" /g, "")

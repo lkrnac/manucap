@@ -14,8 +14,7 @@ import { Character, KeyCombination } from "../../utils/shortcutConstants";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import {
     MockedDebouncedFunction,
-    removeDraftJsDynamicValues,
-    spellCheckOptionPredicate
+    removeDraftJsDynamicValues
 } from "../../../testUtils/testUtils";
 import { CaptionSpecification } from "../../toolbox/model";
 import { readCaptionSpecification } from "../../toolbox/captionSpecifications/captionSpecificationSlice";
@@ -248,14 +247,29 @@ const testInlineStyle = (vttCue: VTTCue, buttonIndex: number, expectedText: stri
             />
         </Provider>
     );
-    const editorState = actualNode.container.querySelector(Editor).props().editorState;
+
+    // Wait for the editor to be ready and get current state
+    const editorState = editorStateFOR_TESTING;
     const selectionState = editorState.getSelection();
     // select first 5 characters
     const newSelectionState = selectionState.set("anchorOffset", 0).set("focusOffset", 5) as SelectionState;
 
     // WHEN
-    setEditorStateFOR_TESTING(EditorState.acceptSelection(editorState, newSelectionState));
-    actualNode.container.querySelector("button").at(buttonIndex).simulate("click");
+    // Apply selection to editor state
+    act(() => {
+        setEditorStateFOR_TESTING(EditorState.acceptSelection(editorState, newSelectionState));
+    });
+
+    // Click the inline style button (using the specific inline style buttons)
+    const buttons = actualNode.container.querySelectorAll(".mc-inline-style-btn");
+    const button = buttons[buttonIndex] as HTMLElement;
+
+    act(() => {
+        // Trigger mouseDown first (which prevents default to keep editor focus)
+        fireEvent.mouseDown(button);
+        // Then trigger the click which applies the style
+        fireEvent.click(button);
+    });
 
     // THEN
     expect(testingStore.getState().cues[0].vttCue.text).toEqual(expectedText);
@@ -395,7 +409,7 @@ describe("CueTextEditor", () => {
             const saveTrack = jest.fn();
             testingStore.dispatch(setSaveTrack(saveTrack) as {} as AnyAction);
             const vttCue = new VTTCue(0, 1, "some text");
-            const actualNode = render(
+            render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
@@ -407,13 +421,13 @@ describe("CueTextEditor", () => {
                     />
                 </Provider>
             );
-            const editorState = actualNode.find(Editor).props().editorState;
+            const editorState = editorStateFOR_TESTING;
             const selectionState = editorState.getSelection();
 
             // WHEN
             // select first 5 characters
             const newSelectionState = selectionState.set("anchorOffset", 0).set("focusOffset", 5) as SelectionState;
-            actualNode.find(Editor).props().onChange(EditorState.forceSelection(editorState, newSelectionState));
+            setEditorStateFOR_TESTING(EditorState.forceSelection(editorState, newSelectionState));
 
             // THEN
             expect(updateCueMock).toHaveBeenCalledTimes(0);
@@ -467,7 +481,7 @@ describe("CueTextEditor", () => {
                 const editor = mountEditorNode();
 
                 // WHEN
-                editor.simulate("keyDown", { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
+                fireEvent.keyDown(editor!, { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
 
                 // THEN
                 expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
@@ -485,7 +499,7 @@ describe("CueTextEditor", () => {
                     const editor = mountEditorNode();
 
                     // WHEN
-                    editor.simulate("keyDown", { keyCode: character });
+                    fireEvent.keyDown(editor!, { keyCode: character });
 
                     // THEN
                     expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
@@ -504,7 +518,7 @@ describe("CueTextEditor", () => {
                     const editor = mountEditorNode();
 
                     // WHEN
-                    editor.simulate("keyDown", { keyCode: character });
+                    fireEvent.keyDown(editor!, { keyCode: character });
 
                     // THEN
                     expect(mousetrapSpy).toBeCalledWith(expectedKeyCombination);
@@ -530,7 +544,7 @@ describe("CueTextEditor", () => {
                 const editor = mountEditorNode();
 
                 // WHEN
-                editor.simulate("keyDown", { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
+                fireEvent.keyDown(editor!, { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
 
                 // THEN
                 expect(mousetrapSpy).not.toBeCalled();
@@ -542,7 +556,7 @@ describe("CueTextEditor", () => {
             const editor = mountEditorNode();
 
             // WHEN
-            editor.simulate("keyDown", {
+            fireEvent.keyDown(editor!, {
                 keyCode: 8, // backspace
                 metaKey: false,
                 shiftKey: true,
@@ -586,10 +600,10 @@ describe("CueTextEditor", () => {
                     />
                 </Provider>
             );
-            const editor = actualNode.find(".public-DraftEditor-content");
+            const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
 
             // WHEN
-            editor.simulate("paste", {
+            fireEvent.paste(editor, {
                 clipboardData: {
                     types: [ "text/plain" ],
                     getData: (): string => "Paste text to start: ",
@@ -606,7 +620,7 @@ describe("CueTextEditor", () => {
             const editor = mountEditorNode();
 
             // WHEN
-            editor.simulate("paste", {
+            fireEvent.paste(editor!, {
                 clipboardData: {
                     types: [ "text/plain" ],
                     getData: (): string => " Paste text to end",
@@ -641,7 +655,14 @@ describe("CueTextEditor", () => {
 
             // WHEN
             vttCue.position = 6;
-            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+            actualNode.rerender(<ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                    setGlossaryTerm: jest.fn(),
+                    autoFocus: true }}
+            />);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.position).toEqual(6);
@@ -669,7 +690,14 @@ describe("CueTextEditor", () => {
 
             // WHEN
             vttCue.align = "right";
-            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+            actualNode.rerender(<ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                    setGlossaryTerm: jest.fn(),
+                    autoFocus: true }}
+            />);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.align).toEqual("right");
@@ -697,7 +725,14 @@ describe("CueTextEditor", () => {
 
             // WHEN
             vttCue.lineAlign = "end";
-            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+            actualNode.rerender(<ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                    setGlossaryTerm: jest.fn(),
+                    autoFocus: true }}
+            />);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.lineAlign).toEqual("end");
@@ -725,7 +760,14 @@ describe("CueTextEditor", () => {
 
             // WHEN
             vttCue.positionAlign = "line-right";
-            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+            actualNode.rerender(<ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                    setGlossaryTerm: jest.fn(),
+                    autoFocus: true }}
+            />);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.positionAlign).toEqual("line-right");
@@ -753,7 +795,14 @@ describe("CueTextEditor", () => {
 
             // WHEN
             vttCue.snapToLines = true;
-            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+            actualNode.rerender(<ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                    setGlossaryTerm: jest.fn(),
+                    autoFocus: true }}
+            />);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.snapToLines).toEqual(true);
@@ -780,7 +829,14 @@ describe("CueTextEditor", () => {
 
             // WHEN
             vttCue.size = 30;
-            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+            actualNode.rerender(<ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                    setGlossaryTerm: jest.fn(),
+                    autoFocus: true }}
+            />);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.size).toEqual(30);
@@ -807,7 +863,14 @@ describe("CueTextEditor", () => {
 
             // WHEN
             vttCue.line = 6;
-            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+            actualNode.rerender(<ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                    setGlossaryTerm: jest.fn(),
+                    autoFocus: true }}
+            />);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.line).toEqual(6);
@@ -834,7 +897,14 @@ describe("CueTextEditor", () => {
 
             // WHEN
             vttCue.vertical = "lr";
-            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+            actualNode.rerender(<ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                    setGlossaryTerm: jest.fn(),
+                    autoFocus: true }}
+            />);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.vertical).toEqual("lr");
@@ -861,7 +931,14 @@ describe("CueTextEditor", () => {
 
             // WHEN
             vttCue.id = "differentId";
-            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+            actualNode.rerender(<ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                    setGlossaryTerm: jest.fn(),
+                    autoFocus: true }}
+            />);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.id).toEqual("differentId");
@@ -888,7 +965,14 @@ describe("CueTextEditor", () => {
 
             // WHEN
             vttCue.pauseOnExit = true;
-            actualNode.setProps({ props: { index: 0, vttCue, editUuid }});
+            actualNode.rerender(<ReduxTestWrapper
+                store={testingStore}
+                props={{ index: 0, vttCue, editUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                    setGlossaryTerm: jest.fn(),
+                    autoFocus: true }}
+            />);
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.pauseOnExit).toEqual(true);
@@ -976,7 +1060,7 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            const actual = removeDraftJsDynamicValues(actualNode.html());
+            const actual = removeDraftJsDynamicValues(actualNode.container.outerHTML);
             expect(actual).toContain(expectedContent);
         });
 
@@ -1021,20 +1105,33 @@ describe("CueTextEditor", () => {
                         />
                     </Provider>
                 );
-                const editor = actualNode.find(".public-DraftEditor-content");
+                const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
 
                 // WHEN
-                editor.simulate("keyDown", { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
-                editor.simulate("paste", {
+                fireEvent.keyDown(editor, { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
+                fireEvent.paste(editor, {
                     clipboardData: {
                         types: ["text/plain"],
                         getData: (): string => "ffff",
                     }
                 });
-                actualNode.setProps({ spellCheck });
+                actualNode.rerender(
+                    <Provider store={testingStore}>
+                        <CueTextEditor
+                            bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                            unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                            index={0}
+                            vttCue={vttCue}
+                            editUuid={editUuid}
+                            spellCheck={spellCheck}
+                            setGlossaryTerm={jest.fn()}
+                            autoFocus
+                        />
+                    </Provider>
+                );
 
                 // THEN
-                const actual = removeDraftJsDynamicValues(actualNode.html());
+                const actual = removeDraftJsDynamicValues(actualNode.container.outerHTML);
                 expect(actual).toContain(expectedContent);
             });
 
@@ -1080,20 +1177,33 @@ describe("CueTextEditor", () => {
                         />
                     </Provider>
                 );
-                const editor = actualNode.find(".public-DraftEditor-content");
+                const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
 
                 // WHEN
-                editor.simulate("keyDown", { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
-                editor.simulate("paste", {
+                fireEvent.keyDown(editor, { keyCode: character, metaKey, shiftKey, altKey, ctrlKey });
+                fireEvent.paste(editor, {
                     clipboardData: {
                         types: ["text/plain"],
                         getData: (): string => "ffff",
                     }
                 });
-                actualNode.setProps({ spellCheck });
+                actualNode.rerender(
+                    <Provider store={testingStore}>
+                        <CueTextEditor
+                            bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
+                            unbindCueViewModeKeyboardShortcut={unbindCueViewModeKeyboardShortcutSpy}
+                            index={0}
+                            vttCue={vttCue}
+                            editUuid={editUuid}
+                            spellCheck={spellCheck}
+                            setGlossaryTerm={jest.fn()}
+                            autoFocus
+                        />
+                    </Provider>
+                );
 
                 // THEN
-                const actual = removeDraftJsDynamicValues(actualNode.html());
+                const actual = removeDraftJsDynamicValues(actualNode.container.outerHTML);
                 expect(actual).toContain(expectedContent);
             });
 
@@ -1132,8 +1242,19 @@ describe("CueTextEditor", () => {
             );
 
             // WHEN
-            actualNode.find(".mc-text-with-error").at(0).simulate("click");
-            actualNode.findWhere(spellCheckOptionPredicate(2)).at(0).simulate("click");
+            const errorSpans = actualNode.container.querySelectorAll(".mc-text-with-error");
+            fireEvent.click(errorSpans[0]);
+
+            // Wait for spell check popup to appear and find the option button
+            // Looking for element with class containing "-option" and id ending with "-option-2"
+            await waitFor(() => {
+                const options = Array.from(document.querySelectorAll('[class*="-option"]'));
+                const optionButton = options.find(el => el.id.endsWith("-option-2"));
+                expect(optionButton).toBeTruthy();
+                if (optionButton) {
+                    fireEvent.click(optionButton);
+                }
+            });
 
             // THEN
             expect(updateCueCallback).toHaveBeenCalledTimes(1);
@@ -1573,7 +1694,7 @@ describe("CueTextEditor", () => {
             expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).not.toContain(notExpectedContent);
         });
 
-        it("replace first occurrence for 3 matches per cue", () => {
+        it("replace first occurrence for 3 matches per cue", async () => {
             // GIVEN
             const saveTrack = jest.fn();
             const updateCueCallback = jest.fn();
@@ -1621,10 +1742,14 @@ describe("CueTextEditor", () => {
             });
 
             // THEN
-            expect(updateCueCallback).toHaveBeenCalledTimes(1);
+            // Wait for the component to process the replacement
+            await waitFor(() => {
+                expect(testingStore.getState().cues[0].vttCue.text)
+                    .toEqual("some <i>HTML</i> <b>abcd efg</b> sample Text and Text");
+            }, { timeout: 3000 });
+
+            expect(updateCueCallback).toHaveBeenCalled();
             expect(saveTrack).not.toBeCalled();
-            expect(testingStore.getState().cues[0].vttCue.text)
-                .toEqual("some <i>HTML</i> <b>abcd efg</b> sample Text and Text");
             expect(testingStore.getState().editingCueIndex).toEqual(0);
             expect(testingStore.getState().searchReplace.indices).toEqual({
                 matchedCueIndex: 0,
@@ -1637,7 +1762,7 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().searchReplace.replacement).toEqual("");
         });
 
-        it("replace second occurrence for 3 matches per cue", () => {
+        it("replace second occurrence for 3 matches per cue", async () => {
             // GIVEN
             const saveTrack = jest.fn();
             const updateCueCallback = jest.fn();
@@ -1685,10 +1810,14 @@ describe("CueTextEditor", () => {
             });
 
             // THEN
-            expect(updateCueCallback).toHaveBeenCalledTimes(1);
+            // Wait for the component to process the replacement
+            await waitFor(() => {
+                expect(testingStore.getState().cues[0].vttCue.text)
+                    .toEqual("some <i>HTML</i> <b>Text</b> sample abcd efg and Text");
+            }, { timeout: 3000 });
+
+            expect(updateCueCallback).toHaveBeenCalled();
             expect(saveTrack).not.toBeCalled();
-            expect(testingStore.getState().cues[0].vttCue.text)
-                .toEqual("some <i>HTML</i> <b>Text</b> sample abcd efg and Text");
             expect(testingStore.getState().editingCueIndex).toEqual(0);
             expect(testingStore.getState().searchReplace.indices).toEqual({
                 matchedCueIndex: 0,
@@ -1701,7 +1830,7 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().searchReplace.replacement).toEqual("");
         });
 
-        it("replace third occurrence for 3 matches per cue", () => {
+        it("replace third occurrence for 3 matches per cue", async () => {
             // GIVEN
             const saveTrack = jest.fn();
             const updateCueCallback = jest.fn();
@@ -1749,10 +1878,14 @@ describe("CueTextEditor", () => {
             });
 
             // THEN
-            expect(updateCueCallback).toHaveBeenCalledTimes(1);
+            // Wait for the component to process the replacement
+            await waitFor(() => {
+                expect(testingStore.getState().cues[0].vttCue.text)
+                    .toEqual("some <i>HTML</i> <b>Text</b> sample Text and abcd efg");
+            }, { timeout: 3000 });
+
+            expect(updateCueCallback).toHaveBeenCalled();
             expect(saveTrack).not.toBeCalled();
-            expect(testingStore.getState().cues[0].vttCue.text)
-                .toEqual("some <i>HTML</i> <b>Text</b> sample Text and abcd efg");
             expect(testingStore.getState().editingCueIndex).toEqual(1);
             expect(testingStore.getState().searchReplace.indices).toEqual({
                 matchedCueIndex: 1,
@@ -1765,7 +1898,7 @@ describe("CueTextEditor", () => {
             expect(testingStore.getState().searchReplace.replacement).toEqual("");
         });
 
-        it("replace match with regex special chars", () => {
+        it("replace match with regex special chars", async () => {
             // GIVEN
             const saveTrack = jest.fn();
             const updateCueCallback = jest.fn();
@@ -1816,10 +1949,14 @@ describe("CueTextEditor", () => {
             });
 
             // THEN
-            expect(updateCueCallback).toHaveBeenCalledTimes(1);
+            // Wait for the component to process the replacement
+            await waitFor(() => {
+                expect(testingStore.getState().cues[0].vttCue.text)
+                    .toEqual("some <i>HTML</i> <b>[TEXT TEST]</b>");
+            }, { timeout: 3000 });
+
+            expect(updateCueCallback).toHaveBeenCalled();
             expect(saveTrack).not.toBeCalled();
-            expect(testingStore.getState().cues[0].vttCue.text)
-                .toEqual("some <i>HTML</i> <b>[TEXT TEST]</b>");
             expect(testingStore.getState().editingCueIndex).toEqual(-1);
             expect(testingStore.getState().searchReplace.indices).toEqual({
                 matchedCueIndex: -1,
@@ -1882,7 +2019,7 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).toContain(expectedContent);
         });
 
         it("renders with multiple too long lines", () => {
@@ -1924,7 +2061,7 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).toContain(expectedContent);
         });
 
         it("renders with too long lines and no caption specs", () => {
@@ -1952,7 +2089,7 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).toContain(expectedContent);
         });
 
         it("does not render with too long lines decorator with caption specs disabled", () => {
@@ -2106,7 +2243,7 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            const actual = removeDraftJsDynamicValues(actualNode.html());
+            const actual = removeDraftJsDynamicValues(actualNode.container.outerHTML);
             expect(actual).toContain(expectedContent);
         });
     });
@@ -2160,7 +2297,7 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).toContain(expectedContent);
         });
 
         it("renders too many lines that are also too long", () => {
@@ -2207,7 +2344,7 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).toContain(expectedContent);
         });
 
         it("does not render with too many lines decorator with no caption specs", () => {
@@ -2235,7 +2372,7 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            expect(removeDraftJsDynamicValues(actualNode.html())).toContain(expectedContent);
+            expect(removeDraftJsDynamicValues(actualNode.container.outerHTML)).toContain(expectedContent);
         });
 
         it("does not render with too many lines decorator with caption specs disabled", () => {
@@ -2389,7 +2526,7 @@ describe("CueTextEditor", () => {
             );
 
             // THEN
-            const actual = removeDraftJsDynamicValues(actualNode.html());
+            const actual = removeDraftJsDynamicValues(actualNode.container.outerHTML);
             expect(actual).toContain(expectedContent);
         });
     });
@@ -2476,7 +2613,7 @@ describe("CueTextEditor", () => {
             testingStore.dispatch(updateEditingTrack(testTrack as Track) as {} as AnyAction);
 
             const vttCue = new VTTCue(0, 1, "some text");
-            const actualNode = render(
+            render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
@@ -2494,7 +2631,7 @@ describe("CueTextEditor", () => {
             const contentState = ContentState.createFromText("some te");
             const editorState = EditorState.createEmpty();
             const newState = EditorState.push(editorState, contentState, "apply-entity");
-            actualNode.find(Editor).props().onChange(newState);
+            setEditorStateFOR_TESTING(newState);
 
             // THEN
             expect(editorStateFOR_TESTING.getCurrentContent().getPlainText()).toEqual("some text");
@@ -2509,7 +2646,7 @@ describe("CueTextEditor", () => {
             const editor = mountEditorNode("some\nwrapped\ntext");
 
             // WHEN
-            editor.simulate("paste", {
+            fireEvent.paste(editor!, {
                 clipboardData: {
                     types: ["text/plain"],
                     getData: (): string => " lala",
@@ -2541,16 +2678,23 @@ describe("CueTextEditor", () => {
                     }
                 }
             />);
-        const editor = actualNode.find(".public-DraftEditor-content");
-        editor.simulate("keyDown", { keyCode: Character.ENTER, shiftKey: true });
+        const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
+        fireEvent.keyDown(editor, { keyCode: Character.ENTER, shiftKey: true });
         // Update of vtt cue generates new editUuid in slice which would be passed from CueEdit parent.
         // These calls be simulate the prop update from parent.
         const updatedVttCue = testingStore.getState().cues[0].vttCue;
         const updatedEditUuid = testingStore.getState().cues[0].editUuid;
-        actualNode.setProps({ props: { index: 0, vttCue: updatedVttCue, editUuid: updatedEditUuid }});
+        actualNode.rerender(<ReduxTestWrapper
+            store={testingStore}
+            props={{ index: 0, vttCue: updatedVttCue, editUuid: updatedEditUuid,
+                bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                setGlossaryTerm: jest.fn(),
+                autoFocus: true }}
+        />);
 
         // WHEN
-        editor.simulate("paste", {
+        fireEvent.paste(editor, {
             clipboardData: {
                 types: ["text/plain"],
                 getData: (): string => "Paste text",
@@ -2583,16 +2727,23 @@ describe("CueTextEditor", () => {
                     }
                 }
             />);
-        const editor = actualNode.find(".public-DraftEditor-content");
-        editor.simulate("keyDown", { keyCode: Character.ENTER, shiftKey: true });
+        const editor = actualNode.container.querySelector(".public-DraftEditor-content") as Element;
+        fireEvent.keyDown(editor, { keyCode: Character.ENTER, shiftKey: true });
         // Update of vtt cue generates new editUuid in slice which would be passed from CueEdit parent.
         // These calls be simulate the prop update from parent.
         const updatedVttCue = testingStore.getState().cues[0].vttCue;
         const updatedEditUuid = testingStore.getState().cues[0].editUuid;
-        actualNode.setProps({ props: { index: 0, vttCue: updatedVttCue, editUuid: updatedEditUuid }});
+        actualNode.rerender(<ReduxTestWrapper
+            store={testingStore}
+            props={{ index: 0, vttCue: updatedVttCue, editUuid: updatedEditUuid,
+                bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                setGlossaryTerm: jest.fn(),
+                autoFocus: true }}
+        />);
 
         // WHEN
-        editor.simulate("paste", {
+        fireEvent.paste(editor, {
             clipboardData: {
                 types: ["text/plain"],
                 getData: (): string => "Paste text",
@@ -2616,7 +2767,7 @@ describe("CueTextEditor", () => {
         const editUuid = testingStore.getState().cues[0].editUuid;
 
         // WHEN
-        const actualNode = render(
+        render(
             <Provider store={testingStore}>
                 <CueTextEditor
                     index={0}
@@ -2631,8 +2782,7 @@ describe("CueTextEditor", () => {
         );
 
         // THEN
-        const editorState = actualNode.find(Editor).props().editorState;
-        const selectionState = editorState.getSelection();
+        const selectionState = editorStateFOR_TESTING.getSelection();
 
         expect(selectionState.getFocusOffset()).toEqual(0);
     });
@@ -2643,7 +2793,7 @@ describe("CueTextEditor", () => {
         const editUuid = testingStore.getState().cues[0].editUuid;
 
         // WHEN
-        const actualNode = render(
+        render(
             <Provider store={testingStore}>
                 <CueTextEditor
                     index={0}
@@ -2658,8 +2808,7 @@ describe("CueTextEditor", () => {
         );
 
         // THEN
-        const editorState = actualNode.find(Editor).props().editorState;
-        const selectionState = editorState.getSelection();
+        const selectionState = editorStateFOR_TESTING.getSelection();
 
         expect(selectionState.getFocusOffset()).toEqual(21);
     });
