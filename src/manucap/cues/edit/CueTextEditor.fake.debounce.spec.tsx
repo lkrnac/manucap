@@ -655,14 +655,20 @@ describe("CueTextEditor", () => {
 
             // WHEN
             vttCue.position = 6;
-            actualNode.rerender(<ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
-                    setGlossaryTerm: jest.fn(),
-                    autoFocus: true }}
-            />);
+            actualNode.rerender(
+                <ReduxTestWrapper
+                    store={testingStore}
+                    props={{
+                        index: 0,
+                        vttCue,
+                        editUuid,
+                        bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                        setGlossaryTerm: jest.fn(),
+                        autoFocus: true
+                    }}
+                />
+            );
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.position).toEqual(6);
@@ -690,14 +696,20 @@ describe("CueTextEditor", () => {
 
             // WHEN
             vttCue.align = "right";
-            actualNode.rerender(<ReduxTestWrapper
-                store={testingStore}
-                props={{ index: 0, vttCue, editUuid,
-                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
-                    setGlossaryTerm: jest.fn(),
-                    autoFocus: true }}
-            />);
+            actualNode.rerender(
+                <ReduxTestWrapper
+                    store={testingStore}
+                    props={{
+                        index: 0,
+                        vttCue,
+                        editUuid,
+                        bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                        unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                        setGlossaryTerm: jest.fn(),
+                        autoFocus: true
+                    }}
+                />
+            );
 
             // THEN
             expect(testingStore.getState().cues[0].vttCue.align).toEqual("right");
@@ -2733,14 +2745,19 @@ describe("CueTextEditor", () => {
         // These calls be simulate the prop update from parent.
         const updatedVttCue = testingStore.getState().cues[0].vttCue;
         const updatedEditUuid = testingStore.getState().cues[0].editUuid;
-        actualNode.rerender(<ReduxTestWrapper
-            store={testingStore}
-            props={{ index: 0, vttCue: updatedVttCue, editUuid: updatedEditUuid,
-                bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
-                unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
-                setGlossaryTerm: jest.fn(),
-                autoFocus: true }}
-        />);
+        actualNode.rerender(
+            <ReduxTestWrapper
+                store={testingStore}
+                props={{
+                    index: 0,
+                    vttCue: updatedVttCue,
+                    editUuid: updatedEditUuid,
+                    bindCueViewModeKeyboardShortcut: bindCueViewModeKeyboardShortcutSpy,
+                    unbindCueViewModeKeyboardShortcut: unbindCueViewModeKeyboardShortcutSpy,
+                    setGlossaryTerm: jest.fn(),
+                    autoFocus: true
+                }}
+            />);
 
         // WHEN
         fireEvent.paste(editor, {
