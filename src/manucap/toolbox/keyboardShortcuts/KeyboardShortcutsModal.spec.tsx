@@ -29,7 +29,7 @@ describe("KeyboardShortcutsModal", () => {
                         p-component-overlay-enter p-dialog-visible"
                 >
                     <div
-                        className="p-dialog p-component max-w-4xl p-dialog-enter p-dialog-enter-active"
+                        className="p-dialog p-component max-w-4xl p-dialog-default p-dialog-enter p-dialog-enter-active"
                         role="dialog"
                         aria-labelledby=""
                         aria-describedby=""
