@@ -1,3 +1,5 @@
+// TODO: More this to setupTests.ts
+
 import { JSDOM } from "jsdom";
 import fetchMock from 'jest-fetch-mock';
 import { createCanvas } from 'canvas';
