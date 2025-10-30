@@ -15,29 +15,33 @@ import { VideoPlayerProps } from "./VideoPlayer";
 
 // I know this is anti-pattern, but it is very hard to test video.js with such old implementation of React integration
 let videoPlayerPropsHistory: VideoPlayerProps[] = [];
+let currentProps = {} as VideoPlayerProps;
 jest.mock("./VideoPlayer", () => (videoPlayerProps: VideoPlayerProps): ReactElement => {
     videoPlayerPropsHistory.push(videoPlayerProps);
+    currentProps = videoPlayerProps;
     return <div>VideoPlayer</div>
 });
 
 let testingStore = createTestingStore();
 
+const testingCues = [
+    { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE" },
+    { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
+] as CueDto[];
+
 const testingTrack = {
     type: "CAPTION",
     language: { id: "en-US" },
     default: true,
+    timecodesUnlocked: true
 } as Track;
-
-const testingCues = [
-    { vttCue: new VTTCue(0, 1.225, "Caption Line 1"), cueCategory: "DIALOGUE" },
-    { vttCue: new VTTCue(1.225, 2, "Caption Line 2"), cueCategory: "DIALOGUE" },
-] as CueDto[];
 
 const updateCueMock = jest.fn();
 
 describe("EditingVideoPlayer", () => {
     beforeEach(() => {
         videoPlayerPropsHistory = [];
+        currentProps = {} as VideoPlayerProps;
         testingStore = createTestingStore();
         testingStore.dispatch(saveCueUpdateSlice.actions.setUpdateCueCallback(updateCueMock));
     });
@@ -62,8 +66,7 @@ describe("EditingVideoPlayer", () => {
         });
 
         // THEN
-        expect(videoPlayerPropsHistory.length).toBe(2);
-        expect(videoPlayerPropsHistory[1].playSection).toEqual({ startTime: 2, endTime: 3 });
+        expect(currentProps.playSection).toEqual({ startTime: 2, endTime: 3 });
     });
 
     it("passes down last cue change when updated", async () => {
@@ -116,5 +119,56 @@ describe("EditingVideoPlayer", () => {
 
         // THEN
         expect(testingStore.getState().lastCueChange).toBeNull();
+    });
+
+
+    it("passes down cues array with correct language when first rendered", () => {
+        // GIVEN
+        const handleTimeChange = jest.fn();
+        const expectedLanguageCuesArray = [
+            {
+                languageId: "en-US",
+                cues: [
+                    { vttCue: new VTTCue(0, 1, "Caption Line 1"), cueCategory: "DIALOGUE", errors: []},
+                    { vttCue: new VTTCue(1, 2, "Caption Line 2"), cueCategory: "DIALOGUE", errors: []},
+                ]
+            }
+        ];
+
+        // WHEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        testingStore.dispatch(updateCues(testingCues) as {} as AnyAction);
+        render(
+            <Provider store={testingStore} >
+                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" onTimeChange={handleTimeChange} />
+            </Provider>
+        );
+
+        // THEN
+        const languageCuesArray = currentProps.languageCuesArray;
+        expect(languageCuesArray[0].cues[0].vttCue).toEqual(expectedLanguageCuesArray[0].cues[0].vttCue);
+        expect(languageCuesArray[0].cues[1].vttCue).toEqual(expectedLanguageCuesArray[0].cues[1].vttCue);
+    });
+
+    it("passes down correct properties when updated", () => {
+        // GIVEN
+        const handleTimeChange = jest.fn();
+        const component = (
+            <Provider store={testingStore} >
+                <EditingVideoPlayer mp4="dummyMp4" poster="dummyPoster" onTimeChange={handleTimeChange} />
+            </Provider>
+        );
+        const actualNode = render(component);
+
+        // WHEN
+        testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
+        actualNode.rerender(component);
+
+        // THEN
+        expect(currentProps.mp4).toEqual("dummyMp4");
+        expect(currentProps.poster).toEqual("dummyPoster");
+        expect(currentProps.tracks[0]).toEqual(testingTrack);
+        expect(currentProps.tracks.length).toEqual(1);
+        expect(currentProps.onTimeChange).toEqual(handleTimeChange);
     });
 });

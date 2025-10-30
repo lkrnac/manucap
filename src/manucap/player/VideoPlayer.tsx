@@ -48,7 +48,7 @@ const registerPlayerShortcuts = (videoPlayer: VideoPlayer): void => {
 const randomColor = () =>
     "rgba(" + [~~(Math.random() * 255), ~~(Math.random() * 255), ~~(Math.random() * 255), 0.1] + ")";
 
-export interface Props {
+export interface VideoPlayerProps {
     mp4: string;
     poster: string;
     waveform?: string;
@@ -76,7 +76,7 @@ const updateCueAndCopyStyles = (videoJsTrack: TextTrack) => (vttCue: VTTCue, ind
     }
 };
 
-const updateCuesForVideoJsTrack = (props: Props, videoJsTrack: TextTrack, trackFontSizePercent?: number): void => {
+const updateCuesForVideoJsTrack = (props: VideoPlayerProps, videoJsTrack: TextTrack, trackFontSizePercent?: number): void => {
     const matchTracks = (track: Track): boolean => track.language.id === videoJsTrack.language;
     const track = props.tracks.filter(matchTracks)[0] as Track;
     props.languageCuesArray
@@ -113,7 +113,7 @@ const handleCueAddIfNeeded = (lastCueChange: CueChange, videoJsTrack: TextTrack,
 };
 
 const updateVideoJsTrackIfNeeded = (
-    props: Props,
+    props: VideoPlayerProps,
     lastCueChange: CueChange,
     videoJsTrack: TextTrack,
     player: VideoJsPlayer
@@ -131,7 +131,7 @@ const updateVideoJsTrackIfNeeded = (
     }
 };
 
-class VideoPlayer extends React.Component<Props> {
+class VideoPlayer extends React.Component<VideoPlayerProps> {
     public player: VideoJsPlayer;
     private readonly videoNode?: RefObject<HTMLVideoElement | null>;
     playSegmentPauseTimeout?: number;
@@ -141,7 +141,7 @@ class VideoPlayer extends React.Component<Props> {
     private readonly waveformTimelineRef?: RefObject<HTMLDivElement | null>;
 
 
-    constructor(props: Props) {
+    constructor(props: VideoPlayerProps) {
         super(props);
 
         this.player = {} as VideoJsPlayer; // Keeps Typescript compiler quiet. Feel free to remove if you know how.
@@ -192,7 +192,7 @@ class VideoPlayer extends React.Component<Props> {
         }
     }
 
-    componentDidUpdate(prevProps: Props): void {
+    componentDidUpdate(prevProps: VideoPlayerProps): void {
         const lastCueChange = this.props.lastCueChange;
         const videoJsTrack = (this.player.textTracks())[0];
         if (lastCueChange && videoJsTrack && videoJsTrack.cues) {
