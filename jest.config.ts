@@ -12,7 +12,7 @@ const config: JestConfigWithTsJest = {
         "!node_modules/**"
     ],
     resetMocks: false,
-    setupFilesAfterEnv: ["@testing-library/jest-dom"],
+    setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
     // TODO: remove unused config
     // transform: {
     //     "^.+\\.(ts|tsx)$": "ts-jest", // Ensures TS files are transpiled
