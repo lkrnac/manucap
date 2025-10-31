@@ -1,13 +1,16 @@
+import "../../../testUtils/initBrowserEnvironment"
+import { act } from "react";
+import * as React from "react";
+import { AnyAction } from "@reduxjs/toolkit";
+import { fireEvent, render } from "@testing-library/react";
+import { Provider } from "react-redux";
+import { EditorState, SelectionState } from "draft-js";
+
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { CueDto, Language, Track } from "../../model";
 import { updateEditingTrack } from "../../trackSlices";
-import { AnyAction } from "@reduxjs/toolkit";
 import CueLine, { CueLineRowProps } from "./CueLine";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
-import { fireEvent, render } from "@testing-library/react";
-import { Provider } from "react-redux";
-import * as React from "react";
-import { EditorState, SelectionState } from "draft-js";
 import { editorStateFOR_TESTING, setEditorStateFOR_TESTING } from "../edit/CueTextEditor";
 import { searchReplaceSlice, showSearchReplace } from "../searchReplace/searchReplaceSlices";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
@@ -177,9 +180,11 @@ describe("CueLine", () => {
 
             // WHEN
             // Change position of cursor in draft-js editor
-            const selectionState = editorStateFOR_TESTING.getSelection();
-            const newSelectionState = selectionState.set("anchorOffset", 5).set("focusOffset", 5) as SelectionState;
-            setEditorStateFOR_TESTING(EditorState.forceSelection(editorStateFOR_TESTING, newSelectionState));
+            await act(async () => {
+                const selectionState = editorStateFOR_TESTING.getSelection();
+                const newSelectionState = selectionState.set("anchorOffset", 5).set("focusOffset", 5) as SelectionState;
+                setEditorStateFOR_TESTING(EditorState.forceSelection(editorStateFOR_TESTING, newSelectionState));
+            });
 
             fireEvent.click(actualNode.container.querySelectorAll(".mc-glossary-match")[0]);
 
@@ -189,7 +194,7 @@ describe("CueLine", () => {
     });
 
     describe("search term", () => {
-        it("highlights search term in first source cue", () => {
+        it("highlights search term in first source cue", async () => {
             // GIVEN
             const testingTrack = {
                 type: "CAPTION",
@@ -230,7 +235,6 @@ describe("CueLine", () => {
                 matchedCues: [dummyCue, dummyCue, dummyCue, matchedCue],
                 commentAuthor: "Linguist"
             } as CueLineRowProps;
-
             testingStore.dispatch(updateEditingCueIndex(0) as {} as AnyAction);
             testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
 
@@ -249,7 +253,7 @@ describe("CueLine", () => {
             // THEN
             expect(actualNode.container.outerHTML).toContain(
                 "<i>Source <b>" +
-                "<span style=\"background-color:#D9E9FF\" data-reactroot=\"\">Line</span>" +
+                "<span style=\"background-color:#D9E9FF\">Line</span>" +
                 "</b></i> <br>Wrapped text"
             );
         });
@@ -382,7 +386,7 @@ describe("CueLine", () => {
             // THEN
             expect(actualNode.container.outerHTML).toContain(
                 "<i>Source <b>" +
-                "<span style=\"background-color:#D9E9FF\" data-reactroot=\"\">Line</span>" +
+                "<span style=\"background-color:#D9E9FF\">Line</span>" +
                 "</b></i> <br>Wrapped text"
             );
         });
@@ -447,7 +451,7 @@ describe("CueLine", () => {
 
             // THEN
             expect(actualNode.container.outerHTML).toContain(
-                "Editing <span style=\"background-color:#D9E9FF\" data-reactroot=\"\">Line</span> 1"
+                "Editing <span style=\"background-color:#D9E9FF\">Line</span> 1"
             );
         });
 
@@ -516,7 +520,7 @@ describe("CueLine", () => {
 
             // THEN
             expect(actualNode.container.outerHTML).toContain(
-                "Editing <span style=\"background-color:#D9E9FF\" data-reactroot=\"\">Line</span> 3"
+                "Editing <span style=\"background-color:#D9E9FF\">Line</span> 3"
             );
         });
 
