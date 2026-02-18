@@ -17,7 +17,7 @@ import CueTextEditor, { CueTextEditorProps } from "./CueTextEditor";
 import { updateEditingTrack } from "../../trackSlices";
 import { fetchSpellCheck } from "../spellCheck/spellCheckFetch";
 import { Replacement, SpellCheck } from "../spellCheck/model";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { saveCueUpdateSlice } from "../saveCueUpdateSlices";
 

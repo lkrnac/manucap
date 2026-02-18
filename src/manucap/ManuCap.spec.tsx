@@ -29,7 +29,7 @@ import { updateSourceCues } from "./cues/view/sourceCueSlices";
 import { lastCueChangeSlice } from "./cues/edit/cueEditorSlices";
 import { showMerge } from "./cues/merge/mergeSlices";
 import MergeEditor from "./cues/merge/MergeEditor";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import CueListToolbar from "./CueListToolbar";
 
 jest.mock("lodash", () => ({

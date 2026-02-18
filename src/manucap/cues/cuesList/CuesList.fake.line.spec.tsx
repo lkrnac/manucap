@@ -13,7 +13,7 @@ import CueLine, { CueLineProps } from "../cueLine/CueLine";
 import { updateCues } from "./cuesListActions";
 import CuesList from "./CuesList";
 import { createTestingStore } from "../../../testUtils/testingStore";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import { changeScrollPosition } from "./cuesListScrollSlice";
 import { Character, KeyCombination } from "../../utils/shortcutConstants";
 import { updateSourceCues } from "../view/sourceCueSlices";

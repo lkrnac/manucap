@@ -32,7 +32,7 @@ import {
     setFind,
     showSearchReplace
 } from "../searchReplace/searchReplaceSlices";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import { setSpellCheckDomain } from "../../spellcheckerSettingsSlice";
 import { updateEditingCueIndex } from "./cueEditorSlices";

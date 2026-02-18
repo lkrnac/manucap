@@ -2,7 +2,7 @@ import "../../../testUtils/initBrowserEnvironment";
 import { ContentState, convertFromHTML, EditorState } from "draft-js";
 import InlineStyleButton from "./InlineStyleButton";
 import { createEvent, fireEvent, render } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 
 /**
  * On click actions are covered by CueTextEditor tests

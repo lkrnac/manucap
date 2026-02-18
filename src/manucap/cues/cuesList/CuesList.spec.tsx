@@ -12,7 +12,7 @@ import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { changeScrollPosition, scrollPositionSlice } from "./cuesListScrollSlice";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import CueLine from "../cueLine/CueLine";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import AddCueLineButton from "../edit/AddCueLineButton";

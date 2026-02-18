@@ -6,7 +6,7 @@ import * as simulant from "simulant";
 import { Provider } from "react-redux";
 import { AnyAction } from "redux";
 import { fireEvent, render } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import "@testing-library/jest-dom";
 
 import { Character } from "../../utils/shortcutConstants";
