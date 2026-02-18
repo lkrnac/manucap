@@ -1,19 +1,19 @@
 import "../../../testUtils/initBrowserEnvironment";
-import { renderHook } from "@testing-library/react-hooks";
+import { renderHook } from "@testing-library/react";
 import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto, Language, Track } from "../../model";
 import { updateCues } from "./cuesListActions";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateSourceCues } from "../view/sourceCueSlices";
 import useMatchedCuesAsCsv from "./useMatchedCuesAsCsv";
-import { ReactElement } from "react";
+import { ReactElement, ReactNode } from "react";
 import { Provider } from "react-redux";
 import { updateEditingTrack } from "../../trackSlices";
 
 let testingStore = createTestingStore();
 
 interface WrapperProps {
-    children: ReactElement[];
+    children: ReactNode;
 }
 
 describe("useMatchedCuesAsCsv", () => {
