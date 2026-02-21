@@ -1311,7 +1311,7 @@ describe("CueTextEditor", () => {
             // Clicking the first button and waiting for transition to end.
             fireEvent.click(spellcheckButtons[0]);
             await waitFor(() => {
-                expect(actualNode.container.querySelector(".p-connected-overlay-enter-done")).not.toBeNull();
+                expect(document.body.querySelector(".p-connected-overlay-enter-done")).not.toBeNull();
             });
 
             // Clicking the second button.
@@ -1319,7 +1319,7 @@ describe("CueTextEditor", () => {
 
             // THEN
             await waitFor(() => {
-                expect(actualNode.container.querySelectorAll(".p-connected-overlay-enter-done").length).toBe(1);
+                expect(document.body.querySelectorAll(".p-connected-overlay-enter-done").length).toBe(1);
             });
         });
 
