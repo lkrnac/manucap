@@ -108,7 +108,6 @@ describe("CueCategoryButton", () => {
                 const actualNode = render(<CueCategoryButton onChange={onChange} />);
                 const button = actualNode.container.querySelector("button")!;
                 fireEvent.click(button);
-                console.log(document.documentElement.outerHTML);
                 const span = document.querySelectorAll("#cueCategoryMenu li")[index].querySelector("span")!;
                 fireEvent.click(span);
 
