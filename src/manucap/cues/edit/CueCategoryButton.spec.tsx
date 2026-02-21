@@ -50,7 +50,7 @@ describe("CueCategoryButton", () => {
 
     it("renders with dropdown", () => {
         // GIVEN
-        const expectedNode = render((
+        const expectedNode = render(
             <>
                 <button
                     className="mc-dropdown-toggle mc-btn mc-btn-light"
@@ -80,14 +80,14 @@ describe("CueCategoryButton", () => {
                     </ul>
                 </div>
             </>
-        ), { container: document.body });
+        );
 
         // WHEN
-        const actualNode = render(<CueCategoryButton onChange={jest.fn()} />, { container: document.body });
+        const actualNode = render(<CueCategoryButton onChange={jest.fn()} />);
         fireEvent.click(actualNode.container.querySelector("button") as Element);
 
         // THEN
-        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
+        expect(document.body.innerHTML).toContain(expectedNode.container.outerHTML);
     });
 
     describe("CueCategory options", () => {

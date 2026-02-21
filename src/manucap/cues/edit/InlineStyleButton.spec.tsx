@@ -179,7 +179,7 @@ describe("InlineStyleButton", () => {
                 setEditorState={jest.fn()}
                 editorState={editorState}
             />
-        , { container: document.body });
+        );
         const button = actualNode.container.querySelector(".mc-btn-primary") as Element;
 
         //WHEN
