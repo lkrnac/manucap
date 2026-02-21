@@ -1290,7 +1290,7 @@ describe("CueTextEditor", () => {
             } as SpellCheck;
             const vttCue = new VTTCue(0, 1, "some hTm <b>Text</b> smple");
             const editUuid = testingStore.getState().cues[0].editUuid;
-            const actualNode = render((
+            const actualNode = render(
                 <Provider store={testingStore}>
                     <CueTextEditor
                         bindCueViewModeKeyboardShortcut={bindCueViewModeKeyboardShortcutSpy}
@@ -1303,7 +1303,7 @@ describe("CueTextEditor", () => {
                         autoFocus
                     />
                 </Provider>
-            ), { container: document.body });
+            );
 
             // WHEN
             const spellcheckButtons = actualNode.container.querySelectorAll(".mc-text-with-error");
@@ -1351,8 +1351,7 @@ describe("CueTextEditor", () => {
                         setGlossaryTerm={jest.fn()}
                         autoFocus
                     />
-                </Provider>,
-                { container: document.body }
+                </Provider>
             );
             fireEvent.click(actualNode.container.querySelectorAll(".mc-text-with-error")[0]);
 

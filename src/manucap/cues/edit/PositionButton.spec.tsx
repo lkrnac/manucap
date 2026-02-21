@@ -191,14 +191,11 @@ describe("PositionButton", () => {
         );
 
         // WHEN
-        const actualNode = render(<PositionButton vttCue={vttCue} changePosition={jest.fn()} />, {
-            container: document.body
-        });
-
+        const actualNode = render(<PositionButton vttCue={vttCue} changePosition={jest.fn()} />);
         fireEvent.click(actualNode.container.querySelector("button")!);
 
         // THEN
-        expect(actualNode.container.innerHTML).toEqual(removeNewlines(expectedNode.container.innerHTML));
+        expect(removeNewlines(document.body.children[0].innerHTML)).toEqual(removeNewlines(expectedNode.container.innerHTML));
     });
 
     it("changes position", () => {
@@ -207,12 +204,10 @@ describe("PositionButton", () => {
         const changePosition = jest.fn();
 
         // WHEN
-        const actualNode = render(<PositionButton vttCue={vttCue} changePosition={changePosition} />, {
-            container: document.body
-        });
+        const actualNode = render(<PositionButton vttCue={vttCue} changePosition={changePosition} />);
         const button = actualNode.container.querySelector("button");
         fireEvent.click(button!);
-        const row1Column4Button = actualNode.container.querySelectorAll("li")[3].querySelector("span");
+        const row1Column4Button = document.body.querySelectorAll("li")[3].querySelector("span");
         fireEvent.click(row1Column4Button!);
 
         // THEN
