@@ -133,7 +133,6 @@ describe("TimeEditor", () => {
         );
 
         // WHEN
-        console.log(actualNode.container.outerHTML);
         const timeField = actualNode.container.querySelector("input");
         fireEvent.change(timeField!, { target: { value: "abc!e@#.$%^" }});
 
