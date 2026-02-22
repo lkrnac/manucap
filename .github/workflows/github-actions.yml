@@ -22,8 +22,7 @@ jobs:
               with:
                   node-version: 24
                   cache: 'npm'
-                  registry-url: 'https://registry.npmjs.org'
-            - run: npm ci --legacy-peer-deps
+            - run: npm ci --force
             - run: npm run test
             - name: Upload coverage reports to Codecov
               uses: codecov/codecov-action@v3
@@ -36,5 +35,5 @@ jobs:
               run: ./scripts/post-build-js-checks.sh
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            - run: npm publish --provenance --access public
+            - run: npm publish
               if: github.ref == 'refs/heads/master'
