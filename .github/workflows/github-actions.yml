@@ -35,5 +35,5 @@ jobs:
               run: ./scripts/post-build-js-checks.sh
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            - run: npm publish
+            - run: npm publish --provenance --access public
               if: github.ref == 'refs/heads/master'
