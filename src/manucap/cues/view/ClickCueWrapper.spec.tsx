@@ -2,7 +2,7 @@ import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import { Provider } from "react-redux";
 import { fireEvent, render } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 
 import { CueDto, Track } from "../../model";

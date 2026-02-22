@@ -25,7 +25,7 @@ export interface CueLineProps {
     rowIndex: number;
     data: CueLineDto;
     rowProps: CueLineRowProps;
-    rowRef: React.RefObject<HTMLDivElement>;
+    rowRef: React.RefObject<HTMLDivElement | null>;
     editDisabled?: boolean;
 }
 

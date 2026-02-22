@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { PropsWithChildren, ReactElement } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { CaptionSpecification } from "../model";
@@ -27,8 +27,8 @@ const millisToSeconds = (millis: number | null): string => millis ? "" + (millis
 
 // Disable following rule because if returned HtmlAnchorElement it requires to initialize all element props
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const LinkNewTabRenderer = (props: HTMLLinkElement): any =>
-    <a href={props.href} rel="noopener noreferrer" target="_blank">{props.children}</a>;
+const LinkNewTabRenderer = ({ href, children }: PropsWithChildren<{ href: string }>): any =>
+    <a href={href} rel="noopener noreferrer" target="_blank">{children}</a>;
 
 const CaptionSpecificationsForm = (props: Props): ReactElement => (
     <>

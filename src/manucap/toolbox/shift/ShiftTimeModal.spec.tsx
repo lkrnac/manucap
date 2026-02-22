@@ -10,9 +10,9 @@ import { updateEditingTrack } from "../../trackSlices";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { cleanup, fireEvent, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { act } from "react-dom/test-utils";
 import { removeIds, renderWithPortal } from "../../../testUtils/testUtils";
 import { updateEditingCueIndex } from "../../cues/edit/cueEditorSlices";
+import { act } from "react";
 
 const testCuesForNegativeShifting = [
     { vttCue: new VTTCue(1, 3, "Caption Line 1"), cueCategory: "DIALOGUE" },
@@ -65,7 +65,7 @@ describe("ShiftTimesModal", () => {
         // GIVEN
         const expectedNode = render(
             <div
-                className="p-dialog p-component max-w-3xl p-dialog-enter p-dialog-enter-active"
+                className="p-dialog p-component max-w-3xl p-dialog-default p-dialog-enter p-dialog-enter-active"
                 role="dialog"
                 aria-labelledby=""
                 aria-describedby=""
@@ -161,14 +161,14 @@ describe("ShiftTimesModal", () => {
         expect(actual).toEqual(expected);
     });
 
-    it("doesn't render error message and disable apply button if track is chunked", () => {
+    it("doesn't render error message and disable apply button if track is chunked", async () => {
         // GIVEN
         testingStore.dispatch(updateEditingTrack(testingCaptionTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(testCues) as {} as AnyAction);
         const expectedNode = render(
             <Provider store={testingStore}>
                 <div
-                    className="p-dialog p-component max-w-3xl p-dialog-enter p-dialog-enter-active"
+                    className="p-dialog p-component max-w-3xl p-dialog-default p-dialog-enter p-dialog-enter-active"
                     role="dialog"
                     aria-labelledby=""
                     aria-describedby=""
@@ -256,7 +256,7 @@ describe("ShiftTimesModal", () => {
 
         const input = actualNode.container.querySelectorAll("input[name='shiftTime']")[0];
         const allCuesRadioBtn = actualNode.container.querySelectorAll(".form-check input[value='0']")[0];
-        userEvent.type(input, "-1");
+        await userEvent.type(input, "-1");
         fireEvent.click(allCuesRadioBtn);
 
         // THEN
@@ -280,7 +280,7 @@ describe("ShiftTimesModal", () => {
         const input = actualNode.container.querySelectorAll("input[name='shiftTime']")[0];
         const allCuesRadioBtn = actualNode.container.querySelectorAll(".form-check input[value='0']")[0];
         const submitBtn = actualNode.container.querySelectorAll(".mc-shift-modal-apply-button")[0];
-        userEvent.type(input, "1");
+        await userEvent.type(input, "1");
         fireEvent.click(allCuesRadioBtn);
         await act(async () => {
             fireEvent.click(submitBtn);
@@ -338,7 +338,7 @@ describe("ShiftTimesModal", () => {
         const input = container.querySelectorAll("input[name='shiftTime']")[0];
         const allCuesRadioBtn = container.querySelectorAll(".form-check input[value='0']")[0];
         const submitBtn = container.querySelectorAll(".mc-shift-modal-apply-button")[0];
-        userEvent.type(input, "0.6");
+        await userEvent.type(input, "0.6");
         fireEvent.click(allCuesRadioBtn);
         await act(async () => {
             fireEvent.click(submitBtn);
@@ -370,7 +370,7 @@ describe("ShiftTimesModal", () => {
         const input = container.querySelectorAll("input[name='shiftTime']")[0];
         const allCuesRadioBtn = container.querySelectorAll(".form-check input[value='0']")[0];
         const submitBtn = container.querySelectorAll(".mc-shift-modal-apply-button")[0];
-        userEvent.type(input, "0.25");
+        await userEvent.type(input, "0.25");
         fireEvent.click(allCuesRadioBtn);
         await act(async () => {
             fireEvent.click(submitBtn);
@@ -420,7 +420,7 @@ describe("ShiftTimesModal", () => {
         const input = container.querySelectorAll("input[name='shiftTime']")[0];
         const allCuesRadioBtn = container.querySelectorAll(".form-check input[value='0']")[0];
         const submitBtn = container.querySelectorAll(".mc-shift-modal-apply-button")[0];
-        userEvent.type(input, "1");
+        await userEvent.type(input, "1");
         fireEvent.click(allCuesRadioBtn);
         await act(async () => {
             fireEvent.click(submitBtn);
@@ -445,11 +445,7 @@ describe("ShiftTimesModal", () => {
         const input = container.querySelectorAll("input[name='shiftTime']")[0];
         const allCuesRadioBtn = container.querySelectorAll(".form-check input[value='0']")[0];
         const submitBtn = container.querySelectorAll(".mc-shift-modal-apply-button")[0];
-
-        await act(async () => {
-            await userEvent.type(input, "-0.153", { delay: 100 });
-        });
-
+        await userEvent.type(input, "-0.153", { delay: 100 });
         fireEvent.click(allCuesRadioBtn);
         await act(async () => {
             fireEvent.click(submitBtn);
@@ -475,11 +471,7 @@ describe("ShiftTimesModal", () => {
         const input = container.querySelectorAll("input[name='shiftTime']")[0];
         const allCuesRadioBtn = container.querySelectorAll(".form-check input[value='0']")[0];
         const submitBtn = container.querySelectorAll(".mc-shift-modal-apply-button")[0];
-
-        await act(async () => {
-            await userEvent.type(input, "-0.153", { delay: 100 });
-        });
-
+        await userEvent.type(input, "-0.153", { delay: 100 });
         fireEvent.click(allCuesRadioBtn);
         await act(async () => {
             fireEvent.click(submitBtn);
@@ -508,11 +500,7 @@ describe("ShiftTimesModal", () => {
         const input = container.querySelectorAll("input[name='shiftTime']")[0];
         const beforeCuesRadioBtn = container.querySelectorAll(".form-check input[value='1']")[0];
         const submitBtn = container.querySelectorAll(".mc-shift-modal-apply-button")[0];
-
-        await act(async () => {
-            await userEvent.type(input, "-0.153", { delay: 100 });
-        });
-
+        await userEvent.type(input, "-0.153", { delay: 100 });
         fireEvent.click(beforeCuesRadioBtn);
         await act(async () => {
             fireEvent.click(submitBtn);
@@ -541,11 +529,7 @@ describe("ShiftTimesModal", () => {
         const input = container.querySelectorAll("input[name='shiftTime']")[0];
         const afterCuesRadioBtn = container.querySelectorAll(".form-check input[value='2']")[0];
         const submitBtn = container.querySelectorAll(".mc-shift-modal-apply-button")[0];
-
-        await act(async () => {
-            await userEvent.type(input, "-0.153", { delay: 100 });
-        });
-
+        await userEvent.type(input, "-0.153", { delay: 100 });
         fireEvent.click(afterCuesRadioBtn);
         await act(async () => {
             fireEvent.click(submitBtn);

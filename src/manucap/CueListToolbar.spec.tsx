@@ -1,11 +1,7 @@
 import "../testUtils/initBrowserEnvironment";
-import { createTestingStore } from "../testUtils/testingStore";
-import { setSaveTrack } from "./cues/saveSlices";
+
 import { AnyAction } from "@reduxjs/toolkit";
-import { mount } from "enzyme";
 import { Provider } from "react-redux";
-import CueListToolbar from "./CueListToolbar";
-import { Language, Track } from "./model";
 import Icon from "@mdi/react";
 import {
     mdiChevronDoubleDown,
@@ -15,6 +11,12 @@ import {
     mdiPageFirst,
     mdiPageLast
 } from "@mdi/js";
+import { render } from "@testing-library/react";
+
+import { createTestingStore } from "../testUtils/testingStore";
+import { setSaveTrack } from "./cues/saveSlices";
+import CueListToolbar from "./CueListToolbar";
+import { Language, Track } from "./model";
 
 const testingTrack = {
     type: "CAPTION",
@@ -41,7 +43,7 @@ describe("CueListToolbar", () => {
 
     it("renders", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <div className="space-x-2 flex items-center mt-1.5">
                     <button
@@ -135,7 +137,7 @@ describe("CueListToolbar", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CueListToolbar
                     editingTrack={testingTrack}
@@ -147,12 +149,12 @@ describe("CueListToolbar", () => {
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders with edit disabled", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <div className="space-x-2 flex items-center mt-1.5">
                     <button
@@ -246,7 +248,7 @@ describe("CueListToolbar", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CueListToolbar
                     editingTrack={testingTrack}
@@ -259,7 +261,7 @@ describe("CueListToolbar", () => {
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
 });

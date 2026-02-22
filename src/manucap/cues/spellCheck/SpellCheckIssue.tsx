@@ -43,7 +43,7 @@ interface Option {
     label: string;
 }
 
-const onEnterPopover = (props: Props, selectRef: RefObject<Select>): void => {
+const onEnterPopover = (props: Props, selectRef: RefObject<Select | null>): void => {
     props.unbindCueViewModeKeyboardShortcut();
     // @ts-ignore since menuListRef uses React.Ref<any> type firstElementChild can be found as a property
     selectRef?.current?.menuListRef?.firstElementChild?.focus();
@@ -83,7 +83,7 @@ const onkeydown = (setSpellCheckerMatchingOffset: Function): KeyboardEventHandle
 
 export const SpellCheckIssue = (props: Props): ReactElement | null => {
     const dispatch = useDispatch();
-    const selectRef = useRef(null);
+    const selectRef = useRef<Select | null>(null);
     const searchReplaceFind = useSelector((state: ManuCapState) => state.searchReplace.find);
     const menu = useRef<Menu>(null);
     const spellCheckSpan = useRef(null);

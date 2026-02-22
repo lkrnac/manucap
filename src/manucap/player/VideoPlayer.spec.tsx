@@ -7,9 +7,9 @@ import videojs, { VideoJsPlayer } from "video.js";
 import { Character } from "../utils/shortcutConstants";
 import VideoPlayer from "./VideoPlayer";
 import { copyNonConstructorProperties, isSafari } from "../cues/cueUtils";
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
 import { removeVideoPlayerDynamicValue } from "../../testUtils/testUtils";
-import sinon from "sinon";
+import React from "react";
 
 jest.mock("../cues/cueUtils");
 
@@ -35,7 +35,7 @@ describe("VideoPlayer", () => {
     it("renders", () => {
         // GIVEN
         // noinspection HtmlUnknownTarget Dummy URL is OK for testing
-        const expectedVideoView = mount(
+        const { container: expectedContainer } = render(
             <video
                 id="video-player_html5_api"
                 style={{ margin: "auto" }}
@@ -48,7 +48,7 @@ describe("VideoPlayer", () => {
         );
 
         // WHEN
-        const actualVideoView = mount(
+        const { container: actualContainer } = render(
             <VideoPlayer
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
@@ -57,11 +57,11 @@ describe("VideoPlayer", () => {
                 lastCueChange={null}
             />
         );
-        const videoNode = actualVideoView.find("video");
+        const videoNode = actualContainer.querySelector("video");
 
         // THEN
-        expect(removeVideoPlayerDynamicValue(videoNode.html()))
-            .toEqual(removeVideoPlayerDynamicValue(expectedVideoView.html()));
+        expect(removeVideoPlayerDynamicValue(videoNode?.outerHTML || ""))
+            .toEqual(removeVideoPlayerDynamicValue(expectedContainer.querySelector("video")?.outerHTML || ""));
     });
 
     it("initializes videoJs with correct options (non safari)", () => {
@@ -70,10 +70,12 @@ describe("VideoPlayer", () => {
             { kind: "captions", mode: "showing", srclang: "en-US", default: true } as videojs.TextTrackOptions,
             { kind: "captions", mode: "showing", srclang: "es-ES", default: false } as videojs.TextTrackOptions
         ];
+        const ref = React.createRef<VideoPlayer>();
 
         // WHEN
-        const actualNode = mount(
+        render(
             <VideoPlayer
+                ref={ref}
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 tracks={tracks}
@@ -83,9 +85,7 @@ describe("VideoPlayer", () => {
         );
 
         // THEN
-        const videoNode = actualNode.find("VideoPlayer");
-        // @ts-ignore can't find the correct syntax
-        const actualComponent = videoNode.instance() as VideoPlayer;
+        const actualComponent = ref.current!;
         expect(actualComponent.player.options_.playbackRates).toEqual([0.5, 0.75, 1, 1.25]);
         expect(actualComponent.player.options_.fluid).toBeTruthy();
         expect(actualComponent.player.options_.html5.nativeTextTracks).toBeUndefined();
@@ -101,10 +101,12 @@ describe("VideoPlayer", () => {
             { kind: "captions", mode: "showing", srclang: "en-US", default: true } as videojs.TextTrackOptions,
             { kind: "captions", mode: "showing", srclang: "es-ES", default: false } as videojs.TextTrackOptions
         ];
+        const ref = React.createRef<VideoPlayer>();
 
         // WHEN
-        const actualNode = mount(
+        render(
             <VideoPlayer
+                ref={ref}
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 tracks={tracks}
@@ -114,9 +116,7 @@ describe("VideoPlayer", () => {
         );
 
         // THEN
-        const videoNode = actualNode.find("VideoPlayer");
-        // @ts-ignore can't find the correct syntax
-        const actualComponent = videoNode.instance() as VideoPlayer;
+        const actualComponent = ref.current!;
         expect(actualComponent.player.options_.playbackRates).toEqual([0.5, 0.75, 1, 1.25]);
         expect(actualComponent.player.options_.fluid).toBeTruthy();
         expect(actualComponent.player.options_.html5.nativeTextTracks).toBeFalsy();
@@ -125,9 +125,13 @@ describe("VideoPlayer", () => {
     });
 
     it("initializes videoJs with mp4 and poster URLs", () => {
+        // GIVEN
+        const ref = React.createRef<VideoPlayer>();
+
         // WHEN
-        const actualNode = mount(
+        render(
             <VideoPlayer
+                ref={ref}
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 tracks={[]}
@@ -137,9 +141,7 @@ describe("VideoPlayer", () => {
         );
 
         // THEN
-        const videoNode = actualNode.find("VideoPlayer");
-        // @ts-ignore can't find the correct syntax
-        const actualComponent = videoNode.instance() as VideoPlayer;
+        const actualComponent = ref.current!;
         expect(actualComponent.player.src()).toEqual("dummyMp4Url");
         expect(actualComponent.player.poster()).toEqual("dummyPosterUrl");
     });
@@ -166,8 +168,11 @@ describe("VideoPlayer", () => {
             { language: "en-CA", addCue: jest.fn(), cues: captionCues },
             { language: "es-ES", addCue: jest.fn(), cues: translationCues }
         ];
-        const actualNode = mount(
+        const ref = React.createRef<VideoPlayer>();
+
+        render(
             <VideoPlayer
+                ref={ref}
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 tracks={initialTestingTracks}
@@ -175,9 +180,7 @@ describe("VideoPlayer", () => {
                 lastCueChange={null}
             />
         );
-        const videoNode = actualNode.find("VideoPlayer");
-        // @ts-ignore can't find the correct syntax
-        const component = videoNode.instance() as VideoPlayer;
+        const component = ref.current!;
 
         // WHEN
         dispatchEventForTrack(component.player, textTracks[0]);
@@ -212,8 +215,11 @@ describe("VideoPlayer", () => {
         const textTracks = [
             { language: "en-CA", addCue: jest.fn(), cues: [new VTTCue(0, 1, "Caption Line 1")]},
         ];
-        const actualNode = mount(
+        const ref = React.createRef<VideoPlayer>();
+
+        render(
             <VideoPlayer
+                ref={ref}
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 tracks={initialTestingTracks}
@@ -221,9 +227,7 @@ describe("VideoPlayer", () => {
                 lastCueChange={null}
             />
         );
-        const videoNode = actualNode.find("VideoPlayer");
-        // @ts-ignore can't find the correct syntax
-        const component = videoNode.instance() as VideoPlayer;
+        const component = ref.current!;
 
         // WHEN
         dispatchEventForTrack(component.player, textTracks[0]);
@@ -234,8 +238,10 @@ describe("VideoPlayer", () => {
 
     it("should toggle play/pause with key shortcut", () => {
         // GIVEN
-        const actualNode = mount(
+        const ref = React.createRef<VideoPlayer>();
+        render(
             <VideoPlayer
+                ref={ref}
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 tracks={[]}
@@ -243,10 +249,8 @@ describe("VideoPlayer", () => {
                 lastCueChange={null}
             />
         );
-        const videoNode = actualNode.find("VideoPlayer");
-        // @ts-ignore can't find the correct syntax
-        const actualComponent = videoNode.instance() as VideoPlayer;
-        const playPauseSpy = sinon.spy();
+        const actualComponent = ref.current!;
+        const playPauseSpy = jest.fn();
         actualComponent.playPause = playPauseSpy;
 
         // WHEN
@@ -254,13 +258,15 @@ describe("VideoPlayer", () => {
         simulant.fire(document.documentElement, "keydown", { keyCode: Character.O_CHAR, shiftKey: true, altKey: true });
 
         // THEN
-        sinon.assert.calledTwice(playPauseSpy);
+        expect(playPauseSpy).toHaveBeenCalledTimes(2);
     });
 
     it("should shiftTime -1 second with key shortcut", () => {
         // GIVEN
-        const actualNode = mount(
+        const ref = React.createRef<VideoPlayer>();
+        render(
             <VideoPlayer
+                ref={ref}
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 tracks={[]}
@@ -268,10 +274,8 @@ describe("VideoPlayer", () => {
                 lastCueChange={null}
             />
         );
-        const videoNode = actualNode.find("VideoPlayer");
-        // @ts-ignore can't find the correct syntax
-        const actualComponent = videoNode.instance() as VideoPlayer;
-        const shiftTimeSpy = sinon.spy();
+        const actualComponent = ref.current!;
+        const shiftTimeSpy = jest.fn();
         actualComponent.shiftTime = shiftTimeSpy;
 
         // WHEN
@@ -279,13 +283,15 @@ describe("VideoPlayer", () => {
             document.documentElement, "keydown", { keyCode: Character.ARROW_LEFT, shiftKey: true, altKey: true });
 
         // THEN
-        sinon.assert.calledWith(shiftTimeSpy, -1000);
+        expect(shiftTimeSpy).toHaveBeenCalledWith(-1000);
     });
 
     it("should call shiftTime 1 second with key shortcut", () => {
         // GIVEN
-        const actualNode = mount(
+        const ref = React.createRef<VideoPlayer>();
+        render(
             <VideoPlayer
+                ref={ref}
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 tracks={[]}
@@ -293,10 +299,8 @@ describe("VideoPlayer", () => {
                 lastCueChange={null}
             />
         );
-        const videoNode = actualNode.find("VideoPlayer");
-        // @ts-ignore can't find the correct syntax
-        const actualComponent = videoNode.instance() as VideoPlayer;
-        const shiftTimeSpy = sinon.spy();
+        const actualComponent = ref.current!;
+        const shiftTimeSpy = jest.fn();
         actualComponent.shiftTime = shiftTimeSpy;
 
         // WHEN
@@ -304,14 +308,16 @@ describe("VideoPlayer", () => {
             document.documentElement, "keydown", { keyCode: Character.ARROW_RIGHT, shiftKey: true, altKey: true });
 
         // THEN
-        sinon.assert.calledWith(shiftTimeSpy, 1000);
+        expect(shiftTimeSpy).toHaveBeenCalledWith(1000);
     });
 
     it("should call onTimeChange on player timeupdate event", () => {
         // GIVEN
-        const onTimeChange = sinon.spy();
-        const actualNode = mount(
+        const onTimeChange = jest.fn();
+        const ref = React.createRef<VideoPlayer>();
+        render(
             <VideoPlayer
+                ref={ref}
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 tracks={[]}
@@ -320,21 +326,21 @@ describe("VideoPlayer", () => {
                 lastCueChange={null}
             />
         );
-        const videoNode = actualNode.find("VideoPlayer");
-        // @ts-ignore can't find the correct syntax
-        const actualComponent = videoNode.instance() as VideoPlayer;
+        const actualComponent = ref.current!;
 
         // WHEN
         actualComponent.player.trigger("timeupdate");
 
         // THEN
-        sinon.assert.calledOnce(onTimeChange);
+        expect(onTimeChange).toHaveBeenCalledTimes(1);
     });
 
     it("should work correctly after player timeupdate event when no onTimeChange prop is provided", () => {
         // GIVEN
-        const actualNode = mount(
+        const ref = React.createRef<VideoPlayer>();
+        render(
             <VideoPlayer
+                ref={ref}
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 tracks={[]}
@@ -342,10 +348,8 @@ describe("VideoPlayer", () => {
                 lastCueChange={null}
             />
         );
-        const videoNode = actualNode.find("VideoPlayer");
-        // @ts-ignore can't find the correct syntax
-        const actualComponent = videoNode.instance() as VideoPlayer;
-        const playPauseSpy = sinon.spy();
+        const actualComponent = ref.current!;
+        const playPauseSpy = jest.fn();
         actualComponent.playPause = playPauseSpy;
 
         // WHEN
@@ -353,7 +357,7 @@ describe("VideoPlayer", () => {
         simulant.fire(document.documentElement, "keydown", { keyCode: Character.O_CHAR, shiftKey: true, altKey: true });
 
         // THEN
-        sinon.assert.calledOnce(playPauseSpy);
+        expect(playPauseSpy).toHaveBeenCalledTimes(1);
     });
 
     it("customizes cues positions on track load", () => {
@@ -372,8 +376,11 @@ describe("VideoPlayer", () => {
         const textTracks = [
             { language: "en-CA", addCue: jest.fn(), cues: [vttCue]},
         ];
-        const actualNode = mount(
+        const ref = React.createRef<VideoPlayer>();
+
+        render(
             <VideoPlayer
+                ref={ref}
                 poster="dummyPosterUrl"
                 mp4="dummyMp4Url"
                 tracks={initialTestingTracks}
@@ -382,9 +389,7 @@ describe("VideoPlayer", () => {
                 trackFontSizePercent={1.25}
             />
         );
-        const videoNode = actualNode.find("VideoPlayer");
-        // @ts-ignore can't find the correct syntax
-        const component = videoNode.instance() as VideoPlayer;
+        const component = ref.current!;
 
         // WHEN
         dispatchEventForTrack(component.player, textTracks[0]);

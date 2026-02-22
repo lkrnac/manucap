@@ -1,4 +1,4 @@
-import { FunctionComponent, PropsWithChildren, MouseEvent, ReactElement, useEffect, useState } from "react";
+import { MouseEvent, ReactElement, useEffect, useState } from "react";
 
 interface Props {
     className?: string;
@@ -9,7 +9,7 @@ interface Props {
     render: (toggle: boolean) => ReactElement;
 }
 
-const ToggleButton: FunctionComponent<Props> = (props: PropsWithChildren<Props>) => {
+const ToggleButton = (props: Props) => {
     const [toggle, setToggle] = useState(false);
     useEffect(() => {
         setToggle(props.toggled || false);

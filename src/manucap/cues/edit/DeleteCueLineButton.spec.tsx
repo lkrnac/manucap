@@ -1,17 +1,19 @@
 import "../../../testUtils/initBrowserEnvironment";
+
 import "video.js"; // VTTCue definition
 import { AnyAction } from "redux";
+import { Provider } from "react-redux";
+import { mdiDelete } from "@mdi/js";
+import Icon from "@mdi/react";
+import { fireEvent, render } from "@testing-library/react";
+
 import { CueDto, Track } from "../../model";
 import DeleteCueLineButton from "./DeleteCueLineButton";
-import { Provider } from "react-redux";
-import { mount } from "enzyme";
 import { updateCues } from "../cuesList/cuesListActions";
 import { setSaveTrack } from "../saveSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { createTestingStore } from "../../../testUtils/testingStore";
 import { saveCueDeleteSlice } from "../saveCueDeleteSlices";
-import { mdiDelete } from "@mdi/js";
-import Icon from "@mdi/react";
 
 let testingStore = createTestingStore();
 
@@ -26,7 +28,7 @@ describe("DeleteCueLineButton", () => {
 
     it("renders", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <div className="p-1.5">
                 <button
                     id="deleteCueLineButton0"
@@ -42,14 +44,14 @@ describe("DeleteCueLineButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <DeleteCueLineButton cueIndex={0} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("deletes cue when delete cue button is clicked", () => {
@@ -59,14 +61,15 @@ describe("DeleteCueLineButton", () => {
             { vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },
         ] as CueDto[];
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <DeleteCueLineButton cueIndex={0} />
             </Provider>
         );
 
         // WHEN
-        actualNode.find(".mc-delete-cue-button").simulate("click");
+        const button = actualNode.container.querySelector(".mc-delete-cue-button");
+        fireEvent.click(button!);
 
         // THEN
         expect(testingStore.getState().cues.length).toEqual(1);
@@ -86,14 +89,15 @@ describe("DeleteCueLineButton", () => {
             { id: "test-cue-2", vttCue: new VTTCue(1, 2, "Cue 2"), cueCategory: "DIALOGUE" },
         ] as CueDto[];
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <DeleteCueLineButton cueIndex={0} />
             </Provider>
         );
 
         // WHEN
-        actualNode.find(".mc-delete-cue-button").simulate("click");
+        const button = actualNode.container.querySelector(".mc-delete-cue-button")!;
+        fireEvent.click(button);
 
         // THEN
         expect(deleteCueMock).toHaveBeenCalledWith(

@@ -32,9 +32,14 @@ CONSOLE_PROBLEMS=$(cat js-build.log | \
   pcre2grep -Mv 'console.warn.*\n.*VIDEOJS: WARN: The element supplied is not included in the DOM' | \
   pcre2grep -Mv 'console.warn.*\n.*Preload parameter of wavesurfer.load will be ignored because' | \
   pcre2grep -Mv 'console.error.*\n.*Error: Not implemented: HTMLMediaElement\.prototype\.pause' | \
+  pcre2grep -Mv 'console.error.*\n.*Support for defaultProps will be removed from memo components in a future major release. Use JavaScript default parameters instead.' | \
+  pcre2grep -Mv 'console.error.*\n.*Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.' | \
 
   # Remove `c` from following command to troubleshoot which issue was not caught by above suppressions
   pcre2grep -Mc '(\A\s*console\..*\n.*)|(Network Error)|(ECONNREFUSED)|(UnhandledPromiseRejectionWarning)')
+
+#Use for troubleshooting:
+#echo "$CONSOLE_PROBLEMS" | tee found-errors.txt
 
 if (( CONSOLE_PROBLEMS > 0 )); then
     curl -L \

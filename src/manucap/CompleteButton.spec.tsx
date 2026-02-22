@@ -1,15 +1,17 @@
 import "../testUtils/initBrowserEnvironment";
-import { mount } from "enzyme";
+
+import { Provider } from "react-redux";
+import { AnyAction } from "@reduxjs/toolkit";
+import { mdiAlertOutline, mdiCheckCircleOutline, mdiLoading } from "@mdi/js";
+import Icon from "@mdi/react";
+import { fireEvent, render } from "@testing-library/react";
+
+import { updateEditingTrack } from "./trackSlices";
 import CompleteButton from "./CompleteButton";
 import { createTestingStore } from "../testUtils/testingStore";
-import { Provider } from "react-redux";
-import { updateEditingTrack } from "./trackSlices";
-import { AnyAction } from "@reduxjs/toolkit";
 import { CueDto, Track } from "./model";
 import { updateCues } from "./cues/cuesList/cuesListActions";
 import { setSaveTrack } from "./cues/saveSlices";
-import { mdiAlertOutline, mdiCheckCircleOutline, mdiLoading } from "@mdi/js";
-import Icon from "@mdi/react";
 
 const testingTrack = {
     type: "CAPTION",
@@ -37,7 +39,7 @@ describe("CompleteButton", () => {
 
     it("renders for save state NONE", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <div className="space-x-4 flex items-center">
                     <div className="font-medium">
@@ -54,19 +56,19 @@ describe("CompleteButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CompleteButton onComplete={jest.fn()} saveState={"NONE"} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders with disabled property and save state NONE", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <div className="space-x-4 flex items-center">
                     <div className="font-medium">
@@ -86,19 +88,19 @@ describe("CompleteButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CompleteButton onComplete={jest.fn()} disabled saveState={"NONE"} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders with disabled property and save state TRIGGERED", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <div className="space-x-4 flex items-center">
                     <div className="font-medium">
@@ -119,19 +121,19 @@ describe("CompleteButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CompleteButton onComplete={jest.fn()} disabled saveState={"TRIGGERED"} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders save pending for save state TRIGGERED", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <div className="space-x-4 flex items-center">
                     <div className="font-medium">
@@ -152,19 +154,19 @@ describe("CompleteButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CompleteButton onComplete={jest.fn()} saveState={"TRIGGERED"} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders save succeeded for save state SAVED", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <div className="space-x-4 flex items-center">
                     <div className="font-medium">
@@ -181,19 +183,19 @@ describe("CompleteButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CompleteButton onComplete={jest.fn()} saveState={"SAVED"} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders save succeeded for save state ERROR", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <div className="space-x-4 flex items-center">
                     <div className="font-medium">
@@ -210,14 +212,14 @@ describe("CompleteButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CompleteButton onComplete={jest.fn()} saveState={"ERROR"} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("calls onComplete when clicked", () => {
@@ -225,14 +227,15 @@ describe("CompleteButton", () => {
         const mockOnComplete = jest.fn();
         testingStore.dispatch(updateEditingTrack(testingTrack) as {} as AnyAction);
         testingStore.dispatch(updateCues(cues) as {} as AnyAction);
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <CompleteButton onComplete={mockOnComplete} saveState={"NONE"} />
             </Provider>
         );
 
         // WHEN
-        actualNode.find(".mc-complete-caption-mc-btn").simulate("click");
+        const button = actualNode.container.querySelector(".mc-complete-caption-mc-btn");
+        fireEvent.click(button!)
 
         // THEN
         expect(mockOnComplete).toHaveBeenCalledWith(
