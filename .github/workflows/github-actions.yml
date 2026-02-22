@@ -9,7 +9,10 @@ on:
         branches:
             - "*"
 
-permissions: write-all
+permissions:
+    contents: read
+    id-token: write
+
 jobs:
     test-deploy:
         runs-on: ubuntu-latest
