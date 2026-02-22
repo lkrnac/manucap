@@ -6,6 +6,7 @@ import { setValidationErrors } from "./edit/cueEditorSlices";
 
 const DEFAULT_TIME_OUT = 100;
 
+// TODO: I can't find any use of Toast alerts. Are they needed?
 const CueErrorAlert = (): ReactElement => {
     const dispatch = useDispatch();
     const validationErrors = useSelector((state: ManuCapState) => state.validationErrors);

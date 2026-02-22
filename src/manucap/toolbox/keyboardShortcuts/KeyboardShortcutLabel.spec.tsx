@@ -1,16 +1,16 @@
 import "../../../testUtils/initBrowserEnvironment";
 import KeyboardShortcutLabel from "./KeyboardShortcutLabel";
-import { mount } from "enzyme";
 import { os } from "platform";
 import { Provider } from "react-redux";
 import testingStore from "../../../testUtils/testingStore";
+import { render } from "@testing-library/react";
 
 
 describe("KeyboardShortcutLabel", () => {
     it("renders", () => {
         // GIVEN
         const commandKey = os && os.family === "OS X" ? "Command" : "Ctrl";
-        const expectedNode = mount(
+        const expectedNode = render(
             <div style={{ display: "flex", alignItems: "center" }}>
                 <div className="flex items-center justify-center">
                     <h4 className="m-0">
@@ -70,20 +70,20 @@ describe("KeyboardShortcutLabel", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <KeyboardShortcutLabel character="o" name="Toggle Play / Pause" />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("hide buttons if passed hide flags", () => {
         // GIVEN
         const commandKey = os && os.family === "OS X" ? "Command" : "Ctrl";
-        const expectedNode = mount(
+        const expectedNode = render(
             <div style={{ display: "flex", alignItems: "center" }}>
                 <div className="hidden items-center justify-center">
                     <h4 className="m-0">
@@ -143,7 +143,7 @@ describe("KeyboardShortcutLabel", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <KeyboardShortcutLabel
                     hideAlternativeKey
@@ -157,6 +157,6 @@ describe("KeyboardShortcutLabel", () => {
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 });

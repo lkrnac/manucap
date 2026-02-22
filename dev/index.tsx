@@ -7,7 +7,7 @@ import { updateCues } from "../src/manucap/cues/cuesList/cuesListActions";
 import { updateEditingTrack } from "../src/manucap/trackSlices";
 import { updateCaptionUser } from "../src/manucap/userSlices";
 import { CueDto, Language, SaveState, Track, User } from "../src/manucap/model";
-import ReactDOM from "react-dom";
+import { createRoot } from 'react-dom/client';
 import ManuCap from "../src/manucap/ManuCap";
 import { readCaptionSpecification } from "../src/manucap/toolbox/captionSpecifications/captionSpecificationSlice";
 import testingStore from "../src/testUtils/testingStore";
@@ -391,9 +391,9 @@ const TestApp = (): ReactElement => {
     );
 };
 
-ReactDOM.render(
+const root = createRoot(document.getElementById("root")!);
+root.render(
     <Provider store={testingStore}>
         <TestApp />
-    </Provider>,
-    document.getElementById("root")
+    </Provider>
 );

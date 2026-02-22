@@ -50,7 +50,7 @@ const CuesList = (props: Props): ReactElement => {
     const endIndex = pageIndex === lastPageIndex
         ? (pageIndex + 1) * DEFAULT_PAGE_SIZE
         : (pageIndex + 1) * DEFAULT_PAGE_SIZE + 5;
-    const [refs, setRefs] = useState([] as RefObject<HTMLDivElement>[]);
+    const [refs, setRefs] = useState<RefObject<HTMLDivElement | null>[]>([]);
 
     useEffect(
         () => {

@@ -1,13 +1,15 @@
 import "../../../testUtils/initBrowserEnvironment";
+
+import { AnyAction } from "redux";
 import { Provider } from "react-redux";
+import Icon from "@mdi/react";
+import { mdiArrowLeftRight } from "@mdi/js";
+import { fireEvent, render } from "@testing-library/react";
+
 import ShiftTimeButton from "./ShiftTimeButton";
-import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import { updateEditingTrack } from "../../trackSlices";
 import { Language, Track } from "../../model";
-import { AnyAction } from "redux";
-import Icon from "@mdi/react";
-import { mdiArrowLeftRight } from "@mdi/js";
 
 const testTrack = {
     type: "CAPTION",
@@ -32,7 +34,7 @@ describe("ShiftTimeButton", () => {
 
     it("renders", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <button
                     className="mc-shift-time-button flex items-center"
@@ -45,20 +47,21 @@ describe("ShiftTimeButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <ShiftTimeButton onClick={jest.fn()} />
             </Provider>
         );
-        actualNode.find("button.mc-shift-time-button").simulate("click");
+        const button = actualNode.container.querySelector("button.mc-shift-time-button")!;
+        fireEvent.click(button);
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders enabled if timecodes are locked but track is caption", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <button
                     className="mc-shift-time-button flex items-center"
@@ -71,21 +74,21 @@ describe("ShiftTimeButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <ShiftTimeButton onClick={jest.fn()} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("renders disabled if timecodes are locked and track is translation", () => {
         // GIVEN
         testingStore.dispatch(
             updateEditingTrack( { ...testTranslationTrack, timecodesUnlocked: false } as Track) as {} as AnyAction);
-        const expectedNode = mount(
+        const expectedNode = render(
             <Provider store={testingStore}>
                 <button
                     className="mc-shift-time-button flex items-center"
@@ -99,13 +102,13 @@ describe("ShiftTimeButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <ShiftTimeButton onClick={jest.fn()} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 });

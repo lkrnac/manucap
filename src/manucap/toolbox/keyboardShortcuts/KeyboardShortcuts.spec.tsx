@@ -1,19 +1,20 @@
 import "../../../testUtils/initBrowserEnvironment";
+
 // @ts-ignore - Doesn't have types definitions file
 import * as simulant from "simulant";
-import { Character } from "../../utils/shortcutConstants";
-import KeyboardShortcuts from "./KeyboardShortcuts";
 import { Provider } from "react-redux";
-import { mount } from "enzyme";
-import testingStore from "../../../testUtils/testingStore";
 import { fireEvent, render } from "@testing-library/react";
 import Icon from "@mdi/react";
 import { mdiKeyboard } from "@mdi/js";
 
+import { Character } from "../../utils/shortcutConstants";
+import testingStore from "../../../testUtils/testingStore";
+import KeyboardShortcuts from "./KeyboardShortcuts";
+
 describe("KeyboardShortcuts", () => {
     it("renders", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <button className="mc-keyboard-shortcuts-button flex items-center">
                 <Icon path={mdiKeyboard} size={1.25} />
                 <span className="pl-4">Keyboard Shortcuts</span>
@@ -21,21 +22,21 @@ describe("KeyboardShortcuts", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <KeyboardShortcuts show setShow={jest.fn()} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("calls setShow with opposite value of show", () => {
         // GIVEN
         const setShow = jest.fn();
 
-        mount(
+        render(
             <Provider store={testingStore}>
                 <KeyboardShortcuts show setShow={setShow} />
             </Provider>

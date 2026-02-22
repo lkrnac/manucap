@@ -1,9 +1,10 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
 import { ContentState, EditorState, convertFromHTML } from "draft-js";
-import CueLineCounts from "./CueLineCounts";
 import { Provider } from "react-redux";
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
+
+import CueLineCounts from "./CueLineCounts";
 import testingStore from "../../../testUtils/testingStore";
 
 const testContentRendered = (
@@ -21,7 +22,7 @@ const testContentRendered = (
     const editorState = EditorState.createWithContent(contentState);
 
     const vttCue = new VTTCue(startTime, endTime, text);
-    const expectedNode = mount(
+    const expectedNode = render(
         <div className="text-sm" style={{ paddingLeft: "5px", paddingTop: "10px" }}>
             <span>DURATION: <span className="text-green-dark">{duration}s</span>, </span>
             <span>CHARACTERS: <span className="text-green-dark">{characters}</span>, </span>
@@ -31,14 +32,14 @@ const testContentRendered = (
     );
 
     // WHEN
-    const actualNode = mount(
+    const actualNode = render(
         <Provider store={testingStore}>
             <CueLineCounts cueIndex={0} vttCue={vttCue} editorState={editorState} />
         </Provider>
     );
 
     // THEN
-    expect(actualNode.html()).toEqual(expectedNode.html());
+    expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
 };
 
 describe("CueLineCounts", () => {

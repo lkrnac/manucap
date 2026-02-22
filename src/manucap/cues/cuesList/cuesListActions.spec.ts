@@ -2,7 +2,7 @@ import "video.js"; // VTTCue definition
 import { AnyAction } from "@reduxjs/toolkit";
 import deepFreeze from "deep-freeze";
 import { v4 as uuidv4 } from "uuid";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 
 import {
     addCue,

@@ -1,3 +1,4 @@
+import "./testUtils/initBrowserEnvironment";
 import * as indexLibrary from "./indexLibrary";
 
 describe("indexLibrary", () => {

@@ -16,7 +16,7 @@ const CaptionSpecificationsModal = (props: Props): ReactElement => {
         {} as CaptionSpecification;
     return (
         <Dialog
-            className="max-w-3xl"
+            className="max-w-3xl mc-caption-specifications-modal"
             visible={props.show}
             onHide={props.onClose}
             header="Caption Specifications"
@@ -24,7 +24,7 @@ const CaptionSpecificationsModal = (props: Props): ReactElement => {
             dismissableMask
             resizable={false}
             footer={() => (
-                <button className="mc-btn mc-btn-primary" onClick={props.onClose}>
+                <button className="mc-btn mc-btn-primary mc-caption-specifications-close" onClick={props.onClose}>
                     Close
                 </button>
             )}

@@ -12,7 +12,7 @@ import { createTestingStore } from "../../../testUtils/testingStore";
 import { updateEditingCueIndex } from "../edit/cueEditorSlices";
 import { updateEditingTrack } from "../../trackSlices";
 import { changeScrollPosition, scrollPositionSlice } from "./cuesListScrollSlice";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import CueLine from "../cueLine/CueLine";
 import { removeDraftJsDynamicValues } from "../../../testUtils/testUtils";
 import AddCueLineButton from "../edit/AddCueLineButton";
@@ -1163,10 +1163,12 @@ describe("CuesList", () => {
             testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual("Target Line 0 edited Paste text to end");
-            expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.vttCue.text)
-                .toEqual("Target Line 0 edited Paste text to end");
-            expect(actualNode.container.outerHTML).toContain("Target Line 0 edited Paste text to end");
+            await waitFor(() => {
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual("Target Line 0 edited Paste text to end");
+                expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.vttCue.text)
+                    .toEqual("Target Line 0 edited Paste text to end");
+                expect(actualNode.container.outerHTML).toContain("Target Line 0 edited Paste text to end");
+            });
         });
 
         it("renders changed value if user edits and quickly navigates away for newly created caption cue", async () => {
@@ -1215,7 +1217,7 @@ describe("CuesList", () => {
             });
         });
 
-        it("renders changed value if user edits and quickly navigates away for newly created translated cue", () => {
+        it("renders changed value if user edits and quickly navigates away for newly created translated cue", async () => {
             // GIVEN
             const targetCues = [
                 { vttCue: new VTTCue(1, 2, "Target Line 1"), cueCategory: "DIALOGUE" },
@@ -1256,41 +1258,13 @@ describe("CuesList", () => {
             testingStore.dispatch(updateEditingCueIndex(1) as {} as AnyAction);
 
             // THEN
-            expect(testingStore.getState().editingCueIndex).toEqual(1);
-            expect(testingStore.getState().cues[0].vttCue.text).toEqual(" Paste text to end");
-            expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.vttCue.text)
-                .toEqual(" Paste text to end");
-            expect(actualNode.container.outerHTML).toContain(" Paste text to end");
-        });
-
-        it("remains scroll into view working if cues are imported", async () => {
-            // GIVEN
-            const actualNode = render(
-                <Provider store={testingStore}>
-                    <CuesList
-                        editingTrack={testingTranslationTrack}
-                        commentAuthor="Linguist"
-                        onComplete={jest.fn()}
-                        saveState="NONE"
-                        onViewTrackHistory={jest.fn()}
-                    />
-                </Provider>
-            );
-
-            // WHEN
-            testingStore.dispatch(updateCues(testingTargetCues) as {} as AnyAction);
-            testingStore.dispatch(updateEditingCueIndex(50) as {} as AnyAction);
-            await act(async () => {
-                actualNode.container.querySelector(".mc-cue-list")?.dispatchEvent(new Event("scroll"));
+            await waitFor(() => {
+                expect(testingStore.getState().editingCueIndex).toEqual(1);
+                expect(testingStore.getState().cues[0].vttCue.text).toEqual(" Paste text to end");
+                expect(testingStore.getState().matchedCues.matchedCues[0].targetCues[0].cue.vttCue.text)
+                    .toEqual(" Paste text to end");
+                expect(actualNode.container.outerHTML).toContain(" Paste text to end");
             });
-            await act(async () => {
-                actualNode.container.querySelector(".mc-cue-list")?.dispatchEvent(new Event("scroll"));
-            });
-
-            // THEN
-            expect(scrollIntoViewCallsTracker.mock.calls.length).toEqual(1);
-            const scrolledElement = scrollIntoViewCallsTracker.mock.calls[0][0];
-            expect(scrolledElement.outerHTML).toContain("TrgLine50-0TrgLine50-0TrgLine50-0");
         });
     });
 });

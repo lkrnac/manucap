@@ -3,17 +3,17 @@ import "video.js"; // VTTCue definition
 import { CueDto } from "../../model";
 import PlayCueButton from "./PlayCueButton";
 import { Provider } from "react-redux";
-import { mount } from "enzyme";
 import testingStore from "../../../testUtils/testingStore";
 import { mdiPlay } from "@mdi/js";
 import Icon from "@mdi/react";
+import { render } from "@testing-library/react";
 
 const testCue = { vttCue: new VTTCue(2, 3, "some text"), cueCategory: "DIALOGUE" } as CueDto;
 
 describe("PlayCueButton", () => {
     it("renders", () => {
         // GIVEN
-        const expectedNode = mount(
+        const expectedNode = render(
             <div className="p-1.5">
                 <button
                     id="playCueButton-1"
@@ -29,26 +29,26 @@ describe("PlayCueButton", () => {
         );
 
         // WHEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <PlayCueButton cue={testCue} cueIndex={1} />
             </Provider>
         );
 
         // THEN
-        expect(actualNode.html()).toEqual(expectedNode.html());
+        expect(actualNode.container.outerHTML).toEqual(expectedNode.container.outerHTML);
     });
 
     it("plays cue when play cue button is clicked", () => {
         // GIVEN
-        const actualNode = mount(
+        const actualNode = render(
             <Provider store={testingStore}>
                 <PlayCueButton cue={testCue} cueIndex={1} />
             </Provider>
         );
 
         // WHEN
-        actualNode.find("button").simulate("click");
+        actualNode.container.querySelector("button")?.click();
 
         // THEN
         expect(testingStore.getState().videoSectionToPlay).toEqual({ startTime: 2, endTime: 3 });

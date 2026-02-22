@@ -1,8 +1,8 @@
 import "../../../testUtils/initBrowserEnvironment";
 import "video.js"; // VTTCue definition
+import { act } from "react";
 import { Provider } from "react-redux";
 import { fireEvent, render } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
 import { AnyAction } from "@reduxjs/toolkit";
 
 import { CueDto, CueError, Language, Track } from "../../model";
@@ -914,7 +914,7 @@ describe("CueView", () => {
         } as CueDto;
 
         const expectedSourceCueContent = "<i>Source <b><span style=\"background-color:#D9E9FF\"" +
-            " data-reactroot=\"\">Line</span></b></i> <br>Wrapped text Line";
+            ">Line</span></b></i> <br>Wrapped text Line";
 
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         testingStore.dispatch(setFind("Line") as {} as AnyAction);
@@ -957,7 +957,7 @@ describe("CueView", () => {
         } as CueDto;
 
         const expectedSourceCueContent = "<i>Source <b><span style=\"background-color:#D9E9FF\"" +
-            " data-reactroot=\"\">Line</span></b></i> <br>Wrapped text Line";
+            ">Line</span></b></i> <br>Wrapped text Line";
 
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         testingStore.dispatch(setFind("Line") as {} as AnyAction);
@@ -1000,7 +1000,7 @@ describe("CueView", () => {
         } as CueDto;
 
         const expectedSourceCueContent = "<i>Source <b>Line</b></i> <br>Wrapped text " +
-            "<span style=\"background-color:#D9E9FF\" data-reactroot=\"\">Line</span>";
+            "<span style=\"background-color:#D9E9FF\">Line</span>";
 
         testingStore.dispatch(showSearchReplace(true) as {} as AnyAction);
         testingStore.dispatch(setFind("Line") as {} as AnyAction);

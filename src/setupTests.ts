@@ -1,5 +1,5 @@
 import { enableMapSet } from "immer";
-import "@testing-library/jest-dom/extend-expect";
+import '@testing-library/jest-dom';
 // https://stackoverflow.com/questions/48828759/unit-test-raises-error-because-of-getcontext-is-not-implemented
 import "jest-canvas-mock";
 
