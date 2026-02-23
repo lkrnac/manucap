@@ -6,12 +6,14 @@ import VideoPlayer from "./manucap/player/VideoPlayer";
 import useMatchedCuesAsCsv from "./manucap/cues/cuesList/useMatchedCuesAsCsv";
 import { updateSourceCues } from "./manucap/cues/view/sourceCueSlices";
 import { updateCaptionUser } from "./manucap/userSlices";
+import { readCaptionSpecification } from "./manucap/toolbox/captionSpecifications/captionSpecificationSlice";
 
 const Actions = ({
     updateEditingTrack,
     updateCues,
     updateSourceCues,
     updateCaptionUser,
+    readCaptionSpecification,
 });
 
 const Hooks = ({

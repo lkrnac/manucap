@@ -1,14 +1,25 @@
 {
   "name": "manucap",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "description": "",
   "license": "",
   "repository": {
     "type": "git",
     "url": "https://github.com/lkrnac/manucap"
   },
-  "main": "dist/index.js",
-  "types": "dist/@types/index.d.ts",
+  "main": "dist/manucap.js",
+  "module": "dist/manucap.mjs",
+  "types": "dist/indexLibrary.d.ts",
+  "style": "dist/manucap.css",
+  "exports": {
+    ".": {
+      "import": "./dist/manucap.mjs",
+      "require": "./dist/manucap.js",
+      "types": "./dist/indexLibrary.d.ts"
+    },
+    "./style": "./dist/manucap.css",
+    "./dist/manucap.css": "./dist/manucap.css"
+  },
   "engines": {
     "node": ">=24",
     "npm": ">=11"
